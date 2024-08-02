@@ -1,7 +1,7 @@
 export interface LoginArgs {
-  email: string;
+  email?: string;
   password: string;
-  session?: string;
+  username?: string;
 }
 
 export interface SignupArgs {
