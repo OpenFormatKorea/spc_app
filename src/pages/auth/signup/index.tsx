@@ -1,9 +1,8 @@
+import React, { useState } from "react";
+import { fetchSignUp } from "@/pages/auth/lib/apis";
 import { SignupArgs } from "@/pages/auth/lib/types";
-import { info } from "console";
-import { sign } from "crypto";
-import { useState } from "react";
 
-const signup = () => {
+const Signup: React.FC = async () => {
   const [showPW, setShowPw] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [userName, setUserName] = useState("");
@@ -12,14 +11,15 @@ const signup = () => {
   const [passwordChk, setPasswordChk] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [instantPWChk, setInstantPWChk] = useState(false);
-
-  const emailRegEx = /^A-Za-z0-9@A-Za-z0-9.[A-Za-z]{2,3}$/;
+  const [message, setMessage] = useState<string | null>(null);
+  const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
-  const signupInfo: SignupArgs = {
-    userName: userName,
-    email: email,
-    password: password,
-  };
+
+  // const signupInfo: SignupArgs = {
+  //   userName: userName,
+  //   email: email,
+  //   password: password,
+  // };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -39,9 +39,13 @@ const signup = () => {
     }
   };
 
-  const postSignUp = (info: SignupArgs) => {
-    console.log(info);
-    return info;
+  const handleEmailChk = (email: string) => {
+    return emailRegEx.test(email);
+  };
+
+  const postSignUp = async (info: SignupArgs) => {
+    const result = await fetchSignUp(info);
+    setMessage(result.message);
   };
 
   const infoCheck = (info: SignupArgs) => {
@@ -51,6 +55,9 @@ const signup = () => {
     } else if (!info.userName) {
       alert("Check your username.");
       return false;
+    } else if (!info.email || !handleEmailChk(info.email)) {
+      alert("Check your email.");
+      return false;
     } else if (!info.password) {
       alert("Check your password.");
       return false;
@@ -58,11 +65,16 @@ const signup = () => {
       return true;
     }
   };
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const signupInfo: SignupArgs = {
+      userName,
+      email,
+      password,
+    };
 
-  const handleSubmit = () => {
     if (infoCheck(signupInfo)) {
-      postSignUp(signupInfo);
-      return "success";
+      await postSignUp(signupInfo);
     }
   };
   return (
@@ -154,4 +166,4 @@ const signup = () => {
     </div>
   );
 };
-export default signup;
+export default Signup;
