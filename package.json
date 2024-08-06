@@ -2,6 +2,7 @@
   "name": "spc_app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8001",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,9 +10,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/cache": "^11.13.1",
+    "@mui/material-nextjs": "^5.16.6",
     "axios": "^1.7.2",
     "clsx": "^2.1.1",
     "cookies-next": "^4.2.1",
+    "cors": "^2.8.5",
     "jwt-decode": "^4.0.0",
     "next": "14.2.5",
     "notistack": "^3.0.1",

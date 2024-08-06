@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchSignUp } from "@/pages/auth/lib/apis";
 import { SignupArgs } from "@/pages/auth/lib/types";
+import router from "next/router";
+import { info } from "console";
 
-const Signup: React.FC = async () => {
+const Signup: React.FC = () => {
   const [showPW, setShowPw] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [userName, setUserName] = useState("");
@@ -13,16 +15,17 @@ const Signup: React.FC = async () => {
   const [instantPWChk, setInstantPWChk] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,12}$/;
 
-  // const signupInfo: SignupArgs = {
-  //   userName: userName,
-  //   email: email,
-  //   password: password,
-  // };
+  const signupInfo: SignupArgs = {
+    userName: userName,
+    email: email,
+    password: password,
+  };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+
     if (!passwordPattern.test(e.target.value)) {
       setPasswordError("사용 불가능");
     } else {
@@ -46,6 +49,18 @@ const Signup: React.FC = async () => {
   const postSignUp = async (info: SignupArgs) => {
     const result = await fetchSignUp(info);
     setMessage(result.message);
+    return result;
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    // event.preventDefault();
+    if (infoCheck(signupInfo)) {
+      const result = await postSignUp(signupInfo);
+      setMessage(result.message);
+      if (result.success) {
+        router.push("/auth/login"); // Navigate to the login page
+      }
+    }
   };
 
   const infoCheck = (info: SignupArgs) => {
@@ -65,18 +80,13 @@ const Signup: React.FC = async () => {
       return true;
     }
   };
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const signupInfo: SignupArgs = {
-      userName,
-      email,
-      password,
-    };
 
-    if (infoCheck(signupInfo)) {
-      await postSignUp(signupInfo);
-    }
-  };
+  useEffect(() => {
+    const isFormValid = userName !== "" && email !== "" && password !== "" && passwordChk !== "" && instantPWChk;
+
+    setButtonDisabled(!isFormValid);
+  }, [userName, email, password, passwordChk, instantPWChk]);
+
   return (
     <div
       className="containerBox"
@@ -135,8 +145,8 @@ const Signup: React.FC = async () => {
         </div>
         <div className="inblock w-full text-xs text-left mx-2">
           <p className="ml-2 h-17">
-            * 비밀번호는 최소 8자, 대문자, 특수기호 포함{" "}
-            <a style={passwordError ? { color: "red" } : { color: "green" }}>{passwordError}</a>
+            * 비밀번호는 최소 8자, 대문자, 특수기호 포함 [
+            <a style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</a>]
           </p>
         </div>
         <div className="flex w-full mx-2 mt-2 p-1 justify-left align-left text-left items-center">
@@ -150,13 +160,19 @@ const Signup: React.FC = async () => {
             onChange={handlePasswordChkChange}
           />
         </div>
+        <div className="inblock w-full text-xs text-center mx-2">
+          <p>
+            [<a style={{ color: instantPWChk ? "green" : "red" }}>{instantPWChk ? "일치" : "불일치"}</a>]
+          </p>
+        </div>
         <button className="text-xs border m-2 bg-white" onClick={() => setShowPw(!showPW)}>
           {showPW ? "hide" : "show"} pw
         </button>
-
+        {buttonDisabled}
         <div className="m-2">
           <button
-            className={`p-2 text-center m-2 ${buttonDisabled ? " bg-gray-300 cursor-not-allowed" : " bg-black text-white"}`}
+            disabled={buttonDisabled}
+            className={`p-2 text-center m-2 cursor-pointer ${buttonDisabled ? " bg-gray-300" : " bg-black text-white"}`}
             onClick={handleSubmit}
           >
             sign up

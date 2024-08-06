@@ -3,14 +3,14 @@ import router from "next/router";
 import { useState } from "react";
 
 // src/pages/index.tsx
-const Login = () => {
+const login = () => {
   const [showPW, getShowPw] = useState(false);
   const [username, getUsername] = useState("");
   const [password, getPassword] = useState("");
   const emailRegEx = /^A-Za-z0-9@A-Za-z0-9.[A-Za-z]{2,3}$/;
 
   const signupInfo: LoginArgs = {
-    username: username,
+    userName: username,
     password: password,
   };
   const handleButton = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -29,7 +29,7 @@ const Login = () => {
     return info;
   };
   const infoCheck = (info: LoginArgs) => {
-    if (!info.username) {
+    if (!info.userName) {
       alert("Check your username.");
       return false;
     } else if (!info.password) {
@@ -106,4 +106,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default login;

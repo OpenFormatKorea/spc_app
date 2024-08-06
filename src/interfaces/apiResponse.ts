@@ -1,4 +1,4 @@
-import { VariantType } from 'notistack';
+import { VariantType } from "notistack";
 
 export interface ApiHandlerReturnProps<K = undefined> {
   success: boolean;
