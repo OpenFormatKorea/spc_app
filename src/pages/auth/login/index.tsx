@@ -58,19 +58,11 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <div
-        className="LoginBox"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
+      <div className="LoginBox flex justify-center items-center h-screen">
         <div className="inblock min-w-[350px] bg-blue-200 text-center rounded-lg p-4">
           <form>
             <h1 className="m-2 text-center text-lg font-bold">로그인</h1>
-            <div className="emailDiv flex w-full m-2 p-1 justify-left align-left text-left items-center">
+            <div className="emailDiv flex w-full m-2 p-1 justify-start items-center text-left">
               <p className="w-[20%] text-sm font-bold m-2">e-mail</p>
               <input
                 type="email"
@@ -80,7 +72,7 @@ const Login: React.FC = () => {
                 onChange={(e) => getUsername(e.target.value)}
               />
             </div>
-            <div className="passwordDiv flex w-full m-2 p-1 justify-left align-left text-left items-center">
+            <div className="passwordDiv flex w-full m-2 p-1 justify-start items-center text-left">
               <p className="w-[20%] text-sm font-bold m-2">Password </p>
               <input
                 type={showPW ? "text" : "password"}
@@ -90,14 +82,14 @@ const Login: React.FC = () => {
                 onChange={(e) => getPassword(e.target.value)}
               />
               <div
-                className="ml-2 rounded-md text-xs w-[17%] text-white bg-blue-300 text-center p-2"
+                className="ml-2 rounded-md text-xs w-[17%] text-white bg-blue-300 text-center p-2 cursor-pointer"
                 onClick={() => getShowPw(!showPW)}
               >
                 pw보기
               </div>
             </div>
           </form>
-          <div className="passwordDiv flex w-full m-1 p-1 justify-center align-left text-left items-center">
+          <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
             <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
               <button id="signup" onClick={handleButton}>
                 회원가입
@@ -111,7 +103,7 @@ const Login: React.FC = () => {
             </div>
           </div>
           <button
-            className="m-1 p-3 text-xs bg-blue-300 rounded-xl text-white font-medium cursor-pointer"
+            className="m-1 p-3 text-xs bg-blue-300 rounded-xl text-white font-medium cursor-pointer w-full"
             onClick={handleSubmit}
           >
             로그인
