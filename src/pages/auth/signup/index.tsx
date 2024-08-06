@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchSignUp } from "@/pages/auth/lib/apis";
-import { SignupArgs } from "@/pages/auth/lib/types";
+import { AuthArgs } from "@/pages/auth/lib/types";
 import router from "next/router";
 import { info } from "console";
 
@@ -13,11 +13,10 @@ const Signup: React.FC = () => {
   const [passwordChk, setPasswordChk] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [instantPWChk, setInstantPWChk] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
   const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,12}$/;
 
-  const signupInfo: SignupArgs = {
+  const signupInfo: AuthArgs = {
     userName: userName,
     email: email,
     password: password,
@@ -46,24 +45,24 @@ const Signup: React.FC = () => {
     return emailRegEx.test(email);
   };
 
-  const postSignUp = async (info: SignupArgs) => {
+  const postSignUp = async (info: AuthArgs) => {
     const result = await fetchSignUp(info);
-    setMessage(result.message);
     return result;
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    // event.preventDefault();
     if (infoCheck(signupInfo)) {
       const result = await postSignUp(signupInfo);
-      setMessage(result.message);
+      alert(result.message);
       if (result.success) {
-        router.push("/auth/login"); // Navigate to the login page
+        router.push("/auth/login");
       }
+    } else {
+      alert("화원 가입을 실패 하였습니다.");
     }
   };
 
-  const infoCheck = (info: SignupArgs) => {
+  const infoCheck = (info: AuthArgs) => {
     if (info.password !== passwordChk) {
       alert("Passwords do not match.");
       return false;
@@ -83,13 +82,12 @@ const Signup: React.FC = () => {
 
   useEffect(() => {
     const isFormValid = userName !== "" && email !== "" && password !== "" && passwordChk !== "" && instantPWChk;
-
     setButtonDisabled(!isFormValid);
   }, [userName, email, password, passwordChk, instantPWChk]);
 
   return (
     <div
-      className="containerBox"
+      className="SingUpBox"
       style={{
         width: "full",
         backgroundColor: "#8ace00",
@@ -101,82 +99,96 @@ const Signup: React.FC = () => {
       }}
     >
       <div
-        className="min-w-[380px] w-[40vh] border-2 p-6"
         style={{
-          // width: 'full',
-          // height: 'full',
-          alignItems: "center",
+          display: "flex",
           justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
         }}
       >
-        <div className="text-xl m-2">회원가입</div>
-        <div className="flex w-full m-2 p-1 justify-left align-left text-left items-center">
-          <a className="w-[32%] m-2 h-17">user name: </a>
-          <input
-            type="text"
-            id="username"
-            placeholder="아이디를 입력하세요."
-            value={userName}
-            className="usernameInput ml-2 text-xs p-2 w-[55%]"
-            onChange={(e) => setUserName(e.target.value)}
-          />
-        </div>
-        <div className="flex w-full m-2 p-1 justify-left align-left text-left items-center">
-          <a className="w-[32%] m-2 h-17">email: </a>
-          <input
-            type="email"
-            id="email"
-            placeholder="이메일을 입력하세요."
-            value={email}
-            className="usernameInput ml-2 text-xs p-2 w-[55%]"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="flex w-full mx-2 mt-2 p-1 justify-left align-left text-left items-center">
-          <a className="w-[32%] m-2 h-17">password: </a>
-          <input
-            type={showPW ? "text" : "password"}
-            id="password"
-            placeholder="비밀번호를 입력하세요."
-            value={password}
-            className="usernameInput ml-2 text-xs p-2 w-[55%]"
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <div className="inblock w-full text-xs text-left mx-2">
-          <p className="ml-2 h-17">
-            * 비밀번호는 최소 8자, 대문자, 특수기호 포함 [
-            <a style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</a>]
-          </p>
-        </div>
-        <div className="flex w-full mx-2 mt-2 p-1 justify-left align-left text-left items-center">
-          <a className="w-[32%] m-2 h-17">pw check: </a>
-          <input
-            type={showPW ? "text" : "password"}
-            id="passwordChk"
-            placeholder="비밀번호 확인"
-            value={passwordChk}
-            className="usernameInput ml-2 text-xs  p-2 w-[55%]"
-            onChange={handlePasswordChkChange}
-          />
-        </div>
-        <div className="inblock w-full text-xs text-center mx-2">
-          <p>
-            [<a style={{ color: instantPWChk ? "green" : "red" }}>{instantPWChk ? "일치" : "불일치"}</a>]
-          </p>
-        </div>
-        <button className="text-xs border m-2 bg-white" onClick={() => setShowPw(!showPW)}>
-          {showPW ? "hide" : "show"} pw
-        </button>
-        {buttonDisabled}
-        <div className="m-2">
-          <button
-            disabled={buttonDisabled}
-            className={`p-2 text-center m-2 cursor-pointer ${buttonDisabled ? " bg-gray-300" : " bg-black text-white"}`}
-            onClick={handleSubmit}
-          >
-            sign up
+        <div
+          className="min-w-[380px] w-[40vh] min-h-[380px] border-2 p-6"
+          style={{
+            backgroundColor: "#8ace00",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <div className="text-xl m-2">회원가입</div>
+          <div className="flex w-full m-2 p-1 justify-left align-left text-left items-center">
+            <a className="w-[23%] m-2 h-17 text-xs">아이디: </a>
+            <input
+              type="text"
+              id="username"
+              placeholder="아이디를 입력하세요."
+              value={userName}
+              className="usernameInput ml-2 text-xs p-2 w-[77%]"
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </div>
+          <div className="flex w-full m-2 p-1 justify-left align-left text-left items-center">
+            <a className="w-[23%] m-2 h-17 text-xs">이메일: </a>
+            <input
+              type="email"
+              id="email"
+              placeholder="이메일을 입력하세요."
+              value={email}
+              className="usernameInput ml-2 text-xs p-2 w-[77%]"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="flex w-full mx-2 mt-2 p-1 justify-left align-left text-left items-center">
+            <a className="w-[23%] m-2 h-17 text-xs">비밀번호: </a>
+            <input
+              type={showPW ? "text" : "password"}
+              id="password"
+              placeholder="비밀번호를 입력하세요."
+              value={password}
+              className="usernameInput ml-2 text-xs p-2 w-[77%]"
+              onChange={handlePasswordChange}
+            />
+          </div>
+          <div className="inblock w-full text-xs text-left mx-2">
+            <p className="ml-2 h-17">
+              * 비밀번호는 최소 8자, 대문자, 특수기호 포함 [
+              <a style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</a>]
+            </p>
+          </div>
+          <div className="flex w-full mx-2 mt-2 p-1 justify-left align-left text-left items-center">
+            <a className="w-[23%] m-2 h-17 text-xs">
+              비밀번호
+              <br />
+              확인:{" "}
+            </a>
+            <input
+              type={showPW ? "text" : "password"}
+              id="passwordChk"
+              placeholder="비밀번호 확인"
+              value={passwordChk}
+              className="usernameInput ml-2 text-xs  p-2 w-[77%]"
+              onChange={handlePasswordChkChange}
+            />
+          </div>
+          <div className="inblock w-full text-xs text-right mx-2">
+            <p className="mr-2 h-17">
+              [<a style={{ color: instantPWChk ? "green" : "red" }}>{instantPWChk ? "일치" : "불일치"}</a>]
+            </p>
+          </div>
+          <button className="text-xs border m-2 p-1 bg-white" onClick={() => setShowPw(!showPW)}>
+            비밀번호 {showPW ? "숨기기" : "보여주기"}
           </button>
+          <div className="m-2 w-full">
+            <button
+              disabled={buttonDisabled}
+              className={`p-2 w-full text-center m-2 ${buttonDisabled ? " bg-gray-300 cursor-not-allowed" : " bg-black text-white"}`}
+              onClick={handleSubmit}
+            >
+              회원가입
+            </button>
+          </div>
         </div>
       </div>
     </div>

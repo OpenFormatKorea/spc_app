@@ -1,18 +1,21 @@
-import { LoginArgs, SignupArgs } from "@/pages/auth/lib/types";
+import { fetchLogIn } from "@/pages/auth/lib/apis";
+import { AuthArgs } from "@/pages/auth/lib/types";
 import router from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // src/pages/index.tsx
-const login = () => {
+const Login: React.FC = () => {
   const [showPW, getShowPw] = useState(false);
-  const [username, getUsername] = useState("");
+  const [userName, getUsername] = useState("");
   const [password, getPassword] = useState("");
-  const emailRegEx = /^A-Za-z0-9@A-Za-z0-9.[A-Za-z]{2,3}$/;
 
-  const signupInfo: LoginArgs = {
-    userName: username,
+  const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+  const loginInfo: AuthArgs = {
+    userName: userName,
     password: password,
   };
+
   const handleButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { id } = event.currentTarget;
     if (id === "forgotpw") {
@@ -21,22 +24,35 @@ const login = () => {
       router.push("/auth/signup");
     }
   };
-  function buttoncheck() {
-    alert("login button");
-  }
-  const postLogin = (info: LoginArgs) => {
-    console.log(info);
-    return info;
+
+  const postLogin = async (info: AuthArgs) => {
+    const result = await fetchLogIn(info);
+    return result;
   };
-  const infoCheck = (info: LoginArgs) => {
+
+  const infoCheck = (info: AuthArgs) => {
     if (!info.userName) {
-      alert("Check your username.");
+      alert("아이디를 확인 후 다시 시도해주세요.");
       return false;
     } else if (!info.password) {
-      alert("Check your password.");
+      alert("비밀번호를 확인 후 다시 시도해주세요.");
       return false;
     } else {
       return true;
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    if (infoCheck(loginInfo)) {
+      const result = await postLogin(loginInfo);
+      if (result.success) {
+        console.log(loginInfo.userName + " 님 로그인 하셨습니다.");
+        router.push("/home");
+      } else {
+        alert(result.message);
+      }
+    } else {
+      alert("로그인에 실패하였습니다.");
     }
   };
 
@@ -60,7 +76,7 @@ const login = () => {
                 type="email"
                 placeholder="이메일을 입력하세요"
                 className="border-black border p-2 w-[55%]"
-                value={username}
+                value={userName}
                 onChange={(e) => getUsername(e.target.value)}
               />
             </div>
@@ -96,7 +112,7 @@ const login = () => {
           </div>
           <button
             className="m-1 p-3 text-xs bg-blue-300 rounded-xl text-white font-medium cursor-pointer"
-            onClick={buttoncheck}
+            onClick={handleSubmit}
           >
             로그인
           </button>
@@ -106,4 +122,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;

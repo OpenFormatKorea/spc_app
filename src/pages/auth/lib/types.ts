@@ -1,10 +1,11 @@
-export interface LoginArgs {
-  password: string;
-  userName?: string;
+export interface AuthArgs {
+  userName: string;
+  email?: string;
+  password?: string;
 }
 
-export interface SignupArgs {
+export interface ChangePWArgs {
   userName: string;
-  email: string;
-  password: string;
+  old_password: string;
+  new_password?: string;
 }
