@@ -1,3 +1,4 @@
+import AuthChangePWForm from "@/components/Layout/AuthLayout/AuthChangePWForm";
 import { fetchChangePW, fetchSignUp } from "@/pages/auth/lib/apis";
 import { ChangePWArgs } from "@/pages/auth/lib/types";
 import router from "next/router";
@@ -5,7 +6,7 @@ import { useEffect, useState } from "react";
 const changepw = () => {
   const [showPW, setShowPw] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [userName, setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [old_password, setOldPW] = useState("");
   const [new_password, setNewPW] = useState("");
   const [newPasswordChk, setNewPasswordChk] = useState("");
@@ -14,7 +15,7 @@ const changepw = () => {
   const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,12}$/;
 
   const changePWInfo: ChangePWArgs = {
-    userName: userName,
+    username: username,
     old_password: old_password,
     new_password: new_password,
   };
@@ -23,7 +24,7 @@ const changepw = () => {
     if (info.new_password !== newPasswordChk) {
       alert("Passwords do not match.");
       return false;
-    } else if (!info.userName) {
+    } else if (!info.username) {
       alert("Check your username.");
       return false;
     } else if (!info.old_password) {
@@ -78,93 +79,28 @@ const changepw = () => {
   };
   useEffect(() => {
     const isFormValid =
-      userName !== "" && old_password !== "" && new_password !== "" && newPasswordChk !== "" && instantPWChk;
+      username !== "" && old_password !== "" && new_password !== "" && newPasswordChk !== "" && instantPWChk;
     setButtonDisabled(!isFormValid);
-  }, [userName, old_password, new_password, newPasswordChk, instantPWChk]);
+  }, [username, old_password, new_password, newPasswordChk, instantPWChk]);
 
   return (
-    <div className="ChangePWBox w-full bg-[#8ace00] flex justify-center items-center text-center h-screen">
-      <div className="flex justify-center items-center h-screen">
-        <div className="min-w-[380px] w-[40vh] min-h-[380px] border-2 p-6 bg-[#8ace00] flex flex-col justify-center items-center text-center">
-          <div className="text-xl m-2">새 비밀번호 변경하기</div>
-          <div className="flex w-full m-2 p-1 justify-start items-center text-left">
-            <a className="w-[23%] m-2 h-17 text-xs">이메일:</a>
-            <input
-              type="text"
-              id="userName"
-              placeholder="아이디를 입력하세요."
-              value={userName}
-              className="usernameInput ml-2 text-xs p-2 w-[77%]"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className="flex w-full m-2 p-1 justify-start items-center text-left">
-            <a className="w-[23%] m-2 h-17 text-xs">예전 비밀번호:</a>
-            <input
-              type="text"
-              id="old_password"
-              placeholder="임시 비밀번호를 입력하세요."
-              value={old_password}
-              className="oldpwInput ml-2 text-xs p-2 w-[77%]"
-              onChange={(e) => setOldPW(e.target.value)}
-            />
-          </div>
-          <div className="flex w-full m-2 p-1 justify-start items-center text-left">
-            <a className="w-[23%] m-2 h-17 text-xs">새 비밀번호:</a>
-            <input
-              type={showPW ? "text" : "password"}
-              id="new_password"
-              placeholder="새로 설정할 비밀번호를 입력하세요."
-              value={new_password}
-              className="newpwInput ml-2 text-xs p-2 w-[77%]"
-              onChange={handleNewPasswordChange}
-            />
-          </div>
-          <div className="inline-block w-full text-xs text-left mx-2">
-            <p className="ml-2 h-17">
-              * 비밀번호는 최소 8자, 대문자, 특수기호 포함 [
-              <a style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</a>]
-            </p>
-          </div>
-          <div className="flex w-full mx-2 mt-2 p-1 justify-start items-center text-left">
-            <a className="w-[23%] m-2 h-17 text-xs">
-              새 비밀번호
-              <br />
-              체크:
-            </a>
-            <input
-              type={showPW ? "text" : "password"}
-              id="newPasswordChk"
-              placeholder="비밀번호 확인"
-              value={newPasswordChk}
-              className="newpwChkInput ml-2 text-xs p-2 w-[77%]"
-              onChange={handleNewPasswordChkChange}
-            />
-          </div>
-          <div className="inline-block w-full text-xs text-right mx-2">
-            <p className="mr-2 h-17">
-              [<a style={{ color: instantPWChk ? "green" : "red" }}>{instantPWChk ? "일치" : "불일치"}</a>]
-            </p>
-          </div>
-          <div className="m-2 w-full flex justify-center">
-            <button
-              disabled={buttonDisabled}
-              className={`p-2 w-full text-center m-2 ${buttonDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-black text-white"}`}
-              onClick={handleSubmit}
-            >
-              비밀번호 변경
-            </button>
-          </div>
-          <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
-            <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
-              <button id="login" onClick={handleButton}>
-                임시 비밀번호 재발급
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AuthChangePWForm
+      username={username}
+      setUsername={setUsername}
+      showPW={showPW}
+      old_password={old_password}
+      new_password={new_password}
+      setOldPW={setOldPW}
+      buttonDisabled={buttonDisabled}
+      handleNewPasswordChange={handleNewPasswordChange}
+      passwordError={passwordError}
+      newPasswordChk={newPasswordChk}
+      instantPWChk={instantPWChk}
+      handleNewPasswordChkChange={handleNewPasswordChkChange}
+      setShowPw={setShowPw}
+      handleButton={handleButton}
+      handleSubmit={handleSubmit}
+    ></AuthChangePWForm>
   );
 };
 export default changepw;

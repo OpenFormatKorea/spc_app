@@ -1,11 +1,11 @@
 export interface AuthArgs {
-  userName: string;
+  username: string;
   email?: string;
   password?: string;
 }
 
 export interface ChangePWArgs {
-  userName: string;
+  username: string;
   old_password: string;
   new_password?: string;
 }

@@ -1,18 +1,20 @@
+import AuthLogin from "@/components/Layout/AuthLayout/AuthLoginForm";
+import AuthLoginForm from "@/components/Layout/AuthLayout/AuthLoginForm";
 import { fetchLogIn } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // src/pages/index.tsx
 const Login: React.FC = () => {
-  const [showPW, getShowPw] = useState(false);
-  const [userName, getUsername] = useState("");
-  const [password, getPassword] = useState("");
+  const [showPW, setShowPw] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
   const loginInfo: AuthArgs = {
-    userName: userName,
+    username: username,
     password: password,
   };
 
@@ -31,7 +33,7 @@ const Login: React.FC = () => {
   };
 
   const infoCheck = (info: AuthArgs) => {
-    if (!info.userName) {
+    if (!info.username) {
       alert("아이디를 확인 후 다시 시도해주세요.");
       return false;
     } else if (!info.password) {
@@ -46,8 +48,8 @@ const Login: React.FC = () => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
       if (result.success) {
-        console.log(loginInfo.userName + " 님 로그인 하셨습니다.");
-        router.push("/home");
+        console.log(loginInfo.username + " 님 로그인 하셨습니다.");
+        router.push("/admin");
       } else {
         alert(result.message);
       }
@@ -57,60 +59,21 @@ const Login: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="LoginBox flex justify-center items-center h-screen">
-        <div className="inblock min-w-[350px] bg-blue-200 text-center rounded-lg p-4">
-          <form>
-            <h1 className="m-2 text-center text-lg font-bold">로그인</h1>
-            <div className="emailDiv flex w-full m-2 p-1 justify-start items-center text-left">
-              <p className="w-[20%] text-sm font-bold m-2">e-mail</p>
-              <input
-                type="email"
-                placeholder="이메일을 입력하세요"
-                className="border-black border p-2 w-[55%]"
-                value={userName}
-                onChange={(e) => getUsername(e.target.value)}
-              />
-            </div>
-            <div className="passwordDiv flex w-full m-2 p-1 justify-start items-center text-left">
-              <p className="w-[20%] text-sm font-bold m-2">Password </p>
-              <input
-                type={showPW ? "text" : "password"}
-                placeholder="비밀번호를 입력하세요"
-                className="border-black border p-2 w-[55%]"
-                value={password}
-                onChange={(e) => getPassword(e.target.value)}
-              />
-              <div
-                className="ml-2 rounded-md text-xs w-[17%] text-white bg-blue-300 text-center p-2 cursor-pointer"
-                onClick={() => getShowPw(!showPW)}
-              >
-                pw보기
-              </div>
-            </div>
-          </form>
-          <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
-            <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
-              <button id="signup" onClick={handleButton}>
-                회원가입
-              </button>
-            </div>
-            <div>|</div>
-            <div id="forgotpw" className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
-              <button id="forgotpw" onClick={handleButton}>
-                비밀번호 찾기
-              </button>
-            </div>
-          </div>
-          <button
-            className="m-1 p-3 text-xs bg-blue-300 rounded-xl text-white font-medium cursor-pointer w-full"
-            onClick={handleSubmit}
-          >
-            로그인
-          </button>
-        </div>
+    <div className="AuthContainer w-full bg-[#8ace00] flex justify-center items-center text-center h-screen">
+      <div className="flex justify-center items-center h-screen">
+        <AuthLogin
+          username={username}
+          setUsername={setUsername}
+          showPW={showPW}
+          password={password}
+          setPassword={setPassword}
+          buttonDisabled={false}
+          setShowPw={setShowPw}
+          handleButton={handleButton}
+          handleSubmit={handleSubmit}
+        />
       </div>
-    </>
+    </div>
   );
 };
 

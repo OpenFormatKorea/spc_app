@@ -1,0 +1,61 @@
+import AuthButton from "@/components/Layout/AuthLayout/AuthButton";
+import AuthContainer from "@/components/Layout/AuthLayout/AuthContainer";
+import AuthInputBox from "@/components/Layout/AuthLayout/AuthInputBox";
+import AuthLogin from "@/components/Layout/AuthLayout/AuthLoginForm";
+interface AuthForgotPWProps {
+  username: string;
+  setUsername: (value: string) => void;
+  email: string;
+  setEmail: (value: string) => void;
+  buttonDisabled: boolean;
+  handleButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+}
+const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
+  username,
+  setUsername,
+  email,
+  setEmail,
+  handleButton,
+  handleSubmit,
+  buttonDisabled,
+}) => {
+  return (
+    <AuthContainer>
+      <div className="min-w-[380px] w-[40vh] min-h-[380px] border-2 p-6 bg-[#8ace00] flex flex-col justify-center items-center text-center">
+        <div className="text-xl m-2">비밀번호 찾기</div>
+        <AuthInputBox
+          label="이메일:"
+          type="text"
+          id="email"
+          placeholder="이메일을 입력하세요."
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <AuthInputBox
+          label="아이디:"
+          type="text"
+          id="username"
+          placeholder="아이디를 입력하세요."
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <AuthButton disabled={buttonDisabled} label="임시 비밀번호 발급" onClick={handleSubmit} />
+        <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
+          <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
+            <button id="signup" onClick={handleButton}>
+              회원가입
+            </button>
+          </div>
+          <div>|</div>
+          <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
+            <button id="login" onClick={handleButton}>
+              로그인
+            </button>
+          </div>
+        </div>
+      </div>
+    </AuthContainer>
+  );
+};
+export default AuthForgotPW;
