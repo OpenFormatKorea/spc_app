@@ -19,12 +19,12 @@ export const handleSignOut = async (event: React.FormEvent) => {
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
-    <header className="bg-gray-200 flex items-center h-[70px] w-[100%]">
-      <div className="flex-grow flex items-center justify-between">
-        <h2 className="font-semibold text-lg min-w-[300px] pl-3 bg-red-300">{title}</h2>
-        <div className="flex">
-          <div className="p-2 mr-2 cursor-pointer bg-white rounded-lg">My Page</div>
-          <div className="p-2 mr-2 cursor-pointer bg-white rounded-lg" onClick={handleSignOut}>
+    <header className="bg-[#20b7ec] fixed top-0 left-0 ml-[200px]" style={{ width: "calc(100% - 200px)" }}>
+      <div className="flex items-center h-[60px] px-4">
+        <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
+        <div className="flex space-x-2">
+          <div className="p-2 cursor-pointer bg-white rounded-lg text-sm text-center w-[72px]">My Page</div>
+          <div className="p-2 cursor-pointer bg-white rounded-lg text-sm text-center w-[72px]" onClick={handleSignOut}>
             Sign out
           </div>
         </div>

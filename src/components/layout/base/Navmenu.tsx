@@ -15,7 +15,7 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
   };
 
   return (
-    <div className="h-[40px] flex items-center justify-center border-b text-xl cursor-pointer" onClick={handleClick}>
+    <div className="h-[50px] flex items-center justify-center  text-xl cursor-pointer" onClick={handleClick}>
       {menutitle}
     </div>
   );

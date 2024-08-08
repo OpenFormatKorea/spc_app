@@ -20,11 +20,11 @@ const HomePage = () => {
         <div className="m-10 flex justify-center">
           <img src="/images/incento_logo.png" alt="Incento Logo" className="w-[180px]" />
         </div>
-        <div className="p-4 flex items-center justify-center space-x-2 m-10">
-          <button id="login" className="p-2 bg-gray-300 text-sm" onClick={handleButton}>
+        <div className="p-4 flex items-center justify-center m-10">
+          <button id="login" className="mx-2 p-2 bg-gray-300 text-sm" onClick={handleButton}>
             로그인
           </button>
-          <button id="signup" className="p-2 bg-gray-300 text-sm" onClick={handleButton}>
+          <button id="signup" className="mx-2 p-2 bg-gray-300 text-sm" onClick={handleButton}>
             회원가입
           </button>
         </div>

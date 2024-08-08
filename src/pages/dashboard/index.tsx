@@ -10,7 +10,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Dashboard: React.FC = () => {
   return (
     <DashboardContainer title={"대시보드"}>
-      <div className="inline-block w-full">
+      <div className="inline-block w-full mt-[70px] fixed">
         <div className="h2-header p-2 w-100 h-14 flex items-center font-bold">
           <h2>Hello, World!</h2>
         </div>
