@@ -1,6 +1,6 @@
-import AuthButton from "@/components/Layout/AuthLayout/AuthButton";
-import AuthContainer from "@/components/Layout/AuthLayout/AuthContainer";
-import AuthInputBox from "@/components/Layout/AuthLayout/AuthInputBox";
+import AuthButton from "@/components/layout/authlayout/AuthButton";
+import AuthContainer from "@/components/layout/authlayout/AuthContainer";
+import AuthInputBox from "@/components/layout/authlayout/AuthInputBox";
 interface AuthLoginFormProps {
   username: string;
   setUsername: (value: string) => void;

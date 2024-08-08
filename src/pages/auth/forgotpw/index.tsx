@@ -1,15 +1,18 @@
-import AuthContainer from "@/components/Layout/AuthLayout/AuthContainer";
-import AuthForgotPW from "@/components/Layout/AuthLayout/AuthForgotPWForm";
-import { fetchChangePW, fetchResetPW } from "@/pages/auth/lib/apis";
+import AuthContainer from "@/components/layout/authlayout/AuthContainer";
+import AuthForgotPW from "@/components/layout/authlayout/AuthForgotPWForm";
+import { authenticateUserforLogin } from "@/lib/auth";
+import { fetchResetPW } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";
-import { info } from "console";
+import { GetServerSideProps } from "next";
 import router from "next/router";
 import { useEffect, useState } from "react";
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return authenticateUserforLogin(context);
+};
 const resetpw = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const resetPWInfo: AuthArgs = {
     username: username,
     email: email,
@@ -33,7 +36,6 @@ const resetpw = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    console.log("resetPWInfo", resetPWInfo);
     if (infoCheck(resetPWInfo)) {
       const result = await postResetPW(resetPWInfo);
       if (result.success) {

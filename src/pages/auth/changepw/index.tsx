@@ -1,8 +1,13 @@
-import AuthChangePWForm from "@/components/Layout/AuthLayout/AuthChangePWForm";
+import AuthChangePWForm from "@/components/layout/authlayout/AuthChangePWForm";
+import { authenticateUserforLogin } from "@/lib/auth";
 import { fetchChangePW, fetchSignUp } from "@/pages/auth/lib/apis";
 import { ChangePWArgs } from "@/pages/auth/lib/types";
+import { GetServerSideProps } from "next";
 import router from "next/router";
 import { useEffect, useState } from "react";
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return authenticateUserforLogin(context);
+};
 const changepw = () => {
   const [showPW, setShowPw] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);

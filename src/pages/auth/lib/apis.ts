@@ -48,7 +48,6 @@ export async function fetchLogIn(info: AuthArgs) {
 
 //reset PW
 export async function fetchResetPW(info: AuthArgs) {
-  console.log("info", info);
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/account/generate-temp-password`;
   const username = info.username;
   const email = info.email;
@@ -64,7 +63,6 @@ export async function fetchResetPW(info: AuthArgs) {
 
 //change PW
 export async function fetchChangePW(info: ChangePWArgs) {
-  console.log("info", info);
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/account/change-password`;
   const username = info.username;
   const old_password = info.old_password;
@@ -84,7 +82,6 @@ export async function fetchChangePW(info: ChangePWArgs) {
     document.cookie = `refresh=${refresh};path=/;domain=${
       process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
     }`;
-    console.log("success: ", true, "");
     return { success: true, message: "비밀번호 변경을 성공하였습니다." };
   } catch (error) {
     console.log("success: ", false, "message: 비밀번호 변경 실패 ");

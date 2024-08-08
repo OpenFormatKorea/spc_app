@@ -1,45 +1,31 @@
 // src/pages/home.tsx
-import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { getCookie } from "cookies-next";
+import { GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+
 const HomePage = () => {
   const router = useRouter();
   const handleButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { id } = event.currentTarget;
-    if (id === 'login') {
-      router.push('auth/login');
-    } else if (id === 'signup') {
-      router.push('auth/signup');
+    if (id === "login") {
+      router.push("auth/login");
+    } else if (id === "signup") {
+      router.push("auth/signup");
     }
   };
 
   return (
-    <div>
-      <div
-        className='LoginBox'
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <div className='inblock min-w-[350px] bg-blue-100 text-center items-center rounded-lg p-4'>
-          <div className='w-full p-4 flex items-center justify-center'>
-            <img src='/images/incento_logo.png' />
+    <div className="LoginContainer flex justify-center items-center h-screen bg-[#8ace00]">
+      <div className="LoginBox min-w-[350px] min-h-[350px] border-2 border-white flex justify-center items-center">
+        <div className="inline-block w-[100%] h-[100%]">
+          <div className=" flex justify-center m-10">
+            <img src="/images/incento_logo.png" alt="Incento Logo" />
           </div>
-          <div className='w-full p-4 flex items-center justify-center'>
-            <button
-              id='login'
-              className='p-2 rounded-lg border-white bg-blue-300 text-white text-sm m-1'
-              onClick={handleButton}
-            >
+          <div className="p-4 flex items-center justify-center space-x-2 m-10">
+            <button id="login" className="p-2  bg-gray-300 text-auto text-sm" onClick={handleButton}>
               로그인
             </button>
-            <button
-              id='signup'
-              className='p-2 rounded-lg border-white bg-green-300 text-white text-sm m-1'
-              onClick={handleButton}
-            >
+            <button id="signup" className="p-2  bg-gray-300 text-auto text-sm" onClick={handleButton}>
               회원가입
             </button>
           </div>

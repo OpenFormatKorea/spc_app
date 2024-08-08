@@ -1,6 +1,11 @@
-import AuthButton from "@/components/Layout/AuthLayout/AuthButton";
-import AuthInputBox from "@/components/Layout/AuthLayout/AuthInputBox";
+import AuthButton from "@/components/layout/authlayout/AuthButton";
+import AuthInputBox from "@/components/layout/authlayout/AuthInputBox";
+import { authenticateUserforLogin } from "@/lib/auth";
+import { GetServerSideProps } from "next";
 import React, { ChangeEvent, FormEvent } from "react";
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return authenticateUserforLogin(context);
+};
 interface AuthSignUpFormProps {
   username: string;
   setUsername: (value: string) => void;

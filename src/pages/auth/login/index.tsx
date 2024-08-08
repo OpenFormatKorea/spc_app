@@ -1,10 +1,14 @@
-import AuthLogin from "@/components/Layout/AuthLayout/AuthLoginForm";
-import AuthLoginForm from "@/components/Layout/AuthLayout/AuthLoginForm";
+import AuthLogin from "@/components/layout/authlayout/AuthLoginForm";
+import { authenticateUserforLogin } from "@/lib/auth";
 import { fetchLogIn } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";
+import { setCookie } from "cookies-next";
+import { GetServerSideProps } from "next";
 import router from "next/router";
 import { useState } from "react";
-
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return authenticateUserforLogin(context);
+};
 // src/pages/index.tsx
 const Login: React.FC = () => {
   const [showPW, setShowPw] = useState(false);
@@ -17,7 +21,6 @@ const Login: React.FC = () => {
     username: username,
     password: password,
   };
-
   const handleButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { id } = event.currentTarget;
     if (id === "forgotpw") {
@@ -48,8 +51,9 @@ const Login: React.FC = () => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
       if (result.success) {
+        setCookie("username", loginInfo.username);
         console.log(loginInfo.username + " 님 로그인 하셨습니다.");
-        router.push("/admin");
+        router.push("/dashboard");
       } else {
         alert(result.message);
       }

@@ -1,7 +1,6 @@
-import AuthButton from "@/components/Layout/AuthLayout/AuthButton";
-import AuthContainer from "@/components/Layout/AuthLayout/AuthContainer";
-import AuthInputBox from "@/components/Layout/AuthLayout/AuthInputBox";
-import AuthLogin from "@/components/Layout/AuthLayout/AuthLoginForm";
+import AuthButton from "@/components/layout/authlayout/AuthButton";
+import AuthContainer from "@/components/layout/authlayout/AuthContainer";
+import AuthInputBox from "@/components/layout/authlayout/AuthInputBox";
 import { ChangeEvent } from "react";
 interface AuthChangePWFormProps {
   username: string;
@@ -66,7 +65,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           onChange={handleNewPasswordChange}
         />
         <div className="inline-block w-full text-xs text-left mx-2">
-          <p className="ml-2 h-17">
+          <p className="ml-2">
             * 비밀번호는 최소 8자, 대문자, 특수기호 포함 [
             <a style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</a>]
           </p>

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { fetchSignUp } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";
 import router from "next/router";
-import { info } from "console";
-import AuthContainer from "@/components/Layout/AuthLayout/AuthContainer";
-import AuthSignUpForm from "@/components/Layout/AuthLayout/AuthSignUpForm";
+import AuthContainer from "@/components/layout/authlayout/AuthContainer";
+import AuthSignUpForm from "@/components/layout/authlayout/AuthSignUpForm";
 
 const Signup: React.FC = () => {
   const [showPW, setShowPw] = useState(false);
