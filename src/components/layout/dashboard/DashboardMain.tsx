@@ -21,11 +21,10 @@ export const handleSignOut = async (event: React.FormEvent) => {
 
 const DashboardMain: React.FC<MainProps> = ({ children }) => {
   return (
-    <div className="pl-[200px] mt-[60px]">
-      {" "}
-      <div className="inline-block w-full">
-        <div className="h2-header w-100 h-[50px] flex items-center font-boldv bg-yellow-500 ">
-          <h2>Hello, World!</h2>
+    <div className="pl-[200px] mt-[60px] h-full">
+      <div className="inline-block w-full bg-gray-50">
+        <div className="h2-header w-100 h-[50px] flex items-center font-bold p-10 text-[30px]">
+          <h2>TITLE DASHBOARD</h2>
         </div>
         {children}
       </div>

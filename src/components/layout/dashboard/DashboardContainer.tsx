@@ -13,9 +13,8 @@ const DashboardContainer: React.FC<DashboarContainerProps> = ({ title, children 
     <div className="flex flex-col h-screen">
       <Navbar />
       <Header title={title} />
-
       <DashboardMain children={children} />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
