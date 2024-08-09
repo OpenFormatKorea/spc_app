@@ -7,10 +7,12 @@ interface HeaderProps {
 }
 
 export const handleSignOut = async (event: React.FormEvent) => {
-  const username = getCookie("username");
-  if (username) {
-    deleteCookie("username");
-    console.log(username + " 님 로그아웃");
+  const access = getCookie("access");
+  if (access) {
+    deleteCookie("access");
+    deleteCookie("refresh");
+    deleteCookie("shop_id");
+    console.log(access + " 님 로그아웃");
     router.push("/home");
   } else {
     alert("로그아웃을 실패하였습니다. 잠시 후 다시 시도해주시기 바랍니다.");

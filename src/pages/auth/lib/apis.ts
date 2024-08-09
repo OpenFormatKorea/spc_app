@@ -13,14 +13,14 @@ export async function fetchSignUp(info: AuthArgs) {
       data: { access, refresh },
     }: { data: { access: string; refresh: string } } = await axios.post(apiUrl, { username, password, email });
 
-    // document.cookie = `access=${access};path=/;domain=${
-    //   process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
-    // }`;
-    // document.cookie = `refresh=${refresh};path=/;domain=${
-    //   process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
-    // }`;
-    console.log("success: ", true, "message: Signup successful");
-    return { success: true, message: "Signup successful" };
+    document.cookie = `access=${access};path=/;domain=${
+      process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
+    }`;
+    document.cookie = `refresh=${refresh};path=/;domain=${
+      process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
+    }`;
+    console.log("success: ", true, "message: 회원가입 성공하였습니다.");
+    return { success: true, message: "회원가입 성공하였습니다." };
   } catch (error) {
     console.log("success: ", false, "message: 이메일과 비밀번호를 확인 해 주세요");
 
@@ -30,16 +30,19 @@ export async function fetchSignUp(info: AuthArgs) {
 
 //login
 export async function fetchLogIn(info: AuthArgs) {
-  console.log("info", info);
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/account/login`;
   const username = info.username;
   const password = info.password;
   try {
     const {
-      data: { access, refresh },
-    }: { data: { access: string; refresh: string } } = await axios.post(apiUrl, { username, password });
+      data: { access, refresh, shop_id },
+    }: { data: { access: string; refresh: string; shop_id: string } } = await axios.post(apiUrl, {
+      username,
+      password,
+    });
+
     console.log("success: ", true, "message: 로그인에 성공 하였습니다.");
-    return { success: true, message: "로그인에 성공 하였습니다." };
+    return { success: true, message: "로그인에 성공 하였습니다.", data: { access, refresh, shop_id } };
   } catch (error) {
     console.log("success: ", false, "message: 이메일과 비밀번호를 확인 해 주세요");
     return { success: false, message: "이메일과 비밀번호를 확인 해 주세요" };

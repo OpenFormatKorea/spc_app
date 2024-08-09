@@ -5,9 +5,8 @@ import { getCookie } from "cookies-next";
 type AuthResult = { redirect: Redirect } | { props: {} };
 
 export const authenticateUserforLogin = (context: GetServerSidePropsContext): AuthResult => {
-  const username = getCookie("username", context);
-
-  if (username) {
+  const access = getCookie("access", context);
+  if (access) {
     return {
       redirect: {
         destination: "/dashboard",
@@ -19,8 +18,8 @@ export const authenticateUserforLogin = (context: GetServerSidePropsContext): Au
 };
 
 export const authenticateUserforHeader = (context: GetServerSidePropsContext): AuthResult => {
-  const username = getCookie("username", context);
-  if (!username) {
+  const access = getCookie("access", context);
+  if (!access) {
     return {
       redirect: {
         destination: "/home",

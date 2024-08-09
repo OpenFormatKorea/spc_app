@@ -16,7 +16,6 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const buttonRef = useRef<HTMLButtonElement>(null);
-
   const loginInfo: AuthArgs = {
     username: username,
     password: password,
@@ -33,6 +32,9 @@ const Login: React.FC = () => {
 
   const postLogin = async (info: AuthArgs) => {
     const result = await fetchLogIn(info);
+    const data = result.data;
+    const access = data?.access;
+    console.log(access);
     return result;
   };
 
@@ -52,8 +54,12 @@ const Login: React.FC = () => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
       if (result.success) {
-        setCookie("username", loginInfo.username);
-        console.log(loginInfo.username + " 님 로그인 하셨습니다.");
+        setCookie("access", result.data?.access);
+        setCookie("refresh", result.data?.refresh);
+        setCookie("shop_id", result.data?.shop_id);
+        console.log("result.data", result.data);
+
+        console.log(result.data?.shop_id + " 님 로그인 하셨습니다.");
         router.push("/dashboard");
       } else {
         alert(result.message);
