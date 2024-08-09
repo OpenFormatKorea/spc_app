@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <nav className="bg-yellow-400 w-[200px] fixed h-[100%]">
       <div className="flex items-center justify-center h-[70px] p-3">
-        <img src="/svg/spc_logo.svg" alt="Logo" className="h-[100%]" onClick={handleClick} />
+        <img src="/svg/spc_logo.svg" alt="Logo" className="h-[100%] cursor-pointer" onClick={handleClick} />
       </div>
       <div className="pt-4">
         <Navmenu menutitle="캠페인" link="/campaign" />

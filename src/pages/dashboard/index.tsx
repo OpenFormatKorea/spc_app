@@ -1,4 +1,5 @@
-import DashboardContainer from "@/components/layout/base/DashboardContainer";
+import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import DashboardContents from "@/components/layout/dashboard/DashboardContents";
 import { authenticateUserforHeader } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 
@@ -10,13 +11,45 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Dashboard: React.FC = () => {
   return (
     <DashboardContainer title={"대시보드"}>
-      <div className="inline-block w-full mt-[70px] fixed">
-        <div className="h2-header p-2 w-100 h-14 flex items-center font-bold">
-          <h2>Hello, World!</h2>
-        </div>
-        <div className="body-containter p-2 w-100 h-[50%] bg-blue-100 flex-grow flex flex-col overflow-auto">
-          THIS IS THE BODY PART
-        </div>
+      <div className="contents-container flex flex-wrap w-full h-full justify-center ">
+        <DashboardContents>
+          <div>SUBJECT</div>
+          <div>description</div>
+          <table className="min-w-full bg-white border border-gray-200 ">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700">Name</th>
+                <th className="px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700">Age</th>
+                <th className="px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700">
+                  Country
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-6 py-4 border-b border-gray-200">John Doe</td>
+                <td className="px-6 py-4 border-b border-gray-200">28</td>
+                <td className="px-6 py-4 border-b border-gray-200">USA</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 border-b border-gray-200">Jane Smith</td>
+                <td className="px-6 py-4 border-b border-gray-200">34</td>
+                <td className="px-6 py-4 border-b border-gray-200">Canada</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 border-b border-gray-200">Emily Johnson</td>
+                <td className="px-6 py-4 border-b border-gray-200">22</td>
+                <td className="px-6 py-4 border-b border-gray-200">UK</td>
+              </tr>
+            </tbody>
+          </table>
+        </DashboardContents>
+        <DashboardContents>children</DashboardContents>
+        <DashboardContents>children</DashboardContents>
+        <DashboardContents>children</DashboardContents>
+        <DashboardContents>children</DashboardContents>
+        <DashboardContents>children</DashboardContents>
+        <DashboardContents>children</DashboardContents>
       </div>
     </DashboardContainer>
   );
