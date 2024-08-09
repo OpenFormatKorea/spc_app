@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState, KeyboardEvent } from "react";
 import { fetchSignUp } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";
 import router from "next/router";
@@ -16,6 +16,7 @@ const Signup: React.FC = () => {
   const [instantPWChk, setInstantPWChk] = useState(false);
   const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,12}$/;
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const signupInfo: AuthArgs = {
     username: username,
@@ -52,6 +53,15 @@ const Signup: React.FC = () => {
       }
     } else {
       alert("화원 가입을 실패 하였습니다.");
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (buttonRef.current) {
+        buttonRef.current.click();
+      }
     }
   };
 
@@ -95,6 +105,8 @@ const Signup: React.FC = () => {
         buttonDisabled={buttonDisabled}
         setShowPw={setShowPw}
         handleSubmit={handleSubmit}
+        buttonRef={buttonRef}
+        handleKeyDown={handleKeyDown}
       ></AuthSignUpForm>
     </AuthContainer>
   );

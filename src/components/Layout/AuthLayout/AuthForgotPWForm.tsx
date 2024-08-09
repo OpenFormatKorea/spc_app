@@ -10,6 +10,8 @@ interface AuthForgotPWProps {
   buttonDisabled: boolean;
   handleButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  buttonRef: React.RefObject<HTMLButtonElement>;
+  handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
   username,
@@ -19,6 +21,8 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
   handleButton,
   handleSubmit,
   buttonDisabled,
+  buttonRef,
+  handleKeyDown,
 }) => {
   return (
     <AuthContainer>
@@ -31,6 +35,7 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
           placeholder="이메일을 입력하세요."
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <AuthInputBox
           label="아이디:"
@@ -39,8 +44,9 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
           placeholder="아이디를 입력하세요."
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
-        <AuthButton disabled={buttonDisabled} label="임시 비밀번호 발급" onClick={handleSubmit} />
+        <AuthButton disabled={buttonDisabled} label="임시 비밀번호 발급" buttonRef={buttonRef} onClick={handleSubmit} />
         <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
           <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
             <button id="signup" onClick={handleButton}>

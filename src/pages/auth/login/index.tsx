@@ -4,8 +4,8 @@ import { fetchLogIn } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";
 import { setCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
-import router from "next/router";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useRef, useState, KeyboardEvent } from "react";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return authenticateUserforLogin(context);
 };
@@ -14,13 +14,14 @@ const Login: React.FC = () => {
   const [showPW, setShowPw] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const router = useRouter();
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const loginInfo: AuthArgs = {
     username: username,
     password: password,
   };
+
   const handleButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { id } = event.currentTarget;
     if (id === "forgotpw") {
@@ -62,6 +63,15 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent the default form submission behavior if it's in a form element
+      if (buttonRef.current) {
+        buttonRef.current.click(); // Trigger the click event on the login button
+      }
+    }
+  };
+
   return (
     <div className="AuthContainer w-full bg-[#8ace00] flex justify-center items-center text-center h-screen">
       <div className="flex justify-center items-center h-screen">
@@ -75,6 +85,8 @@ const Login: React.FC = () => {
           setShowPw={setShowPw}
           handleButton={handleButton}
           handleSubmit={handleSubmit}
+          buttonRef={buttonRef}
+          handleKeyDown={handleKeyDown}
         />
       </div>
     </div>

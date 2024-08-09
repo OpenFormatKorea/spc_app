@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, KeyboardEvent } from "react";
 interface AuthInputBoxProps {
   label: string;
   type: string;
@@ -6,8 +6,9 @@ interface AuthInputBoxProps {
   placeholder: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
-const AuthInputBox: React.FC<AuthInputBoxProps> = ({ label, type, id, placeholder, value, onChange }) => {
+const AuthInputBox: React.FC<AuthInputBoxProps> = ({ label, type, id, placeholder, value, onChange, onKeyDown }) => {
   return (
     <div className="flex w-full mx-2 mt-2 p-1 justify-start items-center text-left">
       <a className="w-[25%] m-2 text-xs">{label}</a>
@@ -18,6 +19,7 @@ const AuthInputBox: React.FC<AuthInputBoxProps> = ({ label, type, id, placeholde
         value={value}
         className="usernameInput ml-2 text-xs p-2 w-[75%]"
         onChange={onChange}
+        onKeyDown={onKeyDown}
       />
     </div>
   );

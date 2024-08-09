@@ -21,6 +21,8 @@ interface AuthSignUpFormProps {
   buttonDisabled: boolean;
   setShowPw: (value: boolean) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  buttonRef: React.RefObject<HTMLButtonElement>;
+  handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
   username,
@@ -37,6 +39,8 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
   buttonDisabled,
   setShowPw,
   handleSubmit,
+  buttonRef,
+  handleKeyDown,
 }) => {
   return (
     <div className="min-w-[380px] w-[40vh] min-h-[380px] border-2 p-6 bg-[#8ace00] flex flex-col justify-center items-center text-center">
@@ -48,6 +52,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
         placeholder="아이디를 입력하세요."
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
       <AuthInputBox
         label="이메일:"
@@ -56,6 +61,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
         placeholder="이메일을 입력하세요."
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
       <AuthInputBox
         label="비밀번호:"
@@ -64,6 +70,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
         placeholder="비밀번호를 입력하세요."
         value={password}
         onChange={handlePasswordChange}
+        onKeyDown={handleKeyDown}
       />
       <div className="inline-block w-full text-xs text-left mx-2">
         <p className="ml-2">
@@ -78,6 +85,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
         placeholder="비밀번호 확인"
         value={passwordChk}
         onChange={handlePasswordChkChange}
+        onKeyDown={handleKeyDown}
       />
       <div className="inline-block w-full text-xs text-right mx-2">
         <p className="mr-2">
@@ -87,7 +95,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
       <button className="text-xs border m-2 p-1 bg-white cursor-pointer" onClick={() => setShowPw(!showPW)}>
         비밀번호 {showPW ? "숨기기" : "보여주기"}
       </button>
-      <AuthButton disabled={buttonDisabled} label="회원가입" onClick={handleSubmit} />
+      <AuthButton disabled={buttonDisabled} label="회원가입" buttonRef={buttonRef} onClick={handleSubmit} />
     </div>
   );
 };

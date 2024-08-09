@@ -18,6 +18,8 @@ interface AuthChangePWFormProps {
   newPasswordChk: string;
   handleButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  buttonRef: React.RefObject<HTMLButtonElement>;
+  handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
   username,
@@ -35,6 +37,8 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
   setShowPw,
   handleButton,
   handleSubmit,
+  buttonRef,
+  handleKeyDown,
 }) => {
   return (
     <AuthContainer>
@@ -47,6 +51,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           placeholder="아이디을 입력하세요."
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <AuthInputBox
           label="임시 비밀번호:"
@@ -55,6 +60,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           placeholder="임시 비밀번호를 입력하세요."
           value={old_password}
           onChange={(e) => setOldPW(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <AuthInputBox
           label="신규 비밀번호:"
@@ -63,6 +69,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           placeholder="신규 비밀번호를 입력하세요."
           value={new_password}
           onChange={handleNewPasswordChange}
+          onKeyDown={handleKeyDown}
         />
         <div className="inline-block w-full text-xs text-left mx-2">
           <p className="ml-2">
@@ -77,6 +84,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           placeholder="비밀번호 확인"
           value={newPasswordChk}
           onChange={handleNewPasswordChkChange}
+          onKeyDown={handleKeyDown}
         />
         <div className="inline-block w-full text-xs text-right mx-2">
           <p className="mr-2">
@@ -87,7 +95,12 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           비밀번호 {showPW ? "숨기기" : "보여주기"}
         </button>
 
-        <AuthButton disabled={buttonDisabled} label="임시 비밀번호 재발급" onClick={handleSubmit} />
+        <AuthButton
+          disabled={buttonDisabled}
+          label="임시 비밀번호 재발급"
+          buttonRef={buttonRef}
+          onClick={handleSubmit}
+        />
         <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
           <div id="forgotpw" className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
             <button id="forgotpw" onClick={handleButton}>

@@ -5,7 +5,7 @@ import { fetchResetPW } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";
 import { GetServerSideProps } from "next";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, KeyboardEvent } from "react";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return authenticateUserforLogin(context);
 };
@@ -13,6 +13,8 @@ const resetpw = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   const resetPWInfo: AuthArgs = {
     username: username,
     email: email,
@@ -56,6 +58,14 @@ const resetpw = () => {
       router.push("/auth/signup");
     }
   };
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (buttonRef.current) {
+        buttonRef.current.click();
+      }
+    }
+  };
 
   useEffect(() => {
     const isFormValid = username !== "" && email !== "";
@@ -72,6 +82,8 @@ const resetpw = () => {
         handleButton={handleButton}
         handleSubmit={handleSubmit}
         buttonDisabled={buttonDisabled}
+        buttonRef={buttonRef}
+        handleKeyDown={handleKeyDown}
       />
     </AuthContainer>
   );

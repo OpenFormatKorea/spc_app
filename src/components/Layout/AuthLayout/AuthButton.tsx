@@ -1,14 +1,17 @@
 import { type } from "os";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useRef } from "react";
 interface AuthButtonProps {
   disabled: boolean;
   label: string;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  buttonRef: React.RefObject<HTMLButtonElement>;
 }
-const AuthButton: React.FC<AuthButtonProps> = ({ disabled, label, onClick }) => {
+
+const AuthButton: React.FC<AuthButtonProps> = ({ disabled, label, onClick, buttonRef }) => {
   return (
     <div className="m-2 w-full flex justify-center">
       <button
+        ref={buttonRef}
         disabled={disabled}
         className={`p-2 w-full text-center m-2 cursor-pointer ${disabled ? "bg-gray-300" : "bg-black text-white"}`}
         onClick={onClick}

@@ -11,6 +11,8 @@ interface AuthLoginFormProps {
   setShowPw: (value: boolean) => void;
   handleButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  buttonRef: React.RefObject<HTMLButtonElement>;
+  handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 const AuthLogin: React.FC<AuthLoginFormProps> = ({
   username,
@@ -22,6 +24,8 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
   setShowPw,
   handleButton,
   handleSubmit,
+  buttonRef,
+  handleKeyDown,
 }) => {
   return (
     <AuthContainer>
@@ -34,6 +38,7 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
           placeholder="아이디을 입력하세요."
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <AuthInputBox
           label="비밀번호:"
@@ -42,12 +47,13 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
           placeholder="비밀번호를 입력하세요."
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <button className="text-xs border m-2 p-1 bg-white cursor-pointer" onClick={() => setShowPw(!showPW)}>
           비밀번호 {showPW ? "숨기기" : "보여주기"}
         </button>
 
-        <AuthButton disabled={buttonDisabled} label="로그인" onClick={handleSubmit} />
+        <AuthButton disabled={buttonDisabled} label="로그인" buttonRef={buttonRef} onClick={handleSubmit} />
         <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
           <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
             <button id="signup" onClick={handleButton}>

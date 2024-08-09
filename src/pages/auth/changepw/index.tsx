@@ -1,10 +1,10 @@
 import AuthChangePWForm from "@/components/layout/authlayout/AuthChangePWForm";
 import { authenticateUserforLogin } from "@/lib/auth";
-import { fetchChangePW, fetchSignUp } from "@/pages/auth/lib/apis";
+import { fetchChangePW } from "@/pages/auth/lib/apis";
 import { ChangePWArgs } from "@/pages/auth/lib/types";
 import { GetServerSideProps } from "next";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, KeyboardEvent } from "react";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return authenticateUserforLogin(context);
 };
@@ -18,6 +18,7 @@ const changepw = () => {
   const [passwordError, setPasswordError] = useState("");
   const [instantPWChk, setInstantPWChk] = useState(false);
   const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,12}$/;
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const changePWInfo: ChangePWArgs = {
     username: username,
@@ -79,9 +80,19 @@ const changepw = () => {
     }
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (buttonRef.current) {
+        buttonRef.current.click();
+      }
+    }
+  };
+
   const handleButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     router.push("/auth/forgotpw");
   };
+
   useEffect(() => {
     const isFormValid =
       username !== "" && old_password !== "" && new_password !== "" && newPasswordChk !== "" && instantPWChk;
@@ -105,6 +116,8 @@ const changepw = () => {
       setShowPw={setShowPw}
       handleButton={handleButton}
       handleSubmit={handleSubmit}
+      buttonRef={buttonRef}
+      handleKeyDown={handleKeyDown}
     ></AuthChangePWForm>
   );
 };
