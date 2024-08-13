@@ -1,30 +1,28 @@
-import { authenticateUserforHeader } from "@/lib/auth";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { GetServerSideProps } from "next";
 import router from "next/router";
 interface MainProps {
+  title: string;
   children: React.ReactNode;
+  onclick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onclickText: string;
+  buttonId: string;
 }
 
-export const handleSignOut = async (event: React.FormEvent) => {
-  const access = getCookie("access");
-  if (access) {
-    deleteCookie("access");
-    deleteCookie("refresh");
-    deleteCookie("shop_id");
-    console.log(access + " 님 로그아웃");
-    router.push("/home");
-  } else {
-    alert("로그아웃을 실패하였습니다. 잠시 후 다시 시도해주시기 바랍니다.");
-  }
-};
-
-const DashboardMain: React.FC<MainProps> = ({ children }) => {
+const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickText, buttonId }) => {
   return (
-    <div className="pl-[200px] mt-[60px] h-full">
-      <div className="inline-block w-full bg-gray-50">
-        <div className="h2-header w-100 h-[50px] flex items-center font-bold p-10 text-[30px]">
-          <h2>TITLE DASHBOARD</h2>
+    <div className="pl-[200px] mt-[60px] flex flex-col" style={{ height: "calc(100vh - 60px)" }}>
+      <div className="w-full bg-gray-100 p-10 flex-grow">
+        <div className="header-container flex items-center p-2">
+          <div className="text-[30px] font-bold w-1/2">
+            <h2>{title}</h2>
+          </div>
+          {onclickText !== "" && (
+            <div className="button-container w-full text-right">
+              <button className="border p-2 bg-blue-500 text-white rounded-lg" onClick={onclick} id={buttonId}>
+                {onclickText}
+              </button>
+            </div>
+          )}
         </div>
         {children}
       </div>

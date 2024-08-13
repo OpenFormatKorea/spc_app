@@ -8,7 +8,7 @@ interface DashboardContentsProps {
 
 const DashboardContents: React.FC<DashboardContentsProps> = ({ children }) => {
   return (
-    <div className="body-container shadow-sm rounded-lg p-3 border-gray-200 border flex-1 bg-blue-50 m-6 max-w-fit min-w-[400px] h-50">
+    <div className="body-container shadow-sm rounded-lg p-6 m-2 border-gray-200 border flex-1 bg-white mt-4">
       {children}
     </div>
   );

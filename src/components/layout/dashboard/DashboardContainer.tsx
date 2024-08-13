@@ -6,14 +6,23 @@ import { Main } from "next/document";
 interface DashboarContainerProps {
   children: React.ReactNode;
   title: string;
+  onclick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onclickText: string;
+  buttonId: string;
 }
 
-const DashboardContainer: React.FC<DashboarContainerProps> = ({ title, children }) => {
+const DashboardContainer: React.FC<DashboarContainerProps> = ({ title, children, onclick, onclickText, buttonId }) => {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col">
       <Navbar />
       <Header title={title} />
-      <DashboardMain children={children} />
+      <DashboardMain
+        title={title}
+        children={children}
+        onclick={onclick}
+        onclickText={onclickText}
+        buttonId={buttonId}
+      />
       {/* <Footer /> */}
     </div>
   );
