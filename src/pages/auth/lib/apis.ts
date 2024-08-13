@@ -5,13 +5,19 @@ import axios from "axios";
 export async function fetchSignUp(info: AuthArgs) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/account/register`;
   const username = info.username;
-  const password = info.password;
+  const shop_name = info.shop_name;
   const email = info.email;
+  const password = info.password;
 
   try {
     const {
       data: { access, refresh },
-    }: { data: { access: string; refresh: string } } = await axios.post(apiUrl, { username, password, email });
+    }: { data: { access: string; refresh: string } } = await axios.post(apiUrl, {
+      username,
+      shop_name,
+      email,
+      password,
+    });
 
     document.cookie = `access=${access};path=/;domain=${
       process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"

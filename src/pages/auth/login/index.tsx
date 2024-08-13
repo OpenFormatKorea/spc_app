@@ -5,7 +5,7 @@ import { AuthArgs } from "@/pages/auth/lib/types";
 import { setCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useRef, useState, KeyboardEvent } from "react";
+import { useRef, useState, KeyboardEvent, useEffect } from "react";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return authenticateUserforLogin(context);
 };
@@ -14,8 +14,17 @@ const Login: React.FC = () => {
   const [showPW, setShowPw] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (buttonRef.current) {
+        buttonRef.current.click();
+      }
+    }
+  };
+
   const loginInfo: AuthArgs = {
     username: username,
     password: password,
@@ -66,15 +75,6 @@ const Login: React.FC = () => {
       }
     } else {
       alert("로그인에 실패하였습니다.");
-    }
-  };
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); // Prevent the default form submission behavior if it's in a form element
-      if (buttonRef.current) {
-        buttonRef.current.click(); // Trigger the click event on the login button
-      }
     }
   };
 

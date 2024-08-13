@@ -10,6 +10,7 @@ const Signup: React.FC = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [shopName, setShopName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordChk, setPasswordChk] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -20,6 +21,7 @@ const Signup: React.FC = () => {
 
   const signupInfo: AuthArgs = {
     username: username,
+    shop_name: shopName,
     email: email,
     password: password,
   };
@@ -45,6 +47,7 @@ const Signup: React.FC = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
+    console.log("signupInfo", signupInfo);
     if (infoCheck(signupInfo)) {
       const result = await postSignUp(signupInfo);
       alert(result.message);
@@ -72,6 +75,9 @@ const Signup: React.FC = () => {
     } else if (!info.username) {
       alert("아이디를 확인 해 주세요.");
       return false;
+    } else if (!info.shop_name) {
+      alert("자사몰 명을 확인 해 주세요.");
+      return false;
     } else if (!info.email || !handleEmailChk(info.email)) {
       alert("이메일을 확인 해 주세요.");
       return false;
@@ -84,7 +90,8 @@ const Signup: React.FC = () => {
   };
 
   useEffect(() => {
-    const isFormValid = username !== "" && email !== "" && password !== "" && passwordChk !== "" && instantPWChk;
+    const isFormValid =
+      username !== "" && email !== "" && shopName !== "" && password !== "" && passwordChk !== "" && instantPWChk;
     setButtonDisabled(!isFormValid);
   }, [username, email, password, passwordChk, instantPWChk]);
 
@@ -95,6 +102,8 @@ const Signup: React.FC = () => {
         setUsername={setUsername}
         email={email}
         setEmail={setEmail}
+        shopName={shopName}
+        setShopName={setShopName}
         showPW={showPW}
         password={password}
         handlePasswordChange={handlePasswordChange}

@@ -11,6 +11,8 @@ interface AuthSignUpFormProps {
   setUsername: (value: string) => void;
   email: string;
   setEmail: (value: string) => void;
+  shopName: string;
+  setShopName: (value: string) => void;
   showPW: boolean;
   password: string;
   handlePasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -29,6 +31,8 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
   setUsername,
   email,
   setEmail,
+  shopName,
+  setShopName,
   showPW,
   password,
   handlePasswordChange,
@@ -56,11 +60,20 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
       />
       <AuthInputBox
         label="이메일:"
-        type="email"
+        type="text"
         id="email"
         placeholder="이메일을 입력하세요."
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        onKeyDown={handleKeyDown}
+      />
+      <AuthInputBox
+        label="자사몰 명:"
+        type="text"
+        id="shopName"
+        placeholder="자사몰 이름을 입력하세요."
+        value={shopName}
+        onChange={(e) => setShopName(e.target.value)}
         onKeyDown={handleKeyDown}
       />
       <AuthInputBox

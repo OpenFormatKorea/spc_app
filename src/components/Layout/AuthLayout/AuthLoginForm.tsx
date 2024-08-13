@@ -35,7 +35,7 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
           label="아이디:"
           type="text"
           id="username"
-          placeholder="아이디을 입력하세요."
+          placeholder="아이디를 입력하세요."
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={handleKeyDown}

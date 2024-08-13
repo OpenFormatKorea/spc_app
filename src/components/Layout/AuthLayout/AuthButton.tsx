@@ -1,4 +1,3 @@
-import { type } from "os";
 import React, { ChangeEvent, useRef } from "react";
 interface AuthButtonProps {
   disabled: boolean;

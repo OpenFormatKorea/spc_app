@@ -6,6 +6,8 @@ interface HeaderProps {
   title: string;
 }
 
+const headerBtnstyle = "p-2 cursor-pointer bg-white rounded-lg text-xs text-center";
+
 export const handleSignOut = async (event: React.FormEvent) => {
   const access = getCookie("access");
   if (access) {
@@ -21,12 +23,12 @@ export const handleSignOut = async (event: React.FormEvent) => {
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
-    <header className="bg-[#20b7ec] fixed top-0 left-0 ml-[200px]" style={{ width: "calc(100% - 200px)" }}>
-      <div className="flex items-center h-[60px] px-4">
+    <header className="bg-[#20b7ec] fixed ml-[200px]" style={{ width: "calc(100% - 200px)" }}>
+      <div className="flex items-center h-[60px] px-6">
         <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
         <div className="flex space-x-2">
-          <div className="p-2 cursor-pointer bg-white rounded-lg text-sm text-center w-[72px]">My Page</div>
-          <div className="p-2 cursor-pointer bg-white rounded-lg text-sm text-center w-[72px]" onClick={handleSignOut}>
+          <div className={headerBtnstyle}>My Page</div>
+          <div className={headerBtnstyle} onClick={handleSignOut}>
             Sign out
           </div>
         </div>
