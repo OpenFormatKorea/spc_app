@@ -62,14 +62,14 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
           );
         return req;
       }
-      const response = await axios.post(`${baseURL}/account/token/refresh/`, {
-        refresh,
-      });
-      setAccessTokenToCookies(context, response.data.access);
-      setRefreshTokenToCookies(context, response.data.refresh);
+      // const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+      //   refresh,
+      // });
+      // setAccessTokenToCookies(context, response.data.access);
+      // setRefreshTokenToCookies(context, response.data.refresh);
 
-      if (!req.headers) req.headers = {} as AxiosRequestHeaders;
-      req.headers.Authorization = `Bearer ${response.data.access as string}`;
+      // if (!req.headers) req.headers = {} as AxiosRequestHeaders;
+      // req.headers.Authorization = `Bearer ${response.data.access as string}`;
 
       return req;
     });

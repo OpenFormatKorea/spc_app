@@ -1,6 +1,7 @@
 import { fetchAPI } from "@/lib/api";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { CampaignArgs } from "@/pages/campaign/lib/types";
+import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 
 export async function fetchCreateCampaign(info: CampaignArgs, context: GetServerSidePropsContext) {
@@ -30,27 +31,18 @@ export async function fetchCreateCampaign(info: CampaignArgs, context: GetServer
 
 export async function fetchGetCampaignInfo(context: GetServerSidePropsContext) {
   const shop_id = getShopIdFromCookies(context);
-  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns` + "?shop_id=" + shop_id;
+  //  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns` + "?shop_id=" + shop_id;
 
-  const data = await fetchAPI(context, final_url, "GET", {});
-  console.log("data :", data);
-
-  return data;
+  const final_url = `http://127.0.0.1:8001/api/v1/referral/campaigns` + "?shop_id=" + shop_id;
+  try {
+    const response = await fetchAPI(context, final_url, "GET", {});
+    // const response = await axios.get(final_url, {
+    //   //refresh,
+    // });
+    console.log("data in API GET FUNCTION :", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching campaign info:", error);
+    return null;
+  }
 }
-
-// export const fetchGetCampaignInfo = async (context: GetServerSidePropsContext) => {
-//   const shop_id = getShopIdFromCookies(context);
-//   const data = await fetchAPI(context, `/referral/campaigns`, "GET", {
-//     shop_id,
-//   });
-//   return data.data;
-// };
-
-// export const fetchGetCampaignInfo = async (context: GetServerSidePropsContext) => {
-//   //const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns` + "?shop_id=" + shop_id;
-//   const shop_id = getShopIdFromCookies(context);
-//   const data = await fetchAPI(context, `/referral/campaigns`, "GET", {
-//     shop_id,
-//   });
-//   return data.data;
-// };
