@@ -23,7 +23,7 @@ export const handleSignOut = async (event: React.FormEvent) => {
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
-    <header className="bg-[#20b7ec] fixed ml-[200px]" style={{ width: "calc(100% - 200px)" }}>
+    <header className="bg-[#20b7ec] fixed ml-[250px]" style={{ width: "calc(100% - 250px)" }}>
       <div className="flex items-center h-[60px] px-6">
         <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
         <div className="flex space-x-2">

@@ -10,7 +10,7 @@ interface MainProps {
 
 const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickText, buttonId }) => {
   return (
-    <div className="pl-[200px] mt-[60px] flex flex-col" style={{ height: "calc(100vh - 60px)" }}>
+    <div className="pl-[250px] mt-[60px] flex flex-col" style={{ height: "calc(100vh - 60px)" }}>
       <div className="w-full bg-gray-100 p-10 flex-grow">
         <div className="header-container flex items-center p-2">
           <div className="text-[30px] font-bold w-1/2">
