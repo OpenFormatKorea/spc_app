@@ -1,10 +1,12 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import DashboardContents from "@/components/layout/dashboard/DashboardContents";
+import { Response } from "@/lib/serverApiFunctions";
+import { fetchGetCampaignInfo } from "@/pages/campaign/lib/apis";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
+import React from "react";
 
-// src/pages/index.tsx
-const Campaign: React.FC = () => {
-  //table style string
+const Campaign = (context: GetServerSidePropsContext) => {
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700";
   const tbodyStyle = "px-6 py-4 border-b border-gray-200";
   const router = useRouter();
@@ -14,6 +16,7 @@ const Campaign: React.FC = () => {
       router.push("campaign/new");
     }
   };
+
   return (
     <DashboardContainer title={"캠페인"} onclick={handleButton} onclickText="새 리퍼럴 생성" buttonId="new_campaign">
       <div className="wrapper-container">
@@ -35,13 +38,21 @@ const Campaign: React.FC = () => {
               <table className="w-full bg-white border border-gray-200">
                 <thead>
                   <tr className="bg-gray-200">
-                    <th className={theadStyle}>리퍼럴명</th>
+                    <th className={theadStyle}>캠페인 명</th>
                     <th className={theadStyle}>타입</th>
                     <th className={theadStyle}>활성화</th>
                     <th className={theadStyle}>캠페인 생성일</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {/* {campaignData.map((campaign, index) => (
+                    <tr key={index}>
+                      <td className={tbodyStyle}>{campaign.name}</td>
+                      <td className={tbodyStyle}>{campaign.type}</td>
+                      <td className={tbodyStyle}>{campaign.active ? "ON" : "OFF"}</td>
+                      <td className={tbodyStyle}>{campaign.created_at}</td>
+                    </tr>
+                  ))} */}
                   <tr>
                     <td className={tbodyStyle}>예시 캠페인</td>
                     <td className={tbodyStyle}>Product</td>

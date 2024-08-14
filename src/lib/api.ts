@@ -20,6 +20,7 @@ export type fetchAPIType = (
 
 export const fetchAPI: fetchAPIType = async (context, relative_url, method = "GET", data, params = {}) => {
   const api = await getAxiosInstanceServer(context);
+
   if (!api) return;
   const res = await api({
     method,

@@ -77,7 +77,6 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     // Add a response interceptor to log response headers
     axiosInstance.interceptors.response.use((response) => {
       // Log the response headers
-      console.log("Response Headers:", response.headers);
       return response;
     });
 
