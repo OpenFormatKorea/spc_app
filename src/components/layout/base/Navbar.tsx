@@ -15,9 +15,7 @@ const Navbar = () => {
       </div>
       <div className="pt-4">
         <Navmenu menutitle="대시보드" link="/dashboard" />
-
         <Navmenu menutitle="캠페인" link="/campaign" />
-        <Navmenu menutitle="네이버" link="https://www.naver.com" />
       </div>
     </nav>
   );

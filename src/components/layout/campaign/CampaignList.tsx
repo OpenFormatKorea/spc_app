@@ -37,7 +37,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
           </div>
         )}
       </div>
-      <div>현재 사용중인 리퍼럴 목록입니다.</div>
+      <div>현재 사용중인 캠페인 목록입니다.</div>
 
       <div className="my-2 w-full">
         <table className="w-full bg-white border border-gray-200">

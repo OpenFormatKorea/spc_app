@@ -29,8 +29,12 @@ export async function fetchCreateCampaign(info: CampaignArgs, context: GetServer
   }
 }
 
-export async function fetchModifyCampaign(id: string, info: CampaignArgs, context: GetServerSidePropsContext) {
-  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign-modify/` + id;
+export async function fetchModifyCampaign(
+  camapaign_id: string,
+  info: CampaignArgs,
+  context: GetServerSidePropsContext
+) {
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign-modify/` + camapaign_id;
   const shop_id = getShopIdFromCookies(context);
   const dataObj = {
     shop_id: shop_id,
@@ -69,9 +73,9 @@ export async function fetchGetCampaignList(context: GetServerSidePropsContext) {
   }
 }
 
-export async function fetchGetCampaignDetails(id: string, context: GetServerSidePropsContext) {
+export async function fetchGetCampaignDetails(camapaign_id: string, context: GetServerSidePropsContext) {
   const shop_id = getShopIdFromCookies(context);
-  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign/` + id;
+  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign/` + camapaign_id;
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});

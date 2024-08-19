@@ -74,14 +74,14 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           router.push("/campaign");
         }
       } else {
-        console.log("리퍼럴 생성을 실패 하였습니다.");
+        console.log("캠페인 생성을 실패 하였습니다.");
         return false;
       }
     }
   };
   return (
     <DashboardContainer
-      title={"새 리퍼럴 생성"}
+      title={"새 캠페인 생성"}
       onclick={handleSubmit}
       onclickText="저장하기"
       buttonId="create_campaign"

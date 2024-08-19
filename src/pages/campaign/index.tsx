@@ -35,7 +35,7 @@ export const Campaign = ({ apiResponse }: { apiResponse: ApiResponse }) => {
 
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   return (
-    <DashboardContainer title={"캠페인"} onclick={handleButton} onclickText="새 리퍼럴 생성" buttonId="new_campaign">
+    <DashboardContainer title={"캠페인"} onclick={handleButton} onclickText="새 캠페인 생성" buttonId="new_campaign">
       <div className="wrapper-container">
         <div className="contents-container w-full justify-center">
           <DashboardContents>

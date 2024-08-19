@@ -47,7 +47,7 @@ const CampaignDetails: React.FC<DashboarDetailsProps> = ({
   return (
     <div className="contents-container w-full justify-center items-center">
       <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-        <a className="w-[100px] text-md font-bold">리퍼럴 명: </a>
+        <a className="w-[100px] text-md font-bold">캠페인 명: </a>
         <InputTextBox
           type="text"
           id="title"
@@ -58,7 +58,7 @@ const CampaignDetails: React.FC<DashboarDetailsProps> = ({
         />
       </div>
       <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-        <a className="w-[100px] text-md font-bold">리퍼럴 설명: </a>
+        <a className="w-[100px] text-md font-bold">캠페인 설명: </a>
         <InputTextBox
           type="text"
           id="description"
@@ -108,7 +108,7 @@ const CampaignDetails: React.FC<DashboarDetailsProps> = ({
         </div>
       </div>
       <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-        <a className="w-[100px] text-md font-bold">리퍼럴 활성화: </a>
+        <a className="w-[100px] text-md font-bold">캠페인 활성화: </a>
         <InputRadioBox
           label="활성화"
           name="active"
