@@ -5,6 +5,8 @@ export interface CampaignArgs {
   period_type: string;
   start_date: string;
   end_date?: string;
+  newStart_date?: Date;
+  newEnd_date?: Date;
   active: boolean;
 }
 export interface CampaignInfoProps {

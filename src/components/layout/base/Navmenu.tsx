@@ -23,7 +23,8 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
   const handleClick = () => {
     router.push(link);
   };
-  const isActive = router.pathname === link;
+  //const isActive = router.pathname === link;
+  const isActive = router.pathname.startsWith(link.split("/")[1] ? `/${link.split("/")[1]}` : link);
 
   return (
     <div

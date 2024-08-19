@@ -1,6 +1,4 @@
-// src/pages/home.tsx
-import InputRadioBox from "@/components/base/InputRadio";
-import InputTextBox from "@/components/base/InputText";
+import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import DashboardContents from "@/components/layout/dashboard/DashboardContents";
 import { fetchCreateCampaign } from "@/pages/campaign/lib/apis";
@@ -21,25 +19,21 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   const [start_date, setStart_date] = useState("2024-08-14 00:00:00");
   const [end_date, setEnd_date] = useState("2024-08-16 00:00:00");
   const [active, setActive] = useState(true);
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPeriod_type(e.target.value);
-  };
-  const handleActiveRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setActive(e.target.value === "true");
-  };
+  // const [newStart_date, setNewStartDate] = useState(new Date());
+  // const [newEnd_date, setNewEndDate] = useState(new Date());
 
   const infoCheck = (info: CampaignArgs) => {
     if (!info.title) {
-      alert("리퍼럴 명을 입력 해주세요.");
+      alert("캠페인 명을 입력 해주세요.");
       return false;
     } else if (!info.description) {
-      alert("리퍼럴 설명을 입력 해주세요.");
+      alert("캠페인 설명을 입력 해주세요.");
       return false;
     } else if (!info.start_date) {
-      alert("리퍼럴 시작 시간을 선택 해주세요.");
+      alert("캠페인 시작 시간을 선택 해주세요.");
       return false;
-    } else if (period_type === "LIMITED" && !info.end_date) {
-      alert("리퍼럴 종료 시간을 선택 해주세요.");
+    } else if (info.period_type === "LIMITED" && !info.end_date) {
+      alert("캠페인 종료 시간을 선택 해주세요.");
       return false;
     } else {
       return true;
@@ -54,6 +48,8 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
     start_date: start_date,
     end_date: end_date,
     active: active,
+    // newStart_date: newStart_date,
+    // newEnd_date: newEnd_date,
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -91,84 +87,17 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
       buttonId="create_campaign"
     >
       <DashboardContents>
-        <div className="contents-container w-full justify-center items-center">
-          <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-            <a className="w-[100px] text-md font-bold">리퍼럴 명: </a>
-            <InputTextBox
-              type="text"
-              id="title"
-              placeholder="리퍼럴 명을 입력하세요."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-          </div>
-          <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-            <a className="w-[100px] text-md font-bold">리퍼럴 설명: </a>
-            <InputTextBox
-              type="text"
-              id="description"
-              placeholder="리퍼럴 설명을 입력하세요."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-          </div>
-          <div className="inputForm p-2 flex space-x-4 items-center h-[60px] ">
-            <a className="w-[100px] text-md font-bold">기간 종류: </a>
-            <InputRadioBox
-              label="무기한"
-              name="period_type"
-              value="UNLIMITED"
-              checked={period_type === "UNLIMITED"}
-              onChange={handleRadioChange}
-            />
-            <InputRadioBox
-              label="기간 제한"
-              name="period_type"
-              value="LIMITED"
-              checked={period_type === "LIMITED"}
-              onChange={handleRadioChange}
-            />
-          </div>
-          <div className="inputForm p-2 flex space-x-4 items-center h-[60px]">
-            <a className="w-[100px] text-md font-bold">캠페인 기간: </a>
-            <div>
-              <input
-                id="start_date"
-                className="text-md text-gray-500 h-[30px] p-2"
-                value={start_date}
-                onChange={(e) => setStart_date(e.target.value)}
-              />
-            </div>
-            ~
-            <div>
-              <input
-                id="end_date"
-                className="text-md text-gray-500 h-[30px] p-2"
-                value={end_date}
-                onChange={(e) => setEnd_date(e.target.value)}
-              ></input>
-            </div>
-          </div>
-          <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-            <a className="w-[100px] text-md font-bold">리퍼럴 활성화: </a>
-            <InputRadioBox
-              label="활성화"
-              name="active"
-              value="true"
-              checked={active === true}
-              onChange={handleActiveRadioChange}
-            />
-            <InputRadioBox
-              label="비활성화"
-              name="active"
-              value="false"
-              checked={active === false}
-              onChange={handleActiveRadioChange}
-            />
-          </div>
-        </div>
+        <CampaignDetails
+          campaignArgs={campaignArgs}
+          setPeriod_type={setPeriod_type}
+          setDescription={setDescription}
+          setActive={setActive}
+          setTitle={setTitle}
+          setStart_date={setStart_date}
+          setEnd_date={setEnd_date}
+          // setNewStartDate={setNewStartDate}
+          // setNewEndDate={setNewEndDate}
+        />
       </DashboardContents>
     </DashboardContainer>
   );

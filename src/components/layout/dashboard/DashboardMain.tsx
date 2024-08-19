@@ -25,6 +25,13 @@ const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickT
           )}
         </div>
         {children}
+        {/* {buttonId === "modify_campaign" ? (
+          <div className="button-container w-full text-right">
+            <button className="border m-2 p-2 bg-red-500 text-white rounded-lg" onClick={onclick} id={buttonId}>
+              삭제하기
+            </button>
+          </div>
+        ) : null} */}
       </div>
     </div>
   );

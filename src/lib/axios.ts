@@ -4,7 +4,7 @@ import {
   setAccessTokenToCookies,
   setRefreshTokenToCookies,
 } from "@/lib/helper";
-import axios, { AxiosRequestHeaders, InternalAxiosRequestConfig } from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { jwtDecode } from "jwt-decode";
 import { GetServerSidePropsContext } from "next";
@@ -32,14 +32,20 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     });
 
     axiosInstance.interceptors.request.use(async (req: InternalAxiosRequestConfig) => {
-      // Log the request headers
-
       const access_decoded: { exp: number } = jwtDecode(access as string);
       const isExpired = access_decoded.exp * 1000 < new Date().getTime();
       console.log("Request Headers:", req.headers);
 
-      if (!isExpired) return req;
+      if (isExpired) {
+        const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+          refresh,
+        });
+        setAccessTokenToCookies(context, response.data.access);
+        setRefreshTokenToCookies(context, response.data.refresh);
 
+        req.headers.Authorization = `Bearer ${response.data.access as string}`;
+        return req;
+      }
       if (!refresh) {
         if (typeof window !== "undefined")
           window.location.replace(
