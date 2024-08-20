@@ -13,7 +13,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
   const router = useRouter();
   function onlcickCampaignDetail(event: React.MouseEvent<HTMLElement>) {
     const { id } = event.currentTarget;
-    router.replace(`/campaign/details?id=${id}`, undefined, { shallow: true, scroll: false });
+    router.replace(`/campaign/details?camapaign_id=${id}`, undefined, { shallow: true, scroll: false });
   }
   // 더보기 버튼 표시 유무 확인
   const [isCampaignPage, setIsCampaignPage] = useState(false);
