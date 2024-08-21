@@ -2,7 +2,7 @@ import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import DashboardContents from "@/components/layout/dashboard/DashboardContents";
 import { fetchCreateCampaign } from "@/pages/campaign/lib/apis";
-import { CampaignArgs } from "@/pages/campaign/lib/types";
+import { CampaignArgs, PeriodType } from "@/pages/campaign/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useRef, useState, KeyboardEvent } from "react";
@@ -15,7 +15,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [period_type, setPeriod_type] = useState("UNLIMITED");
+  const [period_type, setPeriod_type] = useState(PeriodType.UL);
   const [start_date, setStart_date] = useState("2024-08-14 00:00:00");
   const [end_date, setEnd_date] = useState("2024-08-16 00:00:00");
   const [active, setActive] = useState(true);
@@ -53,28 +53,25 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); // Prevent the default form submission behavior if it's in a form element
-      if (buttonRef.current) {
-        buttonRef.current.click(); // Trigger the click event on the login button
-      }
-    }
-  };
-
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
 
     if (id === "create_campaign") {
       if (infoCheck(campaignArgs)) {
         const result = await fetchCreateCampaign(campaignArgs, context);
-        alert(result.message);
-        if (result.success) {
-          router.push("/campaign");
+
+        if (result.status === 200) {
+          alert(result.message);
+          if (result.success) {
+            router.push("/campaign");
+          }
+        } else {
+          alert("캠페인 생성을 실패 하였습니다. 상태 코드: " + result.status);
+          console.log("캠페인 생성을 실패 하였습니다. 상태 코드:", result.status);
+          return false;
         }
       } else {
-        console.log("캠페인 생성을 실패 하였습니다.");
+        console.log("입력한 정보가 유효하지 않습니다.");
         return false;
       }
     }

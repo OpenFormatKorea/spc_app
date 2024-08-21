@@ -1,4 +1,4 @@
-import AuthLogin from "@/components/layout/authlayout/AuthLoginForm";
+import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 import { authenticateUserforLogin } from "@/lib/auth";
 import { fetchLogIn } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";

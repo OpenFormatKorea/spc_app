@@ -1,7 +1,7 @@
-import AuthButton from "@/components/layout/authlayout/AuthButton";
-import AuthContainer from "@/components/layout/authlayout/AuthContainer";
-import AuthInputBox from "@/components/layout/authlayout/AuthInputBox";
-import AuthLogin from "@/components/layout/authlayout/AuthLoginForm";
+import AuthButton from "@/components/layout/auth/AuthButton";
+import AuthContainer from "@/components/layout/auth/AuthContainer";
+import AuthInputBox from "@/components/layout/auth/AuthInputBox";
+import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 interface AuthForgotPWProps {
   username: string;
   setUsername: (value: string) => void;

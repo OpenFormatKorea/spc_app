@@ -1,5 +1,5 @@
-import AuthButton from "@/components/layout/authlayout/AuthButton";
-import AuthInputBox from "@/components/layout/authlayout/AuthInputBox";
+import AuthButton from "@/components/layout/auth/AuthButton";
+import AuthInputBox from "@/components/layout/auth/AuthInputBox";
 import { authenticateUserforLogin } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import React, { ChangeEvent, FormEvent } from "react";

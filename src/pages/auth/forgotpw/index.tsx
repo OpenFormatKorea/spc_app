@@ -1,5 +1,5 @@
-import AuthContainer from "@/components/layout/authlayout/AuthContainer";
-import AuthForgotPW from "@/components/layout/authlayout/AuthForgotPWForm";
+import AuthContainer from "@/components/layout/auth/AuthContainer";
+import AuthForgotPW from "@/components/layout/auth/AuthForgotPWForm";
 import { authenticateUserforLogin } from "@/lib/auth";
 import { fetchResetPW } from "@/pages/auth/lib/apis";
 import { AuthArgs } from "@/pages/auth/lib/types";

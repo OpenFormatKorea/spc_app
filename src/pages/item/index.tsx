@@ -1,0 +1,56 @@
+import CampaignList from "@/components/layout/campaign/CampaignList";
+import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import DashboardContents from "@/components/layout/dashboard/DashboardContents";
+import ItemList from "@/components/layout/item/ItemList";
+import { ApiResponse } from "@/lib/types";
+import { fetchGetCampaignList } from "@/pages/campaign/lib/apis";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const response = await fetchGetCampaignList(context);
+  console.log("GETSERVERSIDE API RESPONSE: ", response);
+  return {
+    props: {
+      apiResponse: response,
+    },
+  };
+};
+
+export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
+  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700";
+  const tbodyStyle = "px-6 py-4 border-b border-gray-200";
+  const router = useRouter();
+  const handleButton = (event: React.MouseEvent<HTMLElement>) => {
+    const { id } = event.currentTarget;
+    if (id === "new_item") {
+      router.push("item/new");
+    }
+  };
+
+  useEffect(() => {
+    console.log("Received API Response:", apiResponse);
+  }, [apiResponse]);
+  // Ensure apiResponse is an array before mapping
+
+  const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
+  return (
+    <DashboardContainer title={"리퍼럴"} onclick={handleButton} onclickText="새 리퍼럴 생성" buttonId="new_item">
+      <div className="wrapper-container">
+        <div className="contents-container w-full justify-center">
+          <DashboardContents>
+            <ItemList
+              theadStyle={theadStyle}
+              tbodyStyle={tbodyStyle}
+              apiResponse={apiResponse}
+              handleButton={handleButton}
+            ></ItemList>
+          </DashboardContents>
+        </div>
+      </div>
+    </DashboardContainer>
+  );
+};
+
+export default Item;

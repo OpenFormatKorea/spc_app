@@ -10,28 +10,24 @@ interface MainProps {
 
 const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickText, buttonId }) => {
   return (
-    <div className="pl-[250px] mt-[60px] flex flex-col" style={{ height: "calc(100vh - 60px)" }}>
-      <div className="w-full bg-gray-100 p-10 flex-grow">
-        <div className="header-container flex items-center p-2">
-          <div className="text-[30px] font-bold w-1/2">
-            <h2>{title}</h2>
-          </div>
+    <div className="flex flex-col mt-[60px] lg:pl-[250px] pl-0 min-h-screen">
+      <div className="w-full bg-gray-100 p-4 sm:p-8 flex-grow">
+        <div className="subject-container flex flex-col sm:flex-row sm:items-center justify-between">
+          <a className="text-[24px] sm:text-[30px] font-bold">{title}</a>
           {onclickText !== "" && (
-            <div className="button-container w-full text-right">
-              <button className="border p-2 bg-blue-500 text-white rounded-lg" onClick={onclick} id={buttonId}>
+            <div className="button-container w-full sm:w-auto text-right mt-4 sm:mt-0 sm:ml-auto">
+              <button
+                className={`border p-2 text-white rounded-lg 
+                  ${buttonId === "cancel_modify_campaign" ? "bg-gray-400" : "bg-blue-500"}`}
+                onClick={onclick}
+                id={buttonId}
+              >
                 {onclickText}
               </button>
             </div>
           )}
         </div>
         {children}
-        {/* {buttonId === "modify_campaign" ? (
-          <div className="button-container w-full text-right">
-            <button className="border m-2 p-2 bg-red-500 text-white rounded-lg" onClick={onclick} id={buttonId}>
-              삭제하기
-            </button>
-          </div>
-        ) : null} */}
       </div>
     </div>
   );

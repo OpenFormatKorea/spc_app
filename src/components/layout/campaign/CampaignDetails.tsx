@@ -1,21 +1,20 @@
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
-import { CampaignArgs } from "@/pages/campaign/lib/types";
+import { CampaignArgs, PeriodType } from "@/pages/campaign/lib/types";
 import { useRef, KeyboardEvent } from "react";
 import Calendar from "react-calendar";
-interface DashboarDetailsProps {
+
+interface CampaignDetailsProps {
   campaignArgs: CampaignArgs;
-  setPeriod_type: (value: string) => void;
+  setPeriod_type: (value: PeriodType) => void;
   setDescription: (value: string) => void;
   setActive: (value: boolean) => void;
   setTitle: (value: string) => void;
   setStart_date: (value: string) => void;
   setEnd_date: (value: string) => void;
-  // setNewStartDate: (value: Date) => void;
-  // setNewEndDate: (value: Date) => void;
 }
 
-const CampaignDetails: React.FC<DashboarDetailsProps> = ({
+const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   campaignArgs,
   setPeriod_type,
   setDescription,
@@ -23,11 +22,9 @@ const CampaignDetails: React.FC<DashboarDetailsProps> = ({
   setTitle,
   setStart_date,
   setEnd_date,
-  // setNewStartDate,
-  // setNewEndDate,
 }) => {
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPeriod_type(e.target.value);
+    setPeriod_type(e.target.value as PeriodType);
   };
 
   const handleActiveRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,10 +41,11 @@ const CampaignDetails: React.FC<DashboarDetailsProps> = ({
       }
     }
   };
+
   return (
-    <div className="contents-container w-full justify-center items-center">
-      <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-        <a className="w-[100px] text-md font-bold">캠페인 명: </a>
+    <div className="contents-container w-full justify-center items-center p-4 sm:p-6">
+      <div className="inputForm flex flex-col space-y-2 text-left w-full">
+        <label className="text-md font-bold">캠페인 명</label>
         <InputTextBox
           type="text"
           id="title"
@@ -57,8 +55,8 @@ const CampaignDetails: React.FC<DashboarDetailsProps> = ({
           onKeyDown={handleKeyDown}
         />
       </div>
-      <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-        <a className="w-[100px] text-md font-bold">캠페인 설명: </a>
+      <div className="inputForm flex flex-col space-y-2 text-left w-full">
+        <label className="text-md font-bold my-2">캠페인 설명</label>
         <InputTextBox
           type="text"
           id="description"
@@ -68,63 +66,64 @@ const CampaignDetails: React.FC<DashboarDetailsProps> = ({
           onKeyDown={handleKeyDown}
         />
       </div>
-      <div className="inputForm p-2 flex space-x-4 items-center h-[60px] ">
-        <a className="w-[100px] text-md font-bold">기간 종류: </a>
-        <InputRadioBox
-          label="무기한"
-          name="period_type"
-          value="UNLIMITED"
-          checked={campaignArgs.period_type === "UNLIMITED"}
-          onChange={handleRadioChange}
-        />
-        <InputRadioBox
-          label="기간 제한"
-          name="period_type"
-          value="LIMITED"
-          checked={campaignArgs.period_type === "LIMITED"}
-          onChange={handleRadioChange}
-        />
+      <div className="inputForm flex flex-col space-y-2 text-left w-full">
+        <label className="text-md font-bold my-2">기간 종류</label>
+        <div className="flex gap-4">
+          <InputRadioBox
+            label="무기한"
+            name="period_type"
+            value={PeriodType.UL}
+            checked={campaignArgs.period_type === PeriodType.UL}
+            onChange={handleRadioChange}
+          />
+          <InputRadioBox
+            label="기간 제한"
+            name="period_type"
+            value="LIMITED"
+            checked={campaignArgs.period_type === PeriodType.L}
+            onChange={handleRadioChange}
+          />
+        </div>
       </div>
-      <div className="inputForm p-2 flex space-x-4 items-center h-[60px]">
-        <a className="w-[100px] text-md font-bold">캠페인 기간: </a>
-        <div>
-          {/* <Calendar onChange={(date) => setNewStartDate(date as Date)} value={campaignArgs.newStart_date} /> */}
+      <div className="inputForm flex flex-col space-y-2 text-left w-full">
+        <label className="text-md font-bold my-2">캠페인 기간</label>
+        <div className="flex flex-col sm:flex-row gap-2 w-full items-center">
           <input
             id="start_date"
-            className="text-md text-gray-500 h-[30px] p-2"
+            className="text-md text-gray-500 text-center h-[30px] p-2 border"
             value={campaignArgs.start_date}
             onChange={(e) => setStart_date(e.target.value)}
           />
-        </div>
-        ~
-        <div>
-          {/* <Calendar onChange={(date) => setNewEndDate(date as Date)} value={campaignArgs.newEnd_date} /> */}
+          <div className="text-md">~</div>
           <input
             id="end_date"
-            className="text-md text-gray-500 h-[30px] p-2"
+            className="text-md text-gray-500 text-center h-[30px] p-2 border"
             value={campaignArgs.end_date}
             onChange={(e) => setEnd_date(e.target.value)}
-          ></input>
+          />
         </div>
       </div>
-      <div className="inputForm p-2 flex space-x-4 items-center h-[60px] text-left">
-        <a className="w-[100px] text-md font-bold">캠페인 활성화: </a>
-        <InputRadioBox
-          label="활성화"
-          name="active"
-          value="true"
-          checked={campaignArgs.active === true}
-          onChange={handleActiveRadioChange}
-        />
-        <InputRadioBox
-          label="비활성화"
-          name="active"
-          value="false"
-          checked={campaignArgs.active === false}
-          onChange={handleActiveRadioChange}
-        />
+      <div className="inputForm flex flex-col space-y-2 text-left w-full">
+        <label className="text-md font-bold">캠페인 활성화</label>
+        <div className="flex gap-4">
+          <InputRadioBox
+            label="활성화"
+            name="active"
+            value="true"
+            checked={campaignArgs.active === true}
+            onChange={handleActiveRadioChange}
+          />
+          <InputRadioBox
+            label="비활성화"
+            name="active"
+            value="false"
+            checked={campaignArgs.active === false}
+            onChange={handleActiveRadioChange}
+          />
+        </div>
       </div>
     </div>
   );
 };
+
 export default CampaignDetails;

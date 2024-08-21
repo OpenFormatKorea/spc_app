@@ -1,4 +1,4 @@
-import AuthChangePWForm from "@/components/layout/authlayout/AuthChangePWForm";
+import AuthChangePWForm from "@/components/layout/auth/AuthChangePWForm";
 import { authenticateUserforLogin } from "@/lib/auth";
 import { fetchChangePW } from "@/pages/auth/lib/apis";
 import { ChangePWArgs } from "@/pages/auth/lib/types";

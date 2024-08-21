@@ -1,26 +1,6 @@
-export interface CampaignArgs {
-  id?: number;
-  title: string;
-  description: string;
-  period_type: PeriodType;
-  start_date: string;
-  end_date?: string;
-  newStart_date?: Date;
-  newEnd_date?: Date;
-  active: boolean;
-}
-export interface CampaignInfoProps {
-  campaignInfo: CampaignArgs[];
-}
-export enum PeriodType {
-  L = "LIMITED",
-  UL = "UNLIMITED",
-}
-
-// 리퍼럴 아이템
 export interface ItemArgs {
   id?: number;
-  item_type: ItemType;
+  referral_type: ItemType;
   title: string;
   description: string;
   reward_type: RewardType;
@@ -29,7 +9,7 @@ export interface ItemArgs {
   active: boolean;
 }
 export interface ItemInfoProps {
-  itemInfo: ItemArgs[];
+  referralInfo: ItemArgs[];
 }
 export enum ItemType {
   PM = "PROMOTION",

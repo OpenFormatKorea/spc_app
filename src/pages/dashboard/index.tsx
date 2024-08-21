@@ -42,74 +42,13 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
             tbodyStyle={tbodyStyle}
             apiResponse={apiResponse}
             handleButton={handleButton}
-          ></CampaignList>
+          />
         </DashboardContents>
         <div className="flex">
           <DashboardContents>children</DashboardContents>
           <DashboardContents>children</DashboardContents>
         </div>
-        <div className="flex">
-          <DashboardContents>
-            <div>SUBJECT</div>
-            <div>description</div>
-            <table className="min-w-full bg-white border border-gray-200 ">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className={theadStyle}>Name</th>
-                  <th className={theadStyle}>Age</th>
-                  <th className={theadStyle}>Country</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className={tbodyStyle}>John Doe</td>
-                  <td className={tbodyStyle}>28</td>
-                  <td className={tbodyStyle}>USA</td>
-                </tr>
-                <tr>
-                  <td className={tbodyStyle}>Jane Smith</td>
-                  <td className={tbodyStyle}>34</td>
-                  <td className={tbodyStyle}>Canada</td>
-                </tr>
-                <tr>
-                  <td className={tbodyStyle}>Emily Johnson</td>
-                  <td className={tbodyStyle}>22</td>
-                  <td className={tbodyStyle}>UK</td>
-                </tr>
-              </tbody>
-            </table>
-          </DashboardContents>
-          <DashboardContents>
-            <div>SUBJECT</div>
-            <div>description</div>
-            <table className="min-w-full bg-white border border-gray-200 ">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className={theadStyle}>Name</th>
-                  <th className={theadStyle}>Age</th>
-                  <th className={theadStyle}>Country</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className={tbodyStyle}>John Doe</td>
-                  <td className={tbodyStyle}>28</td>
-                  <td className={tbodyStyle}>USA</td>
-                </tr>
-                <tr>
-                  <td className={tbodyStyle}>Jane Smith</td>
-                  <td className={tbodyStyle}>34</td>
-                  <td className={tbodyStyle}>Canada</td>
-                </tr>
-                <tr>
-                  <td className={tbodyStyle}>Emily Johnson</td>
-                  <td className={tbodyStyle}>22</td>
-                  <td className={tbodyStyle}>UK</td>
-                </tr>
-              </tbody>
-            </table>
-          </DashboardContents>
-        </div>
+
         <DashboardContents>
           <div>SUBJECT</div>
           <div>description</div>
