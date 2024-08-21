@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface ItemListProps {
+  campaignTitle: string;
+  campaignDesc: string;
   theadStyle: string;
   tbodyStyle: string;
   apiResponse: ApiResponse;
@@ -11,14 +13,14 @@ interface ItemListProps {
 
 const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse, handleButton }) => {
   const router = useRouter();
-  function onlcickCampaignDetail(event: React.MouseEvent<HTMLElement>) {
+  function onlcickItemDetail(event: React.MouseEvent<HTMLElement>) {
     const { id } = event.currentTarget;
     router.replace(`/item/details?item_id=${id}`, undefined, { shallow: true, scroll: false });
   }
   // 더보기 버튼 표시 유무 확인
-  const [isItemPage, setIsItemPage] = useState(false);
+  const [isCampaignPage, setIsCampaignPage] = useState(false);
   useEffect(() => {
-    setIsItemPage(router.pathname.includes("/item"));
+    setIsCampaignPage(router.pathname.includes("/campaign"));
   }, [router.pathname]);
 
   const items = Array.isArray(apiResponse) ? apiResponse : [];
@@ -32,8 +34,8 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
         </div>
         <div className="w-[50%]] item-end justify-end text-center">
           <div
-            id="modify_campaign"
-            className="border m-2 mt-4 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] min-fit"
+            id="create_item"
+            className="border m-2 mt-4 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] min-fit  cursor-pointer"
             onClick={handleButton}
           >
             아이템 추가
@@ -52,7 +54,7 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
           </thead>
           <tbody>
             {items.map((item, i) => (
-              <tr className=" cursor-pointer" key={i} id={item.id} onClick={onlcickCampaignDetail}>
+              <tr className=" cursor-pointer" key={i} id={item.id} onClick={onlcickItemDetail}>
                 <td className={tbodyStyle}>{item.title}</td>
                 <td className={tbodyStyle}>{item.period_type}</td>
                 <td className={tbodyStyle}>{item.active ? "TRUE" : "FALSE"}</td>

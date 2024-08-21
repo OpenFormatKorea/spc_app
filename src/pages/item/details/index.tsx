@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import Calendar from "react-calendar";
 import { fetchGetItemDetails, fetchModifyItem, fetchDeleteItem } from "@/pages/campaign/lib/apis";
-import { ItemArgs } from "@/pages/campaign/lib/types";
+import { ItemArgs } from "@/pages/item/lib/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id }: any = context.query;
@@ -16,7 +16,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (response == null || response.shop_id != shop_id) {
     return {
       redirect: {
-        destination: "/item",
+        destination: "/campaign",
         permanent: false,
       },
     };
@@ -31,10 +31,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 const infoCheck = (info: ItemArgs) => {
   if (!info.title) {
-    alert("캠페인 명을 입력 해주세요.");
+    alert("아이템 명을 입력 해주세요.");
     return false;
   } else if (!info.description) {
-    alert("캠페인 설명을 입력 해주세요.");
+    alert("아이템 설명을 입력 해주세요.");
     return false;
   } else {
     return true;
@@ -111,17 +111,7 @@ const DetailsItem = (
   return (
     <DashboardContainer title={"캠페인 상세 정보"} onclick={handleSubmit} onclickText="수정하기" buttonId="modify_item">
       <DashboardContents>
-        <ItemDetails
-          itemArgs={itemArgs}
-          setPeriod_type={setPeriod_type}
-          setDescription={setDescription}
-          setActive={setActive}
-          setTitle={setTitle}
-          setStart_date={setStart_date}
-          setEnd_date={setEnd_date}
-          // setNewStartDate={setNewStartDate}
-          // setNewEndDate={setNewEndDate}
-        />
+        <ItemDetails />
       </DashboardContents>
       <div className="button-container w-full text-right">
         <button

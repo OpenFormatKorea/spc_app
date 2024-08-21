@@ -4,7 +4,7 @@ export interface CampaignArgs {
   description: string;
   period_type: PeriodType;
   start_date: string;
-  end_date?: string;
+  end_date?: any;
   newStart_date?: Date;
   newEnd_date?: Date;
   active: boolean;
@@ -15,32 +15,4 @@ export interface CampaignInfoProps {
 export enum PeriodType {
   L = "LIMITED",
   UL = "UNLIMITED",
-}
-
-// 리퍼럴 아이템
-export interface ItemArgs {
-  id?: number;
-  item_type: ItemType;
-  title: string;
-  description: string;
-  reward_type: RewardType;
-  reward_details: RewardDetailsArgs | null;
-  created_at?: string;
-  active: boolean;
-}
-export interface ItemInfoProps {
-  itemInfo: ItemArgs[];
-}
-export enum ItemType {
-  PM = "PROMOTION",
-  PD = "PRODUCT",
-}
-export enum RewardType {
-  CO = "COUPON",
-  PO = "POINT",
-}
-export interface RewardDetailsArgs {
-  id?: number;
-  name: string;
-  amount: number;
 }

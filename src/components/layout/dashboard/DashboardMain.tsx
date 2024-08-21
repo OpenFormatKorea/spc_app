@@ -17,7 +17,7 @@ const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickT
           {onclickText !== "" && (
             <div className="button-container w-full sm:w-auto text-right mt-4 sm:mt-0 sm:ml-auto">
               <button
-                className={`border p-2 text-white rounded-lg 
+                className={`border p-2 text-white rounded-lg  cursor-pointer
                   ${buttonId === "cancel_modify_campaign" ? "bg-gray-400" : "bg-blue-500"}`}
                 onClick={onclick}
                 id={buttonId}

@@ -1,26 +1,43 @@
 export interface ItemArgs {
   id?: number;
-  referral_type: ItemType;
+  campaign_id: string;
   title: string;
-  description: string;
-  reward_type: RewardType;
-  reward_details: RewardDetailsArgs | null;
-  created_at?: string;
-  active: boolean;
+  item_type: ItemType;
+  kakao_args: KakaoArgs;
+  products: ProductsArgs[];
+  promotions: PromotionsArgs[];
+  rewards: RewardArgs[];
+  active?: boolean;
 }
-export interface ItemInfoProps {
-  referralInfo: ItemArgs[];
-}
+
 export enum ItemType {
   PM = "PROMOTION",
   PD = "PRODUCT",
 }
+
 export enum RewardType {
   CO = "COUPON",
   PO = "POINT",
 }
-export interface RewardDetailsArgs {
+
+export interface KakaoArgs {
   id?: number;
-  name: string;
-  amount: number;
+  message: string;
+}
+
+export interface ProductsArgs {
+  id?: number;
+  product_model_code: string;
+}
+
+export interface PromotionsArgs {
+  id?: number;
+  description: string;
+}
+
+export interface RewardArgs {
+  id?: number;
+  reward_type: RewardType;
+  coupon_code?: string | null;
+  point_amount?: number | null;
 }

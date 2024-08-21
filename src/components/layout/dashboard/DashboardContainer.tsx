@@ -24,18 +24,6 @@ const DashboardContainer: React.FC<DashboarContainerProps> = ({ title, children,
         buttonId={buttonId}
       />
     </div>
-    // <div className="flex flex-col">
-    //   <Navbar />
-    //   <Header title={title} />
-    //   <DashboardMain
-    //     title={title}
-    //     children={children}
-    //     onclick={onclick}
-    //     onclickText={onclickText}
-    //     buttonId={buttonId}
-    //   />
-    //   {/* <Footer /> */}
-    // </div>
   );
 };
 export default DashboardContainer;

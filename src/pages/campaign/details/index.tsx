@@ -15,15 +15,16 @@ import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { authenticateUserforHeader } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
+import ItemList from "@/components/layout/item/ItemList";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
-  const campaignResponse = await fetchGetCampaignList(context);
+  const CListApiResponse = await fetchGetCampaignList(context);
   const authResponse = authenticateUserforHeader(context);
 
-  const response = await fetchGetCampaignDetails(campaign_id, context);
+  const CDetailApiResponse = await fetchGetCampaignDetails(campaign_id, context);
   const shop_id = getShopIdFromCookies(context);
-  if (response == null || response.shop_id != shop_id) {
+  if (CDetailApiResponse == null || CDetailApiResponse.shop_id != shop_id) {
     return {
       redirect: {
         destination: "/campaign",
@@ -33,9 +34,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else {
     return {
       props: {
-        campaignApiResponse: campaignResponse,
+        cListApiResponse: CListApiResponse,
         authResponse: authResponse,
-        apiResponse: response,
+        cDetailApiResponse: CDetailApiResponse,
         campaign_id: campaign_id,
       },
     };
@@ -44,22 +45,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const DetailsCampaign = (
   {
-    apiResponse,
     campaign_id,
-    campaignApiResponse,
+    cListApiResponse,
+    cDetailApiResponse,
   }: {
-    apiResponse: CampaignArgs;
     campaign_id: string;
-    campaignApiResponse: ApiResponse;
+    cListApiResponse: ApiResponse;
+    cDetailApiResponse: CampaignArgs;
   },
   context: GetServerSidePropsContext
 ) => {
-  const [title, setTitle] = useState(apiResponse.title);
-  const [description, setDescription] = useState(apiResponse.description);
-  const [period_type, setPeriod_type] = useState(apiResponse.period_type);
-  const [start_date, setStart_date] = useState(apiResponse.start_date);
-  const [end_date, setEnd_date] = useState(apiResponse.end_date);
-  const [active, setActive] = useState(apiResponse.active);
+  const [title, setTitle] = useState(cDetailApiResponse.title);
+  const [description, setDescription] = useState(cDetailApiResponse.description);
+  const [period_type, setPeriod_type] = useState(cDetailApiResponse.period_type);
+  const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
+  const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
+  const [active, setActive] = useState(cDetailApiResponse.active);
 
   const router = useRouter();
 
@@ -114,6 +115,8 @@ const DetailsCampaign = (
     const { id } = event.currentTarget;
     if (id === "more_campaign") {
       router.push("campaign");
+    } else if (id === "create_item") {
+      router.push("/item/new");
     }
   };
 
@@ -139,27 +142,29 @@ const DetailsCampaign = (
             setEnd_date={setEnd_date}
           />
         </DashboardContents>
-        <div className="flex flex-col sm:flex-row justify-end sm:space-x-4 mt-4 sm:mt-8">
+        <div className="flex items-center justify-end mt-4 gap-x-2">
           <button
             id="delete_campaign"
-            className="border p-2 bg-red-500 text-white rounded-lg w-full sm:w-auto mb-2 sm:mb-0"
+            className="border p-2 bg-red-500 text-white rounded-lg w-[80px] cursor-pointer"
             onClick={handleSubmit}
           >
             삭제하기
           </button>
           <button
             id="modify_campaign"
-            className="border p-2 bg-blue-400 text-white rounded-lg w-full sm:w-auto"
+            className="border p-2 bg-blue-400 text-white rounded-lg w-[80px]  cursor-pointer"
             onClick={handleSubmit}
           >
             수정하기
           </button>
         </div>
         <DashboardContents>
-          <CampaignList
+          <ItemList
+            campaignTitle={cDetailApiResponse.title}
+            campaignDesc={cDetailApiResponse.description}
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
-            apiResponse={campaignApiResponse}
+            apiResponse={cListApiResponse}
             handleButton={handleButton}
           />
         </DashboardContents>

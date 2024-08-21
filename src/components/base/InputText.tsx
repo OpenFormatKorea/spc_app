@@ -4,7 +4,7 @@ interface InputTextArgs {
   type: string;
   id: string;
   placeholder: string;
-  value: string;
+  value: any;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
@@ -16,7 +16,7 @@ const InputTextBox: React.FC<InputTextArgs> = ({ type, id, placeholder, value, o
       id={id}
       placeholder={placeholder}
       value={value}
-      className="input-class text-xs p-3 rounded-md w-full sm:min-w-[400px] border"
+      className="input-class text-xs p-3 rounded-md w-full lg:max-w-[350px] border"
       onChange={onChange}
       onKeyDown={onKeyDown}
     />
