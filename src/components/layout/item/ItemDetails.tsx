@@ -28,7 +28,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
 }) => {
   const [productInputs, setProductInputs] = useState<string[]>([""]);
   const [promotionInputs, setPromotionInputs] = useState<string[]>([""]);
-
+  const inputformClass = "inputformClass flex flex-col text-left w-full mb-2";
+  const labelClass = "labelClass text-md font-bold my-4";
   const handleItemTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItem_type(e.target.value as ItemType);
   };
@@ -43,8 +44,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
   return (
     <>
       <div className="contents-container w-full justify-center items-center">
-        <div className="inputForm flex flex-col text-left w-full mb-2">
-          <label className="text-md font-bold my-4">아이템 명</label>
+        <div className={inputformClass}>
+          <label className={labelClass}>아이템 명</label>
           <InputTextBox
             type="text"
             id="title"
@@ -54,8 +55,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
             onKeyDown={handleKeyDown}
           />
         </div>
-        <div className="inputForm flex flex-col text-left w-full mb-2">
-          <label className="text-md font-bold my-4">카카오 메세지</label>
+        <div className={inputformClass}>
+          <label className={labelClass}>카카오 메세지</label>
           <InputTextBox
             type="text"
             id="message"
@@ -66,26 +67,28 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
           />
         </div>
 
-        <div className="inputForm flex flex-col text-left w-full mb-2">
-          <label className="text-md font-bold my-4">아이템 종류</label>
-          <div className="flex justify-between w-[250px] lg:w-[300px]">
-            <InputRadioBox
-              label="프로덕트"
-              name="item_type"
-              value={ItemType.PD}
-              checked={itemArgs.item_type === ItemType.PD}
-              onChange={handleItemTypeRadioChange}
-            />
-            <InputRadioBox
-              label="프로모션"
-              name="item_type"
-              value={ItemType.PM}
-              checked={itemArgs.item_type === ItemType.PM}
-              onChange={handleItemTypeRadioChange}
-            />
+        <div className={inputformClass}>
+          <label className={labelClass}>아이템 종류</label>
+          <div className="flex  mb-2 ">
+            <div className="flex space-x-20 text-left w-full lg:w-[360px]">
+              <InputRadioBox
+                label="프로덕트"
+                name="item_type"
+                value={ItemType.PD}
+                checked={itemArgs.item_type === ItemType.PD}
+                onChange={handleItemTypeRadioChange}
+              />
+              <InputRadioBox
+                label="프로모션"
+                name="item_type"
+                value={ItemType.PM}
+                checked={itemArgs.item_type === ItemType.PM}
+                onChange={handleItemTypeRadioChange}
+              />
+            </div>
             <div
               id="create_item_container"
-              className="border my-2 p-1 bg-blue-500 text-white rounded-lg w-[50px] text-center cursor-pointer"
+              className="border p-1 bg-blue-500 text-white rounded-lg min-w-[45px] text-center cursor-pointer"
               onClick={handleAddInput}
             >
               추가

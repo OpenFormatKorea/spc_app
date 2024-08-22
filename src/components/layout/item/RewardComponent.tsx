@@ -25,10 +25,15 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   setPointInputs,
 }) => {
   useEffect(() => {
-    setRewards(couponInputs);
+    // Initialize with a single coupon input if no inputs are present
+    if (couponInputs.length === 0 && pointInputs.length === 0) {
+      setCouponInputs([{ reward_type: RewardType.CO, coupon_code: "" }]);
+    }
   }, []);
+
   const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setReward_Type(e.target.value as RewardType);
+    // Keep the existing inputs when switching types
   };
 
   const handleAddInput = () => {
@@ -42,12 +47,12 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const handleDeleteInput = (type: RewardType, index: number) => {
     if (type === RewardType.CO) {
       const updatedInputs = couponInputs.filter((_, i) => i !== index);
-      setCouponInputs(updatedInputs.length > 0 ? updatedInputs : [{ reward_type: RewardType.CO, coupon_code: "" }]);
-      setRewards([...pointInputs, ...updatedInputs]); // Sync with parent
+      setCouponInputs(updatedInputs.length > 0 ? updatedInputs : couponInputs);
+      setRewards(updatedInputs.length > 0 ? updatedInputs : couponInputs);
     } else if (type === RewardType.PO) {
       const updatedInputs = pointInputs.filter((_, i) => i !== index);
-      setPointInputs(updatedInputs.length > 0 ? updatedInputs : [{ reward_type: RewardType.PO, point_amount: 0 }]);
-      setRewards([...couponInputs, ...updatedInputs]); // Sync with parent
+      setPointInputs(updatedInputs.length > 0 ? updatedInputs : pointInputs);
+      setRewards(updatedInputs.length > 0 ? updatedInputs : pointInputs);
     }
   };
 
@@ -56,12 +61,12 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
       const updatedInputs = [...couponInputs];
       updatedInputs[index] = { ...updatedInputs[index], coupon_code: value as string };
       setCouponInputs(updatedInputs);
-      setRewards([...pointInputs, ...updatedInputs]); // Sync with parent
+      setRewards(updatedInputs);
     } else if (type === RewardType.PO) {
       const updatedInputs = [...pointInputs];
       updatedInputs[index] = { ...updatedInputs[index], point_amount: Number(value) };
       setPointInputs(updatedInputs);
-      setRewards([...couponInputs, ...updatedInputs]); // Sync with parent
+      setRewards(updatedInputs);
     }
   };
 

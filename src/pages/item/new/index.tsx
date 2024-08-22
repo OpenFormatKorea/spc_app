@@ -1,7 +1,7 @@
-import CampaignContents from "@/components/layout/campaign/DashboardContents";
+import CampaignContents from "@/components/layout/campaign/CampaignContents";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ItemDetails from "@/components/layout/item/ItemDetails";
-import RewardComponent from "@/components/layout/item/RewardComponent";
+import NewRewardComponent from "@/components/layout/item/NewRewardComponent";
 import { fetchCreateItem } from "@/pages/campaign/lib/apis";
 import {
   ItemType,
@@ -97,7 +97,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
 
   return (
     <DashboardContainer title={"새 리퍼럴 생성"} onclick={handleSubmit} onclickText="저장하기" buttonId="create_item">
-      <div className="flex">
+      <div className="flex flex-col md:flex-row w-full">
         <CampaignContents>
           <ItemDetails
             item_type={item_type}
@@ -112,16 +112,27 @@ const NewItem = (context: GetServerSidePropsContext) => {
           />
         </CampaignContents>
         <CampaignContents>
-          <RewardComponent
-            setRewards={setRewards}
-            handleKeyDown={handleKeyDown}
-            reward_type={reward_type}
-            couponInputs={couponInputs}
-            pointInputs={pointInputs}
-            setReward_Type={setReward_Type}
-            setCouponInputs={setCouponInputs}
-            setPointInputs={setPointInputs}
-          />
+          <label className="text-md font-bold flex-grow">리워드</label>
+          <div className="flex flex-col md:flex-row space-x-4 w-full">
+            <NewRewardComponent
+              setRewards={setRewards}
+              handleKeyDown={handleKeyDown}
+              reward_type={RewardType.CO}
+              couponInputs={couponInputs}
+              pointInputs={pointInputs}
+              setCouponInputs={setCouponInputs}
+              setPointInputs={setPointInputs}
+            />
+            <NewRewardComponent
+              setRewards={setRewards}
+              handleKeyDown={handleKeyDown}
+              reward_type={RewardType.PO}
+              couponInputs={couponInputs}
+              pointInputs={pointInputs}
+              setCouponInputs={setCouponInputs}
+              setPointInputs={setPointInputs}
+            />
+          </div>
         </CampaignContents>
       </div>
     </DashboardContainer>

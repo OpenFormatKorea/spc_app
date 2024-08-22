@@ -15,6 +15,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { authenticateUserforHeader } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
 import ItemList from "@/components/layout/item/ItemList";
+import CampaignContents from "@/components/layout/campaign/CampaignContents";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
@@ -145,8 +146,8 @@ const DetailsCampaign = (
       onclickText="뒤로가기"
       buttonId="cancel_modify_campaign"
     >
-      <div className="flex flex-col w-full">
-        <DashboardContents>
+      <div className="flex flex-col md:flex-row w-full">
+        <CampaignContents>
           <CampaignDetails
             campaignArgs={campaignArgs}
             setPeriod_type={setPeriod_type}
@@ -156,24 +157,24 @@ const DetailsCampaign = (
             setStart_date={setStart_date}
             setEnd_date={setEnd_date}
           />
-        </DashboardContents>
-        <div className="flex items-center justify-end mt-4 gap-x-2">
-          <button
-            id="delete_campaign"
-            className="border p-2 bg-red-500 text-white rounded-lg w-[80px] cursor-pointer"
-            onClick={handleSubmit}
-          >
-            삭제하기
-          </button>
-          <button
-            id="modify_campaign"
-            className="border p-2 bg-blue-400 text-white rounded-lg w-[80px]  cursor-pointer"
-            onClick={handleSubmit}
-          >
-            수정하기
-          </button>
-        </div>
-        <DashboardContents>
+          <div className="flex items-center justify-end mt-4 gap-x-2">
+            <button
+              id="delete_campaign"
+              className="border p-2 bg-red-500 text-white rounded-lg w-[80px] cursor-pointer"
+              onClick={handleSubmit}
+            >
+              삭제하기
+            </button>
+            <button
+              id="modify_campaign"
+              className="border p-2 bg-blue-400 text-white rounded-lg w-[80px]  cursor-pointer"
+              onClick={handleSubmit}
+            >
+              수정하기
+            </button>
+          </div>
+        </CampaignContents>
+        <CampaignContents>
           <ItemList
             campaignTitle={cDetailApiResponse.title}
             campaignDesc={cDetailApiResponse.description}
@@ -182,7 +183,7 @@ const DetailsCampaign = (
             apiResponse={cListApiResponse}
             handleButton={handleButton}
           />
-        </DashboardContents>
+        </CampaignContents>
       </div>
     </DashboardContainer>
   );

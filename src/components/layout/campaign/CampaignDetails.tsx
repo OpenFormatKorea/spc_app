@@ -43,7 +43,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   };
 
   return (
-    <div className="contents-container w-full justify-center items-center px-4 sm:px-6">
+    <div className="contents-container w-full justify-center items-center">
+      <div className="mb-10 font-bold text-xl flex w-full">캠페인 상세정보</div>
       <div className="inputForm flex flex-col text-left w-full">
         <label className="text-md font-bold mb-4">캠페인 명</label>
         <InputTextBox

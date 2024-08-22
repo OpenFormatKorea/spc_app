@@ -30,7 +30,7 @@ const InputTextBox: React.FC<InputTextArgs> = ({ type, id, placeholder, value, o
         id={id}
         placeholder={placeholder}
         value={value}
-        className="input-class text-xs p-3 rounded-md w-full lg:max-w-[350px] border"
+        className="input-class flex-grow text-xs p-3 rounded-md w-full lg:max-w-[350px] border"
         onChange={onChange}
         onKeyDown={onKeyDown}
       />

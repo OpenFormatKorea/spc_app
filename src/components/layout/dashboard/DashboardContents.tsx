@@ -1,7 +1,3 @@
-import { authenticateUserforHeader } from "@/lib/auth";
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { GetServerSideProps } from "next";
-import router from "next/router";
 interface DashboardContentsProps {
   children: React.ReactNode;
 }

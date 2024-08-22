@@ -91,7 +91,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
               />
               <div
                 id="delete_item_container"
-                className={`ml-2 p-1 rounded-lg w-[50px] text-center cursor-pointer text-white ${
+                className={`ml-2 border p-1  text-white rounded-lg  min-w-[45px]  text-center cursor-pointer ${
                   productInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
                 }`}
                 onClick={() => handleDeleteInput(index)}
@@ -115,7 +115,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
               />
               <div
                 id="delete_item_container"
-                className={`ml-2 p-1 rounded-lg w-[50px] text-center cursor-pointer text-white ${
+                className={`ml-2 border p-1  text-white rounded-lg  min-w-[45px]  text-center cursor-pointer ${
                   promotionInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
                 }`}
                 onClick={() => handleDeleteInput(index)}
