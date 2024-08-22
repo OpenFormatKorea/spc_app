@@ -1,38 +1,50 @@
 import InputTextBox from "@/components/base/InputText";
 import { ItemType, ProductsArgs, PromotionsArgs } from "@/pages/item/lib/types";
-import { useRef, KeyboardEvent, useState, useEffect } from "react";
+import { KeyboardEvent, useEffect } from "react";
 
 interface ItemTypeComponentProps {
   item_type: ItemType;
-  products: ProductsArgs[];
-  promotions: PromotionsArgs[];
+  productInputs: string[];
+  promotionInputs: string[];
   setProducts: (value: ProductsArgs[]) => void;
   setPromotions: (value: PromotionsArgs[]) => void;
+  setProductInputs: (value: string[]) => void;
+  setPromotionInputs: (value: string[]) => void;
 }
 
 const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   item_type,
-  products,
-  promotions,
+  productInputs,
+  promotionInputs,
   setProducts,
   setPromotions,
+  setProductInputs,
+  setPromotionInputs,
 }) => {
-  const [productInputs, setProductInputs] = useState<string[]>([""]);
-  const [promotionInputs, setPromotionInputs] = useState<string[]>([""]);
+  // const [productInputs, setProductInputs] = useState<string[]>([""]);
+  // const [promotionInputs, setPromotionInputs] = useState<string[]>([""]);
 
-  // Effect to reset input boxes when item_type changes
+  // 프로덕트 & 프로모션 파싱
   useEffect(() => {
     setProductInputs([""]);
     setPromotionInputs([""]);
   }, [item_type]);
 
-  const handleAddInput = () => {
-    if (item_type === ItemType.PD) {
-      setProductInputs([...productInputs, ""]);
-    } else if (item_type === ItemType.PM) {
-      setPromotionInputs([...promotionInputs, ""]);
-    }
-  };
+  useEffect(() => {
+    setProducts(productInputs.map((input) => ({ product_model_code: input })));
+  }, [productInputs, setProducts]);
+
+  useEffect(() => {
+    setPromotions(promotionInputs.map((input) => ({ description: input })));
+  }, [promotionInputs, setPromotions]);
+
+  // const handleAddInput = () => {
+  //   if (item_type === ItemType.PD) {
+  //     setProductInputs([...productInputs, ""]);
+  //   } else if (item_type === ItemType.PM) {
+  //     setPromotionInputs([...promotionInputs, ""]);
+  //   }
+  // };
 
   const handleDeleteInput = (index: number) => {
     if (item_type === ItemType.PD) {
@@ -66,15 +78,6 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   return (
     <>
       <div className="contents-container w-full justify-center">
-        <div className="w-full lg:max-w-[405px] flex justify-end mb-2">
-          <div
-            id="create_item_container"
-            className="border my-2 p-2 bg-blue-500 text-white rounded-lg w-[50px] text-center cursor-pointer"
-            onClick={handleAddInput}
-          >
-            추가
-          </div>
-        </div>
         {item_type === ItemType.PD &&
           productInputs.map((input, index) => (
             <div key={index} className="inputForm flex items-center w-full mb-2 text-left">
@@ -88,7 +91,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
               />
               <div
                 id="delete_item_container"
-                className={`ml-1 p-2 rounded-lg w-[50px] text-center cursor-pointer text-white ${
+                className={`ml-2 p-1 rounded-lg w-[50px] text-center cursor-pointer text-white ${
                   productInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
                 }`}
                 onClick={() => handleDeleteInput(index)}
@@ -112,7 +115,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
               />
               <div
                 id="delete_item_container"
-                className={`ml-1 p-2 rounded-lg w-[50px] text-center cursor-pointer text-white ${
+                className={`ml-2 p-1 rounded-lg w-[50px] text-center cursor-pointer text-white ${
                   promotionInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
                 }`}
                 onClick={() => handleDeleteInput(index)}

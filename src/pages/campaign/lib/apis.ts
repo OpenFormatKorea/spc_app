@@ -1,6 +1,7 @@
 import { fetchAPI } from "@/lib/api";
 import { getShopIdFromCookies } from "@/lib/helper";
-import { CampaignArgs, ItemArgs } from "@/pages/campaign/lib/types";
+import { CampaignArgs } from "@/pages/campaign/lib/types";
+import { ItemArgs } from "@/pages/item/lib/types";
 import { GetServerSidePropsContext } from "next";
 
 export async function fetchCreateCampaign(info: CampaignArgs, context: GetServerSidePropsContext) {
@@ -132,7 +133,7 @@ export async function fetchGetCampaignDetails(campaign_id: string, context: GetS
 // 리퍼럴 아이템
 
 export async function fetchCreateItem(info: ItemArgs, context: GetServerSidePropsContext) {
-  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-create`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-create`;
   const shop_id = getShopIdFromCookies(context);
 
   const dataObj = {

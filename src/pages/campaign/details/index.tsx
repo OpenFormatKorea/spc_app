@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import DashboardContents from "@/components/layout/dashboard/DashboardContents";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
-import CampaignList from "@/components/layout/campaign/CampaignList";
 import {
   fetchDeleteCampaign,
   fetchGetCampaignDetails,
@@ -19,9 +18,8 @@ import ItemList from "@/components/layout/item/ItemList";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
-  const CListApiResponse = await fetchGetCampaignList(context);
   const authResponse = authenticateUserforHeader(context);
-
+  const CListApiResponse = await fetchGetCampaignList(context);
   const CDetailApiResponse = await fetchGetCampaignDetails(campaign_id, context);
   const shop_id = getShopIdFromCookies(context);
   if (CDetailApiResponse == null || CDetailApiResponse.shop_id != shop_id) {
@@ -77,6 +75,23 @@ const DetailsCampaign = (
     const { id } = event.currentTarget;
     const shop_id: any = getShopIdFromCookies(context);
 
+    const infoCheck = (info: CampaignArgs) => {
+      if (!info.title) {
+        alert("캠페인 명을 입력 해주세요.");
+        return false;
+      } else if (!info.description) {
+        alert("캠페인 설명을 입력 해주세요.");
+        return false;
+      } else if (!info.start_date) {
+        alert("캠페인 시작 시간을 선택 해주세요.");
+        return false;
+      } else if (info.period_type === "LIMITED" && !info.end_date) {
+        alert("캠페인 종료 시간을 선택 해주세요.");
+        return false;
+      } else {
+        return true;
+      }
+    };
     if (id === "modify_campaign") {
       if (infoCheck(campaignArgs)) {
         const result = await fetchModifyCampaign(campaign_id, campaignArgs, context);
@@ -116,7 +131,7 @@ const DetailsCampaign = (
     if (id === "more_campaign") {
       router.push("campaign");
     } else if (id === "create_item") {
-      router.push("/item/new");
+      router.push("/item/new?campaign_id=" + campaign_id);
     }
   };
 
@@ -172,23 +187,4 @@ const DetailsCampaign = (
     </DashboardContainer>
   );
 };
-
-const infoCheck = (info: CampaignArgs) => {
-  if (!info.title) {
-    alert("캠페인 명을 입력 해주세요.");
-    return false;
-  } else if (!info.description) {
-    alert("캠페인 설명을 입력 해주세요.");
-    return false;
-  } else if (!info.start_date) {
-    alert("캠페인 시작 시간을 선택 해주세요.");
-    return false;
-  } else if (info.period_type === "LIMITED" && !info.end_date) {
-    alert("캠페인 종료 시간을 선택 해주세요.");
-    return false;
-  } else {
-    return true;
-  }
-};
-
 export default DetailsCampaign;

@@ -1,56 +1,55 @@
+import CampaignContents from "@/components/layout/campaign/DashboardContents";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import DashboardContents from "@/components/layout/dashboard/DashboardContents";
 import ItemDetails from "@/components/layout/item/ItemDetails";
-import ItemTypeComponent from "@/components/layout/item/ItemTypeComponent";
-import RewardDetails from "@/components/layout/item/RewardDetails";
+import RewardComponent from "@/components/layout/item/RewardComponent";
 import { fetchCreateItem } from "@/pages/campaign/lib/apis";
 import {
   ItemType,
-  RewardType,
   ItemArgs,
   KakaoArgs,
   ProductsArgs,
   PromotionsArgs,
   RewardArgs,
+  RewardType,
 } from "@/pages/item/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useState, useRef, KeyboardEvent } from "react";
+import { useState, useRef, KeyboardEvent, useEffect } from "react";
 
 const NewItem = (context: GetServerSidePropsContext) => {
   //table style string
   const router = useRouter();
 
-  const [item_type, setItem_type] = useState<ItemType>(ItemType.PM);
   const [title, setTitle] = useState("");
-  const [kakao_message, setKakao_message] = useState("");
   const [products, setProducts] = useState<ProductsArgs[]>([]);
   const [promotions, setPromotions] = useState<PromotionsArgs[]>([]);
+  const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>({ message: "" });
+  const [kakao_message, setKakao_message] = useState<string>("");
   const [rewards, setRewards] = useState<RewardArgs[]>([]);
-  const [campaign_id, setCampaign_id] = useState("");
-  const [coupon_code, setCoupon_code] = useState("");
-  const [point_amount, setPoint_amount] = useState(0);
   const [active, setActive] = useState<boolean>(true);
+  const [campaign_id, setCampaign_id] = useState("");
+  const [item_type, setItem_type] = useState<ItemType>(ItemType.PM);
+  const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
+  const [couponInputs, setCouponInputs] = useState<RewardArgs[]>([{ reward_type: RewardType.CO, coupon_code: "" }]);
+  const [pointInputs, setPointInputs] = useState<RewardArgs[]>([{ reward_type: RewardType.CO, point_amount: 0 }]);
 
   const infoCheck = (info: ItemArgs) => {
-    if (!info.title) {
-      alert("리퍼럴 명을 입력 해주세요.");
-      return false;
-    } else if (!info.kakao_args) {
-      alert("카카오 메세지를 입력 해주세요.");
-      return false;
-    } else {
-      return true;
-    }
-  };
-  const kakao_args: KakaoArgs = {
-    message: kakao_message,
+    // if (!info.title) {
+    //   alert("리퍼럴 명을 입력 해주세요.");
+    //   return false;
+    // } else if (!info.kakao_args) {
+    //   alert("카카오 메세지를 입력 해주세요.");
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    return true;
   };
 
   const itemArgs: ItemArgs = {
     title: title,
     item_type: item_type,
-    kakao_args: kakao_args,
+    kakao_args: kakaoArgs,
     products: products,
     promotions: promotions,
     rewards: rewards,
@@ -58,23 +57,17 @@ const NewItem = (context: GetServerSidePropsContext) => {
     active: active,
   };
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); // Prevent the default form submission behavior if it's in a form element
-      if (buttonRef.current) {
-        buttonRef.current.click(); // Trigger the click event on the login button
-      }
-    }
-  };
+  useEffect(() => {
+    setKakaoArgs({ message: kakao_message });
+  }, [kakao_message]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
 
-    if (id === "create_campaign") {
+    if (id === "create_item") {
       if (infoCheck(itemArgs)) {
         const result = await fetchCreateItem(itemArgs, context);
-
+        console.log("itemArgs", itemArgs);
         if (result.status === 200) {
           alert(result.message);
           if (result.success) {
@@ -91,29 +84,46 @@ const NewItem = (context: GetServerSidePropsContext) => {
       }
     }
   };
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (buttonRef.current) {
+        buttonRef.current.click();
+      }
+    }
+  };
+
   return (
-    <DashboardContainer title={"새 리퍼럴 생성"} onclick={handleSubmit} onclickText="저장하기" buttonId="new_item">
-      <DashboardContents>
-        <ItemDetails
-          itemArgs={itemArgs}
-          setItem_type={setItem_type}
-          setTitle={setTitle}
-          setCampaign_id={setCampaign_id}
-          setActive={setActive}
-        />
-      </DashboardContents>
-      <DashboardContents>
-        {/* <RewardDetails
-          itemArgs={itemArgs}
-          setItem_type={setItem_type}
-          setTitle={setTitle}
-          item_type={item_type}
-          setDescription={setDescription}
-          setReward_type={setReward_type}
-          setCampaign_id={setCampaign_id}
-          setActive={setActive}
-        /> */}
-      </DashboardContents>
+    <DashboardContainer title={"새 리퍼럴 생성"} onclick={handleSubmit} onclickText="저장하기" buttonId="create_item">
+      <div className="flex">
+        <CampaignContents>
+          <ItemDetails
+            item_type={item_type}
+            itemArgs={itemArgs}
+            kakao_message={kakao_message}
+            setItem_type={setItem_type}
+            setTitle={setTitle}
+            setProducts={setProducts}
+            setPromotions={setPromotions}
+            setKakao_message={setKakao_message}
+            handleKeyDown={handleKeyDown}
+          />
+        </CampaignContents>
+        <CampaignContents>
+          <RewardComponent
+            setRewards={setRewards}
+            handleKeyDown={handleKeyDown}
+            reward_type={reward_type}
+            couponInputs={couponInputs}
+            pointInputs={pointInputs}
+            setReward_Type={setReward_Type}
+            setCouponInputs={setCouponInputs}
+            setPointInputs={setPointInputs}
+          />
+        </CampaignContents>
+      </div>
     </DashboardContainer>
   );
 };
