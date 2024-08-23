@@ -38,14 +38,6 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
     setPromotions(promotionInputs.map((input) => ({ description: input })));
   }, [promotionInputs, setPromotions]);
 
-  // const handleAddInput = () => {
-  //   if (item_type === ItemType.PD) {
-  //     setProductInputs([...productInputs, ""]);
-  //   } else if (item_type === ItemType.PM) {
-  //     setPromotionInputs([...promotionInputs, ""]);
-  //   }
-  // };
-
   const handleDeleteInput = (index: number) => {
     if (item_type === ItemType.PD) {
       const updatedInputs = productInputs.filter((_, i) => i !== index);

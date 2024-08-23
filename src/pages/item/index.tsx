@@ -1,6 +1,6 @@
 import CampaignList from "@/components/layout/campaign/CampaignList";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import DashboardContents from "@/components/layout/dashboard/DashboardContents";
+import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemList from "@/components/layout/item/ItemList";
 import { ApiResponse } from "@/lib/types";
 import { fetchGetCampaignList } from "@/pages/campaign/lib/apis";
@@ -39,14 +39,14 @@ export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
     <DashboardContainer title={"리퍼럴"} onclick={handleButton} onclickText="새 리퍼럴 생성" buttonId="new_item">
       <div className="wrapper-container">
         <div className="contents-container w-full justify-center">
-          <DashboardContents>
+          <ContentsContainer variant="dashboard">
             <ItemList
               theadStyle={theadStyle}
               tbodyStyle={tbodyStyle}
               apiResponse={apiResponse}
               handleButton={handleButton}
             ></ItemList>
-          </DashboardContents>
+          </ContentsContainer>
         </div>
       </div>
     </DashboardContainer>

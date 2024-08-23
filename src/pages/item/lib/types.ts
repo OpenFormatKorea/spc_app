@@ -20,6 +20,25 @@ export enum RewardType {
   PO = "POINT",
 }
 
+export enum TriggerType {
+  SU = "SIGNUP",
+  PUR = "PURCHASE",
+}
+
+export enum PaymentTimingType {
+  IMM = "IMMEDIATE",
+  DEL = "DELAYED",
+}
+
+export enum PaymentFrequencyType {
+  ONCE = "ONCE",
+  REP = "REPEAT",
+  UNL = "UNLIMITED",
+}
+export interface ReferralConditions {
+  coupon_code?: string;
+  point_amount?: number;
+}
 export interface KakaoArgs {
   id?: number;
   message: string;

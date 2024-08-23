@@ -10,7 +10,7 @@ interface InputRadioBoxProps {
 const InputRadioBox: React.FC<InputRadioBoxProps> = ({ label, value, name, checked, onChange }) => {
   return (
     <>
-      <div className="flex space-x-2 justify-center items-center text-gray-500">
+      <div className="flex space-x-2 justify-center items-center text-gray-500 mr-5">
         <input type="radio" name={name} value={value} checked={checked} onChange={onChange} />
         <label>{label}</label>
       </div>

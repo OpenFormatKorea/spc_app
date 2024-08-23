@@ -1,5 +1,5 @@
-import CampaignContents from "@/components/layout/campaign/CampaignContents";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemDetails from "@/components/layout/item/ItemDetails";
 import NewRewardComponent from "@/components/layout/item/NewRewardComponent";
 import { fetchCreateItem } from "@/pages/campaign/lib/apis";
@@ -97,8 +97,8 @@ const NewItem = (context: GetServerSidePropsContext) => {
 
   return (
     <DashboardContainer title={"새 리퍼럴 생성"} onclick={handleSubmit} onclickText="저장하기" buttonId="create_item">
-      <div className="flex flex-col md:flex-row w-full">
-        <CampaignContents>
+      <div className="flex flex-col md:flex-row w-full justify-center ">
+        <ContentsContainer variant="campaign">
           <ItemDetails
             item_type={item_type}
             itemArgs={itemArgs}
@@ -110,30 +110,10 @@ const NewItem = (context: GetServerSidePropsContext) => {
             setKakao_message={setKakao_message}
             handleKeyDown={handleKeyDown}
           />
-        </CampaignContents>
-        <CampaignContents>
-          <label className="text-md font-bold flex-grow">리워드</label>
-          <div className="flex flex-col md:flex-row space-x-4 w-full">
-            <NewRewardComponent
-              setRewards={setRewards}
-              handleKeyDown={handleKeyDown}
-              reward_type={RewardType.CO}
-              couponInputs={couponInputs}
-              pointInputs={pointInputs}
-              setCouponInputs={setCouponInputs}
-              setPointInputs={setPointInputs}
-            />
-            <NewRewardComponent
-              setRewards={setRewards}
-              handleKeyDown={handleKeyDown}
-              reward_type={RewardType.PO}
-              couponInputs={couponInputs}
-              pointInputs={pointInputs}
-              setCouponInputs={setCouponInputs}
-              setPointInputs={setPointInputs}
-            />
-          </div>
-        </CampaignContents>
+        </ContentsContainer>
+        <ContentsContainer variant="campaign">
+          <NewRewardComponent handleKeyDown={handleKeyDown}></NewRewardComponent>
+        </ContentsContainer>
       </div>
     </DashboardContainer>
   );

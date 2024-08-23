@@ -29,7 +29,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
   const [productInputs, setProductInputs] = useState<string[]>([""]);
   const [promotionInputs, setPromotionInputs] = useState<string[]>([""]);
   const inputformClass = "inputformClass flex flex-col text-left w-full mb-2";
-  const labelClass = "labelClass text-md font-bold my-4";
+  const labelClass = "labelClass text-sm font-bold mt-4";
   const handleItemTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItem_type(e.target.value as ItemType);
   };

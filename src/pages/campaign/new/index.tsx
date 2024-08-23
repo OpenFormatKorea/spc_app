@@ -1,6 +1,7 @@
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import DashboardContents from "@/components/layout/dashboard/DashboardContents";
+import ContentsContainer from "@/components/layout/base/ContentsContainer";
+
 import { fetchCreateCampaign } from "@/pages/campaign/lib/apis";
 import { CampaignArgs, PeriodType } from "@/pages/campaign/lib/types";
 import { GetServerSidePropsContext } from "next";
@@ -83,7 +84,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
       onclickText="저장하기"
       buttonId="create_campaign"
     >
-      <DashboardContents>
+      <ContentsContainer variant="dashboard">
         <CampaignDetails
           campaignArgs={campaignArgs}
           setPeriod_type={setPeriod_type}
@@ -92,10 +93,8 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           setTitle={setTitle}
           setStart_date={setStart_date}
           setEnd_date={setEnd_date}
-          // setNewStartDate={setNewStartDate}
-          // setNewEndDate={setNewEndDate}
         />
-      </DashboardContents>
+      </ContentsContainer>
     </DashboardContainer>
   );
 };

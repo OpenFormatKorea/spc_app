@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   };
 
   return (
-    <header className="bg-yellow-400 lg:bg-[#20b7ec] fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px]">
+    <header className="bg-sky-600 fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px]">
       <div className="flex items-center h-[60px] px-6 w-full">
         <div className="flex items-center lg:hidden">
           {/* Logo visible only on mobile */}
@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="bg-[#20b7ec] text-white lg:hidden flex flex-col items-start p-4">
+        <div className="bg-sky-600 text-white lg:hidden flex flex-col items-start p-4">
           <Navmenu menutitle="대시보드" link="/dashboard" />
           <Navmenu menutitle="캠페인" link="/campaign" />
           <div className="border-t border-white my-2 w-full"></div>
@@ -80,89 +80,3 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 };
 
 export default Header;
-
-// import { authenticateUserforHeader } from "@/lib/auth";
-// import { deleteCookie, getCookie, setCookie } from "cookies-next";
-// import { GetServerSideProps } from "next";
-// import router from "next/router";
-// import { useState } from "react";
-// interface HeaderProps {
-//   title: string;
-// }
-
-// const headerBtnstyle = "p-2 cursor-pointer bg-white rounded-lg text-xs text-center min-w-[65px]";
-
-// export const handleSignOut = async (event: React.FormEvent) => {
-//   const access = getCookie("access");
-//   if (access) {
-//     deleteCookie("access");
-//     deleteCookie("refresh");
-//     deleteCookie("shop_id");
-//     console.log(access + " 님 로그아웃");
-//     router.push("/home");
-//   } else {
-//     alert("로그아웃을 실패하였습니다. 잠시 후 다시 시도해주시기 바랍니다.");
-//   }
-// };
-
-// const Header: React.FC<HeaderProps> = ({ title }) => {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-//   const toggleMenu = () => {
-//     setIsMenuOpen(!isMenuOpen);
-//   };
-//   return (
-//     <header className="bg-[#20b7ec] fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px]">
-//       <div className="flex items-center h-[60px] px-6 w-full">
-//         <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
-//         <div className="flex space-x-2 hidden lg:flex">
-//           <div className={headerBtnstyle}>My Page</div>
-//           <div className={headerBtnstyle} onClick={handleSignOut}>
-//             Sign out
-//           </div>
-//         </div>
-//         <div className="lg:hidden flex items-center">
-//           <button onClick={toggleMenu} className="text-white focus:outline-none">
-//             {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Mobile Menu */}
-//       {isMenuOpen && (
-//         <div className="bg-[#20b7ec] text-white lg:hidden flex flex-col items-start p-4">
-//           <a href="/dashboard" className="py-2" onClick={toggleMenu}>
-//             대시보드
-//           </a>
-//           <a href="/campaign" className="py-2" onClick={toggleMenu}>
-//             캠페인
-//           </a>
-//           <div className="border-t border-white my-2 w-full"></div>
-//           <a className="py-2" onClick={toggleMenu}>
-//             My Page
-//           </a>
-//           <a
-//             className="py-2"
-//             onClick={() => {
-//               handleSignOut();
-//               toggleMenu();
-//             }}
-//           >
-//             Sign out
-//           </a>
-//         </div>
-//       )}
-//     </header>
-//     // <header className="bg-[#20b7ec] fixed ml-[250px]" style={{ width: "calc(100% - 250px)" }}>
-//     //   <div className="flex items-center h-[60px] px-6">
-//     //     <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
-//     //     <div className="flex space-x-2">
-//     //       <div className={headerBtnstyle}>My Page</div>
-//     //       <div className={headerBtnstyle} onClick={handleSignOut}>
-//     //         Sign out
-//     //       </div>
-//     //     </div>
-//     //   </div>
-//     // </header>
-//   );
-// };
-// export default Header;

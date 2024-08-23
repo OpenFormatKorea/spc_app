@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import DashboardContents from "@/components/layout/dashboard/DashboardContents";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import {
   fetchDeleteCampaign,
@@ -15,7 +14,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { authenticateUserforHeader } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
 import ItemList from "@/components/layout/item/ItemList";
-import CampaignContents from "@/components/layout/campaign/CampaignContents";
+import ContentsContainer from "@/components/layout/base/ContentsContainer";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
@@ -147,7 +146,7 @@ const DetailsCampaign = (
       buttonId="cancel_modify_campaign"
     >
       <div className="flex flex-col md:flex-row w-full">
-        <CampaignContents>
+        <ContentsContainer variant="campaign">
           <CampaignDetails
             campaignArgs={campaignArgs}
             setPeriod_type={setPeriod_type}
@@ -173,17 +172,15 @@ const DetailsCampaign = (
               수정하기
             </button>
           </div>
-        </CampaignContents>
-        <CampaignContents>
+        </ContentsContainer>
+        <ContentsContainer variant="campaign">
           <ItemList
-            campaignTitle={cDetailApiResponse.title}
-            campaignDesc={cDetailApiResponse.description}
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
             apiResponse={cListApiResponse}
             handleButton={handleButton}
           />
-        </CampaignContents>
+        </ContentsContainer>
       </div>
     </DashboardContainer>
   );

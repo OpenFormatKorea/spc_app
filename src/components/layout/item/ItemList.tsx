@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface ItemListProps {
-  campaignTitle: string;
-  campaignDesc: string;
   theadStyle: string;
   tbodyStyle: string;
   apiResponse: ApiResponse;

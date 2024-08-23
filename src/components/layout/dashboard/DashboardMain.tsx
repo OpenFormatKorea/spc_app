@@ -10,7 +10,7 @@ interface MainProps {
 
 const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickText, buttonId }) => {
   return (
-    <div className="flex flex-col mt-[60px] lg:pl-[250px] pl-0 min-h-screen">
+    <div className="flex flex-col mt-[60px] lg:pl-[245px] pl-0 min-h-screen">
       <div className="w-full bg-gray-100 p-4 sm:p-8 flex-grow">
         <div className="subject-container flex flex-col sm:flex-row sm:items-center justify-between">
           <a className="text-[24px] sm:text-[30px] font-bold">{title}</a>

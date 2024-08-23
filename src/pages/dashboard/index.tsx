@@ -1,6 +1,7 @@
 import CampaignList from "@/components/layout/campaign/CampaignList";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import DashboardContents from "@/components/layout/dashboard/DashboardContents";
+import ContentsContainer from "@/components/layout/base/ContentsContainer";
+
 import { authenticateUserforHeader } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
 import { AuthArgs } from "@/pages/auth/lib/types";
@@ -36,20 +37,20 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
   return (
     <DashboardContainer title={"대시보드"} onclick={handleButton} onclickText="" buttonId="dashboard">
       <div className="contents-container w-full justify-center">
-        <DashboardContents>
+        <ContentsContainer variant="dashboard">
           <CampaignList
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
             apiResponse={apiResponse}
             handleButton={handleButton}
           />
-        </DashboardContents>
+        </ContentsContainer>
         <div className="flex">
-          <DashboardContents>children</DashboardContents>
-          <DashboardContents>children</DashboardContents>
+          <ContentsContainer variant="dashboard">children</ContentsContainer>
+          <ContentsContainer variant="dashboard">children</ContentsContainer>
         </div>
 
-        <DashboardContents>
+        <ContentsContainer variant="dashboard">
           <div>SUBJECT</div>
           <div>description</div>
           <table className="min-w-full bg-white border border-gray-200 ">
@@ -78,7 +79,7 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
               </tr>
             </tbody>
           </table>
-        </DashboardContents>
+        </ContentsContainer>
       </div>
     </DashboardContainer>
   );

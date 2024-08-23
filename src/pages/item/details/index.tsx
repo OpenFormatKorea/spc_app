@@ -24,49 +24,49 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   setCouponInputs,
   setPointInputs,
 }) => {
-  // useEffect(() => {
-  //   if (couponInputs.length === 0 && pointInputs.length === 0) {
-  //     setCouponInputs([{ reward_type: RewardType.CO, coupon_code: "" }]);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (couponInputs.length === 0 && pointInputs.length === 0) {
+      setCouponInputs([{ reward_type: RewardType.CO, coupon_code: "" }]);
+    }
+  }, []);
 
-  // const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setReward_Type(e.target.value as RewardType);
-  // };
+  const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setReward_Type(e.target.value as RewardType);
+  };
 
-  // const handleAddInput = () => {
-  //   if (reward_type === RewardType.CO) {
-  //     setCouponInputs([...couponInputs, { reward_type: RewardType.CO, coupon_code: "" }]);
-  //   } else if (reward_type === RewardType.PO) {
-  //     setPointInputs([...pointInputs, { reward_type: RewardType.PO, point_amount: 0 }]);
-  //   }
-  // };
+  const handleAddInput = () => {
+    if (reward_type === RewardType.CO) {
+      setCouponInputs([...couponInputs, { reward_type: RewardType.CO, coupon_code: "" }]);
+    } else if (reward_type === RewardType.PO) {
+      setPointInputs([...pointInputs, { reward_type: RewardType.PO, point_amount: 0 }]);
+    }
+  };
 
-  // const handleDeleteInput = (type: RewardType, index: number) => {
-  //   if (type === RewardType.CO) {
-  //     const updatedInputs = couponInputs.filter((_, i) => i !== index);
-  //     setCouponInputs(updatedInputs.length > 0 ? updatedInputs : couponInputs);
-  //     setRewards(updatedInputs.length > 0 ? updatedInputs : couponInputs);
-  //   } else if (type === RewardType.PO) {
-  //     const updatedInputs = pointInputs.filter((_, i) => i !== index);
-  //     setPointInputs(updatedInputs.length > 0 ? updatedInputs : pointInputs);
-  //     setRewards(updatedInputs.length > 0 ? updatedInputs : pointInputs);
-  //   }
-  // };
+  const handleDeleteInput = (type: RewardType, index: number) => {
+    if (type === RewardType.CO) {
+      const updatedInputs = couponInputs.filter((_, i) => i !== index);
+      setCouponInputs(updatedInputs.length > 0 ? updatedInputs : couponInputs);
+      setRewards(updatedInputs.length > 0 ? updatedInputs : couponInputs);
+    } else if (type === RewardType.PO) {
+      const updatedInputs = pointInputs.filter((_, i) => i !== index);
+      setPointInputs(updatedInputs.length > 0 ? updatedInputs : pointInputs);
+      setRewards(updatedInputs.length > 0 ? updatedInputs : pointInputs);
+    }
+  };
 
-  // const handleInputChange = (value: string | number, index: number, type: RewardType) => {
-  //   if (type === RewardType.CO) {
-  //     const updatedInputs = [...couponInputs];
-  //     updatedInputs[index] = { ...updatedInputs[index], coupon_code: value as string };
-  //     setCouponInputs(updatedInputs);
-  //     setRewards(updatedInputs);
-  //   } else if (type === RewardType.PO) {
-  //     const updatedInputs = [...pointInputs];
-  //     updatedInputs[index] = { ...updatedInputs[index], point_amount: Number(value) };
-  //     setPointInputs(updatedInputs);
-  //     setRewards(updatedInputs);
-  //   }
-  // };
+  const handleInputChange = (value: string | number, index: number, type: RewardType) => {
+    if (type === RewardType.CO) {
+      const updatedInputs = [...couponInputs];
+      updatedInputs[index] = { ...updatedInputs[index], coupon_code: value as string };
+      setCouponInputs(updatedInputs);
+      setRewards(updatedInputs);
+    } else if (type === RewardType.PO) {
+      const updatedInputs = [...pointInputs];
+      updatedInputs[index] = { ...updatedInputs[index], point_amount: Number(value) };
+      setPointInputs(updatedInputs);
+      setRewards(updatedInputs);
+    }
+  };
 
   return (
     <>
@@ -78,19 +78,19 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
             name="reward_type"
             value={RewardType.CO}
             checked={reward_type === RewardType.CO}
-            //onChange={handleRewardTypeRadioChange}
+            onChange={handleRewardTypeRadioChange}
           />
           <InputRadioBox
             label="포인트"
             name="reward_type"
             value={RewardType.PO}
             checked={reward_type === RewardType.PO}
-            //onChange={handleRewardTypeRadioChange}
+            onChange={handleRewardTypeRadioChange}
           />
           <div
             id="create_item_container"
             className="border my-2 p-1 bg-blue-500 text-white rounded-lg w-[50px] text-center cursor-pointer"
-            //onClick={handleAddInput}
+            onClick={handleAddInput}
           >
             추가
           </div>
@@ -106,7 +106,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               id={`coupon_code_${index}`}
               placeholder="쿠폰 코드를 입력하세요."
               value={input.coupon_code || ""}
-              // onChange={(e) => handleInputChange(e.target.value, index, RewardType.CO)}
+              onChange={(e) => handleInputChange(e.target.value, index, RewardType.CO)}
               onKeyDown={(e) => handleKeyDown(e)}
             />
             <div
@@ -114,7 +114,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               className={`ml-2 p-1 rounded-lg w-[50px] text-center cursor-pointer text-white ${
                 couponInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
               }`}
-              // onClick={() => handleDeleteInput(RewardType.CO, index)}
+              onClick={() => handleDeleteInput(RewardType.CO, index)}
               style={{ pointerEvents: couponInputs.length === 1 ? "none" : "auto" }}
             >
               삭제
@@ -130,7 +130,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               id={`point_amount_${index}`}
               placeholder="포인트 금액을 입력하세요."
               value={input.point_amount || ""}
-              // onChange={(e) => handleInputChange(e.target.value, index, RewardType.PO)}
+              onChange={(e) => handleInputChange(e.target.value, index, RewardType.PO)}
               onKeyDown={(e) => handleKeyDown(e)}
             />
             <div
@@ -138,7 +138,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               className={`ml-2 p-1 rounded-lg w-[50px] text-center cursor-pointer text-white ${
                 pointInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
               }`}
-              //onClick={() => handleDeleteInput(RewardType.PO, index)}
+              onClick={() => handleDeleteInput(RewardType.PO, index)}
               style={{ pointerEvents: pointInputs.length === 1 ? "none" : "auto" }}
             >
               삭제
