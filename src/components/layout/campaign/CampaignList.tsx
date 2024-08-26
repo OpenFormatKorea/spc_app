@@ -15,6 +15,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
     const { id } = event.currentTarget;
     router.replace(`/campaign/details?campaign_id=${id}`, undefined, { shallow: true, scroll: false });
   }
+
   // 더보기 버튼 표시 유무 확인
   const [isCampaignPage, setIsCampaignPage] = useState(false);
   useEffect(() => {
@@ -26,8 +27,11 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
   return (
     <>
       <div>
-        <div className="font-bold text-xl flex w-full">
-          <div className="w-[50%]">캠페인</div>
+        <div className="font-bold text-xl flex w-full pb-2 border-b-[1px]">
+          <div className="w-[50%]">
+            <div>캠페인</div>
+            <div className="font-normal text-sm">현재 사용중인 아이템 목록입니다.</div>
+          </div>
           {!isCampaignPage && (
             <div
               id="more_campaign"
@@ -38,7 +42,6 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
             </div>
           )}
         </div>
-        <div>현재 사용중인 캠페인 목록입니다.</div>
 
         <div className="my-2 w-full">
           <table className="w-full bg-white border border-gray-200 hidden lg:table">

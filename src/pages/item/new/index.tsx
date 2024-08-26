@@ -1,7 +1,6 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemDetails from "@/components/layout/item/ItemDetails";
-import NewRewardComponent from "@/components/layout/item/NewRewardComponent";
 import { fetchCreateItem } from "@/pages/campaign/lib/apis";
 import {
   ItemType,
@@ -15,6 +14,7 @@ import {
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
+import RewardComponent from "@/components/layout/item/RewardComponent";
 
 const NewItem = (context: GetServerSidePropsContext) => {
   //table style string
@@ -30,8 +30,6 @@ const NewItem = (context: GetServerSidePropsContext) => {
   const [campaign_id, setCampaign_id] = useState("");
   const [item_type, setItem_type] = useState<ItemType>(ItemType.PM);
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
-  const [couponInputs, setCouponInputs] = useState<RewardArgs[]>([{ reward_type: RewardType.CO, coupon_code: "" }]);
-  const [pointInputs, setPointInputs] = useState<RewardArgs[]>([{ reward_type: RewardType.CO, point_amount: 0 }]);
 
   const infoCheck = (info: ItemArgs) => {
     // if (!info.title) {
@@ -112,7 +110,11 @@ const NewItem = (context: GetServerSidePropsContext) => {
           />
         </ContentsContainer>
         <ContentsContainer variant="campaign">
-          <NewRewardComponent handleKeyDown={handleKeyDown}></NewRewardComponent>
+          <RewardComponent
+            handleKeyDown={handleKeyDown}
+            rewardType={reward_type}
+            setRewardType={setReward_Type}
+          ></RewardComponent>
         </ContentsContainer>
       </div>
     </DashboardContainer>

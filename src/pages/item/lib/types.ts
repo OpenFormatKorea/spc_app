@@ -10,6 +10,25 @@ export interface ItemArgs {
   active?: boolean;
 }
 
+export interface RewardConditionsArgs {
+  coupon_code?: string | undefined;
+  point_amount?: number | undefined;
+  referrer_policy: RewardPolicyArgs;
+  referee_policy: RewardPolicyArgs;
+}
+
+export interface RewardPolicyArgs {
+  trigger: TriggerType;
+  payment_timing: {
+    type: PaymentTimingType;
+    delay_days?: number;
+  };
+  payment_frequency: {
+    type: PaymentFrequencyType;
+    repeat_count?: number;
+  };
+}
+
 export enum ItemType {
   PM = "PROMOTION",
   PD = "PRODUCT",
@@ -35,10 +54,7 @@ export enum PaymentFrequencyType {
   REP = "REPEAT",
   UNL = "UNLIMITED",
 }
-export interface ReferralConditions {
-  coupon_code?: string;
-  point_amount?: number;
-}
+
 export interface KakaoArgs {
   id?: number;
   message: string;

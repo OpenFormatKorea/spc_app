@@ -70,9 +70,9 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
 
   return (
     <>
-      <div className="inputForm flex flex-col text-left w-full mb-2">
+      <div className="inputForm flex flex-col text-left  mb-2">
         <label className="text-md font-bold my-4">리워드 종류</label>
-        <div className="flex justify-between w-[250px] lg:w-[300px]">
+        <div className="flex justify-between  w-full lg:max-w-[350px]">
           <InputRadioBox
             label="쿠폰"
             name="reward_type"
@@ -89,7 +89,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
           />
           <div
             id="create_item_container"
-            className="border my-2 p-1 bg-blue-500 text-white rounded-lg w-[50px] text-center cursor-pointer"
+            className=" bg-blue-500 text-white ml-2 border p-1 rounded-lg  min-w-[45px]  text-center cursor-pointer "
             onClick={handleAddInput}
           >
             추가

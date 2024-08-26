@@ -1,5 +1,3 @@
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import router from "next/router";
 interface MainProps {
   title: string;
   children: React.ReactNode;

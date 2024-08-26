@@ -6,7 +6,7 @@ import { ApiResponse } from "@/lib/types";
 import { fetchGetCampaignList } from "@/pages/campaign/lib/apis";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await fetchGetCampaignList(context);
@@ -21,6 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export const Campaign = ({ apiResponse }: { apiResponse: ApiResponse }) => {
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700";
   const tbodyStyle = "px-6 py-4 border-b border-gray-200";
+
   const router = useRouter();
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
@@ -32,7 +33,6 @@ export const Campaign = ({ apiResponse }: { apiResponse: ApiResponse }) => {
   useEffect(() => {
     console.log("Received API Response:", apiResponse);
   }, [apiResponse]);
-  // Ensure apiResponse is an array before mapping
 
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   return (
@@ -45,7 +45,7 @@ export const Campaign = ({ apiResponse }: { apiResponse: ApiResponse }) => {
               tbodyStyle={tbodyStyle}
               apiResponse={apiResponse}
               handleButton={handleButton}
-            ></CampaignList>
+            />
           </ContentsContainer>
         </div>
       </div>

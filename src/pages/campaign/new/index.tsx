@@ -11,7 +11,6 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
-  //table style string
   const router = useRouter();
 
   const [title, setTitle] = useState("");
@@ -20,8 +19,6 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   const [start_date, setStart_date] = useState("2024-08-14 00:00:00");
   const [end_date, setEnd_date] = useState("2024-08-16 00:00:00");
   const [active, setActive] = useState(true);
-  // const [newStart_date, setNewStartDate] = useState(new Date());
-  // const [newEnd_date, setNewEndDate] = useState(new Date());
 
   const infoCheck = (info: CampaignArgs) => {
     if (!info.title) {
@@ -42,15 +39,12 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   };
 
   const campaignArgs: CampaignArgs = {
-    // shop_id: shop_id,
     title: title,
     description: description,
     period_type: period_type,
     start_date: start_date,
     end_date: end_date,
     active: active,
-    // newStart_date: newStart_date,
-    // newEnd_date: newEnd_date,
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);

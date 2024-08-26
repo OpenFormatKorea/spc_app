@@ -21,9 +21,6 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   setProductInputs,
   setPromotionInputs,
 }) => {
-  // const [productInputs, setProductInputs] = useState<string[]>([""]);
-  // const [promotionInputs, setPromotionInputs] = useState<string[]>([""]);
-
   // 프로덕트 & 프로모션 파싱
   useEffect(() => {
     setProductInputs([""]);

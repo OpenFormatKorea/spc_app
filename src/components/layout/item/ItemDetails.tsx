@@ -1,7 +1,7 @@
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 import ItemTypeComponent from "@/components/layout/item/ItemTypeComponent";
-import { ItemArgs, ItemType, KakaoArgs, ProductsArgs, PromotionsArgs } from "@/pages/item/lib/types";
+import { ItemArgs, ItemType, ProductsArgs, PromotionsArgs } from "@/pages/item/lib/types";
 import { KeyboardEvent, useState } from "react";
 interface ItemDetailsProps {
   item_type: ItemType;
@@ -44,6 +44,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
   return (
     <>
       <div className="contents-container w-full justify-center items-center">
+        <h1 className="font-bold text-xl pb-2 border-b-[1px]">아이템 옵션</h1>
         <div className={inputformClass}>
           <label className={labelClass}>아이템 명</label>
           <InputTextBox
@@ -69,8 +70,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
 
         <div className={inputformClass}>
           <label className={labelClass}>아이템 종류</label>
-          <div className="flex  mb-2 ">
-            <div className="flex space-x-20 text-left w-full lg:w-[360px]">
+          <div className="flex h-[42px] items-center w-full mb-2 ">
+            <div className="flex space-x-20 text-left w-full lg:max-w-[358px]">
               <InputRadioBox
                 label="프로덕트"
                 name="item_type"
@@ -86,9 +87,10 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
                 onChange={handleItemTypeRadioChange}
               />
             </div>
+
             <div
               id="create_item_container"
-              className="border p-1 bg-blue-500 text-white rounded-lg min-w-[45px] text-center cursor-pointer"
+              className="border p-1 bg-blue-500 text-white rounded-lg min-w-[45px] text-center cursor-pointer "
               onClick={handleAddInput}
             >
               추가

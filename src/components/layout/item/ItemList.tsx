@@ -26,18 +26,16 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
   return (
     <>
       <div className=" flex w-full">
-        <div className="font-bold text-xl inline-block w-full">
+        <h1 className="font-bold text-xl inline-block w-full pb-2 border-b-[1px]">
           <div className="w-[50%]">아이템</div>
           <div className="font-normal text-sm">현재 사용중인 아이템 목록입니다.</div>
-        </div>
-        <div className="w-[50%]] item-end justify-end text-center">
-          <div
-            id="create_item"
-            className="border m-2 mt-4 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] min-fit  cursor-pointer"
-            onClick={handleButton}
-          >
-            아이템 추가
-          </div>
+        </h1>
+        <div
+          id="create_item"
+          className="border m-2 mt-4 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] min-fit  cursor-pointer"
+          onClick={handleButton}
+        >
+          아이템 추가
         </div>
       </div>
       <div className="my-2 w-full">
