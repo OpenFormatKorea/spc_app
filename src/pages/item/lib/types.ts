@@ -1,78 +1,62 @@
 export interface ItemArgs {
-  id?: number;
   campaign_id: string;
   title: string;
   item_type: ItemType;
   kakao_args: KakaoArgs;
   products: ProductsArgs[];
   promotions: PromotionsArgs[];
-  rewards: RewardArgs[];
-  active?: boolean;
+  rewards: RewardsArgs[];
+}
+export enum ItemType {
+  PM = "PROMOTION",
+  PD = "PRODUCT",
+}
+export interface KakaoArgs {
+  message: string;
+}
+export interface ProductsArgs {
+  product_model_code: string;
+}
+export interface PromotionsArgs {
+  description: string;
 }
 
-export interface RewardConditionsArgs {
+//리워드 관련
+export interface RewardsArgs {
+  reward_type: RewardType;
   coupon_code?: string | undefined;
   point_amount?: number | undefined;
   referrer_policy: RewardPolicyArgs;
   referee_policy: RewardPolicyArgs;
 }
-
-export interface RewardPolicyArgs {
-  trigger: TriggerType;
-  payment_timing: {
-    type: PaymentTimingType;
-    delay_days?: number;
-  };
-  payment_frequency: {
-    type: PaymentFrequencyType;
-    repeat_count?: number;
-  };
+export enum RewardTarget {
+  RFE = "REFEREE",
+  RRR = "REFERRER",
 }
-
-export enum ItemType {
-  PM = "PROMOTION",
-  PD = "PRODUCT",
-}
-
 export enum RewardType {
   CO = "COUPON",
   PO = "POINT",
 }
-
-export enum TriggerType {
-  SU = "SIGNUP",
-  PUR = "PURCHASE",
+export interface RewardPolicyArgs {
+  SIGNUP?: ReferralConditions;
+  PURCHASE?: ReferralConditions;
 }
-
+export interface ReferralConditions {
+  payment_timing: {
+    type: PaymentTimingType;
+    delay_days?: number | null;
+  };
+  payment_frequency: {
+    type: PaymentFrequencyType;
+    repeat_count?: number | null;
+  };
+}
 export enum PaymentTimingType {
   IMM = "IMMEDIATE",
   DEL = "DELAYED",
 }
-
 export enum PaymentFrequencyType {
   ONCE = "ONCE",
   REP = "REPEAT",
   UNL = "UNLIMITED",
-}
-
-export interface KakaoArgs {
-  id?: number;
-  message: string;
-}
-
-export interface ProductsArgs {
-  id?: number;
-  product_model_code: string;
-}
-
-export interface PromotionsArgs {
-  id?: number;
-  description: string;
-}
-
-export interface RewardArgs {
-  id?: number;
-  reward_type: RewardType;
-  coupon_code?: string | null;
-  point_amount?: number | null;
 }

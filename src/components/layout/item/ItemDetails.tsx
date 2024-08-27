@@ -71,7 +71,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
         <div className={inputformClass}>
           <label className={labelClass}>아이템 종류</label>
           <div className="flex h-[42px] items-center w-full mb-2 ">
-            <div className="flex space-x-20 text-left w-full lg:max-w-[358px]">
+            <div className="flex space-x-20 text-left w-full lg:max-w-[458px]">
               <InputRadioBox
                 label="프로덕트"
                 name="item_type"

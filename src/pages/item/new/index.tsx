@@ -8,8 +8,8 @@ import {
   KakaoArgs,
   ProductsArgs,
   PromotionsArgs,
-  RewardArgs,
   RewardType,
+  RewardsArgs,
 } from "@/pages/item/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
@@ -25,22 +25,12 @@ const NewItem = (context: GetServerSidePropsContext) => {
   const [promotions, setPromotions] = useState<PromotionsArgs[]>([]);
   const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>({ message: "" });
   const [kakao_message, setKakao_message] = useState<string>("");
-  const [rewards, setRewards] = useState<RewardArgs[]>([]);
-  const [active, setActive] = useState<boolean>(true);
+  const [rewards, setRewards] = useState<RewardsArgs[]>([]);
   const [campaign_id, setCampaign_id] = useState("");
   const [item_type, setItem_type] = useState<ItemType>(ItemType.PM);
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
 
   const infoCheck = (info: ItemArgs) => {
-    // if (!info.title) {
-    //   alert("리퍼럴 명을 입력 해주세요.");
-    //   return false;
-    // } else if (!info.kakao_args) {
-    //   alert("카카오 메세지를 입력 해주세요.");
-    //   return false;
-    // } else {
-    //   return true;
-    // }
     return true;
   };
 
@@ -52,7 +42,6 @@ const NewItem = (context: GetServerSidePropsContext) => {
     promotions: promotions,
     rewards: rewards,
     campaign_id: campaign_id,
-    active: active,
   };
 
   useEffect(() => {
@@ -112,7 +101,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
         <ContentsContainer variant="campaign">
           <RewardComponent
             handleKeyDown={handleKeyDown}
-            rewardType={reward_type}
+            reward_type={reward_type}
             setRewardType={setReward_Type}
           ></RewardComponent>
         </ContentsContainer>

@@ -1,61 +1,66 @@
-import React, { useState, KeyboardEvent } from "react";
-import { RewardConditionsArgs, RewardType } from "@/pages/item/lib/types";
+import React, { useState, KeyboardEvent, useEffect } from "react";
+import { RewardsArgs, RewardType } from "@/pages/item/lib/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import Modal from "@/components/base/Modal";
 import RewardCard from "@/components/layout/item/RewardCondition";
 
 interface RewardComponentProps {
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
-  rewardType: RewardType;
+  reward_type: RewardType;
   setRewardType: (value: RewardType) => void;
 }
 
-const RewardComponent: React.FC<RewardComponentProps> = ({ handleKeyDown, rewardType, setRewardType }) => {
+const RewardComponent: React.FC<RewardComponentProps> = ({ handleKeyDown, reward_type, setRewardType }) => {
   const inputformClass = "flex flex-col text-left w-full lg:max-w-[350px] min-w-[300px] mb-4";
   const labelClass = "font-gray-600 text-sm font-bold text-left w-full mt-4";
-  const [rewardConditions, setRewardConditions] = useState<RewardConditionsArgs | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rewards, setRewards] = useState<RewardsArgs[]>([]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRewardType(e.target.value as RewardType);
   };
-
+  useEffect(() => {
+    console.log("Rewards array:", rewards);
+  }, [rewards]); // This will log the rewards array every time it changes
   return (
     <>
-      <h1 className="font-bold text-xl pb-2 border-b-[1px]">리퍼럴 옵션</h1>
+      <h1 className="font-bold text-xl pb-2 border-b-[1px]">리퍼럴</h1>
       <div className={inputformClass}>
-        <label className={labelClass}>리워드</label>
+        <label className={labelClass}>리워드 종류</label>
         <div className="flex justify-between w-full lg:max-w-[350px] ">
           <InputRadioBox
             label="쿠폰"
             name="reward_type"
             value={RewardType.CO}
-            checked={rewardType === RewardType.CO}
+            checked={reward_type === RewardType.CO}
             onChange={handleRewardTypeRadioChange}
           />
           <InputRadioBox
             label="포인트"
             name="reward_type"
             value={RewardType.PO}
-            checked={rewardType === RewardType.PO}
+            checked={reward_type === RewardType.PO}
             onChange={handleRewardTypeRadioChange}
           />
           <button className="bg-blue-500 text-white px-2 py-1 rounded-lg w-fit" onClick={openModal}>
             추가
           </button>
         </div>
+        <div>
+          <div>리워드 카드 여기로 들어갈거에요</div>
+        </div>
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <RewardCard
-          reward_type={rewardType}
+          reward_type={reward_type}
           handleKeyDown={handleKeyDown}
           isOpen={isModalOpen}
           onClose={closeModal}
-          setRewardConditions={setRewardConditions}
+          setRewards={setRewards}
         />
       </Modal>
     </>
