@@ -6,7 +6,7 @@ interface RewardPolicyProps {
   trigger: string;
   inputformClass: string;
   labelClass: string;
-  reward_type: RewardType;
+  rewardType: RewardType;
   target_state: RewardPolicyArgs;
   setTargetState: (value: RewardPolicyArgs) => void;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
@@ -16,40 +16,55 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
   trigger,
   inputformClass,
   labelClass,
-  reward_type,
+  rewardType,
   target_state,
   setTargetState,
   handleKeyDown,
 }) => {
+  const [usePolicy, setUsePolicy] = useState(true);
+
+  const handleCheckboxChange = () => {
+    setUsePolicy(!usePolicy);
+  };
+
   return (
     <>
       <div className="p-2 bg-gray-100 rounded-lg">
-        <div className={inputformClass}>
-          <label className="font-gray-600 text-lg font-bold text-left w-full pb-2 border-b-[1px]">
+        <div className="flex items-center mb-4 border-b-[1px] pb-2">
+          <input
+            type="checkbox"
+            id={`usePolicy-${trigger}`}
+            checked={usePolicy}
+            onChange={handleCheckboxChange}
+            className="mr-2 align-middle"
+          />
+          <label htmlFor={`usePolicy-${trigger}`} className="text-lg font-bold">
             {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
           </label>
         </div>
 
-        <ReferralCondition
-          target="referrer"
-          inputformClass={inputformClass}
-          labelClass={labelClass}
-          reward_type={reward_type}
-          target_state={target_state}
-          setTargetState={setTargetState}
-          handleKeyDown={handleKeyDown}
-        />
-      </div>
-      <div className="p-2 bg-gray-100 rounded-lg">
-        <ReferralCondition
-          target="referee"
-          inputformClass={inputformClass}
-          labelClass={labelClass}
-          reward_type={reward_type}
-          target_state={target_state}
-          setTargetState={setTargetState}
-          handleKeyDown={handleKeyDown}
-        />
+        {usePolicy && (
+          <>
+            <ReferralCondition
+              target="referrer"
+              inputFormClass={inputformClass}
+              labelClass={labelClass}
+              rewardType={rewardType}
+              target_state={target_state}
+              setTargetState={setTargetState}
+              handleKeyDown={handleKeyDown}
+            />
+            <ReferralCondition
+              target="referee"
+              inputFormClass={inputformClass}
+              labelClass={labelClass}
+              rewardType={rewardType}
+              target_state={target_state}
+              setTargetState={setTargetState}
+              handleKeyDown={handleKeyDown}
+            />
+          </>
+        )}
       </div>
     </>
   );

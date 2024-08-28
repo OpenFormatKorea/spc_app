@@ -29,7 +29,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
       <div className="font-bold text-xl flex w-full pb-2 border-b-[1px]">
         <div className="w-[50%]">
           <div>캠페인</div>
-          <div className="font-normal text-sm">현재 사용중인 아이템 목록입니다.</div>
+          <div className="font-normal text-sm">현재 사용중인 캠페인 목록입니다.</div>
         </div>
         {!isCampaignPage && (
           <div
@@ -65,7 +65,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
             ))}
             {!campaigns.length && (
               <tr>
-                <td className={tbodyStyle} colSpan={4} className="text-center">
+                <td className={tbodyStyle} colSpan={4}>
                   No campaigns available
                 </td>
               </tr>

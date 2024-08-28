@@ -65,57 +65,55 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   };
 
   return (
-    <>
-      <div className="contents-container w-full justify-center">
-        {item_type === ItemType.PD &&
-          productInputs.map((input, index) => (
-            <div key={index} className="inputForm flex items-center w-full mb-2 text-left">
-              <InputTextBox
-                type="text"
-                id={`product_model_code_${index}`}
-                placeholder="모델 코드를 입력하세요."
-                value={input}
-                onChange={(e) => handleInputChange(e.target.value, index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-              />
-              <div
-                id="delete_item_container"
-                className={`ml-2 border p-1  text-white rounded-lg  min-w-[45px]  text-center cursor-pointer ${
-                  productInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
-                }`}
-                onClick={() => handleDeleteInput(index)}
-                style={{ pointerEvents: productInputs.length === 1 ? "none" : "auto" }}
-              >
-                삭제
-              </div>
+    <div className="contents-container w-full justify-center">
+      {item_type === ItemType.PD &&
+        productInputs.map((input, index) => (
+          <div key={index} className="inputForm flex items-center w-full mb-2 text-left">
+            <InputTextBox
+              type="text"
+              id={`product_model_code_${index}`}
+              placeholder="모델 코드를 입력하세요."
+              value={input}
+              onChange={(e) => handleInputChange(e.target.value, index)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+            />
+            <div
+              id="delete_item_container"
+              className={`ml-2 border p-1 text-white rounded-lg min-w-[45px] text-center cursor-pointer ${
+                productInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
+              }`}
+              onClick={() => handleDeleteInput(index)}
+              style={{ pointerEvents: productInputs.length === 1 ? "none" : "auto" }}
+            >
+              삭제
             </div>
-          ))}
+          </div>
+        ))}
 
-        {item_type === ItemType.PM &&
-          promotionInputs.map((input, index) => (
-            <div key={index} className="inputForm flex items-center w-full mb-2">
-              <InputTextBox
-                type="text"
-                id={`promotion_description_${index}`}
-                placeholder="프로모션 설명을 입력하세요."
-                value={input}
-                onChange={(e) => handleInputChange(e.target.value, index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-              />
-              <div
-                id="delete_item_container"
-                className={`ml-2 border p-1  text-white rounded-lg  min-w-[45px]  text-center cursor-pointer ${
-                  promotionInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
-                }`}
-                onClick={() => handleDeleteInput(index)}
-                style={{ pointerEvents: promotionInputs.length === 1 ? "none" : "auto" }}
-              >
-                삭제
-              </div>
+      {item_type === ItemType.PM &&
+        promotionInputs.map((input, index) => (
+          <div key={index} className="inputForm flex items-center w-full mb-2">
+            <InputTextBox
+              type="text"
+              id={`promotion_description_${index}`}
+              placeholder="프로모션 설명을 입력하세요."
+              value={input}
+              onChange={(e) => handleInputChange(e.target.value, index)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+            />
+            <div
+              id="delete_item_container"
+              className={`ml-2 border p-1 text-white rounded-lg min-w-[45px] text-center cursor-pointer ${
+                promotionInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
+              }`}
+              onClick={() => handleDeleteInput(index)}
+              style={{ pointerEvents: promotionInputs.length === 1 ? "none" : "auto" }}
+            >
+              삭제
             </div>
-          ))}
-      </div>
-    </>
+          </div>
+        ))}
+    </div>
   );
 };
 

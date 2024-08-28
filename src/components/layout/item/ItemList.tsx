@@ -11,12 +11,6 @@ interface ItemListProps {
 
 const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse, handleButton }) => {
   const router = useRouter();
-  const [isItemPage, setIsItemPage] = useState(false);
-
-  useEffect(() => {
-    setIsItemPage(router.pathname.includes("/items"));
-  }, [router.pathname]);
-
   const items = Array.isArray(apiResponse) ? apiResponse : [];
 
   const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -29,13 +23,13 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
   return (
     <div>
       <div className="flex w-full">
-        <div className="w-[50%]">
-          <h1 className="font-bold text-xl pb-2 border-b-[1px]">아이템</h1>
+        <div className="w-full mb-2 border-b-[1px]">
+          <h1 className="font-bold text-xl ">아이템</h1>
           <div className="font-normal text-sm">현재 사용중인 아이템 목록입니다.</div>
         </div>
         <div
           id="create_item"
-          className="border m-2 mt-4 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] cursor-pointer"
+          className="border ml-2 mt-4 mb-2 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] cursor-pointer"
           onClick={handleButton}
         >
           아이템 추가

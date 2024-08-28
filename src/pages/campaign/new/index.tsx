@@ -1,58 +1,61 @@
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-
 import { fetchCreateCampaign } from "@/pages/campaign/lib/apis";
 import { CampaignArgs, PeriodType } from "@/pages/campaign/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useRef, useState, KeyboardEvent } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import { useState, useRef } from "react";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [period_type, setPeriod_type] = useState(PeriodType.UL);
-  const [start_date, setStart_date] = useState("2024-08-14 00:00:00");
-  const [end_date, setEnd_date] = useState("2024-08-16 00:00:00");
+  const [periodType, setPeriodType] = useState(PeriodType.UL);
+  const [startDate, setStartDate] = useState("2024-08-14 00:00:00");
+  const [endDate, setEndDate] = useState("2024-08-16 00:00:00");
   const [active, setActive] = useState(true);
 
-  const infoCheck = (info: CampaignArgs) => {
+  // Function to validate campaign information
+  const isCampaignInfoValid = (info: CampaignArgs): boolean => {
     if (!info.title) {
       alert("캠페인 명을 입력 해주세요.");
       return false;
-    } else if (!info.description) {
+    }
+    if (!info.description) {
       alert("캠페인 설명을 입력 해주세요.");
       return false;
-    } else if (!info.start_date) {
+    }
+    if (!info.start_date) {
       alert("캠페인 시작 시간을 선택 해주세요.");
       return false;
-    } else if (info.period_type === "LIMITED" && !info.end_date) {
+    }
+    if (info.period_type === PeriodType.L && !info.end_date) {
       alert("캠페인 종료 시간을 선택 해주세요.");
       return false;
-    } else {
-      return true;
     }
+    return true;
   };
 
+  // Campaign arguments
   const campaignArgs: CampaignArgs = {
-    title: title,
-    description: description,
-    period_type: period_type,
-    start_date: start_date,
-    end_date: end_date,
-    active: active,
+    title,
+    description,
+    period_type: periodType,
+    start_date: startDate,
+    end_date: endDate,
+    active,
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
 
     if (id === "create_campaign") {
-      if (infoCheck(campaignArgs)) {
+      if (isCampaignInfoValid(campaignArgs)) {
         const result = await fetchCreateCampaign(campaignArgs, context);
 
         if (result.status === 200) {
@@ -61,32 +64,26 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
             router.push("/campaign");
           }
         } else {
-          alert("캠페인 생성을 실패 하였습니다. 상태 코드: " + result.status);
-          console.log("캠페인 생성을 실패 하였습니다. 상태 코드:", result.status);
-          return false;
+          alert(`캠페인 생성을 실패 하였습니다. 상태 코드: ${result.status}`);
+          console.error("캠페인 생성을 실패 하였습니다. 상태 코드:", result.status);
         }
       } else {
-        console.log("입력한 정보가 유효하지 않습니다.");
-        return false;
+        console.error("입력한 정보가 유효하지 않습니다.");
       }
     }
   };
+
   return (
-    <DashboardContainer
-      title={"새 캠페인 생성"}
-      onclick={handleSubmit}
-      onclickText="저장하기"
-      buttonId="create_campaign"
-    >
+    <DashboardContainer title="새 캠페인 생성" onclick={handleSubmit} onclickText="저장하기" buttonId="create_campaign">
       <ContentsContainer variant="dashboard">
         <CampaignDetails
           campaignArgs={campaignArgs}
-          setPeriod_type={setPeriod_type}
+          setPeriod_type={setPeriodType}
           setDescription={setDescription}
           setActive={setActive}
           setTitle={setTitle}
-          setStart_date={setStart_date}
-          setEnd_date={setEnd_date}
+          setStart_date={setStartDate}
+          setEnd_date={setEndDate}
         />
       </ContentsContainer>
     </DashboardContainer>
