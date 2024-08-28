@@ -5,7 +5,7 @@ import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import {
   fetchDeleteCampaign,
   fetchGetCampaignDetails,
-  fetchGetCampaignList,
+  fetchGetItemList,
   fetchModifyCampaign,
 } from "@/pages/campaign/lib/apis";
 import { CampaignArgs } from "@/pages/campaign/lib/types";
@@ -19,7 +19,7 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
   const authResponse = authenticateUserforHeader(context);
-  const CListApiResponse = await fetchGetCampaignList(context);
+  const ItemListApiResponse = await fetchGetItemList(campaign_id, context);
   const CDetailApiResponse = await fetchGetCampaignDetails(campaign_id, context);
   const shop_id = getShopIdFromCookies(context);
   if (CDetailApiResponse == null || CDetailApiResponse.shop_id != shop_id) {
@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else {
     return {
       props: {
-        cListApiResponse: CListApiResponse,
+        itemListApiResponse: ItemListApiResponse,
         authResponse: authResponse,
         cDetailApiResponse: CDetailApiResponse,
         campaign_id: campaign_id,
@@ -44,11 +44,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const DetailsCampaign = (
   {
     campaign_id,
-    cListApiResponse,
+    itemListApiResponse,
     cDetailApiResponse,
   }: {
     campaign_id: string;
-    cListApiResponse: ApiResponse;
+    itemListApiResponse: ApiResponse;
     cDetailApiResponse: CampaignArgs;
   },
   context: GetServerSidePropsContext
@@ -136,8 +136,7 @@ const DetailsCampaign = (
   };
 
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700";
-  const tbodyStyle = "px-6 py-4 border-b border-gray-200";
-
+  const tbodyStyle = "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all";
   return (
     <DashboardContainer
       title={"캠페인 상세 정보"}
@@ -177,7 +176,7 @@ const DetailsCampaign = (
           <ItemList
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
-            apiResponse={cListApiResponse}
+            apiResponse={itemListApiResponse}
             handleButton={handleButton}
           />
         </ContentsContainer>

@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/lib/types";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface ItemListProps {
@@ -13,50 +13,51 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
   const router = useRouter();
   function onlcickItemDetail(event: React.MouseEvent<HTMLElement>) {
     const { id } = event.currentTarget;
-    router.replace(`/item/details?item_id=${id}`, undefined, { shallow: true, scroll: false });
+    if (router.pathname.includes(`/campaign/details`)) {
+    } else {
+      router.replace(`/item/details?item_id=${id}`, undefined, { shallow: true, scroll: false });
+    }
   }
   // 더보기 버튼 표시 유무 확인
-  const [isCampaignPage, setIsCampaignPage] = useState(false);
+  const [isItemPage, setIsItemPage] = useState(false);
   useEffect(() => {
-    setIsCampaignPage(router.pathname.includes("/campaign"));
+    setIsItemPage(router.pathname.includes(`/items`));
   }, [router.pathname]);
 
   const items = Array.isArray(apiResponse) ? apiResponse : [];
 
   return (
     <>
-      <div className=" flex w-full">
+      <div className=" flex w-full ">
         <h1 className="font-bold text-xl inline-block w-full pb-2 border-b-[1px]">
           <div className="w-[50%]">아이템</div>
           <div className="font-normal text-sm">현재 사용중인 아이템 목록입니다.</div>
         </h1>
         <div
           id="create_item"
-          className="border m-2 mt-4 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] min-fit  cursor-pointer"
+          className="border m-2 mt-4 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] min-fit cursor-pointer"
           onClick={handleButton}
         >
           아이템 추가
         </div>
       </div>
       <div className="my-2 w-full">
-        <table className="w-full bg-white border border-gray-200">
+        <table className="w-full bg-white border border-gray-200  rounded-lg">
           <thead>
             <tr className="bg-gray-200">
               <th className={theadStyle}>아이템 명</th>
               <th className={theadStyle}>아이템 종류</th>
-              <th className={theadStyle}>활성화 여부</th>
               <th className={theadStyle}>생성일</th>
+              <th className={theadStyle}>수정일</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item, i) => (
               <tr className=" cursor-pointer" key={i} id={item.id} onClick={onlcickItemDetail}>
                 <td className={tbodyStyle}>{item.title}</td>
-                <td className={tbodyStyle}>{item.period_type}</td>
-                <td className={tbodyStyle}>{item.active ? "TRUE" : "FALSE"}</td>
-                <td className={tbodyStyle}>
-                  {item.start_date} ~ {item.end_date}
-                </td>
+                <td className={tbodyStyle}>{item.item_type}</td>
+                <td className={tbodyStyle}>{item.created_at}</td>
+                <td className={tbodyStyle}>{item.updated_at}</td>
               </tr>
             ))}
             {!items.length && (

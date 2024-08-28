@@ -19,8 +19,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
-  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700";
-  const tbodyStyle = "px-6 py-4 border-b border-gray-200";
+  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 max-w-[300px]";
+  const tbodyStyle = "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all";
   const router = useRouter();
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
@@ -45,7 +45,7 @@ export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
               tbodyStyle={tbodyStyle}
               apiResponse={apiResponse}
               handleButton={handleButton}
-            ></ItemList>
+            />
           </ContentsContainer>
         </div>
       </div>

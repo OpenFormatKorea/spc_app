@@ -140,8 +140,6 @@ export async function fetchCreateItem(info: ItemArgs, context: GetServerSideProp
     shop_id: shop_id,
     title: info.title,
     item_type: info.item_type,
-    description: info.description,
-    active: info.active,
   };
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
@@ -178,8 +176,6 @@ export async function fetchModifyItem(item_id: string, info: ItemArgs, context: 
     shop_id: shop_id,
     title: info.title,
     item_type: info.item_type,
-    description: info.description,
-    active: info.active,
   };
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
@@ -227,13 +223,14 @@ export async function fetchDeleteItem(item_id: string, context: GetServerSidePro
   }
 }
 
-export async function fetchGetItemList(context: GetServerSidePropsContext) {
+export async function fetchGetItemList(campaign_id: string, context: GetServerSidePropsContext) {
   const shop_id = getShopIdFromCookies(context);
-  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/item/items?shop_id=` + shop_id;
+  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items?campaign_id=` + campaign_id;
+  console.log("final_url", final_url);
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("error", error);
