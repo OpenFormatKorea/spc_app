@@ -1,6 +1,5 @@
 import { ApiResponse } from "@/lib/types";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
 interface ItemListProps {
   theadStyle: string;
@@ -15,29 +14,32 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
 
   const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
-    if (!router.pathname.includes("/campaign/details")) {
+    if (router.pathname.includes("/campaign/details")) {
       router.replace(`/item/details?item_id=${id}`, undefined, { shallow: true, scroll: false });
+      console.log(router.pathname);
     }
   };
 
   return (
     <div>
       <div className="flex w-full">
-        <div className="w-full mb-2 border-b-[1px]">
-          <h1 className="font-bold text-xl ">아이템</h1>
-          <div className="font-normal text-sm">현재 사용중인 아이템 목록입니다.</div>
-        </div>
-        <div
-          id="create_item"
-          className="border ml-2 mt-4 mb-2 p-2 bg-blue-500 text-white rounded-lg min-w-[92px] cursor-pointer"
-          onClick={handleButton}
-        >
-          아이템 추가
-        </div>
+        <h1 className="font-bold text-base pb-2 border-b mb-5 w-full flex justify-between items-center">
+          <div>
+            <div className="text-xl">아이템</div>
+            <div className="font-normal text-sm">현재 사용중인 아이템 목록입니다.</div>
+          </div>
+          <div
+            id="create_item"
+            className="bg-blue-400 text-white p-2 rounded-lg w-[90px] text-center"
+            onClick={handleButton}
+          >
+            아이템 추가
+          </div>
+        </h1>
       </div>
 
       <div className="my-2 w-full">
-        <table className="w-full bg-white border border-gray-200 rounded-lg">
+        <table className="w-full bg-white border border-gray-200 rounded-lg text-sm text-center">
           <thead>
             <tr className="bg-gray-200">
               <th className={theadStyle}>아이템 명</th>
@@ -50,7 +52,7 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
             {items.map((item) => (
               <tr className="cursor-pointer" key={item.id} id={item.id} onClick={handleItemClick}>
                 <td className={tbodyStyle}>{item.title}</td>
-                <td className={tbodyStyle}>{item.item_type}</td>
+                <td className={tbodyStyle}>{item.item_type === "PRODUCT" ? "상품" : "프로모션"}</td>
                 <td className={tbodyStyle}>{item.created_at}</td>
                 <td className={tbodyStyle}>{item.updated_at}</td>
               </tr>

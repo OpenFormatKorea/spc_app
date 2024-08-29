@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
-import {
-  fetchDeleteCampaign,
-  fetchGetCampaignDetails,
-  fetchGetItemList,
-  fetchModifyCampaign,
-} from "@/pages/campaign/lib/apis";
+import { fetchDeleteCampaign, fetchGetCampaignDetails, fetchModifyCampaign } from "@/pages/campaign/lib/apis";
+import { fetchGetItemList } from "@/pages/item/lib/apis";
 import { CampaignArgs } from "@/pages/campaign/lib/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";

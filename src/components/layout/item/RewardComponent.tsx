@@ -34,7 +34,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   // }, [rewards]);
   return (
     <>
-      <h1 className="font-bold text-xl pb-2 border-b-[1px]">리퍼럴</h1>
+      <h1 className="font-bold text-xl pb-2 border-b-[1px]">리워드</h1>
       <div className={inputformClass}>
         <label className={labelClass}>리워드 종류</label>
         <div className="flex justify-between w-full lg:max-w-[350px] ">
