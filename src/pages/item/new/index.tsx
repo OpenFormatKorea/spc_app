@@ -15,18 +15,18 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import RewardComponent from "@/components/layout/item/RewardComponent";
+import RewardCard from "@/components/layout/item/RewardCard";
+import { stringify } from "querystring";
 
 const NewItem = (context: GetServerSidePropsContext) => {
-  //table style string
   const router = useRouter();
-
   const [title, setTitle] = useState("");
+  const [campaign_id, setCampaign_id] = useState("");
   const [products, setProducts] = useState<ProductsArgs[]>([]);
   const [promotions, setPromotions] = useState<PromotionsArgs[]>([]);
   const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>({ message: "" });
   const [kakao_message, setKakao_message] = useState<string>("");
   const [rewards, setRewards] = useState<RewardsArgs[]>([]);
-  const [campaign_id, setCampaign_id] = useState("");
   const [item_type, setItem_type] = useState<ItemType>(ItemType.PM);
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
 
@@ -47,6 +47,16 @@ const NewItem = (context: GetServerSidePropsContext) => {
   useEffect(() => {
     setKakaoArgs({ message: kakao_message });
   }, [kakao_message]);
+  useEffect(() => {
+    if (router.isReady) {
+      const campaignId = router.query.campaign_id;
+      if (typeof campaignId === "string") {
+        setCampaign_id(campaignId);
+      } else {
+        console.error("campaign_id 타입 에러");
+      }
+    }
+  }, [router.isReady, router.query]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
@@ -62,7 +72,6 @@ const NewItem = (context: GetServerSidePropsContext) => {
           }
         } else {
           alert("리퍼럴 생성을 실패 하였습니다. 상태 코드: " + result.status);
-          console.log("리퍼럴 생성을 실패 하였습니다. 상태 코드:", result.status);
           return false;
         }
       } else {
@@ -103,7 +112,12 @@ const NewItem = (context: GetServerSidePropsContext) => {
             handleKeyDown={handleKeyDown}
             reward_type={reward_type}
             setRewardType={setReward_Type}
-          ></RewardComponent>
+            rewards={rewards}
+            setRewards={setRewards}
+          />
+          <div className="w-full">
+            <RewardCard rewards={rewards} setRewards={setRewards} />
+          </div>
         </ContentsContainer>
       </div>
     </DashboardContainer>

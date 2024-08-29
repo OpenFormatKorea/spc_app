@@ -43,11 +43,11 @@ export interface RewardPolicyArgs {
 }
 export interface ReferralConditions {
   payment_timing: {
-    type: PaymentTimingType;
+    type: PaymentTimingType | null;
     delay_days?: number | null;
   };
   payment_frequency: {
-    type: PaymentFrequencyType;
+    type: PaymentFrequencyType | null;
     repeat_count?: number | null;
   };
 }

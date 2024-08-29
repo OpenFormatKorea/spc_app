@@ -3,6 +3,7 @@ import { RewardsArgs, RewardType } from "@/pages/item/lib/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import Modal from "@/components/base/Modal";
 import RewardCard from "@/components/layout/item/RewardCondition";
+import RewardModal from "@/components/layout/item/RewardCondition";
 
 interface RewardComponentProps {
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
@@ -51,7 +52,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({ handleKeyDown, reward
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <RewardCard
+        <RewardModal
           reward_type={reward_type}
           handleKeyDown={handleKeyDown}
           isOpen={isModalOpen}
