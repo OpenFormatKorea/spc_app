@@ -8,7 +8,9 @@ interface RewardCardProps {
 }
 
 const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards }) => {
-  const rewardTypes = ["SIGNUP", "PURCHASE"] as const;
+  console.log("rewards", rewards);
+  const triggerTypes = ["SIGNUP", "PURCHASE"] as const;
+  const conditionsTypes = ["referrer_conditions", "refferee_conditions"] as const;
   function handleDeleteRewards(indexToDelete: number) {
     if (confirm("리워드를 삭제하시겠습니까?")) {
       setRewards((prevRewards) => prevRewards.filter((_, index) => index !== indexToDelete));
@@ -38,50 +40,67 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
               삭제
             </button>
           </h1>
-          <div className="flex justify-center space-x-2 w-full">
-            {page_type === "NEW" ? (
+          <div className="justify-center w-full">
+            {page_type === "DETAILS" ? (
               <>
-                {rewardTypes.map((type) => {
-                  const policy =
-                    type === "SIGNUP" ? reward.referrer_conditions.SIGNUP : reward.referrer_conditions.PURCHASE;
+                {conditionsTypes.map((type) => {
+                  const conditions =
+                    type === "referrer_conditions" ? reward.referrer_conditions : reward.referral_conditions;
                   return (
-                    <div key={type} className="border bg-white p-3 w-full max-w-[48%] flex-shrink-0">
-                      <div className="text-base font-bold w-full border-b pb-1 mb-2">
-                        {type === "SIGNUP" ? "회원가입" : "구매 후"}
-                      </div>
-                      <div className="flex">
-                        <div className="font-bold">지급 시점</div>
-                        <div>: {policy?.payment_timing.type}</div>
-                      </div>
-                      {policy?.payment_timing.delay_days != null && (
-                        <div className="flex">
-                          <div className="font-bold">{type === "SIGNUP" ? "회원가입 후" : "구매 후"} 제공 일</div>
-                          <div>: {policy.payment_timing.delay_days}</div>
+                    <>
+                      <div className="w-full flex-col">
+                        <div className="text-base font-bold pt-4 pb-4">
+                          {type === "referrer_conditions" ? "추천인" : "피추천인"}
                         </div>
-                      )}
-                      <div className="flex">
-                        <div className="font-bold">지급 방식</div>
-                        <div>: {policy?.payment_frequency.type}</div>
-                      </div>
-                      {policy?.payment_frequency.repeat_count != null && (
                         <div className="flex">
-                          <div className="font-bold">최대 지급 횟수</div>
-                          <div>: {policy.payment_frequency.repeat_count}</div>
+                          {triggerTypes.map((trigger) => {
+                            return (
+                              <>
+                                <div key={type} className="border bg-white p-3 w-full max-w-[48%] flex-shrink-0">
+                                  <div className="text-base font-bold w-full border-b pb-1 mb-2">
+                                    {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
+                                  </div>
+                                  <div className="flex">
+                                    <div className="font-bold">지급 시점</div>
+                                    <div>: {conditions?.payment_timing.type}</div>
+                                  </div>
+                                  {conditions?.payment_timing.delay_days != null && (
+                                    <div className="flex">
+                                      <div className="font-bold">
+                                        {trigger === "SIGNUP" ? "회원가입 후" : "구매 후"} 제공 일
+                                      </div>
+                                      <div>: {conditions.payment_timing.delay_days}</div>
+                                    </div>
+                                  )}
+                                  <div className="flex">
+                                    <div className="font-bold">지급 방식</div>
+                                    <div>: {conditions?.payment_frequency.type}</div>
+                                  </div>
+                                  {conditions?.payment_frequency.repeat_count != null && (
+                                    <div className="flex">
+                                      <div className="font-bold">최대 지급 횟수</div>
+                                      <div>: {conditions.payment_frequency.repeat_count}</div>
+                                    </div>
+                                  )}
+                                </div>
+                              </>
+                            );
+                          })}
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    </>
                   );
                 })}
               </>
             ) : (
               <>
-                {rewardTypes.map((type) => {
+                {triggerTypes.map((trigger) => {
                   const policy =
-                    type === "SIGNUP" ? reward.referrer_conditions.SIGNUP : reward.referrer_conditions.PURCHASE;
+                    trigger === "SIGNUP" ? reward.referrer_conditions.SIGNUP : reward.referrer_conditions.PURCHASE;
                   return (
-                    <div key={type} className="border bg-white p-3 w-full max-w-[48%] flex-shrink-0">
+                    <div key={trigger} className="border bg-white p-3 w-full max-w-[48%] flex-shrink-0">
                       <div className="text-base font-bold w-full border-b pb-1 mb-2">
-                        {type === "SIGNUP" ? "회원가입" : "구매 후"}
+                        {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
                       </div>
                       <div className="flex">
                         <div className="font-bold">지급 시점</div>
@@ -89,7 +108,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
                       </div>
                       {policy?.payment_timing.delay_days != null && (
                         <div className="flex">
-                          <div className="font-bold">{type === "SIGNUP" ? "회원가입 후" : "구매 후"} 제공 일</div>
+                          <div className="font-bold">{trigger === "SIGNUP" ? "회원가입 후" : "구매 후"} 제공 일</div>
                           <div>: {policy.payment_timing.delay_days}</div>
                         </div>
                       )}

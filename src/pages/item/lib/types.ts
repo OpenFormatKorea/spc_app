@@ -28,8 +28,7 @@ export interface RewardsArgs {
   point_amount?: number | undefined;
   referrer_conditions: RewardPolicyArgs;
   referee_conditions: RewardPolicyArgs;
-  referrer_policy?: RewardPolicyArgs;
-  referee_policy?: RewardPolicyArgs;
+  referral_conditions?: RewardPolicyArgs;
 }
 export enum RewardTarget {
   RFE = "REFEREE",
