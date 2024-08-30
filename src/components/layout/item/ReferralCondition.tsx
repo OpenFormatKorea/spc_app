@@ -1,5 +1,5 @@
 import React, { KeyboardEvent } from "react";
-import { PaymentFrequencyType, PaymentTimingType, RewardType, ReferralConditions } from "@/pages/item/lib/types";
+import { PaymentFrequencyType, PaymentTimingType, RewardType, ItemConditions } from "@/pages/item/lib/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 
@@ -10,8 +10,8 @@ interface ReferralConditionProps {
   labelClass: string;
   rewardType: RewardType;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
-  referralConditions: ReferralConditions;
-  setReferralConditions: React.Dispatch<React.SetStateAction<ReferralConditions>>;
+  itemConditions: ItemConditions;
+  setItemConditions: React.Dispatch<React.SetStateAction<ItemConditions>>;
   useCondition: boolean;
   setUseCondition: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -23,17 +23,17 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   labelClass,
   rewardType,
   handleKeyDown,
-  referralConditions,
-  setReferralConditions,
+  itemConditions,
+  setItemConditions,
   useCondition,
   setUseCondition,
 }) => {
   //payment timing options
   const handleTimingChange = (
-    key: keyof ReferralConditions["payment_timing"],
+    key: keyof ItemConditions["payment_timing"],
     value: PaymentTimingType | number | null
   ) => {
-    setReferralConditions((prevState) => ({
+    setItemConditions((prevState) => ({
       ...prevState,
       payment_timing: {
         ...prevState.payment_timing,
@@ -43,10 +43,10 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   };
   //payment frequency options
   const handleFrequencyChange = (
-    key: keyof ReferralConditions["payment_frequency"],
+    key: keyof ItemConditions["payment_frequency"],
     value: PaymentFrequencyType | number | null
   ) => {
-    setReferralConditions((prevState) => ({
+    setItemConditions((prevState) => ({
       ...prevState,
       payment_frequency: {
         ...prevState.payment_frequency,
@@ -59,7 +59,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
     setUseCondition((prev) => {
       const newUseCondition = !prev;
 
-      setReferralConditions({
+      setItemConditions({
         payment_timing: {
           type: newUseCondition ? PaymentTimingType.IMM : null,
           delay_days: null,
@@ -105,25 +105,25 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 label="즉시 지급"
                 name={`${target}_${trigger}_payment_timing_type`}
                 value={PaymentTimingType.IMM}
-                checked={referralConditions.payment_timing.type === PaymentTimingType.IMM}
+                checked={itemConditions.payment_timing.type === PaymentTimingType.IMM}
                 onChange={(e) => handleTimingChange("type", PaymentTimingType.IMM)}
               />
               <InputRadioBox
                 label="추후 지급"
                 name={`${target}_${trigger}_payment_timing_type`}
                 value={PaymentTimingType.DEL}
-                checked={referralConditions.payment_timing.type === PaymentTimingType.DEL}
+                checked={itemConditions.payment_timing.type === PaymentTimingType.DEL}
                 onChange={(e) => handleTimingChange("type", PaymentTimingType.DEL)}
               />
             </div>
 
-            {referralConditions.payment_timing.type === PaymentTimingType.DEL && (
+            {itemConditions.payment_timing.type === PaymentTimingType.DEL && (
               <div className="flex text-left w-[120px] mt-2 text-gray-500">
                 <InputTextBox
                   type="text"
                   id={`${target}_${trigger}_delay_days`}
                   placeholder=""
-                  value={referralConditions.payment_timing.delay_days || ""}
+                  value={itemConditions.payment_timing.delay_days || ""}
                   onChange={(e) => handleTimingChange("delay_days", Number(e.target.value))}
                   onKeyDown={handleKeyDown}
                 />
@@ -139,32 +139,32 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 label="한번만"
                 name={`${target}_${trigger}_payment_frequency_type`}
                 value={PaymentFrequencyType.ONCE}
-                checked={referralConditions.payment_frequency.type === PaymentFrequencyType.ONCE}
+                checked={itemConditions.payment_frequency.type === PaymentFrequencyType.ONCE}
                 onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.ONCE)}
               />
               <InputRadioBox
                 label="반복"
                 name={`${target}_${trigger}_payment_frequency_type`}
                 value={PaymentFrequencyType.REP}
-                checked={referralConditions.payment_frequency.type === PaymentFrequencyType.REP}
+                checked={itemConditions.payment_frequency.type === PaymentFrequencyType.REP}
                 onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.REP)}
               />
               <InputRadioBox
                 label="무제한"
                 name={`${target}_${trigger}_payment_frequency_type`}
                 value={PaymentFrequencyType.UNL}
-                checked={referralConditions.payment_frequency.type === PaymentFrequencyType.UNL}
+                checked={itemConditions.payment_frequency.type === PaymentFrequencyType.UNL}
                 onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.UNL)}
               />
             </div>
-            {referralConditions.payment_frequency.type === PaymentFrequencyType.REP && (
+            {itemConditions.payment_frequency.type === PaymentFrequencyType.REP && (
               <div className="flex text-left w-[150px] mb-2 text-gray-500">
                 <div className="flex min-w-fit items-center mr-2">최대</div>
                 <InputTextBox
                   type="number"
                   id={`${target}_${trigger}_repeat_count`}
                   placeholder=""
-                  value={referralConditions.payment_frequency.repeat_count || ""}
+                  value={itemConditions.payment_frequency.repeat_count || ""}
                   onChange={(e) => handleFrequencyChange("repeat_count", Number(e.target.value))}
                   onKeyDown={handleKeyDown}
                 />

@@ -43,7 +43,6 @@ const Login: React.FC = () => {
     const result = await fetchLogIn(info);
     const data = result.data;
     const access = data?.access;
-    console.log(access);
     return result;
   };
 

@@ -1,7 +1,6 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemDetails from "@/components/layout/item/ItemDetails";
-import { fetchCreateItem } from "@/pages/campaign/lib/apis";
 import {
   ItemType,
   ItemArgs,
@@ -16,6 +15,7 @@ import { useRouter } from "next/router";
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import RewardComponent from "@/components/layout/item/RewardComponent";
 import RewardCard from "@/components/layout/item/RewardCard";
+import { fetchCreateItem } from "@/pages/item/lib/apis";
 
 const NewItem = (context: GetServerSidePropsContext) => {
   const router = useRouter();
@@ -95,6 +95,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
       <div className="flex flex-col md:flex-row w-full justify-center ">
         <ContentsContainer variant="campaign">
           <ItemDetails
+            page_type="NEW"
             item_type={item_type}
             itemArgs={itemArgs}
             kakao_message={kakao_message}
@@ -114,9 +115,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
             rewards={rewards}
             setRewards={setRewards}
           />
-          <div className="w-full">
-            <RewardCard rewards={rewards} setRewards={setRewards} />
-          </div>
+          <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
         </ContentsContainer>
       </div>
     </DashboardContainer>

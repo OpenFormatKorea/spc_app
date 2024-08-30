@@ -28,9 +28,9 @@ export async function fetchSignUp(info: AuthArgs) {
     console.log("success: ", true, "message: 회원가입 성공하였습니다.");
     return { success: true, message: "회원가입 성공하였습니다." };
   } catch (error) {
-    console.log("success: ", false, "message: 이메일과 비밀번호를 확인 해 주세요");
+    console.log("success: ", false, "message: 아이디와 비밀번호를 확인 해 주세요");
 
-    return { success: false, message: "이메일과 비밀번호를 확인 해 주세요" };
+    return { success: false, message: "아이디와 비밀번호를 확인 해 주세요" };
   }
 }
 
@@ -50,8 +50,8 @@ export async function fetchLogIn(info: AuthArgs) {
     console.log("success: ", true, "message: 로그인에 성공 하였습니다.");
     return { success: true, message: "로그인에 성공 하였습니다.", data: { access, refresh, shop_id } };
   } catch (error) {
-    console.log("success: ", false, "message: 이메일과 비밀번호를 확인 해 주세요");
-    return { success: false, message: "이메일과 비밀번호를 확인 해 주세요" };
+    console.log("success: ", false, "message: 아이디와 비밀번호를 확인 해 주세요");
+    return { success: false, message: "아이디와 비밀번호를 확인 해 주세요" };
   }
 }
 

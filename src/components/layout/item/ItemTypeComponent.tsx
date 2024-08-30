@@ -3,6 +3,7 @@ import { ItemType, ProductsArgs, PromotionsArgs } from "@/pages/item/lib/types";
 import { KeyboardEvent, useEffect } from "react";
 
 interface ItemTypeComponentProps {
+  page_type: "DETAILS" | "NEW";
   item_type: ItemType;
   productInputs: string[];
   promotionInputs: string[];
@@ -13,6 +14,7 @@ interface ItemTypeComponentProps {
 }
 
 const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
+  page_type,
   item_type,
   productInputs,
   promotionInputs,

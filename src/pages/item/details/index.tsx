@@ -10,21 +10,15 @@ import {
   RewardsArgs,
 } from "@/pages/item/lib/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
 import RewardComponent from "@/components/layout/item/RewardComponent";
-import RewardCard from "@/components/layout/item/RewardCard";
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
-import { fetchCreateItem, fetchGetItemDetails, fetchModifyItem } from "@/pages/item/lib/apis";
-import { authenticateUserforHeader } from "@/lib/auth";
-import { getShopIdFromCookies } from "@/lib/helper";
-import { title } from "process";
+import { fetchGetItemDetails } from "@/pages/item/lib/apis";
 import ItemDetails from "@/components/layout/item/ItemDetails";
+import RewardCard from "@/components/layout/item/RewardCard";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id }: any = context.query;
-  const authResponse = authenticateUserforHeader(context);
   const IDetailApiResponse = await fetchGetItemDetails(item_id, context);
-  const shop_id = getShopIdFromCookies(context);
   if (IDetailApiResponse == null) {
     return {
       redirect: {
@@ -35,7 +29,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else {
     return {
       props: {
-        authResponse: authResponse,
         apiResponse: IDetailApiResponse,
       },
     };
@@ -43,18 +36,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
-  const router = useRouter();
-
-  const [title, setTitle] = useState(apiResponse.title);
-  const [campaign_id, setCampaign_id] = useState("");
-  const [products, setProducts] = useState<ProductsArgs[]>(apiResponse.products);
-  const [promotions, setPromotions] = useState<PromotionsArgs[]>(apiResponse.promotions);
-  const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>(apiResponse.kakaoArgs || {});
-  const [kakao_message, setKakao_message] = useState<string>(apiResponse.kakao_message || "");
-  const [rewards, setRewards] = useState<RewardsArgs[]>(apiResponse.rewards);
-  const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
-  const [reward_type, setReward_Type] = useState<RewardType>(apiResponse.reward_type);
-
+  console.log("apiResponse", apiResponse);
+  const response = apiResponse.apiResponse;
+  const [title, setTitle] = useState(response.title);
+  const [products, setProducts] = useState<ProductsArgs[]>(response.product_item);
+  const [promotions, setPromotions] = useState<PromotionsArgs[]>(response.promotion_item);
+  const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>(response.kakao_args || {});
+  const [kakao_message, setKakao_message] = useState<string>(kakaoArgs.message || "");
+  const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
+  const [item_type, setItem_type] = useState<ItemType>(response.item_type);
+  const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
   const itemArgs: ItemArgs = {
     title: title,
     item_type: item_type,
@@ -62,7 +53,7 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
     products: products,
     promotions: promotions,
     rewards: rewards,
-    campaign_id: campaign_id,
+    campaign_id: "",
   };
 
   useEffect(() => {
@@ -71,19 +62,18 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
-    if (id === "modify_item") {
-      const result = await fetchModifyItem(itemArgs, context);
-      console.log("itemArgs", itemArgs);
-      if (result.status === 200) {
-        alert(result.message);
-        if (result.success) {
-          router.push("/campaign");
-        }
-      } else {
-        alert("리퍼럴 생성을 실패 하였습니다. 상태 코드: " + result.status);
-        return false;
-      }
-    }
+    // if (id === "modify_item") {
+    //   const result = await fetchModifyItem(itemArgs, context);
+    //   if (result.status === 200) {
+    //     alert(result.message);
+    //     if (result.success) {
+    //       router.push("/campaign");
+    //     }
+    //   } else {
+    //     alert("리퍼럴 수정을 실패 하였습니다. 상태 코드: " + result.status);
+    //     return false;
+    //   }
+    // }
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -97,10 +87,11 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
   };
 
   return (
-    <DashboardContainer title={"리퍼럴 상세"} onclick={handleSubmit} onclickText="수정하기" buttonId="modify_item">
+    <DashboardContainer title={"아이템 상세"} onclick={handleSubmit} onclickText="수정하기" buttonId="modify_item">
       <div className="flex flex-col md:flex-row w-full justify-center ">
         <ContentsContainer variant="campaign">
           <ItemDetails
+            page_type="DETAILS"
             item_type={item_type}
             itemArgs={itemArgs}
             kakao_message={kakao_message}
@@ -120,9 +111,7 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
             rewards={rewards}
             setRewards={setRewards}
           />
-          <div className="w-full">
-            <RewardCard rewards={rewards} setRewards={setRewards} />
-          </div>
+          <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />
         </ContentsContainer>
       </div>
     </DashboardContainer>

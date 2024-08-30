@@ -40,7 +40,7 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   return (
     <DashboardContainer title="캠페인" onclick={handleButton} onclickText="새 캠페인 생성" buttonId="new_campaign">
       <div className="wrapper-container">
-        <div className="contents-container w-full justify-center">
+        <div className="contents-container w-full justify-center lg:space-x-4 sm:space-y-4">
           <ContentsContainer variant="dashboard">
             <CampaignList
               theadStyle={theadStyle}

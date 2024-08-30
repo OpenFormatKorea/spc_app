@@ -140,7 +140,7 @@ const DetailsCampaign = (
       onclickText="뒤로가기"
       buttonId="cancel_modify_campaign"
     >
-      <div className="flex flex-col md:flex-row w-full">
+      <div className="flex flex-col md:flex-row w-full md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <CampaignDetails
             campaignArgs={campaignArgs}

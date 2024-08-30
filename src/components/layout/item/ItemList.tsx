@@ -30,7 +30,7 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
           </div>
           <div
             id="create_item"
-            className="bg-blue-400 text-white p-2 rounded-lg w-[90px] text-center"
+            className="bg-blue-400 text-white p-2 rounded-lg w-[90px] text-center cursor-pointer"
             onClick={handleButton}
           >
             아이템 추가

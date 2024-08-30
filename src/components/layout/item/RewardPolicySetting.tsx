@@ -1,8 +1,8 @@
 import React, { KeyboardEvent, useEffect, useState } from "react";
 import {
+  ItemConditions,
   PaymentFrequencyType,
   PaymentTimingType,
-  ReferralConditions,
   RewardPolicyArgs,
   RewardType,
 } from "@/pages/item/lib/types";
@@ -13,9 +13,7 @@ interface RewardPolicySettingProps {
   labelClass: string;
   reward_type: RewardType;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
-  referrerState: RewardPolicyArgs;
   setReferrerState: React.Dispatch<React.SetStateAction<RewardPolicyArgs>>;
-  refereeState: RewardPolicyArgs;
   setRefereeState: React.Dispatch<React.SetStateAction<RewardPolicyArgs>>;
 }
 
@@ -24,9 +22,7 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
   labelClass,
   reward_type,
   handleKeyDown,
-  referrerState,
   setReferrerState,
-  refereeState,
   setRefereeState,
 }) => {
   const [useSignUpPolicy, setUseSignUpPolicy] = useState(true);
@@ -44,14 +40,14 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
   // Separate state for sign up and purchase
 
   const [useSignUpReffererCondition, setUseSignUpReffererCondition] = useState(true);
-  const [signUpReferrerConditions, setSignUpReferrerConditions] = useState<ReferralConditions>(defaultConditions);
+  const [signUpReferrerConditions, setSignUpReferrerConditions] = useState<ItemConditions>(defaultConditions);
   const [useSignUpRefereeCondition, setUseSignUpRefereeCondition] = useState(true);
-  const [signUpRefereeConditions, setSignUpRefereeConditions] = useState<ReferralConditions>(defaultConditions);
+  const [signUpRefereeConditions, setSignUpRefereeConditions] = useState<ItemConditions>(defaultConditions);
 
   const [usePurchaseReffererCondition, setUsePurchaseReffererCondition] = useState(true);
-  const [purchaseReferrerConditions, setPurchaseReferrerConditions] = useState<ReferralConditions>(defaultConditions);
+  const [purchaseReferrerConditions, setPurchaseReferrerConditions] = useState<ItemConditions>(defaultConditions);
   const [usePurchaseRefereeCondition, setUsePurchaseRefereeCondition] = useState(true);
-  const [purchaseRefereeConditions, setPurchaseRefereeConditions] = useState<ReferralConditions>(defaultConditions);
+  const [purchaseRefereeConditions, setPurchaseRefereeConditions] = useState<ItemConditions>(defaultConditions);
 
   useEffect(() => {
     setReferrerState({

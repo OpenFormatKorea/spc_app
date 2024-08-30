@@ -1,12 +1,13 @@
 import React from "react";
-import { RewardPolicyArgs, RewardsArgs } from "@/pages/item/lib/types";
+import { RewardsArgs } from "@/pages/item/lib/types";
 
 interface RewardCardProps {
+  page_type: "DETAILS" | "NEW";
   rewards: RewardsArgs[];
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
-const RewardCard: React.FC<RewardCardProps> = ({ rewards, setRewards }) => {
+const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards }) => {
   const rewardTypes = ["SIGNUP", "PURCHASE"] as const;
   function handleDeleteRewards(indexToDelete: number) {
     if (confirm("리워드를 삭제하시겠습니까?")) {
@@ -38,36 +39,75 @@ const RewardCard: React.FC<RewardCardProps> = ({ rewards, setRewards }) => {
             </button>
           </h1>
           <div className="flex justify-center space-x-2 w-full">
-            {rewardTypes.map((type) => {
-              const policy = type === "SIGNUP" ? reward.referrer_policy.SIGNUP : reward.referrer_policy.PURCHASE;
-              return (
-                <div key={type} className="border bg-white p-3 w-full max-w-[48%] flex-shrink-0">
-                  <div className="text-base font-bold w-full border-b pb-1 mb-2">
-                    {type === "SIGNUP" ? "회원가입" : "구매 후"}
-                  </div>
-                  <div className="flex">
-                    <div className="font-bold">지급 시점</div>
-                    <div>: {policy?.payment_timing.type}</div>
-                  </div>
-                  {policy?.payment_timing.delay_days != null && (
-                    <div className="flex">
-                      <div className="font-bold">{type === "SIGNUP" ? "회원가입 후" : "구매 후"} 제공 일</div>
-                      <div>: {policy.payment_timing.delay_days}</div>
+            {page_type === "NEW" ? (
+              <>
+                {rewardTypes.map((type) => {
+                  const policy =
+                    type === "SIGNUP" ? reward.referrer_conditions.SIGNUP : reward.referrer_conditions.PURCHASE;
+                  return (
+                    <div key={type} className="border bg-white p-3 w-full max-w-[48%] flex-shrink-0">
+                      <div className="text-base font-bold w-full border-b pb-1 mb-2">
+                        {type === "SIGNUP" ? "회원가입" : "구매 후"}
+                      </div>
+                      <div className="flex">
+                        <div className="font-bold">지급 시점</div>
+                        <div>: {policy?.payment_timing.type}</div>
+                      </div>
+                      {policy?.payment_timing.delay_days != null && (
+                        <div className="flex">
+                          <div className="font-bold">{type === "SIGNUP" ? "회원가입 후" : "구매 후"} 제공 일</div>
+                          <div>: {policy.payment_timing.delay_days}</div>
+                        </div>
+                      )}
+                      <div className="flex">
+                        <div className="font-bold">지급 방식</div>
+                        <div>: {policy?.payment_frequency.type}</div>
+                      </div>
+                      {policy?.payment_frequency.repeat_count != null && (
+                        <div className="flex">
+                          <div className="font-bold">최대 지급 횟수</div>
+                          <div>: {policy.payment_frequency.repeat_count}</div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                  <div className="flex">
-                    <div className="font-bold">지급 방식</div>
-                    <div>: {policy?.payment_frequency.type}</div>
-                  </div>
-                  {policy?.payment_frequency.repeat_count != null && (
-                    <div className="flex">
-                      <div className="font-bold">최대 지급 횟수</div>
-                      <div>: {policy.payment_frequency.repeat_count}</div>
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                {rewardTypes.map((type) => {
+                  const policy =
+                    type === "SIGNUP" ? reward.referrer_conditions.SIGNUP : reward.referrer_conditions.PURCHASE;
+                  return (
+                    <div key={type} className="border bg-white p-3 w-full max-w-[48%] flex-shrink-0">
+                      <div className="text-base font-bold w-full border-b pb-1 mb-2">
+                        {type === "SIGNUP" ? "회원가입" : "구매 후"}
+                      </div>
+                      <div className="flex">
+                        <div className="font-bold">지급 시점</div>
+                        <div>: {policy?.payment_timing.type}</div>
+                      </div>
+                      {policy?.payment_timing.delay_days != null && (
+                        <div className="flex">
+                          <div className="font-bold">{type === "SIGNUP" ? "회원가입 후" : "구매 후"} 제공 일</div>
+                          <div>: {policy.payment_timing.delay_days}</div>
+                        </div>
+                      )}
+                      <div className="flex">
+                        <div className="font-bold">지급 방식</div>
+                        <div>: {policy?.payment_frequency.type}</div>
+                      </div>
+                      {policy?.payment_frequency.repeat_count != null && (
+                        <div className="flex">
+                          <div className="font-bold">최대 지급 횟수</div>
+                          <div>: {policy.payment_frequency.repeat_count}</div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       ))}

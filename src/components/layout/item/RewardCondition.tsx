@@ -112,13 +112,13 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, isOpen, handleKe
 
     return true;
   }
-  const onclickAddReferralConditions = () => {
+  const onclickAddItemConditions = () => {
     const rewardConditionsArgs: RewardsArgs = {
       reward_type,
       ...(reward_type === RewardType.CO && { coupon_code }),
       ...(reward_type === RewardType.PO && { point_amount }),
-      referrer_policy: generatePolicy(referrerState),
-      referee_policy: generatePolicy(refereeState),
+      referrer_conditions: generatePolicy(referrerState),
+      referee_conditions: generatePolicy(refereeState),
     };
     if (infoCheck()) {
       setRewards((prevRewards) => [...prevRewards, rewardConditionsArgs]);
@@ -172,7 +172,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, isOpen, handleKe
         </div>
       </div>
 
-      <button className="bg-blue-500 text-white rounded-lg p-2 w-full mt-4" onClick={onclickAddReferralConditions}>
+      <button className="bg-blue-500 text-white rounded-lg p-2 w-full mt-4" onClick={onclickAddItemConditions}>
         {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가
       </button>
     </div>

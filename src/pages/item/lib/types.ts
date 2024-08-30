@@ -26,8 +26,10 @@ export interface RewardsArgs {
   reward_type: RewardType;
   coupon_code?: string | undefined;
   point_amount?: number | undefined;
-  referrer_policy: RewardPolicyArgs;
-  referee_policy: RewardPolicyArgs;
+  referrer_conditions: RewardPolicyArgs;
+  referee_conditions: RewardPolicyArgs;
+  referrer_policy?: RewardPolicyArgs;
+  referee_policy?: RewardPolicyArgs;
 }
 export enum RewardTarget {
   RFE = "REFEREE",
@@ -38,10 +40,11 @@ export enum RewardType {
   PO = "POINT",
 }
 export interface RewardPolicyArgs {
-  SIGNUP?: ReferralConditions;
-  PURCHASE?: ReferralConditions;
+  SIGNUP?: ItemConditions;
+  PURCHASE?: ItemConditions;
+  trigger?: string;
 }
-export interface ReferralConditions {
+export interface ItemConditions {
   payment_timing: {
     type: PaymentTimingType | null;
     delay_days?: number | null;

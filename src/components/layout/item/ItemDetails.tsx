@@ -5,6 +5,7 @@ import { ItemArgs, ItemType, ProductsArgs, PromotionsArgs } from "@/pages/item/l
 import React, { useState } from "react";
 
 interface ItemDetailsProps {
+  page_type: "DETAILS" | "NEW";
   item_type: ItemType;
   itemArgs: ItemArgs;
   kakao_message: string;
@@ -17,6 +18,7 @@ interface ItemDetailsProps {
 }
 
 const ItemDetails: React.FC<ItemDetailsProps> = ({
+  page_type,
   item_type,
   itemArgs,
   kakao_message,
@@ -29,7 +31,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
 }) => {
   const [productInputs, setProductInputs] = useState<string[]>([""]);
   const [promotionInputs, setPromotionInputs] = useState<string[]>([""]);
-
   const inputFormClass = "flex flex-col text-left w-full mb-2";
   const labelClass = "text-sm font-bold mt-4";
 
@@ -48,7 +49,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
   return (
     <div className="contents-container w-full justify-center items-center">
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">아이템 옵션</h1>
-
       <div className={inputFormClass}>
         <label className={labelClass}>아이템 명</label>
         <InputTextBox
@@ -103,6 +103,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
         </div>
 
         <ItemTypeComponent
+          page_type={page_type}
           productInputs={productInputs}
           promotionInputs={promotionInputs}
           item_type={item_type}

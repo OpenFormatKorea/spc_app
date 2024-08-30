@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useEffect, useState } from "react";
-import { PaymentFrequencyType, PaymentTimingType, ReferralConditions, RewardType } from "@/pages/item/lib/types";
+import { ItemConditions, PaymentFrequencyType, PaymentTimingType, RewardType } from "@/pages/item/lib/types";
 import ReferralCondition from "@/components/layout/item/ReferralCondition";
 
 interface RewardPolicyProps {
@@ -12,12 +12,12 @@ interface RewardPolicyProps {
   setUsePolicy: React.Dispatch<React.SetStateAction<boolean>>;
   useReffererCondition: boolean;
   setUseReffererCondition: React.Dispatch<React.SetStateAction<boolean>>;
-  referrerConditions: ReferralConditions;
-  setReferrerConditions: React.Dispatch<React.SetStateAction<ReferralConditions>>;
+  referrerConditions: ItemConditions;
+  setReferrerConditions: React.Dispatch<React.SetStateAction<ItemConditions>>;
   useRefereeCondition: boolean;
   setUseRefereeCondition: React.Dispatch<React.SetStateAction<boolean>>;
-  refereeConditions: ReferralConditions;
-  setRefereeConditions: React.Dispatch<React.SetStateAction<ReferralConditions>>;
+  refereeConditions: ItemConditions;
+  setRefereeConditions: React.Dispatch<React.SetStateAction<ItemConditions>>;
 }
 
 const RewardPolicy: React.FC<RewardPolicyProps> = ({
@@ -138,8 +138,8 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
             labelClass={labelClass}
             rewardType={rewardType}
             handleKeyDown={handleKeyDown}
-            referralConditions={referrerConditions}
-            setReferralConditions={setReferrerConditions}
+            itemConditions={referrerConditions}
+            setItemConditions={setReferrerConditions}
             useCondition={useReffererCondition}
             setUseCondition={setUseReffererCondition}
           />
@@ -150,8 +150,8 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
             labelClass={labelClass}
             rewardType={rewardType}
             handleKeyDown={handleKeyDown}
-            referralConditions={refereeConditions}
-            setReferralConditions={setRefereeConditions}
+            itemConditions={refereeConditions}
+            setItemConditions={setRefereeConditions}
             useCondition={useRefereeCondition}
             setUseCondition={setUseRefereeCondition}
           />

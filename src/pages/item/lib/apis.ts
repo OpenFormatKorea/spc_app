@@ -12,8 +12,8 @@ export async function fetchCreateItem(itemArgs: ItemArgs, context: GetServerSide
     rewards:
       itemArgs.rewards?.map((reward) => ({
         ...reward,
-        referrer_conditions: reward.referrer_policy || {},
-        referral_conditions: reward.referee_policy || {},
+        referrer_conditions: reward.referrer_conditions || {},
+        referral_conditions: reward.referee_conditions || {},
       })) || [],
   };
   console.log("dataObj: ", JSON.stringify(dataObj, null, 2));
