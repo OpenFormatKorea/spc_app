@@ -19,9 +19,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-50"
-      onClick={handleBackgroundClick} // Attach click handler to the overlay
+      onClick={handleBackgroundClick}
     >
-      <div className="rounded-2xl p-4 w-full text-center min-w-[300px] max-w-[600px] relative m-4 shadow-lg bg-white">
+      <div className="rounded-xl p-3 sm:p-6  text-center min-w-[300px] lg:max-w-[720px] relative m-2 sm:m-4 shadow-lg bg-white">
         <button className="absolute top-2 right-5 text-gray-500 hover:text-gray-700 text-xl" onClick={onClose}>
           &times;
         </button>

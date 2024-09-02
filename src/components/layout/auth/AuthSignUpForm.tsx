@@ -47,7 +47,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
   handleKeyDown,
 }) => {
   return (
-    <div className="min-w-[380px] w-[40vh] min-h-[380px] border-2 p-6 bg-[#8ace00] flex flex-col justify-center items-center text-center">
+    <div className="min-w-[420px] w-[40vh] min-h-[420px] border-2 border-gray-300 p-6 bg-white flex flex-col justify-center items-center text-center rounded-2xl shadow-lg">
       <div className="text-xl m-2">회원가입</div>
       <AuthInputBox
         label="아이디:"

@@ -28,7 +28,6 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   useCondition,
   setUseCondition,
 }) => {
-  //payment timing options
   const handleTimingChange = (
     key: keyof ItemConditions["payment_timing"],
     value: PaymentTimingType | number | null
@@ -41,7 +40,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
       },
     }));
   };
-  //payment frequency options
+
   const handleFrequencyChange = (
     key: keyof ItemConditions["payment_frequency"],
     value: PaymentFrequencyType | number | null
@@ -54,7 +53,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
       },
     }));
   };
-  // checkbox selected for refferer and referee
+
   const handleCheckboxChange = () => {
     setUseCondition((prev) => {
       const newUseCondition = !prev;
@@ -74,7 +73,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   };
 
   return (
-    <div className="p-4 border w-full bg-white mb-4 rounded-xl">
+    <div className="p-4 border w-full bg-white rounded-2xl">
       <div className="flex items-center mb-4 border-b-[1px]">
         <label className="font-gray-600 text-lg font-bold text-left w-full">
           {target === "referrer" ? "추천인" : "피추천인"}
@@ -96,84 +95,90 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
         </div>
       </div>
 
-      {useCondition && (
-        <>
-          <div className={inputFormClass}>
-            <label className={labelClass}>{rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 시점</label>
-            <div className="flex justify-between w-full mt-2">
-              <InputRadioBox
-                label="즉시 지급"
-                name={`${target}_${trigger}_payment_timing_type`}
-                value={PaymentTimingType.IMM}
-                checked={itemConditions.payment_timing.type === PaymentTimingType.IMM}
-                onChange={(e) => handleTimingChange("type", PaymentTimingType.IMM)}
-              />
-              <InputRadioBox
-                label="추후 지급"
-                name={`${target}_${trigger}_payment_timing_type`}
-                value={PaymentTimingType.DEL}
-                checked={itemConditions.payment_timing.type === PaymentTimingType.DEL}
-                onChange={(e) => handleTimingChange("type", PaymentTimingType.DEL)}
-              />
-            </div>
-
-            {itemConditions.payment_timing.type === PaymentTimingType.DEL && (
-              <div className="flex text-left w-[120px] mt-2 text-gray-500">
-                <InputTextBox
-                  type="text"
-                  id={`${target}_${trigger}_delay_days`}
-                  placeholder=""
-                  value={itemConditions.payment_timing.delay_days || ""}
-                  onChange={(e) => handleTimingChange("delay_days", Number(e.target.value))}
-                  onKeyDown={handleKeyDown}
-                />
-                <div className="flex items-center min-w-fit ml-2">일 후 지급</div>
-              </div>
-            )}
+      <div
+        className={`transition-all duration-300 ease-in-out ${
+          useCondition ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"
+        }`}
+      >
+        <div className={inputFormClass}>
+          <label className={labelClass}>{rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 시점</label>
+          <div className="flex justify-between w-full mt-2">
+            <InputRadioBox
+              label="즉시 지급"
+              name={`${target}_${trigger}_payment_timing_type`}
+              value={PaymentTimingType.IMM}
+              checked={itemConditions.payment_timing.type === PaymentTimingType.IMM}
+              onChange={(e) => handleTimingChange("type", PaymentTimingType.IMM)}
+            />
+            <InputRadioBox
+              label="추후 지급"
+              name={`${target}_${trigger}_payment_timing_type`}
+              value={PaymentTimingType.DEL}
+              checked={itemConditions.payment_timing.type === PaymentTimingType.DEL}
+              onChange={(e) => handleTimingChange("type", PaymentTimingType.DEL)}
+            />
           </div>
 
-          <div className={inputFormClass}>
-            <label className={labelClass}>{rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 횟수</label>
-            <div className="flex justify-between w-full mt-2">
-              <InputRadioBox
-                label="한번만"
-                name={`${target}_${trigger}_payment_frequency_type`}
-                value={PaymentFrequencyType.ONCE}
-                checked={itemConditions.payment_frequency.type === PaymentFrequencyType.ONCE}
-                onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.ONCE)}
+          <div
+            className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_timing.type === PaymentTimingType.DEL ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"}`}
+          >
+            <div className="flex text-left w-[120px] mt-2 text-gray-500">
+              <InputTextBox
+                type="text"
+                id={`${target}_${trigger}_delay_days`}
+                placeholder=""
+                value={itemConditions.payment_timing.delay_days || ""}
+                onChange={(e) => handleTimingChange("delay_days", Number(e.target.value))}
+                onKeyDown={handleKeyDown}
               />
-              <InputRadioBox
-                label="반복"
-                name={`${target}_${trigger}_payment_frequency_type`}
-                value={PaymentFrequencyType.REP}
-                checked={itemConditions.payment_frequency.type === PaymentFrequencyType.REP}
-                onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.REP)}
-              />
-              <InputRadioBox
-                label="무제한"
-                name={`${target}_${trigger}_payment_frequency_type`}
-                value={PaymentFrequencyType.UNL}
-                checked={itemConditions.payment_frequency.type === PaymentFrequencyType.UNL}
-                onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.UNL)}
-              />
+              <div className="flex items-center min-w-fit ml-2">일 후 지급</div>
             </div>
-            {itemConditions.payment_frequency.type === PaymentFrequencyType.REP && (
-              <div className="flex text-left w-[150px] mb-2 text-gray-500">
-                <div className="flex min-w-fit items-center mr-2">최대</div>
-                <InputTextBox
-                  type="number"
-                  id={`${target}_${trigger}_repeat_count`}
-                  placeholder=""
-                  value={itemConditions.payment_frequency.repeat_count || ""}
-                  onChange={(e) => handleFrequencyChange("repeat_count", Number(e.target.value))}
-                  onKeyDown={handleKeyDown}
-                />
-                <div className="flex items-center min-w-fit ml-2">번</div>
-              </div>
-            )}
           </div>
-        </>
-      )}
+        </div>
+
+        <div className={inputFormClass}>
+          <label className={labelClass}>{rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 횟수</label>
+          <div className="flex justify-between w-full mt-2">
+            <InputRadioBox
+              label="한번만"
+              name={`${target}_${trigger}_payment_frequency_type`}
+              value={PaymentFrequencyType.ONCE}
+              checked={itemConditions.payment_frequency.type === PaymentFrequencyType.ONCE}
+              onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.ONCE)}
+            />
+            <InputRadioBox
+              label="반복"
+              name={`${target}_${trigger}_payment_frequency_type`}
+              value={PaymentFrequencyType.REP}
+              checked={itemConditions.payment_frequency.type === PaymentFrequencyType.REP}
+              onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.REP)}
+            />
+            <InputRadioBox
+              label="무제한"
+              name={`${target}_${trigger}_payment_frequency_type`}
+              value={PaymentFrequencyType.UNL}
+              checked={itemConditions.payment_frequency.type === PaymentFrequencyType.UNL}
+              onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.UNL)}
+            />
+          </div>
+          <div
+            className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_frequency.type === PaymentFrequencyType.REP ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"}`}
+          >
+            <div className="flex text-left w-[150px] mb-2 text-gray-500">
+              <div className="flex min-w-fit items-center mr-2">최대</div>
+              <InputTextBox
+                type="number"
+                id={`${target}_${trigger}_repeat_count`}
+                placeholder=""
+                value={itemConditions.payment_frequency.repeat_count || ""}
+                onChange={(e) => handleFrequencyChange("repeat_count", Number(e.target.value))}
+                onKeyDown={handleKeyDown}
+              />
+              <div className="flex items-center min-w-fit ml-2">번</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

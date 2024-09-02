@@ -17,7 +17,7 @@ const AuthInputBox: React.FC<AuthInputBoxProps> = ({ label, type, id, placeholde
         id={id}
         placeholder={placeholder}
         value={value}
-        className="usernameInput ml-2 text-xs p-2 w-[75%]"
+        className="usernameInput  flex-grow text-xs p-3 w-full lg:max-w-[450px] border-b-[1px]"
         onChange={onChange}
         onKeyDown={onKeyDown}
       />

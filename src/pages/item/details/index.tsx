@@ -88,7 +88,7 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
 
   return (
     <DashboardContainer title={"아이템 상세"} onclick={handleSubmit} onclickText="수정하기" buttonId="modify_item">
-      <div className="flex flex-col md:flex-row w-full justify-center ">
+      <div className="flex flex-col md:flex-row w-full justify-center lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails
             page_type="DETAILS"

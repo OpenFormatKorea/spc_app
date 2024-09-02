@@ -10,8 +10,10 @@ const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickT
   return (
     <div className="flex flex-col pt-[60px] lg:pl-[245px] pl-0 min-h-screen">
       <div className="w-full bg-gray-100 p-4 sm:p-8 flex-grow">
-        <div className="subject-container flex items-center justify-between">
-          <a className="text-[24px] sm:text-[30px] font-bold min-w-[270px]">{title}</a>
+        <div className="subject-container flex items-center justify-between ">
+          <a className="text-[24px] flex items-center justify-between sm:text-[30px] font-bold min-w-[270px] h-[42px]">
+            {title}
+          </a>
           {onclickText && (
             <div className="button-container w-full sm:w-auto text-right sm:ml-auto items-center">
               <button

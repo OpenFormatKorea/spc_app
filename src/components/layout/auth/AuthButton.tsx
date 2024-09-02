@@ -12,7 +12,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({ disabled, label, onClick, butto
       <button
         ref={buttonRef}
         disabled={disabled}
-        className={`p-2 w-full text-center m-2 cursor-pointer ${disabled ? "bg-gray-300" : "bg-black text-white"}`}
+        className={`p-2 rounded-lg w-full text-center m-2 cursor-pointer ${disabled ? "bg-gray-300" : "bg-blue-500 text-white"}`}
         onClick={onClick}
       >
         {label}

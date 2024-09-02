@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useEffect, useState } from "react";
+import React, { KeyboardEvent } from "react";
 import { ItemConditions, PaymentFrequencyType, PaymentTimingType, RewardType } from "@/pages/item/lib/types";
 import ReferralCondition from "@/components/layout/item/ReferralCondition";
 
@@ -69,6 +69,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
       return newUsePolicy;
     });
   };
+
   const handlePurchaseCheckboxChange = () => {
     const defaultConditions = {
       payment_timing: {
@@ -101,18 +102,12 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
       return newUsePolicy;
     });
   };
-  // useEffect(() => {
-  //   console.log("Referrer Conditions", referrerConditions);
-  // }, [referrerConditions]);
-  // useEffect(() => {
-  //   console.log("Referee Conditions", refereeConditions);
-  // }, [refereeConditions]);
 
   return (
-    <div className="flex-col p-2 bg-gray-100 rounded-lg w-full min-w-[332px]">
-      <div className="flex items-center mb-4 border-b-[1px] pb-2">
+    <div className="bg-gray-100 rounded-xl w-full min-w-[320px]">
+      <div className="flex flex-col lg:flex-row items-center mb-4 border-b pb-2">
         <label className="text-lg font-bold text-left w-full">{trigger === "SIGNUP" ? "회원가입" : "구매 후"}</label>
-        <div className="mr-2 mb-3 items-center flex">
+        <div className="mr-2 flex justify-end w-full">
           <input
             type="checkbox"
             className="peer sr-only opacity-0"
@@ -128,9 +123,12 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
           </label>
         </div>
       </div>
-
-      {usePolicy && (
-        <>
+      <div
+        className={`transition-all duration-300 ease-in-out ${
+          usePolicy ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"
+        }`}
+      >
+        <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
           <ReferralCondition
             trigger={trigger}
             target="referrer"
@@ -155,8 +153,8 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
             useCondition={useRefereeCondition}
             setUseCondition={setUseRefereeCondition}
           />
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };

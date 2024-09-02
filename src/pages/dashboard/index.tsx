@@ -51,7 +51,7 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
             handleButton={handleButton}
           />
         </ContentsContainer>
-        <div className="flex space-x-4">
+        {/* <div className="flex space-x-4">
           <ContentsContainer variant="dashboard">children</ContentsContainer>
           <ContentsContainer variant="dashboard">children</ContentsContainer>
         </div>
@@ -84,7 +84,7 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
               </tr>
             </tbody>
           </table>
-        </ContentsContainer>
+        </ContentsContainer> */}
       </div>
     </DashboardContainer>
   );

@@ -44,8 +44,8 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, isOpen, handleKe
   const [point_amount, setPointAmount] = useState<number>(0);
   const [referrerState, setReferrerState] = useState<RewardPolicyArgs>(defaultPolicy);
   const [refereeState, setRefereeState] = useState<RewardPolicyArgs>(defaultPolicy);
-  const inputFormClass = "flex flex-col text-left min-w-[250px] mb-4";
-  const labelClass = "font-gray-600 text-sm font-bold text-left w-full mt-4";
+  const inputFormClass = "flex flex-col text-left min-w-[250px] mb-1";
+  const labelClass = "font-gray-600 text-sm font-bold text-left mt-1";
 
   // const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => defaultPolicy;
   const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => {
@@ -130,16 +130,16 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, isOpen, handleKe
   };
 
   return (
-    <div className="items-center justify-center text-center m-5">
-      <h1 className="w-full text-left text-2xl font-bold pb-2 border-b-[1px]">
+    <div className="items-center justify-center text-center p-2">
+      <h1 className="w-full text-left text-2xl font-bold pb-2 border-b-[1px] mb-4">
         {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가 설정
       </h1>
 
-      <div className="flex-col max-h-[500px] overflow-y-scroll p-2">
-        <div className="w-full p-2">
-          <div className="p-6 bg-gray-100 rounded-lg">
-            <div className={inputFormClass}>
-              <label className="font-gray-600 text-sm font-bold text-left w-full mb-3">
+      <div className="flex flex-col items-center max-h-[550px] overflow-y-scroll my-2">
+        <div className="flex flex-col  bg-white rounded-xl my-4">
+          <div className="flex p-6 bg-gray-100 justify-center rounded-xl mb-4 flex-col items-center w-full">
+            <div className="flex flex-col text-left w-full mb-1">
+              <label className="font-gray-600 text-lg font-bold text-left mb-2">
                 {reward_type === RewardType.CO ? "쿠폰 코드" : "지급 포인트 금액"}
               </label>
               <InputTextBox
@@ -156,17 +156,12 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, isOpen, handleKe
               />
             </div>
           </div>
-        </div>
-
-        <div className="flex-col max-h-full p-2">
           <RewardPolicySetting
             inputformClass={inputFormClass}
             labelClass={labelClass}
             reward_type={reward_type}
             handleKeyDown={handleKeyDown}
-            referrerState={referrerState}
             setReferrerState={setReferrerState}
-            refereeState={refereeState}
             setRefereeState={setRefereeState}
           />
         </div>

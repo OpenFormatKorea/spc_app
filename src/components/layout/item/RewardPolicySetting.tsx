@@ -63,8 +63,8 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
     });
   }, [signUpRefereeConditions, purchaseRefereeConditions]);
   return (
-    <div className="flex-col space-y-4">
-      <div className="p-4 bg-gray-100 rounded-xl">
+    <div className="flex flex-col items-center justify-between space-y-4 w-full">
+      <div className="flex flex-col w-full lg:flex-row bg-gray-100 p-6 rounded-xl">
         <RewardPolicy
           trigger="SIGNUP"
           inputformClass={inputformClass}
@@ -83,7 +83,7 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
           setRefereeConditions={setSignUpRefereeConditions}
         />
       </div>
-      <div className="p-4 bg-gray-100 rounded-lg">
+      <div className="flex flex-col w-full lg:flex-row bg-gray-100 p-6 rounded-xl">
         <RewardPolicy
           trigger="PURCHASE"
           inputformClass={inputformClass}
@@ -103,6 +103,46 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
         />
       </div>
     </div>
+    //   <div className="flex flex-col lg:p-6 space-y-6 lg:flex-row lg:space-y-0 lg:space-x-12 sm:items-center lg:items-start justify-center rounded-xl">
+    //   <div className="p-2 bg-gray-100 rounded-xl">
+    //     <RewardPolicy
+    //       trigger="SIGNUP"
+    //       inputformClass={inputformClass}
+    //       labelClass={labelClass}
+    //       rewardType={reward_type}
+    //       handleKeyDown={handleKeyDown}
+    //       usePolicy={useSignUpPolicy}
+    //       setUsePolicy={setUseSignUpPolicy}
+    //       useReffererCondition={useSignUpReffererCondition}
+    //       setUseReffererCondition={setUseSignUpReffererCondition}
+    //       referrerConditions={signUpReferrerConditions}
+    //       setReferrerConditions={setSignUpReferrerConditions}
+    //       useRefereeCondition={useSignUpRefereeCondition}
+    //       setUseRefereeCondition={setUseSignUpRefereeCondition}
+    //       refereeConditions={signUpRefereeConditions}
+    //       setRefereeConditions={setSignUpRefereeConditions}
+    //     />
+    //   </div>
+    //   <div className="p-2 bg-gray-100 rounded-xl">
+    //     <RewardPolicy
+    //       trigger="PURCHASE"
+    //       inputformClass={inputformClass}
+    //       labelClass={labelClass}
+    //       rewardType={reward_type}
+    //       handleKeyDown={handleKeyDown}
+    //       usePolicy={usePurchasePolicy}
+    //       setUsePolicy={setUsePurchasePolicy}
+    //       useReffererCondition={usePurchaseReffererCondition}
+    //       setUseReffererCondition={setUsePurchaseReffererCondition}
+    //       referrerConditions={purchaseReferrerConditions}
+    //       setReferrerConditions={setPurchaseReferrerConditions}
+    //       useRefereeCondition={usePurchaseRefereeCondition}
+    //       setUseRefereeCondition={setUsePurchaseRefereeCondition}
+    //       refereeConditions={purchaseRefereeConditions}
+    //       setRefereeConditions={setPurchaseRefereeConditions}
+    //     />
+    //   </div>
+    // </div>
   );
 };
 

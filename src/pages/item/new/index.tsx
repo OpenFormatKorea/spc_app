@@ -92,7 +92,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
 
   return (
     <DashboardContainer title={"새 리퍼럴 생성"} onclick={handleSubmit} onclickText="저장하기" buttonId="create_item">
-      <div className="flex flex-col md:flex-row w-full justify-center ">
+      <div className="flex flex-col md:flex-row w-full justify-center lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails
             page_type="NEW"
