@@ -1,6 +1,5 @@
 // src/pages/home.tsx
-import { getCookie } from "cookies-next";
-import { GetServerSidePropsContext } from "next";
+
 import { useRouter } from "next/router";
 
 const HomePage = () => {

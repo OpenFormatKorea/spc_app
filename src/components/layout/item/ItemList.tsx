@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/lib/types";
-import { fetchDeleteItems } from "@/pages/item/lib/apis";
+import { fetchActivateItem, fetchDeleteItems } from "@/pages/item/lib/apis";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -34,8 +34,17 @@ const ItemList: React.FC<ItemListProps> = (
         alert("아이템 삭제를 실패 하였습니다. 상태 코드: " + result.status);
         console.log("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
       }
-    } else if (id === "activate_items") {
-      console.log("NOT PREPARED YET");
+    } else if (id.includes("activate_item_") && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
+      const item_id = id.replace("activate_item_", "");
+      console.log("item_id", item_id);
+      const result = await fetchActivateItem(item_id, context);
+      if (result.status === 200) {
+        alert("아이템 활성화 상태를 변경 하였습니다. ");
+        window.location.reload();
+      } else {
+        alert("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
+        console.log("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: ", result.status);
+      }
     }
   };
 
@@ -166,8 +175,9 @@ const ItemList: React.FC<ItemListProps> = (
                   <td className={`${tbodyStyle}`} onClick={(e) => e.stopPropagation()}>
                     <button
                       type="button"
-                      id={`activate_${item.id}`}
+                      id={`activate_item_${item.id}`}
                       className={`py-1 px-2 w-full min-w-[53px] text-white text-sm rounded-md  ${item.active === true ? "bg-red-500" : "bg-sky-500"} `}
+                      onClick={handleSubmit}
                     >
                       {item.active === true ? "비활성" : "활성"}
                     </button>

@@ -119,6 +119,26 @@ export async function fetchDeleteItems(item_ids: string[], context: GetServerSid
     return { status: 500, success: false, message: "삭제를 실패하였습니다.", error: error };
   }
 }
+
+export async function fetchActivateItem(item_id: string, context: GetServerSidePropsContext) {
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify-active/` + item_id;
+
+  try {
+    const response = await fetchAPI(context, apiUrl, "PUT", {});
+
+    if (response.status === "200" && response.message === "success") {
+      console.log("success: ", true, "message: 아이템 활성화를 변경 하였습니다.");
+      return { status: 200, success: true, message: "아이템들을 삭제하였습니다." };
+    } else {
+      console.error("error", "status: ", response.status, "message: 삭제를 실패하였습니다.");
+      return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
+    }
+  } catch (error) {
+    console.error("error", error);
+    return { status: 500, success: false, message: "삭제를 실패하였습니다.", error: error };
+  }
+}
+
 export async function fetchGetItemList(campaign_id: string, context: GetServerSidePropsContext) {
   const shop_id = getShopIdFromCookies(context);
   const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items?campaign_id=` + campaign_id;
