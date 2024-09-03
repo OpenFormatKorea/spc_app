@@ -131,8 +131,8 @@ const DetailsCampaign = (
     }
   };
 
-  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700";
-  const tbodyStyle = "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all";
+  const theadStyle = "px-1 py-2 text-center border-b border-gray-200 text-sm text-gray-700";
+  const tbodyStyle = "px-2 py-2 border-b border-gray-200 whitespace-normal break-words break-all";
   return (
     <DashboardContainer
       title={"캠페인 상세 정보"}
@@ -154,14 +154,14 @@ const DetailsCampaign = (
           <div className="flex items-center justify-end mt-4 gap-x-2">
             <button
               id="delete_campaign"
-              className="border p-2 bg-red-500 text-white rounded-lg w-[80px] cursor-pointer"
+              className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer"
               onClick={handleSubmit}
             >
               삭제하기
             </button>
             <button
               id="modify_campaign"
-              className="border p-2 bg-blue-400 text-white rounded-lg w-[80px]  cursor-pointer"
+              className="border p-2 bg-blue-500 text-white rounded-lg  cursor-pointer"
               onClick={handleSubmit}
             >
               수정하기

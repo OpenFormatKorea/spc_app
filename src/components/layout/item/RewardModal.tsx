@@ -12,12 +12,11 @@ import RewardPolicySetting from "@/components/layout/item/RewardPolicySetting";
 interface RewardModalProps {
   reward_type: RewardType;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
-  isOpen: boolean;
   onClose: () => void;
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
-const RewardModal: React.FC<RewardModalProps> = ({ reward_type, isOpen, handleKeyDown, onClose, setRewards }) => {
+const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, onClose, setRewards }) => {
   const defaultPolicy = {
     SIGNUP: {
       payment_timing: {
@@ -85,6 +84,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, isOpen, handleKe
       referrerState.SIGNUP?.payment_frequency.type === PaymentFrequencyType.REP &&
       referrerState.SIGNUP?.payment_frequency.repeat_count === null
     ) {
+      console.log("referrerState", referrerState);
       alert("referrerState SIGNUP payment frequency repeat count is null ");
       return false;
     }

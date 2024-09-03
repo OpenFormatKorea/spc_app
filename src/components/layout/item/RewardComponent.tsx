@@ -2,7 +2,7 @@ import React, { useState, KeyboardEvent, useEffect } from "react";
 import { RewardsArgs, RewardType } from "@/pages/item/lib/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import Modal from "@/components/base/Modal";
-import RewardModal from "@/components/layout/item/RewardCondition";
+import RewardModal from "@/components/layout/item/RewardModal";
 
 interface RewardComponentProps {
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
@@ -29,9 +29,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRewardType(e.target.value as RewardType);
   };
-  // useEffect(() => {
-  //   console.log("Rewards array:", rewards);
-  // }, [rewards]);
+
   return (
     <>
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">리워드</h1>
@@ -62,7 +60,6 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
         <RewardModal
           reward_type={reward_type}
           handleKeyDown={handleKeyDown}
-          isOpen={isModalOpen}
           onClose={closeModal}
           setRewards={setRewards}
         />

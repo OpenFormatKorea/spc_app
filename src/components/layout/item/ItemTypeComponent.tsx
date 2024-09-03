@@ -67,7 +67,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   };
 
   return (
-    <div className="contents-container w-full justify-center">
+    <div className="contents-container w-full justify-between">
       {item_type === ItemType.PD &&
         productInputs.map((input, index) => (
           <div key={index} className="inputForm flex items-center w-full mb-2 text-left">

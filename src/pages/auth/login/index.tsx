@@ -78,7 +78,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="AuthContainer w-full bg-sky-200 flex justify-center items-center text-center h-screen">
+    <div className="AuthContainer w-full bg-sky-600 flex justify-center items-center text-center h-screen">
       <div className="flex justify-center items-center h-screen">
         <AuthLogin
           username={username}

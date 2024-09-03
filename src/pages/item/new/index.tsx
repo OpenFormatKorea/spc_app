@@ -30,6 +30,25 @@ const NewItem = (context: GetServerSidePropsContext) => {
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
 
   const infoCheck = (info: ItemArgs) => {
+    if (title === "" || title === null) {
+      alert("아이템 명을 입력해주세요.");
+      return false;
+    }
+    if (kakao_message === "" || kakao_message === null) {
+      alert("카카오 메시지를 입력해주세요.");
+      return false;
+    }
+    if (promotions[0].description == "" && products[0].product_model_code == "") {
+      alert("아이템 적용을 원하시는 상품 혹은 프로모션을 추가해주세요.");
+      return false;
+    }
+    if (rewards.length === 0) {
+      if (confirm("해당 아이템에 아직 리워드가 추가되지 않았어요, 그래도 아이템 생성을 원하시나요? ")) {
+        return true;
+      } else {
+        return false;
+      }
+    }
     return true;
   };
 
@@ -91,7 +110,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
   };
 
   return (
-    <DashboardContainer title={"새 리퍼럴 생성"} onclick={handleSubmit} onclickText="저장하기" buttonId="create_item">
+    <DashboardContainer title={"새 아이템 생성"} onclick={handleSubmit} onclickText="저장하기" buttonId="create_item">
       <div className="flex flex-col md:flex-row w-full justify-center lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails

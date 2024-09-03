@@ -22,14 +22,13 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
     router.push(link);
   };
 
-  // Determines if the current route is active
   const isActive = router.pathname.startsWith(link.split("/")[1] ? `/${link.split("/")[1]}` : link);
 
   return (
     <div
       className={`h-[55px] pl-[20px] flex items-center text-lg cursor-pointer transition-colors duration-300 font-semibold  text-white w-full
-        ${isActive ? "lg:bg-sky-700 bg-sky-700" : "lg:bg-sky-900 bg-sky-700 "}
-        ${!isActive && "lg:bg-sky-900 bg-sky-600 "}
+        ${isActive ? "lg:bg-sky-700 bg-sky-700" : "lg:bg-sky-700 bg-sky-600 "}
+        ${!isActive && "lg:bg-sky-900 bg-sky-600"}
       `}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}

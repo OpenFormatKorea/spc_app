@@ -62,7 +62,7 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
-    // if (id === "modify_item") {
+    // if (id === "delete_item") {
     //   const result = await fetchModifyItem(itemArgs, context);
     //   if (result.status === 200) {
     //     alert(result.message);

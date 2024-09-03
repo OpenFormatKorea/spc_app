@@ -15,7 +15,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="LoginContainer w-full bg-sky-200 flex justify-center items-center text-center h-screen">
+    <div className="LoginContainer w-full bg-sky-600 flex justify-center items-center text-center h-screen">
       <div className="LoginBox min-w-[380px] min-h-[380px] border border-gray-200  rounded-2xl bg-blue-300 flex flex-col justify-center items-center">
         <div className="m-10 flex justify-center">
           <img src="/images/incento_logo.png" alt="Incento Logo" className="w-[180px]" />

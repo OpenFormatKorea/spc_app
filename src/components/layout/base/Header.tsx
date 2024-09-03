@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           <img src="/svg/spc_logo.svg" alt="Logo" className="h-[40px] cursor-pointer mr-4" />
         </div>
         <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
-        <div className="flex space-x-2 hidden lg:flex">
+        <div className="space-x-2 hidden lg:flex">
           <div className="p-2 cursor-pointer bg-white rounded-lg text-xs text-center min-w-[65px]">My Page</div>
           <div
             className="p-2 cursor-pointer bg-white rounded-lg text-xs text-center min-w-[65px]"

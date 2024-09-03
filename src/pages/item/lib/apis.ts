@@ -13,7 +13,7 @@ export async function fetchCreateItem(itemArgs: ItemArgs, context: GetServerSide
       itemArgs.rewards?.map((reward) => ({
         ...reward,
         referrer_conditions: reward.referrer_conditions || {},
-        referral_conditions: reward.referee_conditions || {},
+        referee_conditions: reward.referee_conditions || {},
       })) || [],
   };
   console.log("dataObj: ", JSON.stringify(dataObj, null, 2));
@@ -114,7 +114,6 @@ export async function fetchGetItemList(campaign_id: string, context: GetServerSi
   }
 }
 export async function fetchGetItemDetails(item_id: string, context: GetServerSidePropsContext) {
-  //const shop_id = getShopIdFromCookies(context);
   const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item/` + item_id;
 
   try {

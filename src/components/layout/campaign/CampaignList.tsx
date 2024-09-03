@@ -29,7 +29,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
       <div className="font-bold text-xl flex w-full pb-2 border-b-[1px] mb-4">
         <div className="w-[80%]">
           <div>캠페인</div>
-          <div className="font-normal text-sm w-full">현재 사용중인 캠페인 목록입니다.</div>
+          <div className="font-normal text-sm w-full">현재 사용중인 캠페인 목록이에요.</div>
         </div>
         {!isCampaignPage && (
           <div
@@ -76,7 +76,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
         {/* Mobile-friendly layout */}
         <div className="block lg:hidden">
           {campaigns.map((campaign, i) => (
-            <div key={campaign.id || i} className="border border-gray-200 p-4 mb-4 rounded-xl text-gray-600 space-y-1">
+            <div key={campaign.id || i} className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1">
               <div className="font-bold mb-2 text-black w-full pb-1 border-b">{campaign.title}</div>
               <div className="text-sm">
                 <strong>타입: </strong>
@@ -91,7 +91,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                 {campaign.start_date} ~ {campaign.end_date}
               </div>
               <div
-                className="text-blue-400 cursor-pointer text-right mt-2"
+                className="text-blue-400 cursor-pointer text-right font-semibold"
                 id={campaign.id}
                 onClick={handleCampaignClick}
               >
@@ -99,7 +99,9 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
               </div>
             </div>
           ))}
-          {!campaigns.length && <div className="text-center text-gray-500">No campaigns available</div>}
+          {!campaigns.length && (
+            <div className="text-center text-gray-500">사용중인 캠페인이 없습니다. 새로운 캠페인을 생성해보세요.</div>
+          )}
         </div>
       </div>
     </>

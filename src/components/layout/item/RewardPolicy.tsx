@@ -37,22 +37,23 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
   refereeConditions,
   setRefereeConditions,
 }) => {
+  const defaultConditions = {
+    payment_timing: {
+      type: null,
+      delay_days: null,
+    },
+    payment_frequency: {
+      type: null,
+      repeat_count: null,
+    },
+  };
   const handleSignUpCheckboxChange = () => {
-    const defaultConditions = {
-      payment_timing: {
-        type: null,
-        delay_days: null,
-      },
-      payment_frequency: {
-        type: null,
-        repeat_count: null,
-      },
-    };
     setUsePolicy((prev) => {
       const newUsePolicy = !prev;
       if (!newUsePolicy) {
         setUseReffererCondition(false);
         setReferrerConditions(defaultConditions);
+        setRefereeConditions(defaultConditions);
       } else {
         setUseReffererCondition(true);
         setReferrerConditions({
@@ -71,21 +72,12 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
   };
 
   const handlePurchaseCheckboxChange = () => {
-    const defaultConditions = {
-      payment_timing: {
-        type: null,
-        delay_days: null,
-      },
-      payment_frequency: {
-        type: null,
-        repeat_count: null,
-      },
-    };
     setUsePolicy((prev) => {
       const newUsePolicy = !prev;
       if (!newUsePolicy) {
         setUseRefereeCondition(false);
         setRefereeConditions(defaultConditions);
+        setReferrerConditions(defaultConditions);
       } else {
         setUseRefereeCondition(true);
         setRefereeConditions({
