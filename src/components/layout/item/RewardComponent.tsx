@@ -23,7 +23,15 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const labelClass = "font-gray-600 text-sm font-bold text-left w-full mt-4";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
+
+  const openModal = () => {
+    if (reward_type) {
+      // Check if reward_type is not an empty string
+      setIsModalOpen(true);
+    } else {
+      alert("리워드 종류를 선택해주세요.");
+    }
+  };
   const closeModal = () => setIsModalOpen(false);
 
   const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {

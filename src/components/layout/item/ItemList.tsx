@@ -1,6 +1,8 @@
 import { ApiResponse } from "@/lib/types";
-import campaign from "@/pages/campaign";
+import { fetchDeleteItems } from "@/pages/item/lib/apis";
+import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface ItemListProps {
   theadStyle: string;
@@ -9,9 +11,49 @@ interface ItemListProps {
   handleButton: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse, handleButton }) => {
+const ItemList: React.FC<ItemListProps> = (
+  { theadStyle, tbodyStyle, apiResponse, handleButton },
+  context: GetServerSidePropsContext
+) => {
   const router = useRouter();
   const items = Array.isArray(apiResponse) ? apiResponse : [];
+
+  const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
+  const [selectAll, setSelectAll] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    const { id } = event.currentTarget;
+
+    if (id === "delete_items" && confirm("선택하신 아이템들을 삭제하시겠어요?")) {
+      const item_ids = Object.keys(selectedItems).filter((key) => selectedItems[key]);
+      const result = await fetchDeleteItems(item_ids, context);
+      if (result.status === 200) {
+        alert(result.message);
+        window.location.reload();
+      } else {
+        alert("아이템 삭제를 실패 하였습니다. 상태 코드: " + result.status);
+        console.log("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
+      }
+    } else if (id === "activate_items") {
+      console.log("NOT PREPARED YET");
+    }
+  };
+
+  const handleItemDelete = async (event: React.FormEvent) => {
+    const { id } = event.currentTarget;
+
+    if (confirm("선택하신 아이템을 삭제하시겠어요?")) {
+      const item_ids = [id];
+      const result = await fetchDeleteItems(item_ids, context);
+      if (result.status === 200) {
+        alert(result.message);
+        window.location.reload();
+      } else {
+        alert("아이템 삭제를 실패 하였습니다. 상태 코드: " + result.status);
+        console.log("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
+      }
+    }
+  };
 
   const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
@@ -21,6 +63,37 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
     }
   };
 
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setSelectAll(checked);
+
+    const newSelectedItems = items.reduce(
+      (acc, item) => {
+        acc[item.id] = checked;
+        return acc;
+      },
+      {} as { [key: string]: boolean }
+    );
+    console.log("newSelectedItems", newSelectedItems);
+
+    setSelectedItems(newSelectedItems);
+  };
+
+  const handleCheckboxChange = (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setSelectedItems((prevState) => {
+      const newSelectedItems = {
+        ...prevState,
+        [id]: checked,
+      };
+
+      // Check if all items are selected
+      const allSelected = items.every((item) => newSelectedItems[item.id]);
+      setSelectAll(allSelected); // Update the selectAll state based on this check
+
+      return newSelectedItems;
+    });
+  };
   return (
     <>
       <div>
@@ -41,39 +114,90 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
         </div>
 
         <div className="my-2 w-full">
-          <table className="w-full bg-white border border-gray-200 hidden lg:table">
+          <table className="w-full bg-white border border-gray-200 rounded-lg text-center hidden lg:table">
             <thead>
               <tr className="bg-gray-200">
+                <th className={theadStyle}>
+                  <input
+                    type="checkbox"
+                    id={`item_all`}
+                    name={`item_all`}
+                    checked={selectAll}
+                    onChange={handleSelectAll}
+                  />
+                </th>
                 <th className={theadStyle}>아이템 명</th>
                 <th className={theadStyle}>아이템 종류</th>
                 <th className={theadStyle}>생성일</th>
                 <th className={theadStyle}>수정일</th>
+                <th className={theadStyle}>활성화</th>
+                <th className={theadStyle}>삭제</th>
               </tr>
             </thead>
             <tbody>
               {items.map((item) => (
                 <tr className="cursor-pointer" key={item.id} id={item.id} onClick={handleItemClick}>
+                  <td className={`${tbodyStyle} px-2`} onClick={(e) => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      id={`item_${item.id}`}
+                      name={`item_${item.id}`}
+                      checked={selectedItems[item.id] || false}
+                      onChange={handleCheckboxChange(item.id)}
+                    />
+                  </td>
                   <td className={tbodyStyle}>{item.title}</td>
                   <td className={tbodyStyle}>{item.item_type === "PRODUCT" ? "상품" : "프로모션"}</td>
-                  <td className={tbodyStyle}>{item.created_at}</td>
-                  <td className={tbodyStyle}>{item.updated_at}</td>
+                  <td className={tbodyStyle}>
+                    {new Date(item.created_at).toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </td>
+                  <td className={tbodyStyle}>
+                    {new Date(item.updated_at).toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </td>
+                  <td className={tbodyStyle}>{item.active === true ? "활성" : "비활성"}</td>
+                  <td className={`${tbodyStyle}`} onClick={(e) => e.stopPropagation()}>
+                    <button
+                      type="button"
+                      id={`activate_${item.id}`}
+                      className={`py-1 px-2 w-full min-w-[53px] text-white text-sm rounded-md  ${item.active === true ? "bg-red-500" : "bg-sky-500"} `}
+                    >
+                      {item.active === true ? "비활성" : "활성"}
+                    </button>
+                  </td>
                 </tr>
               ))}
               {!items.length && (
                 <tr>
                   <td className={tbodyStyle} colSpan={4}>
-                    현재 사용중인 아이템이 없어요, 새로운 아이템을 등록해 보세요.
+                    현재 사용중인 아이템이 없어요, 새로운 아이템을 등록해 주세요.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+          <div className="flex items-center justify-start mt-5">
+            <button
+              className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer"
+              id="delete_items"
+              onClick={handleSubmit}
+            >
+              선택삭제
+            </button>
+          </div>
         </div>
       </div>
       {/* Mobile-friendly layout */}
       <div className="block lg:hidden">
         {items.map((item, i) => (
-          <div key={item.id || i} className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1">
+          <div key={item.id || i} className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 ">
             <div className="font-bold mb-2 text-black w-full pb-1 border-b">{item.title}</div>
             <div className="text-sm">
               <strong>아이템 종류: </strong>
@@ -87,12 +211,21 @@ const ItemList: React.FC<ItemListProps> = ({ theadStyle, tbodyStyle, apiResponse
               <strong>캠페인 수정일: </strong>
               {item.updated_at}
             </div>
-            <div
-              className="text-blue-400 cursor-pointer text-right font-semibold"
-              id={item.id}
-              onClick={handleItemClick}
-            >
-              상세보기
+            <div className="flex space-x-4 items-center justify-center p-2">
+              <button
+                className="text-white text-sm min-w-[60px] bg-red-400 py-1 px-2 cursor-pointer rounded-md"
+                id={item.id}
+                onClick={handleItemDelete}
+              >
+                삭제
+              </button>
+              <button
+                className="text-white text-sm min-w-[60px] bg-blue-400 py-1 px-2 cursor-pointer rounded-md"
+                id={item.id}
+                onClick={handleItemClick}
+              >
+                상세보기
+              </button>
             </div>
           </div>
         ))}

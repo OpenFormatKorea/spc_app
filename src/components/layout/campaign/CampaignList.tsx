@@ -59,7 +59,19 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                 <td className={tbodyStyle}>{campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}</td>
                 <td className={tbodyStyle}>{campaign.active ? "활성화" : "비활성화"}</td>
                 <td className={tbodyStyle}>
-                  {campaign.start_date} ~ {campaign.end_date}
+                  {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  ~{" "}
+                  {campaign.end_date && campaign.end_date !== ""
+                    ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : ""}
                 </td>
               </tr>
             ))}

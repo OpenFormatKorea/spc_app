@@ -1,7 +1,6 @@
 import { fetchAPI } from "@/lib/api";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { CampaignArgs } from "@/pages/campaign/lib/types";
-import { ItemArgs } from "@/pages/item/lib/types";
 import { GetServerSidePropsContext } from "next";
 
 export async function fetchCreateCampaign(info: CampaignArgs, context: GetServerSidePropsContext) {

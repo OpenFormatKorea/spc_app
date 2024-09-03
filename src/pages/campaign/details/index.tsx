@@ -112,7 +112,7 @@ const DetailsCampaign = (
 
         if (result.status === 200) {
           alert(result.message);
-          console.log("캠페인을 (현재는 임시 !) 삭제 하였습니다.");
+          console.log("캠페인을 삭제 하였습니다.");
           router.push("/campaign");
         } else {
           alert("캠페인 삭제를 실패 하였습니다. 상태 코드: " + result.status);
@@ -132,7 +132,7 @@ const DetailsCampaign = (
   };
 
   const theadStyle = "px-1 py-2 text-center border-b border-gray-200 text-sm text-gray-700";
-  const tbodyStyle = "px-2 py-2 border-b border-gray-200 whitespace-normal break-words break-all";
+  const tbodyStyle = "px-2 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all";
   return (
     <DashboardContainer
       title={"캠페인 상세 정보"}

@@ -44,9 +44,15 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
 
   return (
     <div className="contents-container w-full justify-center">
-      <h1 className="font-bold text-xl pb-2 border-b-[1px] mb-2">캠페인 상세정보</h1>
-      <div className="inputForm flex flex-col text-left w-full ">
-        <label className="text-md font-bold mb-4">캠페인 명</label>
+      <h1 className="font-bold text-base pb-2 border-b mb-4 w-full flex justify-between items-center">
+        <div>
+          <div className="text-xl">캠페인 상세정보</div>
+          <div className="font-normal text-sm">캠페인의 상세 정보에요.</div>
+        </div>
+      </h1>
+
+      <div className="inputForm flex flex-col text-left w-full pb-2">
+        <label className="text-md font-bold pb-2">캠페인 명</label>
         <InputTextBox
           type="text"
           id="title"
@@ -57,7 +63,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         />
       </div>
       <div className="inputForm flex flex-col text-left w-full">
-        <label className="text-md font-bold my-4">캠페인 설명</label>
+        <label className="text-md font-bold py-2">캠페인 설명</label>
         <InputTextBox
           type="text"
           id="description"
@@ -67,8 +73,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           onKeyDown={handleKeyDown}
         />
       </div>
-      <div className="inputForm flex flex-col text-left w-full mb-2">
-        <label className="text-md font-bold my-4">기간 종류</label>
+      <div className="inputForm flex flex-col text-left w-full pb-2">
+        <label className="text-md font-bold py-2">기간 종류</label>
         <div className="flex justify-between w-[250px] lg:w-[300px]">
           <InputRadioBox
             label="무기한"
@@ -87,7 +93,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         </div>
       </div>
       <div className="flex flex-col w-full text-left">
-        <label className="text-md font-bold my-4">캠페인 기간</label>
+        <label className="text-md font-bold py-2">캠페인 기간</label>
         <div className="lg:flex sm:items-center w-full gap-2">
           <InputTextBox
             type="text"
@@ -110,7 +116,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         </div>
       </div>
       <div className="inputForm flex flex-col text-left w-full">
-        <label className="text-md font-bold my-4">캠페인 활성화</label>
+        <label className="text-md font-bold py-4">캠페인 활성화</label>
         <div className="flex justify-between w-[250px] lg:w-[300px] ">
           <InputRadioBox
             label="활성화"
