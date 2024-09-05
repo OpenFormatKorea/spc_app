@@ -1,10 +1,11 @@
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 import { CampaignArgs, PeriodType } from "@/pages/campaign/lib/types";
-import { useRef, KeyboardEvent } from "react";
+import { useRef, KeyboardEvent, useState, useEffect } from "react";
 import Calendar from "react-calendar";
 
 interface CampaignDetailsProps {
+  page_type: "DETAILS" | "NEW";
   campaignArgs: CampaignArgs;
   setPeriod_type: (value: PeriodType) => void;
   setDescription: (value: string) => void;
@@ -15,6 +16,7 @@ interface CampaignDetailsProps {
 }
 
 const CampaignDetails: React.FC<CampaignDetailsProps> = ({
+  page_type,
   campaignArgs,
   setPeriod_type,
   setDescription,
@@ -47,7 +49,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       <h1 className="font-bold text-base pb-2 border-b mb-4 w-full flex justify-between items-center">
         <div>
           <div className="text-xl">캠페인 상세정보</div>
-          <div className="font-normal text-sm">캠페인의 상세 정보에요.</div>
+          <div className="font-normal text-sm">상세 정보 옵션</div>
         </div>
       </h1>
 
@@ -60,6 +62,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           value={campaignArgs.title}
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={handleKeyDown}
+          disabled={false}
         />
       </div>
       <div className="inputForm flex flex-col text-left w-full">
@@ -71,6 +74,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           value={campaignArgs.description}
           onChange={(e) => setDescription(e.target.value)}
           onKeyDown={handleKeyDown}
+          disabled={false}
         />
       </div>
       <div className="inputForm flex flex-col text-left w-full pb-2">
@@ -82,6 +86,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             value={PeriodType.UL}
             checked={campaignArgs.period_type === PeriodType.UL}
             onChange={handleRadioChange}
+            disabled={false}
           />
           <InputRadioBox
             label="기간 제한"
@@ -89,6 +94,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             value="LIMITED"
             checked={campaignArgs.period_type === PeriodType.L}
             onChange={handleRadioChange}
+            disabled={false}
           />
         </div>
       </div>
@@ -101,6 +107,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             placeholder="캠페인 시작일을 선택하세요."
             value={campaignArgs.start_date}
             onChange={(e) => setStart_date(e.target.value)}
+            disabled={false}
           />
 
           <div className="text-md sm:my-2 sm:w-full lg:w-[25px] sm:text-center sm:flex sm:items-center sm:justify-center">
@@ -112,6 +119,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             placeholder="캠페인 시작일을 선택하세요."
             value={campaignArgs.end_date}
             onChange={(e) => setEnd_date(e.target.value)}
+            disabled={false}
           />
         </div>
       </div>
@@ -124,6 +132,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             value="true"
             checked={campaignArgs.active === true}
             onChange={handleActiveRadioChange}
+            disabled={false}
           />
           <InputRadioBox
             label="비활성화"
@@ -131,6 +140,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             value="false"
             checked={campaignArgs.active === false}
             onChange={handleActiveRadioChange}
+            disabled={false}
           />
         </div>
       </div>

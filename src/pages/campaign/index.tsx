@@ -6,11 +6,22 @@ import { fetchGetCampaignList } from "@/pages/campaign/lib/apis";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
+import { getShopIdFromCookies } from "@/lib/helper";
 
 // Fetches campaign data during server-side rendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await fetchGetCampaignList(context);
+  const shop_id = getShopIdFromCookies(context);
+
   console.log("GETSERVERSIDE API RESPONSE: ", response);
+  if (!response || !shop_id) {
+    return {
+      redirect: {
+        destination: "auth/login",
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {
       apiResponse: response,

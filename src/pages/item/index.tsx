@@ -1,16 +1,14 @@
-import CampaignList from "@/components/layout/campaign/CampaignList";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemList from "@/components/layout/item/ItemList";
 import { ApiResponse } from "@/lib/types";
-import { fetchGetCampaignList } from "@/pages/campaign/lib/apis";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { fetchGetItemList } from "@/pages/item/lib/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await fetchGetCampaignList(context);
-  console.log("GETSERVERSIDE API RESPONSE: ", response);
+  const response = await fetchGetItemList("", context);
   return {
     props: {
       apiResponse: response,
@@ -19,8 +17,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
-  const theadStyle = " border-b border-gray-200 text-left text-sm font-medium text-gray-700 max-w-[300px]";
-  const tbodyStyle = " border-b border-gray-200 whitespace-normal text-sm break-words break-all";
+  const theadStyle =
+    " border-b border-gray-200 text-left text-sm font-medium text-gray-700 max-w-[300px] text-center p-2";
+  const tbodyStyle = " border-b border-gray-200 whitespace-normal text-sm break-words break-all p-2";
   const router = useRouter();
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
@@ -32,7 +31,6 @@ export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
   useEffect(() => {
     console.log("Received API Response:", apiResponse);
   }, [apiResponse]);
-  // Ensure apiResponse is an array before mapping
 
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   return (
@@ -43,6 +41,7 @@ export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
             <ItemList
               theadStyle={theadStyle}
               tbodyStyle={tbodyStyle}
+              campaign_id={""}
               apiResponse={apiResponse}
               handleButton={handleButton}
             />

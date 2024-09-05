@@ -14,11 +14,24 @@ const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickT
           <a className="text-[24px] flex items-center justify-between sm:text-[30px] font-bold min-w-[270px] h-[42px]">
             {title}
           </a>
+
           {onclickText && (
             <div className="button-container w-full sm:w-auto text-right sm:ml-auto items-center">
+              {buttonId === "create_item" && (
+                <button
+                  className="border p-2 text-white rounded-lg cursor-pointer bg-gray-400 mx-2"
+                  onClick={onclick}
+                  id={"cancel_create_item"}
+                >
+                  뒤로가기
+                </button>
+              )}
+
               <button
                 className={`border p-2 text-white rounded-lg cursor-pointer ${
-                  buttonId === "cancel_modify_campaign" ? "bg-gray-400" : "bg-blue-500"
+                  buttonId === "cancel_modify_campaign" || buttonId === "back_campaign_details"
+                    ? "bg-gray-400"
+                    : "bg-blue-500"
                 }`}
                 onClick={onclick}
                 id={buttonId}

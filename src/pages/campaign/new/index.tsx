@@ -77,6 +77,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
     <DashboardContainer title="새 캠페인 생성" onclick={handleSubmit} onclickText="저장하기" buttonId="create_campaign">
       <ContentsContainer variant="dashboard">
         <CampaignDetails
+          page_type="NEW"
           campaignArgs={campaignArgs}
           setPeriod_type={setPeriodType}
           setDescription={setDescription}

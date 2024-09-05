@@ -1,11 +1,14 @@
 export interface ItemArgs {
+  id?: string;
   campaign_id: string;
   title: string;
   item_type: ItemType;
   kakao_args: KakaoArgs;
   products: ProductsArgs[];
   promotions: PromotionsArgs[];
+
   rewards: RewardsArgs[];
+  active: boolean;
 }
 export enum ItemType {
   PM = "PROMOTION",
@@ -15,9 +18,11 @@ export interface KakaoArgs {
   message: string;
 }
 export interface ProductsArgs {
+  id?: string;
   product_model_code: string;
 }
 export interface PromotionsArgs {
+  id?: string;
   description: string;
 }
 
@@ -26,8 +31,8 @@ export interface RewardsArgs {
   reward_type: RewardType;
   coupon_code?: string | undefined;
   point_amount?: number | undefined;
-  referrer_conditions: RewardPolicyArgs;
-  referee_conditions: RewardPolicyArgs;
+  referrer_conditions?: RewardPolicyArgs | null;
+  referee_conditions?: RewardPolicyArgs | null;
 }
 export enum RewardTarget {
   RFE = "REFEREE",

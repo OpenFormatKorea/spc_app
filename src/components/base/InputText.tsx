@@ -1,6 +1,7 @@
 import React, { ChangeEvent, KeyboardEvent } from "react";
 
 interface InputTextArgs {
+  disabled: boolean;
   type: string;
   id: string;
   placeholder: string;
@@ -9,7 +10,7 @@ interface InputTextArgs {
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const InputTextBox: React.FC<InputTextArgs> = ({ type, id, placeholder, value, onChange, onKeyDown }) => {
+const InputTextBox: React.FC<InputTextArgs> = ({ disabled, type, id, placeholder, value, onChange, onKeyDown }) => {
   return (
     <>
       <style jsx>{`
@@ -33,6 +34,7 @@ const InputTextBox: React.FC<InputTextArgs> = ({ type, id, placeholder, value, o
         className="input-class flex-grow text-xs p-3 w-full lg:max-w-[450px] border-b-[1px]"
         onChange={onChange}
         onKeyDown={onKeyDown}
+        disabled={disabled}
       />
     </>
   );

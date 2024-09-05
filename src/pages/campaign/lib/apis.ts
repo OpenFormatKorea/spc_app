@@ -104,11 +104,11 @@ export async function fetchDeleteCampaign(campaign_id: string, context: GetServe
 
 export async function fetchGetCampaignList(context: GetServerSidePropsContext) {
   const shop_id = getShopIdFromCookies(context);
-  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns?shop_id=` + shop_id;
+  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns/` + shop_id;
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-
+    console.log("response", response);
     return response.data;
   } catch (error) {
     console.error("error", error);
@@ -116,9 +116,13 @@ export async function fetchGetCampaignList(context: GetServerSidePropsContext) {
   }
 }
 
-export async function fetchGetCampaignDetails(campaign_id: string, context: GetServerSidePropsContext) {
+export async function fetchGetCampaignDetails(
+  campaign_id: string,
+  shop_id: string,
+  context: GetServerSidePropsContext
+) {
   //const shop_id = getShopIdFromCookies(context);
-  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign/` + campaign_id;
+  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign/` + campaign_id + "?shop_id=" + shop_id;
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
@@ -129,43 +133,8 @@ export async function fetchGetCampaignDetails(campaign_id: string, context: GetS
   }
 }
 
-// export async function fetchModifyItem(item_id: string, info: ItemArgs, context: GetServerSidePropsContext) {
-//   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify/` + item_id;
-//   const shop_id = getShopIdFromCookies(context);
-//   const dataObj = {
-//     shop_id: shop_id,
-//     title: info.title,
-//     item_type: info.item_type,
-//   };
-//   try {
-//     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
-//     if (response.status === "200") {
-//       return {
-//         status: 200,
-//         success: true,
-//         message: "리퍼럴을 수정하였습니다.",
-//         data: response.data,
-//       };
-//     } else {
-//       return {
-//         status: response.status || 400,
-//         success: false,
-//         message: "수정 내용을 다시 확인 해 주세요",
-//       };
-//     }
-//   } catch (error) {
-//     console.error("Error: ", error);
-//     return {
-//       status: 500,
-//       success: false,
-//       message: "수정 내용을 다시 확인 해 주세요",
-//       error: error,
-//     };
-//   }
-// }
-
-export async function fetchDeleteItem(item_id: string, context: GetServerSidePropsContext) {
-  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-delete/` + item_id;
+export async function fetchDeleteItem(item_id: string, shop_id: string, context: GetServerSidePropsContext) {
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-delete/` + item_id + "?shop_id=" + shop_id;
 
   try {
     const response = await fetchAPI(context, apiUrl, "DELETE", {});

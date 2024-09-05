@@ -26,15 +26,14 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
 
   return (
     <div
-      className={`h-[55px] pl-[20px] flex items-center text-lg cursor-pointer transition-colors duration-300 font-semibold  text-white w-full
-        ${isActive ? "lg:bg-sky-700 bg-sky-700" : "lg:bg-sky-700 bg-sky-600 "}
-        ${!isActive && "lg:bg-sky-900 bg-sky-600"}
-      `}
+      className={`h-[55px] flex items-center text-xl cursor-pointer transition-colors duration-300 font-semibold text-white w-full
+      ${isActive ? "bg-sky-700 lg:bg-sky-700 sm:bg-sky-700" : isHovered ? "lg:bg-sky-700 sm:bg-sky-600" : "lg:bg-sky-900 sm:bg-sky-400"}
+    `}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <a href={link} className="w-full">
+      <a href={link} className="w-full text-center">
         {menutitle}
       </a>
     </div>

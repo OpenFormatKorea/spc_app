@@ -14,23 +14,25 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
+  const shop_id: any = getShopIdFromCookies(context);
+
   const authResponse = authenticateUserforHeader(context);
-  const ItemListApiResponse = await fetchGetItemList(campaign_id, context);
-  const CDetailApiResponse = await fetchGetCampaignDetails(campaign_id, context);
-  const shop_id = getShopIdFromCookies(context);
-  if (CDetailApiResponse == null || CDetailApiResponse.shop_id != shop_id) {
+  const itemListApiResponse = await fetchGetItemList(campaign_id, context);
+  const cDetailApiResponse = await fetchGetCampaignDetails(campaign_id, shop_id, context);
+  console.log("cDetailApiResponse", cDetailApiResponse);
+  if (cDetailApiResponse == null || cDetailApiResponse.shop_id != shop_id) {
     return {
       redirect: {
-        destination: "/campaign",
+        destination: "/auth/login",
         permanent: false,
       },
     };
   } else {
     return {
       props: {
-        itemListApiResponse: ItemListApiResponse,
+        itemListApiResponse: itemListApiResponse,
         authResponse: authResponse,
-        cDetailApiResponse: CDetailApiResponse,
+        cDetailApiResponse: cDetailApiResponse,
         campaign_id: campaign_id,
       },
     };
@@ -93,30 +95,22 @@ const DetailsCampaign = (
         const result = await fetchModifyCampaign(campaign_id, campaignArgs, context);
 
         if (result.status === 200) {
-          alert(result.message);
+          alert("캠페인을 수정 하였습니다.");
           router.push("/campaign/details?campaign_id=" + campaign_id);
         } else {
           alert("캠페인 수정을 실패 하였습니다. 상태 코드: " + result.status);
-          console.log("캠페인 수정을 실패 하였습니다. 상태 코드:", result.status);
         }
       }
     } else if (id === "cancel_modify_campaign") {
-      const confirmed = window.confirm("뒤로 가시겠습니까?");
-      if (confirmed) {
-        router.push("/campaign");
-      }
+      router.push("/campaign");
     } else if (id === "delete_campaign") {
-      const confirmed = window.confirm("정말 삭제 하시겠습니까?");
-      if (confirmed) {
+      if (confirm("정말 삭제 하시겠습니까?")) {
         const result = await fetchDeleteCampaign(campaign_id, context);
-
         if (result.status === 200) {
-          alert(result.message);
-          console.log("캠페인을 삭제 하였습니다.");
+          alert("캠페인을 삭제 하였습니다.");
           router.push("/campaign");
         } else {
           alert("캠페인 삭제를 실패 하였습니다. 상태 코드: " + result.status);
-          console.log("캠페인 삭제를 실패 하였습니다. 상태 코드:", result.status);
         }
       }
     }
@@ -143,6 +137,7 @@ const DetailsCampaign = (
       <div className="flex flex-col md:flex-row w-full md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <CampaignDetails
+            page_type="DETAILS"
             campaignArgs={campaignArgs}
             setPeriod_type={setPeriod_type}
             setDescription={setDescription}
@@ -174,6 +169,7 @@ const DetailsCampaign = (
             tbodyStyle={tbodyStyle}
             apiResponse={itemListApiResponse}
             handleButton={handleButton}
+            campaign_id={campaign_id}
           />
         </ContentsContainer>
       </div>

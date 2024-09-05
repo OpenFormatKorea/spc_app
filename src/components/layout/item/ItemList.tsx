@@ -8,11 +8,12 @@ interface ItemListProps {
   theadStyle: string;
   tbodyStyle: string;
   apiResponse: ApiResponse;
+  campaign_id: string;
   handleButton: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const ItemList: React.FC<ItemListProps> = (
-  { theadStyle, tbodyStyle, apiResponse, handleButton },
+  { theadStyle, tbodyStyle, apiResponse, handleButton, campaign_id },
   context: GetServerSidePropsContext
 ) => {
   const router = useRouter();
@@ -26,7 +27,7 @@ const ItemList: React.FC<ItemListProps> = (
 
     if (id === "delete_items" && confirm("선택하신 아이템들을 삭제하시겠어요?")) {
       const item_ids = Object.keys(selectedItems).filter((key) => selectedItems[key]);
-      const result = await fetchDeleteItems(item_ids, context);
+      const result = await fetchDeleteItems(item_ids, campaign_id, context);
       if (result.status === 200) {
         alert(result.message);
         window.location.reload();
@@ -36,8 +37,7 @@ const ItemList: React.FC<ItemListProps> = (
       }
     } else if (id.includes("activate_item_") && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
       const item_id = id.replace("activate_item_", "");
-      console.log("item_id", item_id);
-      const result = await fetchActivateItem(item_id, context);
+      const result = await fetchActivateItem(item_id, campaign_id, context);
       if (result.status === 200) {
         alert("아이템 활성화 상태를 변경 하였습니다. ");
         window.location.reload();
@@ -53,7 +53,7 @@ const ItemList: React.FC<ItemListProps> = (
 
     if (confirm("선택하신 아이템을 삭제하시겠어요?")) {
       const item_ids = [id];
-      const result = await fetchDeleteItems(item_ids, context);
+      const result = await fetchDeleteItems(item_ids, campaign_id, context);
       if (result.status === 200) {
         alert(result.message);
         window.location.reload();
@@ -64,10 +64,31 @@ const ItemList: React.FC<ItemListProps> = (
     }
   };
 
+  // const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
+  //   const { id } = event.currentTarget;
+  //   if (router.pathname.includes("/campaign/details")) {
+  //     router.replace(`/item/details?item_id=${id}&campaign_id=` + campaign_id, undefined, {
+  //       shallow: true,
+  //       scroll: false,
+  //     });
+  //     console.log(router.pathname);
+  //   }
+  // };
   const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     if (router.pathname.includes("/campaign/details")) {
-      router.replace(`/item/details?item_id=${id}`, undefined, { shallow: true, scroll: false });
+      router.replace(
+        {
+          pathname: "/item/details",
+          query: { campaign_id: campaign_id, item_id: id },
+        },
+        undefined,
+        {
+          shallow: true,
+          scroll: false,
+        }
+      );
+
       console.log(router.pathname);
     }
   };
@@ -193,7 +214,7 @@ const ItemList: React.FC<ItemListProps> = (
               )}
             </tbody>
           </table>
-          <div className="flex items-center justify-start mt-5">
+          <div className="items-center justify-start mt-5 hidden lg:flex">
             <button
               className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer"
               id="delete_items"

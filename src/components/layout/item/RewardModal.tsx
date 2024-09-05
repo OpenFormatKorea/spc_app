@@ -46,7 +46,6 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
   const inputFormClass = "flex flex-col text-left min-w-[250px] mb-1";
   const labelClass = "font-gray-600 text-sm font-bold text-left mt-1";
 
-  // const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => defaultPolicy;
   const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => {
     return {
       SIGNUP: {
@@ -153,6 +152,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
                   reward_type === RewardType.CO ? setCouponCode(e.target.value) : setPointAmount(Number(e.target.value))
                 }
                 onKeyDown={handleKeyDown}
+                disabled={false}
               />
             </div>
           </div>

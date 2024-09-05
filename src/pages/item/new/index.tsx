@@ -21,14 +21,26 @@ const NewItem = (context: GetServerSidePropsContext) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [campaign_id, setCampaign_id] = useState("");
-  const [products, setProducts] = useState<ProductsArgs[]>([]);
-  const [promotions, setPromotions] = useState<PromotionsArgs[]>([]);
+  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([{ product_model_code: "" }]);
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
   const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>({ message: "" });
   const [kakao_message, setKakao_message] = useState<string>("");
   const [rewards, setRewards] = useState<RewardsArgs[]>([]);
   const [item_type, setItem_type] = useState<ItemType>(ItemType.PM);
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
+  const [active, setActive] = useState(false);
 
+  const itemArgs: ItemArgs = {
+    title: title,
+    item_type: item_type,
+    kakao_args: kakaoArgs,
+    products: productInputs,
+    promotions: promotionInputs,
+    rewards: rewards,
+    campaign_id: campaign_id,
+    active: active,
+  };
+  console.log("new item itemArgs", itemArgs);
   const infoCheck = (info: ItemArgs) => {
     if (title === "" || title === null) {
       alert("아이템 명을 입력해주세요.");
@@ -38,7 +50,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
       alert("카카오 메시지를 입력해주세요.");
       return false;
     }
-    if (promotions[0].description == "" && products[0].product_model_code == "") {
+    if (promotionInputs[0].description == "" && productInputs[0].product_model_code == "") {
       alert("아이템 적용을 원하시는 상품 혹은 프로모션을 추가해주세요.");
       return false;
     }
@@ -52,37 +64,12 @@ const NewItem = (context: GetServerSidePropsContext) => {
     return true;
   };
 
-  const itemArgs: ItemArgs = {
-    title: title,
-    item_type: item_type,
-    kakao_args: kakaoArgs,
-    products: products,
-    promotions: promotions,
-    rewards: rewards,
-    campaign_id: campaign_id,
-  };
-
-  useEffect(() => {
-    setKakaoArgs({ message: kakao_message });
-  }, [kakao_message]);
-  useEffect(() => {
-    if (router.isReady) {
-      const campaignId = router.query.campaign_id;
-      if (typeof campaignId === "string") {
-        setCampaign_id(campaignId);
-      } else {
-        console.error("campaign_id 타입 에러");
-      }
-    }
-  }, [router.isReady, router.query]);
-
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
 
     if (id === "create_item") {
       if (infoCheck(itemArgs)) {
-        const result = await fetchCreateItem(itemArgs, context);
-        console.log("itemArgs", itemArgs);
+        const result = await fetchCreateItem(itemArgs, campaign_id, context);
         if (result.status === 200) {
           alert(result.message);
           if (result.success) {
@@ -96,6 +83,8 @@ const NewItem = (context: GetServerSidePropsContext) => {
         console.log("입력한 정보가 유효하지 않습니다.");
         return false;
       }
+    } else if (id === "cancel_create_item") {
+      router.push("/campaign/details?campaign_id=" + campaign_id);
     }
   };
 
@@ -109,6 +98,21 @@ const NewItem = (context: GetServerSidePropsContext) => {
     }
   };
 
+  useEffect(() => {
+    setKakaoArgs({ message: kakao_message });
+  }, [kakao_message]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const campaignId = router.query.campaign_id;
+      if (typeof campaignId === "string") {
+        setCampaign_id(campaignId);
+      } else {
+        console.error("campaign_id 타입 에러");
+      }
+    }
+  }, [router.isReady, router.query]);
+
   return (
     <DashboardContainer title={"새 아이템 생성"} onclick={handleSubmit} onclickText="저장하기" buttonId="create_item">
       <div className="flex flex-col md:flex-row w-full justify-center lg:space-x-4">
@@ -118,16 +122,22 @@ const NewItem = (context: GetServerSidePropsContext) => {
             item_type={item_type}
             itemArgs={itemArgs}
             kakao_message={kakao_message}
+            campaign_id={campaign_id}
+            productInputs={productInputs}
+            promotionInputs={promotionInputs}
+            active={active}
             setItem_type={setItem_type}
             setTitle={setTitle}
-            setProducts={setProducts}
-            setPromotions={setPromotions}
+            setProductInputs={setProductInputs}
+            setPromotionInputs={setPromotionInputs}
             setKakao_message={setKakao_message}
+            setActive={setActive}
             handleKeyDown={handleKeyDown}
           />
         </ContentsContainer>
         <ContentsContainer variant="campaign">
           <RewardComponent
+            page_type="NEW"
             handleKeyDown={handleKeyDown}
             reward_type={reward_type}
             setRewardType={setReward_Type}

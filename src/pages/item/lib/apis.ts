@@ -1,22 +1,61 @@
 import { fetchAPI } from "@/lib/api";
 import { getShopIdFromCookies } from "@/lib/helper";
-import { ItemArgs } from "@/pages/item/lib/types";
+import { ItemArgs, RewardPolicyArgs } from "@/pages/item/lib/types";
 import { GetServerSidePropsContext } from "next";
 
 // 리퍼럴 아이템
 
-export async function fetchCreateItem(itemArgs: ItemArgs, context: GetServerSidePropsContext) {
-  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-create`;
+export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, context: GetServerSidePropsContext) {
+  const shop_id = getShopIdFromCookies(context);
+  const cleanConditions = (conditions: RewardPolicyArgs | null): RewardPolicyArgs | {} => {
+    if (!conditions) return {};
+
+    const cleanedConditions: RewardPolicyArgs = {};
+
+    // Check for each condition (SIGNUP, PURCHASE) and clean it if necessary
+    if (conditions.SIGNUP) {
+      const isSignupEmpty =
+        conditions.SIGNUP.payment_timing?.type === null &&
+        conditions.SIGNUP.payment_timing?.delay_days === null &&
+        conditions.SIGNUP.payment_frequency?.type === null &&
+        conditions.SIGNUP.payment_frequency?.repeat_count === null;
+
+      if (!isSignupEmpty) {
+        cleanedConditions.SIGNUP = conditions.SIGNUP;
+      }
+    }
+
+    if (conditions.PURCHASE) {
+      const isPurchaseEmpty =
+        conditions.PURCHASE.payment_timing?.type === null &&
+        conditions.PURCHASE.payment_timing?.delay_days === null &&
+        conditions.PURCHASE.payment_frequency?.type === null &&
+        conditions.PURCHASE.payment_frequency?.repeat_count === null;
+
+      if (!isPurchaseEmpty) {
+        cleanedConditions.PURCHASE = conditions.PURCHASE;
+      }
+    }
+
+    // If all are empty, return {}, otherwise return cleanedConditions
+    return Object.keys(cleanedConditions).length > 0 ? cleanedConditions : {};
+  };
+
   const dataObj = {
     ...itemArgs,
     rewards:
       itemArgs.rewards?.map((reward) => ({
         ...reward,
-        referrer_conditions: reward.referrer_conditions || {},
-        referee_conditions: reward.referee_conditions || {},
+        referrer_conditions: cleanConditions(reward.referrer_conditions || {}),
+        referee_conditions: cleanConditions(reward.referee_conditions || {}),
       })) || [],
+    shop_id: shop_id,
+    campaign_id: campaign_id,
   };
-  console.log("dataObj: ", JSON.stringify(dataObj, null, 2));
+  console.log("dataObj:: ", dataObj);
+
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-create`;
+
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
 
@@ -45,8 +84,14 @@ export async function fetchCreateItem(itemArgs: ItemArgs, context: GetServerSide
   }
 }
 
-export async function fetchModifyItem(item_id: string, info: ItemArgs, context: GetServerSidePropsContext) {
-  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify/` + item_id;
+export async function fetchModifyItem(
+  item_id: string,
+  campaign_id: string,
+  info: ItemArgs,
+  context: GetServerSidePropsContext
+) {
+  const apiUrl =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify/` + item_id + "?campaign_id=" + campaign_id;
   const shop_id = getShopIdFromCookies(context);
   const dataObj = {
     shop_id: shop_id,
@@ -87,10 +132,9 @@ export async function fetchDeleteItem(item_id: string, context: GetServerSidePro
     const response = await fetchAPI(context, apiUrl, "DELETE", {});
 
     if (response.status === "200" && response.message === "success") {
-      console.log("success: ", true, "message: 리퍼럴을 삭제하였습니다.");
       return { status: 200, success: true, message: "리퍼럴을 삭제하였습니다." };
     } else {
-      console.error("error", "status: ", response.status, "message: 삭제를 실패하였습니다.");
+      console.error("error", "status: ", response.status);
       return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
     }
   } catch (error) {
@@ -99,19 +143,21 @@ export async function fetchDeleteItem(item_id: string, context: GetServerSidePro
   }
 }
 
-export async function fetchDeleteItems(item_ids: string[], context: GetServerSidePropsContext) {
+export async function fetchDeleteItems(item_ids: string[], campaign_id: string, context: GetServerSidePropsContext) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-delete`;
+  const shop_id = getShopIdFromCookies(context);
   const dataObj = {
     item_ids: item_ids,
+    shop_id: shop_id,
+    campaign_id: campaign_id,
   };
   try {
     const response = await fetchAPI(context, apiUrl, "DELETE", dataObj);
 
     if (response.status === "200" && response.message === "success") {
-      console.log("success: ", true, "message: 아이템들을 삭제하였습니다.");
       return { status: 200, success: true, message: "아이템들을 삭제하였습니다." };
     } else {
-      console.error("error", "status: ", response.status, "message: 삭제를 실패하였습니다.");
+      console.error("error", "status: ", response.status);
       return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
     }
   } catch (error) {
@@ -120,17 +166,21 @@ export async function fetchDeleteItems(item_ids: string[], context: GetServerSid
   }
 }
 
-export async function fetchActivateItem(item_id: string, context: GetServerSidePropsContext) {
+export async function fetchActivateItem(item_id: string, campaign_id: string, context: GetServerSidePropsContext) {
+  const shop_id = getShopIdFromCookies(context);
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify-active/` + item_id;
-
+  const dataObj = {
+    campaign_id: campaign_id,
+    shop_id: shop_id,
+  };
   try {
-    const response = await fetchAPI(context, apiUrl, "PUT", {});
+    const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
 
     if (response.status === "200" && response.message === "success") {
       console.log("success: ", true, "message: 아이템 활성화를 변경 하였습니다.");
       return { status: 200, success: true, message: "아이템들을 삭제하였습니다." };
     } else {
-      console.error("error", "status: ", response.status, "message: 삭제를 실패하였습니다.");
+      console.error("error", "status: ", response.status);
       return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
     }
   } catch (error) {
@@ -141,7 +191,8 @@ export async function fetchActivateItem(item_id: string, context: GetServerSideP
 
 export async function fetchGetItemList(campaign_id: string, context: GetServerSidePropsContext) {
   const shop_id = getShopIdFromCookies(context);
-  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items?campaign_id=` + campaign_id;
+  const final_url =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items?campaign_id=` + campaign_id + "&shop_id=" + shop_id;
   console.log("final_url", final_url);
 
   try {
@@ -153,8 +204,15 @@ export async function fetchGetItemList(campaign_id: string, context: GetServerSi
     return null;
   }
 }
-export async function fetchGetItemDetails(item_id: string, context: GetServerSidePropsContext) {
-  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item/` + item_id;
+export async function fetchGetItemDetails(item_id: string, campaign_id: string, context: GetServerSidePropsContext) {
+  const shop_id = getShopIdFromCookies(context);
+  const final_url =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item/` +
+    item_id +
+    "?campaign_id=" +
+    campaign_id +
+    "&shop_id=" +
+    shop_id;
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});

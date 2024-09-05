@@ -8,11 +8,20 @@ import { fetchGetCampaignList } from "@/pages/campaign/lib/apis";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { getShopIdFromCookies } from "@/lib/helper";
 
-// Fetches data during server-side rendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaignResponse = await fetchGetCampaignList(context);
   const authResponse = authenticateUserforHeader(context);
+  const shop_id = getShopIdFromCookies(context);
+  if (!campaignResponse || !shop_id) {
+    return {
+      redirect: {
+        destination: "/home",
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {
       apiResponse: campaignResponse,
@@ -21,15 +30,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-// Main Dashboard component
 const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> = ({ apiResponse, authResponse }) => {
   const router = useRouter();
 
-  // Table styles
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700";
   const tbodyStyle = "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all";
 
-  // Handle button clicks
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     if (id === "more_campaign") {
@@ -37,7 +43,6 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
     }
   };
 
-  // Effect hook placeholder (currently empty)
   useEffect(() => {}, [apiResponse, authResponse]);
 
   return (

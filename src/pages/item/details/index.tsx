@@ -15,10 +15,13 @@ import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import { fetchGetItemDetails } from "@/pages/item/lib/apis";
 import ItemDetails from "@/components/layout/item/ItemDetails";
 import RewardCard from "@/components/layout/item/RewardCard";
+import router from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id }: any = context.query;
-  const IDetailApiResponse = await fetchGetItemDetails(item_id, context);
+  const { campaign_id }: any = context.query;
+
+  const IDetailApiResponse = await fetchGetItemDetails(item_id, campaign_id, context);
   if (IDetailApiResponse == null) {
     return {
       redirect: {
@@ -30,50 +33,53 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         apiResponse: IDetailApiResponse,
+        campaign_id: campaign_id,
       },
     };
   }
 };
 
 const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
-  console.log("apiResponse", apiResponse);
+  const campaign_id = apiResponse.campaign_id;
   const response = apiResponse.apiResponse;
+  const item_id = response.id || "";
   const [title, setTitle] = useState(response.title);
-  const [products, setProducts] = useState<ProductsArgs[]>(response.product_item);
-  const [promotions, setPromotions] = useState<PromotionsArgs[]>(response.promotion_item);
   const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>(response.kakao_args || {});
   const [kakao_message, setKakao_message] = useState<string>(kakaoArgs.message || "");
   const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
   const [item_type, setItem_type] = useState<ItemType>(response.item_type);
+  const [active, setActive] = useState(response.active);
   const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
-  const itemArgs: ItemArgs = {
+
+  const [itemArgs, setItemArgs] = useState<ItemArgs>({
+    id: item_id,
     title: title,
     item_type: item_type,
     kakao_args: kakaoArgs,
-    products: products,
-    promotions: promotions,
+    products: response.products,
+    promotions: response.promotions,
     rewards: rewards,
-    campaign_id: "",
-  };
+    active: active,
+    campaign_id: campaign_id,
+  });
 
+  const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
+    Array.isArray(response.products) && response.products.length > 0
+      ? [...response.products]
+      : [{ product_model_code: "" }] // Default empty product
+  );
+
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
+    Array.isArray(response.promotions) && response.promotions.length > 0
+      ? [...response.promotions]
+      : [{ description: "" }] // Default empty promotion
+  );
   useEffect(() => {
     setKakaoArgs({ message: kakao_message });
   }, [kakao_message]);
 
   const handleSubmit = async (event: React.FormEvent) => {
-    const { id } = event.currentTarget;
-    // if (id === "delete_item") {
-    //   const result = await fetchModifyItem(itemArgs, context);
-    //   if (result.status === 200) {
-    //     alert(result.message);
-    //     if (result.success) {
-    //       router.push("/campaign");
-    //     }
-    //   } else {
-    //     alert("리퍼럴 수정을 실패 하였습니다. 상태 코드: " + result.status);
-    //     return false;
-    //   }
-    // }
+    router.push("/campaign/details?campaign_id=" + campaign_id);
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -87,24 +93,34 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
   };
 
   return (
-    <DashboardContainer title={"아이템 상세"} onclick={handleSubmit} onclickText="수정하기" buttonId="modify_item">
-      <div className="flex flex-col md:flex-row w-full justify-center lg:space-x-4">
+    <DashboardContainer
+      title={"아이템 상세"}
+      onclick={handleSubmit}
+      onclickText="뒤로가기"
+      buttonId={"back_campaign_details"}
+    >
+      <div className="flex flex-col sm:flex-row md:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails
             page_type="DETAILS"
             item_type={item_type}
             itemArgs={itemArgs}
             kakao_message={kakao_message}
+            campaign_id={campaign_id}
+            productInputs={productInputs}
+            promotionInputs={promotionInputs}
+            setProductInputs={setProductInputs}
+            setPromotionInputs={setPromotionInputs}
             setItem_type={setItem_type}
             setTitle={setTitle}
-            setProducts={setProducts}
-            setPromotions={setPromotions}
             setKakao_message={setKakao_message}
+            setActive={setActive}
             handleKeyDown={handleKeyDown}
           />
         </ContentsContainer>
         <ContentsContainer variant="campaign">
           <RewardComponent
+            page_type="DETAILS"
             handleKeyDown={handleKeyDown}
             reward_type={reward_type}
             setRewardType={setReward_Type}

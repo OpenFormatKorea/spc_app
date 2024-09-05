@@ -1,5 +1,5 @@
 import React from "react";
-import { PaymentTimingType, RewardsArgs } from "@/pages/item/lib/types";
+import { PaymentFrequencyType, PaymentTimingType, RewardsArgs } from "@/pages/item/lib/types";
 
 interface RewardCardProps {
   page_type: "DETAILS" | "NEW";
@@ -8,7 +8,6 @@ interface RewardCardProps {
 }
 
 const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards }) => {
-  console.log("rewards", rewards);
   const triggerTypes = ["SIGNUP", "PURCHASE"] as const;
   const conditionsTypes = ["referrer_conditions", "refferee_conditions"] as const;
 
@@ -61,7 +60,12 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
                           <div className="flex mb-2">
                             <div className="font-bold">지급 시점</div>
                             <div>
-                              : {policy?.payment_timing.type === PaymentTimingType.IMM ? "즉시 지급" : "추후 지급"}
+                              :{" "}
+                              {policy?.payment_timing?.type
+                                ? policy.payment_timing.type === PaymentTimingType.IMM
+                                  ? "즉시 지급"
+                                  : "추후 지급"
+                                : null}
                             </div>
                           </div>
                           {policy?.payment_timing.delay_days != null && (
@@ -74,7 +78,18 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
                           )}
                           <div className="flex mb-2">
                             <div className="font-bold">지급 방식</div>
-                            <div>: {policy?.payment_frequency.type}</div>
+                            <div>
+                              :{" "}
+                              {policy?.payment_frequency?.type
+                                ? policy.payment_frequency.type === PaymentFrequencyType.ONCE
+                                  ? "한번 지급"
+                                  : policy.payment_frequency.type === PaymentFrequencyType.REP
+                                    ? "반복 지급"
+                                    : policy.payment_frequency.type === PaymentFrequencyType.UNL
+                                      ? "무제한 지급"
+                                      : null
+                                : null}
+                            </div>
                           </div>
                           {policy?.payment_frequency.repeat_count != null && (
                             <div className="flex mb-2">
