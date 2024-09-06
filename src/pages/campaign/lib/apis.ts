@@ -48,6 +48,7 @@ export async function fetchModifyCampaign(campaign_id: string, info: CampaignArg
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign-modify/` + campaign_id;
   const shop_id = getShopIdFromCookies(context);
   const dataObj = {
+    campaign_id: campaign_id,
     shop_id: shop_id,
     title: info.title,
     description: info.description,
@@ -85,9 +86,13 @@ export async function fetchModifyCampaign(campaign_id: string, info: CampaignArg
 
 export async function fetchDeleteCampaign(campaign_id: string, context: GetServerSidePropsContext) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign-delete/` + campaign_id;
-
+  const shop_id = getShopIdFromCookies(context);
+  const dataObj = {
+    campaign_id: campaign_id,
+    shop_id: shop_id,
+  };
   try {
-    const response = await fetchAPI(context, apiUrl, "DELETE", {});
+    const response = await fetchAPI(context, apiUrl, "DELETE", dataObj);
 
     if (response.status === "200" && response.message === "success") {
       console.log("success: ", true, "message: 캠페인을 삭제하였습니다.");
@@ -121,7 +126,6 @@ export async function fetchGetCampaignDetails(
   shop_id: string,
   context: GetServerSidePropsContext
 ) {
-  //const shop_id = getShopIdFromCookies(context);
   const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign/` + campaign_id + "?shop_id=" + shop_id;
 
   try {

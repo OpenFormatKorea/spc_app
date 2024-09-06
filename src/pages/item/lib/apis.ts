@@ -125,9 +125,13 @@ export async function fetchModifyItem(
   }
 }
 
-export async function fetchDeleteItem(item_id: string, context: GetServerSidePropsContext) {
+export async function fetchDeleteItem(item_id: string, campaign_id: string, context: GetServerSidePropsContext) {
+  const shop_id = getShopIdFromCookies(context);
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/item/item-delete/` + item_id;
-
+  const dataObj = {
+    shop_id: shop_id,
+    campaign_id: campaign_id,
+  };
   try {
     const response = await fetchAPI(context, apiUrl, "DELETE", {});
 
@@ -144,8 +148,8 @@ export async function fetchDeleteItem(item_id: string, context: GetServerSidePro
 }
 
 export async function fetchDeleteItems(item_ids: string[], campaign_id: string, context: GetServerSidePropsContext) {
-  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-delete`;
   const shop_id = getShopIdFromCookies(context);
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-delete`;
   const dataObj = {
     item_ids: item_ids,
     shop_id: shop_id,
