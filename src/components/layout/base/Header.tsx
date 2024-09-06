@@ -37,8 +37,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
     <header className="bg-sky-600 fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px]">
       <div className="flex items-center h-[60px] px-6 w-full">
         <div className="flex items-center lg:hidden">
-          {/* Logo visible only on mobile */}
-          <img src="/svg/spc_logo.svg" alt="Logo" className="h-[40px] cursor-pointer mr-4" />
+          <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
         </div>
         <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
         <div className="space-x-2 hidden lg:flex">
