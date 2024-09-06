@@ -4,14 +4,16 @@ import React from "react";
 
 const Navbar = () => {
   const router = useRouter();
-  const handleClick = () => {
-    router.push("dashboard");
+  const handleLogo = () => {
+    router.push("/dashboard");
   };
 
   return (
     <nav className="bg-sky-900 w-[250px] fixed h-[100%] lg:block hidden lg:w-[250px] lg:fixed lg:h-[100%]">
       <div className="flex items-center justify-center h-[70px] p-3 onClick={handleClick}">
-        <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[35px] cursor-pointer mr-4" />
+        <a onClick={handleLogo}>
+          <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
+        </a>
       </div>
       <div className="pt-4">
         <Navmenu menutitle="대시보드" link="/dashboard" />

@@ -1,3 +1,4 @@
+import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
 import { ApiResponse } from "@/lib/types";
 import { fetchActivateItem, fetchDeleteItems } from "@/pages/item/lib/apis";
 import { GetServerSidePropsContext } from "next";
@@ -149,7 +150,6 @@ const ItemList: React.FC<ItemListProps> = (
                 <th className={theadStyle}>생성일</th>
                 <th className={theadStyle}>수정일</th>
                 <th className={theadStyle}>활성화</th>
-                <th className={theadStyle}>삭제</th>
               </tr>
             </thead>
             <tbody>
@@ -180,18 +180,9 @@ const ItemList: React.FC<ItemListProps> = (
                       day: "numeric",
                     })}
                   </td>
-                  <td className={tbodyStyle}>
-                    {item.active === true ? "활성" : "비활성"} {item.active}
-                  </td>
+
                   <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
-                    <button
-                      type="button"
-                      id={`activate_item_${item.id}`}
-                      className={`py-1 px-2 w-full min-w-[53px] text-white text-sm rounded-md  ${item.active === true ? "bg-sky-500" : "bg-red-500"} `}
-                      onClick={handleSubmit}
-                    >
-                      {item.active === true ? "활성" : "비활성"}
-                    </button>
+                    <ItemActiveButton item_id={item.id} campaign_id={campaign_id} active={item.active} />
                   </td>
                 </tr>
               ))}

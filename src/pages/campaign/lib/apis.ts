@@ -57,6 +57,7 @@ export async function fetchModifyCampaign(campaign_id: string, info: CampaignArg
     end_date: info.end_date,
     active: info.active,
   };
+
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
     if (response.status === "200") {

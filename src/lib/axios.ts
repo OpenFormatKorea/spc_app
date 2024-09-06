@@ -34,7 +34,6 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     axiosInstance.interceptors.request.use(async (req: InternalAxiosRequestConfig) => {
       const access_decoded: { exp: number } = jwtDecode(access as string);
       const isExpired = access_decoded.exp * 1000 < new Date().getTime();
-      console.log("Request Headers:", req.headers);
 
       if (isExpired) {
         const response = await axios.post(`${baseURL}/account/token/refresh/`, {

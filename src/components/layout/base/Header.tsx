@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa"; // Importing icons for menu
-import { authenticateUserforHeader } from "@/lib/auth";
 import { deleteCookie, getCookie } from "cookies-next";
 import router from "next/router";
 import Navmenu from "@/components/layout/base/Navmenu";
@@ -25,7 +24,9 @@ export const handleSignOut = async (event?: React.FormEvent) => {
     alert("로그아웃을 실패하였습니다. 잠시 후 다시 시도해주시기 바랍니다.");
   }
 };
-
+const handleLogo = () => {
+  router.push("/dashboard");
+};
 const Header: React.FC<HeaderProps> = ({ title }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -37,7 +38,9 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
     <header className="bg-sky-600 fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px]">
       <div className="flex items-center h-[60px] px-6 w-full">
         <div className="flex items-center lg:hidden">
-          <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
+          <a onClick={handleLogo}>
+            <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
+          </a>
         </div>
         <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
         <div className="space-x-2 hidden lg:flex">

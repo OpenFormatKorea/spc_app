@@ -34,8 +34,9 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   const router = useRouter();
 
   // Table styles
-  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700";
-  const tbodyStyle = "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all";
+  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+  const tbodyStyle =
+    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
 
   // Handle button click
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {

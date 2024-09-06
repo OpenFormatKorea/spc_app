@@ -1,11 +1,12 @@
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
+import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
+import campaign from "@/pages/campaign";
 import { CampaignArgs, PeriodType } from "@/pages/campaign/lib/types";
-import { useRef, KeyboardEvent, useState, useEffect } from "react";
-import Calendar from "react-calendar";
+import React, { useRef, KeyboardEvent, useState, useEffect } from "react";
 
 interface CampaignDetailsProps {
-  page_type: "DETAILS" | "NEW";
+  page_type: "NEW" | "DETAILS";
   campaignArgs: CampaignArgs;
   setPeriod_type: (value: PeriodType) => void;
   setDescription: (value: string) => void;
@@ -13,11 +14,13 @@ interface CampaignDetailsProps {
   setTitle: (value: string) => void;
   setStart_date: (value: string) => void;
   setEnd_date: (value: any) => void;
+  campaign_id?: string;
 }
 
 const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   page_type,
   campaignArgs,
+  campaign_id,
   setPeriod_type,
   setDescription,
   setActive,
@@ -51,6 +54,23 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           <div className="text-xl">캠페인 상세정보</div>
           <div className="font-normal text-sm">상세 정보 옵션</div>
         </div>
+        {page_type === "DETAILS" ? (
+          <div>
+            <CampaignActiveButton
+              campaign={{
+                id: Number(campaign_id),
+                title: campaignArgs.title,
+                description: campaignArgs.description,
+                period_type: campaignArgs.period_type,
+                start_date: campaignArgs.start_date,
+                end_date: campaignArgs.end_date,
+                active: campaignArgs.active,
+              }}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </h1>
 
       <div className="inputForm flex flex-col text-left w-full pb-2">
@@ -123,27 +143,33 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
       </div>
-      <div className="inputForm flex flex-col text-left w-full">
-        <label className="text-md font-bold py-4">캠페인 활성화</label>
-        <div className="flex justify-between w-[250px] lg:w-[300px] ">
-          <InputRadioBox
-            label="활성화"
-            name="active"
-            value="true"
-            checked={campaignArgs.active === true}
-            onChange={handleActiveRadioChange}
-            disabled={false}
-          />
-          <InputRadioBox
-            label="비활성화"
-            name="active"
-            value="false"
-            checked={campaignArgs.active === false}
-            onChange={handleActiveRadioChange}
-            disabled={false}
-          />
-        </div>
-      </div>
+      {page_type === "NEW" ? (
+        <>
+          <div className="inputForm flex flex-col text-left w-full">
+            <label className="text-md font-bold py-4">캠페인 활성화</label>
+            <div className="flex justify-between w-[250px] lg:w-[300px] ">
+              <InputRadioBox
+                label="활성화"
+                name="active"
+                value="true"
+                checked={campaignArgs.active === true}
+                onChange={handleActiveRadioChange}
+                disabled={false}
+              />
+              <InputRadioBox
+                label="비활성화"
+                name="active"
+                value="false"
+                checked={campaignArgs.active === false}
+                onChange={handleActiveRadioChange}
+                disabled={false}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

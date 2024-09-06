@@ -1,4 +1,7 @@
+import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
 import { ApiResponse } from "@/lib/types";
+import campaign from "@/pages/campaign";
+import { fetchActivateItem } from "@/pages/item/lib/apis";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -12,13 +15,12 @@ interface CampaignListProps {
 const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, apiResponse, handleButton }) => {
   const router = useRouter();
   const [isCampaignPage, setIsCampaignPage] = useState(false);
-
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
   }, [router.pathname]);
+  const [campaigns, setCampaigns] = useState(Array.isArray(apiResponse) ? apiResponse : []);
 
-  const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
-
+  //const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     router.replace(`/campaign/details?campaign_id=${id}`, undefined, { shallow: true, scroll: false });
@@ -48,8 +50,8 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
             <tr className="bg-gray-200">
               <th className={theadStyle}>캠페인 명</th>
               <th className={theadStyle}>타입</th>
-              <th className={theadStyle}>활성화</th>
               <th className={theadStyle}>캠페인 생성일</th>
+              <th className={theadStyle}>활성화</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +59,6 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
               <tr className="cursor-pointer" key={campaign.id || i} id={campaign.id} onClick={handleCampaignClick}>
                 <td className={tbodyStyle}>{campaign.title}</td>
                 <td className={tbodyStyle}>{campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}</td>
-                <td className={tbodyStyle}>{campaign.active ? "활성화" : "비활성화"}</td>
                 <td className={tbodyStyle}>
                   {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
                     year: "numeric",
@@ -73,6 +74,12 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                       })
                     : ""}
                 </td>
+                <td
+                  className="px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center flex"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <CampaignActiveButton campaign={campaign} />
+                </td>
               </tr>
             ))}
             {!campaigns.length && (
@@ -87,30 +94,47 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
 
         {/* Mobile-friendly layout */}
         <div className="block lg:hidden">
-          {campaigns.map((campaign, i) => (
-            <div key={campaign.id || i} className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1">
-              <div className="font-bold mb-2 text-black w-full pb-1 border-b">{campaign.title}</div>
-              <div className="text-sm">
-                <strong>타입: </strong>
-                {campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}
-              </div>
-              <div className="text-sm">
-                <strong>활성화: </strong>
-                {campaign.active ? "활성화" : "비활성화"}
-              </div>
-              <div className="text-sm">
-                <strong>캠페인 생성일: </strong>
-                {campaign.start_date} ~ {campaign.end_date}
-              </div>
+          {campaigns.map((campaign, i) => {
+            return (
               <div
-                className="text-blue-400 cursor-pointer text-right font-semibold"
+                key={campaign.id || i}
+                className="bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 cursor-pointer"
                 id={campaign.id}
                 onClick={handleCampaignClick}
               >
-                상세보기
+                <div
+                  className="font-bold mb-2 text-black w-full pb-1 border-b flex justify-between"
+                  onClick={(e) => e.stopPropagation()} // You stop propagation only for the title section
+                >
+                  <div> {campaign.title}</div>
+                  <div>
+                    <CampaignActiveButton campaign={campaign} />
+                  </div>
+                </div>
+                <div className="text-sm">
+                  <strong>타입: </strong>
+                  {campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}
+                </div>
+
+                <div className="text-sm">
+                  <strong>캠페인 활성 기간: </strong>
+                  {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  ~{" "}
+                  {campaign.end_date && campaign.end_date !== ""
+                    ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : ""}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           {!campaigns.length && (
             <div className="text-center text-gray-500">사용중인 캠페인이 없습니다. 새로운 캠페인을 생성해보세요.</div>
           )}

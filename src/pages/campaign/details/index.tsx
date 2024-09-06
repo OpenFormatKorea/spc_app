@@ -138,6 +138,7 @@ const DetailsCampaign = (
         <ContentsContainer variant="campaign">
           <CampaignDetails
             page_type="DETAILS"
+            campaign_id={campaign_id}
             campaignArgs={campaignArgs}
             setPeriod_type={setPeriod_type}
             setDescription={setDescription}
