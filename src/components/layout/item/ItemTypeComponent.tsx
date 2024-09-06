@@ -14,39 +14,26 @@ interface ItemTypeComponentProps {
 const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   page_type,
   item_type,
-  productInputs = [],
-  promotionInputs = [],
+  productInputs,
+  promotionInputs,
   setProductInputs,
   setPromotionInputs,
 }) => {
   const [disableInput, setDisableInput] = useState(false);
-  useEffect(() => {
-    setProductInputs([{ product_model_code: "" }]);
-    setPromotionInputs([{ description: "" }]);
-  }, [item_type]);
 
   useEffect(() => {
-    setProductInputs(productInputs);
-  }, [productInputs, setProductInputs]);
-
-  useEffect(() => {
-    setPromotionInputs(promotionInputs);
-  }, [promotionInputs, setPromotionInputs]);
-
-  useEffect(() => {
-    if (page_type === "DETAILS") {
-      setDisableInput(true);
-    } else {
-      setDisableInput(false);
-    }
+    setDisableInput(page_type === "DETAILS");
   }, [page_type]);
+
   const handleDeleteInput = (index: number) => {
-    if (item_type === ItemType.PD) {
-      const updatedInputs = productInputs.filter((_, i) => i !== index);
-      setProductInputs(updatedInputs);
-    } else if (item_type === ItemType.PM) {
-      const updatedInputs = promotionInputs.filter((_, i) => i !== index);
-      setPromotionInputs(updatedInputs);
+    if (page_type === "NEW") {
+      if (item_type === ItemType.PD) {
+        const updatedInputs = productInputs.filter((_, i) => i !== index);
+        setProductInputs(updatedInputs);
+      } else if (item_type === ItemType.PM) {
+        const updatedInputs = promotionInputs.filter((_, i) => i !== index);
+        setPromotionInputs(updatedInputs);
+      }
     }
   };
 
@@ -70,6 +57,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
 
   return (
     <div className="contents-container w-full justify-between">
+      {/* Product Inputs for item_type === PD */}
       {item_type === ItemType.PD &&
         productInputs.map((input, index) => (
           <div key={index} className="inputForm flex items-center w-full mb-2 text-left">
@@ -77,27 +65,28 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
               type="text"
               id={`product_model_code_${index}`}
               placeholder="모델 코드를 입력하세요."
-              value={input.product_model_code}
+              value={input.product_model_code || input.model_code}
               onChange={(e) => handleInputChange(e.target.value, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               disabled={disableInput}
             />
             <button
               id="delete_item_container"
-              className={`ml-2 border p-1 text-white rounded-lg min-w-[45px] text-center cursor-pointer ${
-                productInputs.length === 1 ? "bg-gray-400 cursor-not-allowed" : "bg-red-500"
+              className={`ml-2 border p-1 text-white rounded-lg min-w-[45px] text-center ${
+                disableInput || productInputs.length === 1
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-red-500 cursor-pointer"
               }`}
               onClick={() => handleDeleteInput(index)}
-              style={{ pointerEvents: productInputs.length === 1 ? "none" : "auto" }}
-              disabled={disableInput}
+              disabled={disableInput || productInputs.length === 1} // Disable delete when in DETAILS mode or if only 1 input
             >
               삭제
             </button>
           </div>
         ))}
+
+      {/* Promotion Inputs for item_type === PM */}
       {item_type === ItemType.PM &&
-        Array.isArray(promotionInputs) &&
-        promotionInputs.length > 0 &&
         promotionInputs.map((input, index) => (
           <div key={index} className="inputForm flex items-center w-full mb-2">
             <InputTextBox
@@ -111,14 +100,13 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
             />
             <button
               id="delete_item_container"
-              className={`ml-2 border p-1 text-white rounded-lg min-w-[45px] text-center  ${
-                promotionInputs.length === 1 || disableInput
+              className={`ml-2 border p-1 text-white rounded-lg min-w-[45px] text-center ${
+                disableInput || promotionInputs.length === 1
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-red-500 cursor-pointer"
               }`}
               onClick={() => handleDeleteInput(index)}
-              style={{ pointerEvents: promotionInputs.length === 1 ? "none" : "auto" }}
-              disabled={disableInput}
+              disabled={disableInput || promotionInputs.length === 1} // Disable delete when in DETAILS mode or if only 1 input
             >
               삭제
             </button>

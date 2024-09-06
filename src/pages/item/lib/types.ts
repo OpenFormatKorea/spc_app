@@ -20,6 +20,7 @@ export interface KakaoArgs {
 export interface ProductsArgs {
   id?: string;
   product_model_code: string;
+  model_code?: string;
 }
 export interface PromotionsArgs {
   id?: string;

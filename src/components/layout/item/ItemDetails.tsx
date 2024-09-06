@@ -48,7 +48,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   const item_id = itemArgs.id || "";
   const inputFormClass = "flex flex-col text-left w-full mb-2";
   const labelClass = "text-sm font-bold mt-4";
-
   const handleItemTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItem_type(e.target.value as ItemType);
   };
@@ -60,6 +59,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
       setPromotionInputs((prev: PromotionsArgs[] = []) => [...prev, { description: "" }]);
     }
   };
+
   const handleActiveStatus = async () => {
     const newActiveStatus = !itemArgs.active;
     if (confirm("아이템 활성화 상태를 변경하시겠어요?") && page_type === "DETAILS") {
@@ -78,6 +78,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   useEffect(() => {
     if (page_type === "DETAILS") {
       setDisableInput(true);
+      setProductInputs(itemArgs.products);
+      setPromotionInputs(itemArgs.promotions);
     } else {
       setDisableInput(false);
     }
@@ -165,14 +167,17 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
             추가
           </button>
         </div>
-        <ItemTypeComponent
-          page_type={page_type}
-          productInputs={productInputs}
-          promotionInputs={promotionInputs}
-          item_type={item_type}
-          setProductInputs={setProductInputs}
-          setPromotionInputs={setPromotionInputs}
-        />
+
+        <>
+          <ItemTypeComponent
+            page_type={page_type}
+            productInputs={productInputs}
+            promotionInputs={promotionInputs}
+            item_type={item_type}
+            setProductInputs={setProductInputs}
+            setPromotionInputs={setPromotionInputs}
+          />
+        </>
       </div>
     </div>
   );

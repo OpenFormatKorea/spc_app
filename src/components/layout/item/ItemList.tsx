@@ -64,16 +64,6 @@ const ItemList: React.FC<ItemListProps> = (
     }
   };
 
-  // const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
-  //   const { id } = event.currentTarget;
-  //   if (router.pathname.includes("/campaign/details")) {
-  //     router.replace(`/item/details?item_id=${id}&campaign_id=` + campaign_id, undefined, {
-  //       shallow: true,
-  //       scroll: false,
-  //     });
-  //     console.log(router.pathname);
-  //   }
-  // };
   const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     if (router.pathname.includes("/campaign/details")) {
@@ -88,8 +78,6 @@ const ItemList: React.FC<ItemListProps> = (
           scroll: false,
         }
       );
-
-      console.log(router.pathname);
     }
   };
 
@@ -192,15 +180,17 @@ const ItemList: React.FC<ItemListProps> = (
                       day: "numeric",
                     })}
                   </td>
-                  <td className={tbodyStyle}>{item.active === true ? "활성" : "비활성"}</td>
-                  <td className={`${tbodyStyle}`} onClick={(e) => e.stopPropagation()}>
+                  <td className={tbodyStyle}>
+                    {item.active === true ? "활성" : "비활성"} {item.active}
+                  </td>
+                  <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
                     <button
                       type="button"
                       id={`activate_item_${item.id}`}
-                      className={`py-1 px-2 w-full min-w-[53px] text-white text-sm rounded-md  ${item.active === true ? "bg-red-500" : "bg-sky-500"} `}
+                      className={`py-1 px-2 w-full min-w-[53px] text-white text-sm rounded-md  ${item.active === true ? "bg-sky-500" : "bg-red-500"} `}
                       onClick={handleSubmit}
                     >
-                      {item.active === true ? "비활성" : "활성"}
+                      {item.active === true ? "활성" : "비활성"}
                     </button>
                   </td>
                 </tr>
