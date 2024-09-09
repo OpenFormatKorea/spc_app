@@ -20,6 +20,7 @@ export const authenticateUserforLogin = (context: GetServerSidePropsContext): Au
 export const authenticateUserforHeader = (context: GetServerSidePropsContext): AuthResult => {
   const access = getCookie("access", context);
   if (!access) {
+    console.log("authenticateUserforHeader error : there is no access token.");
     return {
       redirect: {
         destination: "/home",
