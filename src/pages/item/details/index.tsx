@@ -13,9 +13,9 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { fetchGetItemDetails } from "@/pages/item/lib/apis";
 import ItemDetails from "@/components/layout/item/ItemDetails";
-import RewardComponent from "@/components/layout/item/RewardComponent";
 import RewardCard from "@/components/layout/item/RewardCard";
 import router from "next/router";
+import RewardComponent from "@/components/layout/item/RewardList";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;

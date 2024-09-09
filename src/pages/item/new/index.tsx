@@ -12,10 +12,10 @@ import {
 } from "@/pages/item/lib/types";
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
-import RewardComponent from "@/components/layout/item/RewardComponent";
 import RewardCard from "@/components/layout/item/RewardCard";
 import { fetchCreateItem } from "@/pages/item/lib/apis";
 import { GetServerSidePropsContext } from "next";
+import RewardComponent from "@/components/layout/item/RewardList";
 
 const NewItem = (context: GetServerSidePropsContext) => {
   const router = useRouter();
