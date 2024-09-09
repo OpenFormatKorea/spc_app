@@ -13,12 +13,10 @@ import { fetchGetCampaignList } from "@/lib/campaign/apis";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaignResponse = await fetchGetCampaignList(context);
   const authResponse = authenticateUserforHeader(context);
-  console.log(" campaign GETSERVERSIDE API RESPONSE authResponse: ", authResponse);
 
   const shop_id = getShopIdFromCookies(context);
 
   if (!shop_id) {
-    console.log("dashboard -> no campaignResponse or shop id, redirected to home");
     return {
       redirect: {
         destination: "/home",
