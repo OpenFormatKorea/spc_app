@@ -1,12 +1,6 @@
 import React, { useState, KeyboardEvent } from "react";
 import InputTextBox from "@/components/base/InputText";
-import {
-  PaymentFrequencyType,
-  PaymentTimingType,
-  RewardsArgs,
-  RewardPolicyArgs,
-  RewardType,
-} from "@/pages/item/lib/types";
+import { PaymentFrequencyType, PaymentTimingType, RewardsArgs, RewardPolicyArgs, RewardType } from "@/lib/item/types";
 import RewardPolicySetting from "@/components/layout/item/RewardPolicySetting";
 
 interface RewardModalProps {

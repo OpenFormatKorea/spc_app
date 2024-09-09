@@ -1,21 +1,13 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemDetails from "@/components/layout/item/ItemDetails";
-import {
-  ItemType,
-  ItemArgs,
-  KakaoArgs,
-  ProductsArgs,
-  PromotionsArgs,
-  RewardType,
-  RewardsArgs,
-} from "@/pages/item/lib/types";
+import { ItemType, ItemArgs, KakaoArgs, ProductsArgs, PromotionsArgs, RewardType, RewardsArgs } from "@/lib/item/types";
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import RewardCard from "@/components/layout/item/RewardCard";
-import { fetchCreateItem } from "@/pages/item/lib/apis";
 import { GetServerSidePropsContext } from "next";
 import RewardComponent from "@/components/layout/item/RewardList";
+import { fetchCreateItem } from "@/lib/item/apis";
 
 const NewItem = (context: GetServerSidePropsContext) => {
   const router = useRouter();
@@ -128,6 +120,8 @@ const NewItem = (context: GetServerSidePropsContext) => {
             handleKeyDown={handleKeyDown}
             reward_type={reward_type}
             setRewardType={setReward_Type}
+            // rewards={rewards}
+            // setRewards={setRewards}
           />
           <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
         </ContentsContainer>

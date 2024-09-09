@@ -1,7 +1,7 @@
 import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 import { authenticateUserforLogin } from "@/lib/auth";
-import { fetchLogIn } from "@/pages/auth/lib/apis";
-import { AuthArgs } from "@/pages/auth/lib/types";
+import { fetchLogIn } from "@/lib/auth/apis";
+import { AuthArgs } from "@/lib/auth/types";
 import { setCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";

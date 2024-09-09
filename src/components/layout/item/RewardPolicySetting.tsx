@@ -5,7 +5,7 @@ import {
   PaymentTimingType,
   RewardPolicyArgs,
   RewardType,
-} from "@/pages/item/lib/types";
+} from "@/lib/item/types";
 import RewardPolicy from "@/components/layout/item/RewardPolicy";
 
 interface RewardPolicySettingProps {

@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
-import { fetchDeleteCampaign, fetchGetCampaignDetails, fetchModifyCampaign } from "@/pages/campaign/lib/apis";
-import { fetchGetItemList } from "@/pages/item/lib/apis";
-import { CampaignArgs } from "@/pages/campaign/lib/types";
+import { CampaignArgs } from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { authenticateUserforHeader } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
 import ItemList from "@/components/layout/item/ItemList";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
+import { fetchGetCampaignDetails, fetchModifyCampaign, fetchDeleteCampaign } from "@/lib/campaign/apis";
+import { fetchGetItemList } from "@/lib/item/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;

@@ -3,12 +3,12 @@ import DashboardContainer from "@/components/layout/dashboard/DashboardContainer
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { authenticateUserforHeader } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
-import { AuthArgs } from "@/pages/auth/lib/types";
-import { fetchGetCampaignList } from "@/pages/campaign/lib/apis";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { getShopIdFromCookies } from "@/lib/helper";
+import { AuthArgs } from "@/lib/auth/types";
+import { fetchGetCampaignList } from "@/lib/campaign/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaignResponse = await fetchGetCampaignList(context);

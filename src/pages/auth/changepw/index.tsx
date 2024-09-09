@@ -1,7 +1,7 @@
 import AuthChangePWForm from "@/components/layout/auth/AuthChangePWForm";
 import { authenticateUserforLogin } from "@/lib/auth";
-import { fetchChangePW } from "@/pages/auth/lib/apis";
-import { ChangePWArgs } from "@/pages/auth/lib/types";
+import { fetchChangePW } from "@/lib/auth/apis";
+import { ChangePWArgs } from "@/lib/auth/types";
 import { GetServerSideProps } from "next";
 import router from "next/router";
 import { useEffect, useRef, useState, KeyboardEvent } from "react";

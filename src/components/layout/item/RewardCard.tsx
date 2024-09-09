@@ -1,5 +1,5 @@
 import React from "react";
-import { PaymentFrequencyType, PaymentTimingType, RewardsArgs } from "@/pages/item/lib/types";
+import { PaymentFrequencyType, PaymentTimingType, RewardsArgs } from "@/lib/item/types";
 
 interface RewardCardProps {
   page_type: "DETAILS" | "NEW";

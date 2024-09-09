@@ -1,21 +1,13 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import {
-  ItemType,
-  ItemArgs,
-  KakaoArgs,
-  ProductsArgs,
-  PromotionsArgs,
-  RewardType,
-  RewardsArgs,
-} from "@/pages/item/lib/types";
+import { ItemType, ItemArgs, KakaoArgs, ProductsArgs, PromotionsArgs, RewardType, RewardsArgs } from "@/lib/item/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
-import { fetchGetItemDetails } from "@/pages/item/lib/apis";
 import ItemDetails from "@/components/layout/item/ItemDetails";
 import RewardCard from "@/components/layout/item/RewardCard";
 import router from "next/router";
 import RewardComponent from "@/components/layout/item/RewardList";
+import { fetchGetItemDetails } from "@/lib/item/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;

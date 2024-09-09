@@ -5,7 +5,7 @@ import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { fetchGetItemList } from "@/pages/item/lib/apis";
+import { fetchGetItemList } from "@/lib/item/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await fetchGetItemList("", context);

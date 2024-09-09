@@ -2,11 +2,11 @@ import CampaignList from "@/components/layout/campaign/CampaignList";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { ApiResponse } from "@/lib/types";
-import { fetchGetCampaignList } from "@/pages/campaign/lib/apis";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import { getShopIdFromCookies } from "@/lib/helper";
+import { fetchGetCampaignList } from "@/lib/campaign/apis";
 
 // Fetches campaign data during server-side rendering
 export const getServerSideProps: GetServerSideProps = async (context) => {

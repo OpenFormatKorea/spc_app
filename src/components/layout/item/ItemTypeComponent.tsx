@@ -1,5 +1,5 @@
 import InputTextBox from "@/components/base/InputText";
-import { ItemType, ProductsArgs, PromotionsArgs } from "@/pages/item/lib/types";
+import { ItemType, ProductsArgs, PromotionsArgs } from "@/lib/item/types";
 import { KeyboardEvent, useEffect, useState } from "react";
 
 interface ItemTypeComponentProps {

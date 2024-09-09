@@ -2,7 +2,7 @@ import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
 import campaign from "@/pages/campaign";
-import { CampaignArgs, PeriodType } from "@/pages/campaign/lib/types";
+import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import React, { useRef, KeyboardEvent, useState, useEffect } from "react";
 
 interface CampaignDetailsProps {

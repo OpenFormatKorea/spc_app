@@ -2,7 +2,7 @@ import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 import ItemTypeComponent from "@/components/layout/item/ItemTypeComponent";
 import { fetchActivateItem } from "@/pages/item/lib/apis";
-import { ItemType, ItemArgs, ProductsArgs, PromotionsArgs } from "@/pages/item/lib/types";
+import { ItemType, ItemArgs, ProductsArgs, PromotionsArgs } from "@/lib/item/types";
 import { GetServerSidePropsContext } from "next";
 import { useState, useEffect } from "react";
 

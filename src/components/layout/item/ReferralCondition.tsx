@@ -1,5 +1,5 @@
 import React, { KeyboardEvent } from "react";
-import { PaymentFrequencyType, PaymentTimingType, RewardType, ItemConditions } from "@/pages/item/lib/types";
+import { PaymentFrequencyType, PaymentTimingType, RewardType, ItemConditions } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 

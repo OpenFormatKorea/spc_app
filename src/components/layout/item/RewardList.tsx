@@ -1,5 +1,5 @@
 import React, { useState, KeyboardEvent, useEffect } from "react";
-import { RewardsArgs, RewardType } from "@/pages/item/lib/types";
+import { RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import RewardModal from "@/components/layout/item/RewardModal";
 import Modal from "@/components/layout/base/Modal";

@@ -1,4 +1,4 @@
-import { AuthArgs, ChangePWArgs } from "@/pages/auth/lib/types";
+import { AuthArgs, ChangePWArgs } from "@/lib/auth/types";
 import axios from "axios";
 
 //sign up

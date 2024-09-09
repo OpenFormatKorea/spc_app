@@ -1,5 +1,5 @@
 import React, { KeyboardEvent } from "react";
-import { ItemConditions, PaymentFrequencyType, PaymentTimingType, RewardType } from "@/pages/item/lib/types";
+import { ItemConditions, PaymentFrequencyType, PaymentTimingType, RewardType } from "@/lib/item/types";
 import ReferralCondition from "@/components/layout/item/ReferralCondition";
 
 interface RewardPolicyProps {

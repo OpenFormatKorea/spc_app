@@ -1,5 +1,5 @@
 import { fetchModifyCampaign } from "@/pages/campaign/lib/apis";
-import { CampaignArgs } from "@/pages/campaign/lib/types";
+import { CampaignArgs } from "@/lib/campaign/types";
 import { GetServerSidePropsContext } from "next";
 import React, { useState } from "react";
 

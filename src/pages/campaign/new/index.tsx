@@ -1,11 +1,11 @@
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import { fetchCreateCampaign } from "@/pages/campaign/lib/apis";
-import { CampaignArgs, PeriodType } from "@/pages/campaign/lib/types";
+import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState, useRef } from "react";
+import { fetchCreateCampaign } from "@/lib/campaign/apis";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
