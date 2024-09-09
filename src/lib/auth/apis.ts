@@ -48,6 +48,7 @@ export async function fetchLogIn(info: AuthArgs) {
     });
 
     console.log("success: ", true, "message: 로그인에 성공 하였습니다.");
+    console.log("{ access, refresh, shop_id }", { access, refresh, shop_id });
     return { success: true, message: "로그인에 성공 하였습니다.", data: { access, refresh, shop_id } };
   } catch (error) {
     console.log("success: ", false, "message: 아이디와 비밀번호를 확인 해 주세요");

@@ -143,14 +143,17 @@ export const getAxiosInstanceClient = () => {
       const response = await axios.post(`${baseURL}/account/token/refresh/`, {
         refresh,
       });
+
       setCookie("access", response.data.access);
       setCookie("refresh", response.data.refresh);
+
       const axiosInstance = axios.create({
         baseURL,
         headers: new AxiosHeaders({ Authorization: `Bearer ${access}` }),
       });
       if (!req.headers) req.headers = new AxiosHeaders();
       req.headers.set("Authorization", `Bearer ${response.data.access}`);
+      console.log(" req.headers.get Authorization:  ", req.headers.get("Authorization"));
 
       return req;
     });
