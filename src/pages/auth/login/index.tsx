@@ -62,6 +62,7 @@ const Login: React.FC = () => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
       if (result.success) {
+        console.log("RESULT AFTER LOG IN ", result);
         setCookie("access", result.data?.access);
         setCookie("refresh", result.data?.refresh);
         setCookie("shop_id", result.data?.shop_id);
