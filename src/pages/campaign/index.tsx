@@ -14,14 +14,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
 
   console.log("GETSERVERSIDE API RESPONSE: ", response);
-  if (!response || !shop_id) {
-    return {
-      redirect: {
-        destination: "auth/login",
-        permanent: false,
-      },
-    };
-  }
+  console.log(" campaign GETSERVERSIDE API RESPONSE shop_id: ", shop_id);
+  // if (!response || !shop_id) {
+  //   return {
+  //     redirect: {
+  //       destination: "auth/login",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
   return {
     props: {
       apiResponse: response,
