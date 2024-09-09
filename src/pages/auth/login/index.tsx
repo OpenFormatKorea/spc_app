@@ -65,7 +65,6 @@ const Login: React.FC = () => {
         setCookie("access", result.data?.access);
         setCookie("refresh", result.data?.refresh);
         setCookie("shop_id", result.data?.shop_id);
-        console.log("result.data", result.data);
 
         console.log(result.data?.shop_id + " 님 로그인 하셨습니다.");
         router.push("/dashboard");
