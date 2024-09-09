@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const shop_id = getShopIdFromCookies(context);
 
-  if (!campaignResponse || !shop_id) {
+  if (!shop_id) {
     console.log("dashboard -> no campaignResponse or shop id, redirected to home");
     return {
       redirect: {
