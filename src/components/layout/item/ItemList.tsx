@@ -1,6 +1,6 @@
 import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
+import { fetchDeleteItems, fetchActivateItem } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
-import { fetchActivateItem, fetchDeleteItems } from "@/pages/item/lib/apis";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";

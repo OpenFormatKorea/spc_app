@@ -1,7 +1,5 @@
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
 import { ApiResponse } from "@/lib/types";
-import campaign from "@/pages/campaign";
-import { fetchActivateItem } from "@/pages/item/lib/apis";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 

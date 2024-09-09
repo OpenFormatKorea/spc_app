@@ -1,4 +1,4 @@
-import { fetchActivateItem } from "@/pages/item/lib/apis";
+import { fetchActivateItem } from "@/lib/item/apis";
 import { GetServerSidePropsContext } from "next";
 import React, { useState } from "react";
 interface ItemActiveButtonProps {
