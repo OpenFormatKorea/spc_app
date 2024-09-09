@@ -4,7 +4,7 @@ import {
   setAccessTokenToCookies,
   setRefreshTokenToCookies,
 } from "@/lib/helper";
-import axios, { InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosHeaders, InternalAxiosRequestConfig } from "axios";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { jwtDecode } from "jwt-decode";
 import { GetServerSidePropsContext } from "next";
@@ -12,6 +12,7 @@ import { GetServerSidePropsContext } from "next";
 /**
  * Returns Axios instance for Next.js server: cannot access browser window
  */
+
 export const getAxiosInstanceServer = async (context: GetServerSidePropsContext) => {
   try {
     const access = getAccessTokenFromCookies(context);
@@ -144,9 +145,12 @@ export const getAxiosInstanceClient = () => {
       });
       setCookie("access", response.data.access);
       setCookie("refresh", response.data.refresh);
-
-      if (!req.headers) req.headers = {};
-      req.headers.Authorization = `Bearer ${response.data.access as string}`;
+      const axiosInstance = axios.create({
+        baseURL,
+        headers: new AxiosHeaders({ Authorization: `Bearer ${access}` }),
+      });
+      if (!req.headers) req.headers = new AxiosHeaders();
+      req.headers.set("Authorization", `Bearer ${response.data.access}`);
 
       return req;
     });
