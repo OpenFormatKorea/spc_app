@@ -114,8 +114,8 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
             handleKeyDown={handleKeyDown}
             reward_type={reward_type}
             setRewardType={setReward_Type}
-            rewards={rewards}
-            setRewards={setRewards}
+            // rewards={rewards}
+            // setRewards={setRewards}
           />
           <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />
         </ContentsContainer>
