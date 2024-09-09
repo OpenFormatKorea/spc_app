@@ -28,10 +28,6 @@ export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("Received API Response:", apiResponse);
-  }, [apiResponse]);
-
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   return (
     <DashboardContainer title={"아이템"} onclick={handleButton} onclickText="새 아이템 생성" buttonId="new_item">

@@ -19,7 +19,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const authResponse = authenticateUserforHeader(context);
   const itemListApiResponse = await fetchGetItemList(campaign_id, context);
   const cDetailApiResponse = await fetchGetCampaignDetails(campaign_id, shop_id, context);
-  console.log("cDetailApiResponse", cDetailApiResponse);
   if (cDetailApiResponse == null || cDetailApiResponse.shop_id != shop_id) {
     return {
       redirect: {

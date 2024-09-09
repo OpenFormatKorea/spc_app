@@ -25,11 +25,8 @@ export async function fetchSignUp(info: AuthArgs) {
     document.cookie = `refresh=${refresh};path=/;domain=${
       process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
     }`;
-    console.log("success: ", true, "message: 회원가입 성공하였습니다.");
     return { success: true, message: "회원가입 성공하였습니다." };
   } catch (error) {
-    console.log("success: ", false, "message: 아이디와 비밀번호를 확인 해 주세요");
-
     return { success: false, message: "아이디와 비밀번호를 확인 해 주세요" };
   }
 }
@@ -47,11 +44,8 @@ export async function fetchLogIn(info: AuthArgs) {
       password,
     });
 
-    console.log("success: ", true, "message: 로그인에 성공 하였습니다.");
-    console.log("{ access, refresh, shop_id }", { access, refresh, shop_id });
     return { success: true, message: "로그인에 성공 하였습니다.", data: { access, refresh, shop_id } };
   } catch (error) {
-    console.log("success: ", false, "message: 아이디와 비밀번호를 확인 해 주세요");
     return { success: false, message: "아이디와 비밀번호를 확인 해 주세요" };
   }
 }
@@ -66,7 +60,6 @@ export async function fetchResetPW(info: AuthArgs) {
     const { data, status } = response;
     return { success: true, message: `임시 비밀번호: ${data.temporary_password}`, status };
   } catch (error) {
-    console.log("success: ", false, "message: 이메일과 아이디를 확인 해 주세요");
     return { success: false, message: "이메일과 아이디를 확인 해 주세요", status };
   }
 }
@@ -94,7 +87,6 @@ export async function fetchChangePW(info: ChangePWArgs) {
     }`;
     return { success: true, message: "비밀번호 변경을 성공하였습니다." };
   } catch (error) {
-    console.log("success: ", false, "message: 비밀번호 변경 실패 ");
     return { success: false, message: "비밀번호 변경 정보를 확인 해 주세요" };
   }
 }

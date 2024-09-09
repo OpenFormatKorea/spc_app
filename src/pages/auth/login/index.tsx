@@ -62,12 +62,9 @@ const Login: React.FC = () => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
       if (result.success) {
-        console.log("RESULT AFTER LOG IN ", result);
         setCookie("access", result.data?.access);
         setCookie("refresh", result.data?.refresh);
         setCookie("shop_id", result.data?.shop_id);
-
-        console.log(result.data?.shop_id + " 님 로그인 하셨습니다.");
         router.push("/dashboard");
       } else {
         alert(result.message);

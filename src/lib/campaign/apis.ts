@@ -96,14 +96,11 @@ export async function fetchDeleteCampaign(campaign_id: string, context: GetServe
     const response = await fetchAPI(context, apiUrl, "DELETE", dataObj);
 
     if (response.status === "200" && response.message === "success") {
-      console.log("success: ", true, "message: 캠페인을 삭제하였습니다.");
       return { status: 200, success: true, message: "캠페인을 삭제하였습니다." };
     } else {
-      console.error("error", "status: ", response.status, "message: 삭제를 실패하였습니다.");
       return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
     }
   } catch (error) {
-    console.error("error", error);
     return { status: 500, success: false, message: "삭제를 실패하였습니다.", error: error };
   }
 }
@@ -114,10 +111,8 @@ export async function fetchGetCampaignList(context: GetServerSidePropsContext) {
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    console.log("response", response);
     return response.data;
   } catch (error) {
-    console.error("error", error);
     return null;
   }
 }
@@ -145,14 +140,11 @@ export async function fetchDeleteItem(item_id: string, shop_id: string, context:
     const response = await fetchAPI(context, apiUrl, "DELETE", {});
 
     if (response.status === "200" && response.message === "success") {
-      console.log("success: ", true, "message: 리퍼럴을 삭제하였습니다.");
       return { status: 200, success: true, message: "리퍼럴을 삭제하였습니다." };
     } else {
-      console.error("error", "status: ", response.status, "message: 삭제를 실패하였습니다.");
       return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
     }
   } catch (error) {
-    console.error("error", error);
     return { status: 500, success: false, message: "삭제를 실패하였습니다.", error: error };
   }
 }

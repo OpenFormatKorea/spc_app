@@ -34,7 +34,7 @@ const ItemList: React.FC<ItemListProps> = (
         window.location.reload();
       } else {
         alert("아이템 삭제를 실패 하였습니다. 상태 코드: " + result.status);
-        console.log("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
+        console.error("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
       }
     } else if (id.includes("activate_item_") && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
       const item_id = id.replace("activate_item_", "");
@@ -44,7 +44,7 @@ const ItemList: React.FC<ItemListProps> = (
         window.location.reload();
       } else {
         alert("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
-        console.log("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: ", result.status);
+        console.error("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: ", result.status);
       }
     }
   };
@@ -60,7 +60,7 @@ const ItemList: React.FC<ItemListProps> = (
         window.location.reload();
       } else {
         alert("아이템 삭제를 실패 하였습니다. 상태 코드: " + result.status);
-        console.log("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
+        console.error("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
       }
     }
   };
@@ -93,7 +93,6 @@ const ItemList: React.FC<ItemListProps> = (
       },
       {} as { [key: string]: boolean }
     );
-    console.log("newSelectedItems", newSelectedItems);
 
     setSelectedItems(newSelectedItems);
   };

@@ -77,7 +77,6 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
       referrerState.SIGNUP?.payment_frequency.type === PaymentFrequencyType.REP &&
       referrerState.SIGNUP?.payment_frequency.repeat_count === null
     ) {
-      console.log("referrerState", referrerState);
       alert("referrerState SIGNUP payment frequency repeat count is null ");
       return false;
     }
@@ -116,7 +115,6 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
     if (infoCheck()) {
       setRewards((prevRewards) => [...prevRewards, rewardConditionsArgs]);
       onClose();
-      console.log("rewardConditionsArgs: ", JSON.stringify(rewardConditionsArgs, null, 2));
     } else {
       return false;
     }

@@ -52,7 +52,6 @@ export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, c
     shop_id: shop_id,
     campaign_id: campaign_id,
   };
-  console.log("dataObj:: ", dataObj);
 
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-create`;
 
@@ -181,14 +180,13 @@ export async function fetchActivateItem(item_id: string, campaign_id: string, co
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
 
     if (response.status === "200" && response.message === "success") {
-      console.log("success: ", true, "message: 아이템 활성화를 변경 하였습니다.");
       return { status: 200, success: true, message: "아이템들을 삭제하였습니다." };
     } else {
-      console.error("error", "status: ", response.status);
       return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
     }
   } catch (error) {
     console.error("error", error);
+
     return { status: 500, success: false, message: "삭제를 실패하였습니다.", error: error };
   }
 }
@@ -197,11 +195,9 @@ export async function fetchGetItemList(campaign_id: string, context: GetServerSi
   const shop_id = getShopIdFromCookies(context);
   const final_url =
     `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items?campaign_id=` + campaign_id + "&shop_id=" + shop_id;
-  console.log("final_url", final_url);
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("error", error);
@@ -222,7 +218,7 @@ export async function fetchGetItemDetails(item_id: string, campaign_id: string, 
     const response = await fetchAPI(context, final_url, "GET", {});
     return response.data;
   } catch (error) {
-    console.error("Error fetching id details:", error);
+    console.error("error", error);
     return null;
   }
 }

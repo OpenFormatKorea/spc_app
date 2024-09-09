@@ -18,7 +18,6 @@ export const handleSignOut = async (event?: React.FormEvent) => {
     deleteCookie("access");
     deleteCookie("refresh");
     deleteCookie("shop_id");
-    console.log(access + " 님 로그아웃");
     router.push("/home");
   } else {
     alert("로그아웃을 실패하였습니다. 잠시 후 다시 시도해주시기 바랍니다.");

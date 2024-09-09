@@ -153,7 +153,6 @@ export const getAxiosInstanceClient = () => {
       });
       if (!req.headers) req.headers = new AxiosHeaders();
       req.headers.set("Authorization", `Bearer ${response.data.access}`);
-      console.log(" req.headers.get Authorization:  ", req.headers.get("Authorization"));
 
       return req;
     });
