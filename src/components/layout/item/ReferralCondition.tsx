@@ -109,6 +109,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
               value={PaymentTimingType.IMM}
               checked={itemConditions.payment_timing.type === PaymentTimingType.IMM}
               onChange={(e) => handleTimingChange("type", PaymentTimingType.IMM)}
+              disabled={false}
             />
             <InputRadioBox
               label="추후 지급"
@@ -116,6 +117,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
               value={PaymentTimingType.DEL}
               checked={itemConditions.payment_timing.type === PaymentTimingType.DEL}
               onChange={(e) => handleTimingChange("type", PaymentTimingType.DEL)}
+              disabled={false}
             />
           </div>
 
@@ -130,6 +132,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 value={itemConditions.payment_timing.delay_days || ""}
                 onChange={(e) => handleTimingChange("delay_days", Number(e.target.value))}
                 onKeyDown={handleKeyDown}
+                disabled={false}
               />
               <div className="flex items-center min-w-fit ml-2">일 후 지급</div>
             </div>
@@ -145,6 +148,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
               value={PaymentFrequencyType.ONCE}
               checked={itemConditions.payment_frequency.type === PaymentFrequencyType.ONCE}
               onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.ONCE)}
+              disabled={false}
             />
             <InputRadioBox
               label="반복"
@@ -152,6 +156,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
               value={PaymentFrequencyType.REP}
               checked={itemConditions.payment_frequency.type === PaymentFrequencyType.REP}
               onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.REP)}
+              disabled={false}
             />
             <InputRadioBox
               label="무제한"
@@ -159,6 +164,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
               value={PaymentFrequencyType.UNL}
               checked={itemConditions.payment_frequency.type === PaymentFrequencyType.UNL}
               onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.UNL)}
+              disabled={false}
             />
           </div>
           <div
@@ -173,6 +179,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 value={itemConditions.payment_frequency.repeat_count || ""}
                 onChange={(e) => handleFrequencyChange("repeat_count", Number(e.target.value))}
                 onKeyDown={handleKeyDown}
+                disabled={false}
               />
               <div className="flex items-center min-w-fit ml-2">번</div>
             </div>
