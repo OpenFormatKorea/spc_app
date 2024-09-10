@@ -16,7 +16,7 @@ const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickT
           </a>
 
           {onclickText && (
-            <div className="button-container w-full sm:w-auto text-right sm:ml-auto items-center flex">
+            <div className="button-container w-full sm:w-auto text-right sm:ml-auto items-center flex justify-end sm:justify-between">
               {buttonId === "create_item" && (
                 <button
                   className="border p-2 text-white rounded-lg cursor-pointer bg-gray-400 mx-2"
@@ -26,7 +26,6 @@ const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickT
                   뒤로가기
                 </button>
               )}
-
               <button
                 className={`border p-2 text-white rounded-lg cursor-pointer flex items-center ${
                   buttonId === "cancel_modify_campaign" || buttonId === "back_campaign_details"
@@ -40,9 +39,7 @@ const DashboardMain: React.FC<MainProps> = ({ title, children, onclick, onclickT
                   <div className="pr-2 flex items-center">
                     <AddIcon fontSize="small" />
                   </div>
-                ) : (
-                  <></>
-                )}
+                ) : null}
 
                 {onclickText}
               </button>

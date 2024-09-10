@@ -30,7 +30,6 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
     router.pathname.includes("item") && link === "/campaign"
       ? true
       : router.pathname.startsWith(link.split("/")[1] ? `/${link.split("/")[1]}` : link);
-  console.log("isActive", isActive);
 
   return (
     <div
