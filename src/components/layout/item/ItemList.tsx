@@ -4,7 +4,7 @@ import { ApiResponse } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
+import AddIcon from "@mui/icons-material/Add";
 interface ItemListProps {
   theadStyle: string;
   tbodyStyle: string;
@@ -123,9 +123,12 @@ const ItemList: React.FC<ItemListProps> = (
             </div>
             <div
               id="create_item"
-              className="bg-blue-500 text-white p-2 rounded-lg  text-center cursor-pointer font-normal"
+              className="bg-blue-500 text-white p-2 rounded-lg text-center cursor-pointer font-normal flex items-center"
               onClick={handleButton}
             >
+              <div className="pr-1 flex items-center">
+                <AddIcon fontSize="small" />
+              </div>
               아이템 추가
             </div>
           </h1>
@@ -210,17 +213,32 @@ const ItemList: React.FC<ItemListProps> = (
         {items.map((item, i) => (
           <div key={item.id || i} className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 ">
             <div className="font-bold mb-2 text-black w-full pb-1 border-b">{item.title}</div>
-            <div className="text-sm">
-              <strong>아이템 종류: </strong>
+            <div className="text-sm flex pr-2">
+              <div className="w-[100px]">
+                <strong>아이템 종류: </strong>
+              </div>
               {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
             </div>
-            <div className="text-sm">
-              <strong>생성일: </strong>
-              {item.created_at}
+            <div className="text-sm flex pr-2">
+              <div className="w-[100px]">
+                <strong>생성일: </strong>
+              </div>
+              {new Date(item.created_at).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </div>
-            <div className="text-sm">
-              <strong>캠페인 수정일: </strong>
-              {item.updated_at}
+            <div className="text-sm flex pr-2">
+              <div className="w-[100px]">
+                <strong>캠페인 수정일: </strong>
+              </div>
+
+              {new Date(item.updated_at).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </div>
             <div className="flex space-x-4 items-center justify-center p-2">
               <button

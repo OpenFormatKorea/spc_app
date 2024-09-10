@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.0.2",
+    "@mui/material": "^6.0.2",
     "@mui/material-nextjs": "^5.16.6",
     "axios": "^1.7.2",
     "clsx": "^2.1.1",

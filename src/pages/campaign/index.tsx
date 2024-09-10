@@ -13,7 +13,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await fetchGetCampaignList(context);
   const shop_id = getShopIdFromCookies(context);
 
-  console.log(" campaign GETSERVERSIDE API RESPONSE shop_id: ", shop_id);
   if (!shop_id) {
     return {
       redirect: {
@@ -50,7 +49,7 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
 
   return (
-    <DashboardContainer title="캠페인" onclick={handleButton} onclickText="새 캠페인 생성" buttonId="new_campaign">
+    <DashboardContainer title="캠페인" onclick={handleButton} onclickText="새 캠페인" buttonId="new_campaign">
       <div className="wrapper-container">
         <div className="contents-container w-full justify-center lg:space-x-4 sm:space-y-4">
           <ContentsContainer variant="dashboard">

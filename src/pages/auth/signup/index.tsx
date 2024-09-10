@@ -47,7 +47,6 @@ const Signup: React.FC = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    console.log("signupInfo", signupInfo);
     if (infoCheck(signupInfo)) {
       const result = await postSignUp(signupInfo);
       alert(result.message);

@@ -109,13 +109,17 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                     <CampaignActiveButton campaign={campaign} />
                   </div>
                 </div>
-                <div className="text-sm">
-                  <strong>타입: </strong>
+                <div className="text-sm flex pr-2">
+                  <div className="w-[100px]">
+                    <strong>타입: </strong>
+                  </div>
                   {campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}
                 </div>
 
-                <div className="text-sm">
-                  <strong>캠페인 활성 기간: </strong>
+                <div className="text-sm flex pr-2">
+                  <div className="w-[100px]">
+                    <strong>캠페인 활성 기간: </strong>
+                  </div>
                   {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
                     year: "numeric",
                     month: "long",
