@@ -30,7 +30,7 @@ export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
 
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   return (
-    <DashboardContainer title={"아이템"} onclick={handleButton} onclickText="새 아이템 생성" buttonId="new_item">
+    <DashboardContainer title={"아이템"}>
       <div className="wrapper-container">
         <div className="contents-container w-full justify-center">
           <ContentsContainer variant="dashboard">

@@ -149,14 +149,14 @@ const DetailsCampaign = (
           <div className="flex items-center justify-end mt-4 gap-x-2">
             <button
               id="delete_campaign"
-              className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer"
+              className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer w-[50%]"
               onClick={handleSubmit}
             >
               삭제하기
             </button>
             <button
               id="modify_campaign"
-              className="border p-2 bg-blue-500 text-white rounded-lg  cursor-pointer"
+              className="border p-2 bg-blue-500 text-white rounded-lg  cursor-pointer w-[50%]"
               onClick={handleSubmit}
             >
               수정하기

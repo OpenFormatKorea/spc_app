@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
+import AddIcon from "@mui/icons-material/Add";
 
 // Fetches campaign data during server-side rendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -49,7 +50,7 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
 
   return (
-    <DashboardContainer title="캠페인" onclick={handleButton} onclickText="새 캠페인" buttonId="new_campaign">
+    <DashboardContainer title="캠페인">
       <div className="wrapper-container">
         <div className="contents-container w-full justify-center lg:space-x-4 sm:space-y-4">
           <ContentsContainer variant="dashboard">
@@ -59,6 +60,18 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
               apiResponse={apiResponse}
               handleButton={handleButton}
             />
+            <div className="button-container w-full py-3">
+              <button
+                className={`border p-2 w-full text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500`}
+                onClick={handleButton}
+                id="new_campaign"
+              >
+                <div className="pr-2 flex items-center">
+                  <AddIcon fontSize="small" />
+                </div>
+                새 캠페인
+              </button>
+            </div>
           </ContentsContainer>
         </div>
       </div>

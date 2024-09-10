@@ -74,12 +74,7 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
   };
 
   return (
-    <DashboardContainer
-      title="아이템 상세"
-      onclick={handleSubmit}
-      onclickText="뒤로가기"
-      buttonId="back_campaign_details"
-    >
+    <DashboardContainer title="아이템 상세">
       <div className="flex flex-col sm:flex-row md:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails
@@ -111,6 +106,17 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
           />
           <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />
         </ContentsContainer>
+      </div>
+      <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
+        <div className="flex space-x-2 w-full lg:w-fit">
+          <button
+            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
+            onClick={handleSubmit}
+            id="back_campaign_details"
+          >
+            뒤로가기
+          </button>
+        </div>
       </div>
     </DashboardContainer>
   );

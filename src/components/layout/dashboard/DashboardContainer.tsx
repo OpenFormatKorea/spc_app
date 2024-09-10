@@ -4,23 +4,14 @@ import Navbar from "@/components/layout/base/Navbar";
 interface DashboarContainerProps {
   children: React.ReactNode;
   title: string;
-  onclick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  onclickText: string;
-  buttonId: string;
 }
 
-const DashboardContainer: React.FC<DashboarContainerProps> = ({ title, children, onclick, onclickText, buttonId }) => {
+const DashboardContainer: React.FC<DashboarContainerProps> = ({ title, children }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       <Navbar />
       <Header title={title} />
-      <DashboardMain
-        title={title}
-        children={children}
-        onclick={onclick}
-        onclickText={onclickText}
-        buttonId={buttonId}
-      />
+      <DashboardMain title={title} children={children} />
     </div>
   );
 };

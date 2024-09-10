@@ -51,7 +51,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       <h1 className="font-bold text-base pb-2 border-b mb-4 w-full flex justify-between items-center">
         <div>
           <div className="text-xl">캠페인 상세정보</div>
-          <div className="font-normal text-sm">상세 정보 옵션</div>
+          <div className="font-normal text-sm text-gray-500 pt-2">상세 정보 옵션</div>
         </div>
         {page_type === "DETAILS" ? (
           <div>

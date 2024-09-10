@@ -69,7 +69,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
         return true;
       } else {
         alert("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
-        setActive(!newActiveStatus); // Revert to the previous state
+        setActive(!newActiveStatus);
         return false;
       }
     }
@@ -167,7 +167,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
             추가
           </button>
         </div>
-
         <>
           <ItemTypeComponent
             page_type={page_type}

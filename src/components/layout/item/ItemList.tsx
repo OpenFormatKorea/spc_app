@@ -116,24 +116,22 @@ const ItemList: React.FC<ItemListProps> = (
     <>
       <div>
         <div className="flex w-full">
-          <h1 className="font-bold text-base pb-2 border-b mb-5 w-full flex justify-between items-center">
+          <h1 className="font-bold text-base pb-2 border-b mb-2 w-full flex justify-between items-center">
             <div>
               <div className="text-xl">아이템</div>
-              <div className="font-normal text-sm">현재 사용중인 아이템 목록이에요.</div>
-            </div>
-            <div
-              id="create_item"
-              className="bg-blue-500 text-white p-2 rounded-lg text-center cursor-pointer font-normal flex items-center"
-              onClick={handleButton}
-            >
-              <div className="pr-1 flex items-center">
-                <AddIcon fontSize="small" />
-              </div>
-              아이템 추가
+              <div className="font-normal text-sm text-gray-500 pt-2">현재 사용중인 아이템 목록이에요.</div>
             </div>
           </h1>
         </div>
-
+        <div className="items-center justify-between hidden lg:flex">
+          <button
+            className="p-2 bg-red-500 text-white rounded-lg cursor-pointer"
+            id="delete_items"
+            onClick={handleSubmit}
+          >
+            선택삭제
+          </button>
+        </div>
         <div className="my-2 w-full">
           <table className="w-full bg-white border border-gray-200 rounded-lg text-center hidden lg:table">
             <thead>
@@ -197,15 +195,6 @@ const ItemList: React.FC<ItemListProps> = (
               )}
             </tbody>
           </table>
-          <div className="items-center justify-start mt-5 hidden lg:flex">
-            <button
-              className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer"
-              id="delete_items"
-              onClick={handleSubmit}
-            >
-              선택삭제
-            </button>
-          </div>
         </div>
       </div>
       {/* Mobile-friendly layout */}
@@ -242,14 +231,14 @@ const ItemList: React.FC<ItemListProps> = (
             </div>
             <div className="flex space-x-4 items-center justify-center p-2">
               <button
-                className="text-white text-sm min-w-[60px] bg-red-400 py-1 px-2 cursor-pointer rounded-md"
+                className="text-white text-sm min-w-[55px] bg-red-500 p-1 cursor-pointer rounded-md"
                 id={item.id}
                 onClick={handleItemDelete}
               >
                 삭제
               </button>
               <button
-                className="text-white text-sm min-w-[60px] bg-blue-400 py-1 px-2 cursor-pointer rounded-md"
+                className="text-white text-sm min-w-[55px] bg-blue-500 p-1 cursor-pointer rounded-md"
                 id={item.id}
                 onClick={handleItemClick}
               >
@@ -261,6 +250,16 @@ const ItemList: React.FC<ItemListProps> = (
         {!items.length && (
           <div className="text-center text-gray-500">사용중인 아이템이 없습니다. 새로운 캠페인을 생성해보세요.</div>
         )}
+      </div>
+      <div
+        id="create_item"
+        className="bg-blue-500 flex w-full text-white mt-4 p-2 rounded-lg text-center justify-center cursor-pointer font-normal"
+        onClick={handleButton}
+      >
+        <div className="pr-1 flex text-center items-center">
+          <AddIcon fontSize="small" />
+        </div>
+        아이템 추가
       </div>
     </>
   );

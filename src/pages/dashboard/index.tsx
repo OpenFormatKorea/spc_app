@@ -49,7 +49,7 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
 
   return (
     <DashboardContainer title="대시보드" onclick={handleButton} onclickText="" buttonId="dashboard">
-      <div className="contents-container w-full justify-center">
+      <div className="contents-container w-full justify-center ">
         <ContentsContainer variant="dashboard">
           <CampaignList
             theadStyle={theadStyle}
