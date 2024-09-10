@@ -127,12 +127,7 @@ const DetailsCampaign = (
   const theadStyle = "px-1 py-2 text-center border-b border-gray-200 text-sm text-gray-700";
   const tbodyStyle = "px-2 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all";
   return (
-    <DashboardContainer
-      title={"캠페인 상세 정보"}
-      onclick={handleSubmit}
-      onclickText="뒤로가기"
-      buttonId="cancel_modify_campaign"
-    >
+    <DashboardContainer title={"캠페인 상세 정보"}>
       <div className="flex flex-col md:flex-row w-full md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <CampaignDetails
@@ -172,6 +167,17 @@ const DetailsCampaign = (
             campaign_id={campaign_id}
           />
         </ContentsContainer>
+      </div>
+      <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
+        <div className="flex space-x-2 w-full lg:w-fit">
+          <button
+            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
+            onClick={handleSubmit}
+            id="cancel_modify_campaign"
+          >
+            뒤로가기
+          </button>
+        </div>
       </div>
     </DashboardContainer>
   );
