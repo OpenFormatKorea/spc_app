@@ -56,6 +56,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         {page_type === "DETAILS" ? (
           <div>
             <CampaignActiveButton
+              view="PC"
               campaign={{
                 id: Number(campaign_id),
                 title: campaignArgs.title,
