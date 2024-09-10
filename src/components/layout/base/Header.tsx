@@ -42,7 +42,9 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
           </a>
         </div>
-        <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
+        <div className="w-full">
+          <div className="font-semibold text-lg min-w-[150px] mr-auto text-white hidden lg:block">{title}</div>
+        </div>
 
         <div className="lg:hidden flex items-center">
           <button onClick={toggleMenu} className="text-white focus:outline-none">
