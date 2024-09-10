@@ -50,8 +50,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
     <div className="contents-container w-full justify-center">
       <h1 className="font-bold text-base pb-2 border-b mb-4 w-full flex justify-between items-center">
         <div>
-          <div className="text-xl">캠페인 상세정보</div>
-          <div className="font-normal text-sm text-gray-500 pt-2">상세 정보 옵션</div>
+          <div className="">캠페인 상세정보</div>
+          <div className="font-normal text-xs text-gray-500 pt-2">상세 정보 옵션</div>
         </div>
         {page_type === "DETAILS" ? (
           <div>
@@ -73,7 +73,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       </h1>
 
       <div className="inputForm flex flex-col text-left w-full pb-2">
-        <label className="text-md font-bold pb-2">캠페인 명</label>
+        <label className="text-sm font-bold pb-2">캠페인 명</label>
         <InputTextBox
           type="text"
           id="title"
@@ -98,7 +98,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       </div>
       <div className="inputForm flex flex-col text-left w-full pb-2">
         <label className="text-md font-bold py-2">기간 종류</label>
-        <div className="flex justify-between w-[250px] lg:w-[300px]">
+        <div className="flex justify-between w[full] md:w-[300px] lg:w-[300px]">
           <InputRadioBox
             label="무기한"
             name="period_type"
@@ -129,9 +129,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             disabled={false}
           />
 
-          <div className="text-md sm:my-2 sm:w-full lg:w-[25px] sm:text-center sm:flex sm:items-center sm:justify-center">
-            ~
-          </div>
+          <div className="text-md sm:my-2 sm:w-full lg:w-[25px] sm:text-center flex justify-center">~</div>
           <InputTextBox
             type="text"
             id="end_date"

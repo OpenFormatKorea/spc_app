@@ -208,7 +208,7 @@ const ItemList: React.FC<ItemListProps> = (
               </div>
               {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
             </div>
-            <div className="text-sm flex pr-2">
+            <div className="text-sm flex w-full pr-2">
               <div className="w-[100px]">
                 <strong>생성일: </strong>
               </div>
@@ -229,16 +229,16 @@ const ItemList: React.FC<ItemListProps> = (
                 day: "numeric",
               })}
             </div>
-            <div className="flex space-x-4 items-center justify-center p-2">
+            <div className="w-full pt-2 flex justify-center space-x-2 text-white text-sm">
               <button
-                className="text-white text-sm min-w-[55px] bg-red-500 p-1 cursor-pointer rounded-md"
+                className="w-[50%] p-2 cursor-pointer rounded-md  bg-red-500 "
                 id={item.id}
                 onClick={handleItemDelete}
               >
                 삭제
               </button>
               <button
-                className="text-white text-sm min-w-[55px] bg-blue-500 p-1 cursor-pointer rounded-md"
+                className=" w-[50%] p-2 cursor-pointer rounded-md bg-blue-500"
                 id={item.id}
                 onClick={handleItemClick}
               >
@@ -248,7 +248,11 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         ))}
         {!items.length && (
-          <div className="text-center text-gray-500">사용중인 아이템이 없습니다. 새로운 캠페인을 생성해보세요.</div>
+          <div className="text-center text-gray-500">
+            사용중인 아이템이 없습니다.
+            <br />
+            새로운 캠페인을 생성해보세요.
+          </div>
         )}
       </div>
       <div
