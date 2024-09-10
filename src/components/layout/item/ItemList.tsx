@@ -1,10 +1,10 @@
-import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
 import { fetchDeleteItems, fetchActivateItem } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
 interface ItemListProps {
   theadStyle: string;
   tbodyStyle: string;
@@ -182,7 +182,7 @@ const ItemList: React.FC<ItemListProps> = (
                   </td>
 
                   <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
-                    <ItemActiveButton item_id={item.id} campaign_id={campaign_id} active={item.active} />
+                    <ItemActiveButton view="PC" item_id={item.id} campaign_id={campaign_id} active={item.active} />
                   </td>
                 </tr>
               ))}
@@ -201,7 +201,15 @@ const ItemList: React.FC<ItemListProps> = (
       <div className="block lg:hidden">
         {items.map((item, i) => (
           <div key={item.id || i} className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 ">
-            <div className="font-bold mb-2 text-black w-full pb-1 border-b">{item.title}</div>
+            <div
+              className="font-bold mb-2 text-black w-full pb-1 border-b flex justify-between"
+              onClick={(e) => e.stopPropagation()} // You stop propagation only for the title section
+            >
+              <div> {item.title}</div>
+              <div>
+                <ItemActiveButton view="MOBILE" item_id={item.id} campaign_id={campaign_id} active={item.active} />
+              </div>
+            </div>
             <div className="text-sm flex pr-2">
               <div className="w-[100px]">
                 <strong>아이템 종류: </strong>

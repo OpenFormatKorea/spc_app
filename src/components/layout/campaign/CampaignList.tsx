@@ -18,7 +18,6 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
   }, [router.pathname]);
   const [campaigns, setCampaigns] = useState(Array.isArray(apiResponse) ? apiResponse : []);
 
-  //const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     router.replace(`/campaign/details?campaign_id=${id}`, undefined, { shallow: true, scroll: false });
@@ -76,7 +75,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                   className="px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center flex"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <CampaignActiveButton campaign={campaign} />
+                  <CampaignActiveButton view="PC" campaign={campaign} />
                 </td>
               </tr>
             ))}
@@ -106,7 +105,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                 >
                   <div> {campaign.title}</div>
                   <div>
-                    <CampaignActiveButton campaign={campaign} />
+                    <CampaignActiveButton view="MOBILE" campaign={campaign} />
                   </div>
                 </div>
                 <div className="text-sm flex pr-2">
