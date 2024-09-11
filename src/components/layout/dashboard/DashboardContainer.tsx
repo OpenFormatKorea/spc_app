@@ -3,15 +3,14 @@ import DashboardMain from "@/components/layout/dashboard/DashboardMain";
 import Navbar from "@/components/layout/base/Navbar";
 interface DashboarContainerProps {
   children: React.ReactNode;
-  title: string;
 }
 
-const DashboardContainer: React.FC<DashboarContainerProps> = ({ title, children }) => {
+const DashboardContainer: React.FC<DashboarContainerProps> = ({ children }) => {
   return (
     <div className="flex flex-col ">
       <Navbar />
-      <Header title={title} />
-      <DashboardMain title={title} children={children} />
+      <Header />
+      <DashboardMain children={children} />
     </div>
   );
 };

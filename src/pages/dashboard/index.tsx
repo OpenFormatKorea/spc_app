@@ -47,6 +47,11 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
 
   return (
     <DashboardContainer title="대시보드">
+      <div className="flex w-full justify-between items-center mb-3">
+        <div className="subject-container flex w-full">
+          <a className="text-2xl lg:text-4xl font-bold">대시보드</a>
+        </div>
+      </div>
       <div className="contents-container w-full justify-center ">
         <ContentsContainer variant="dashboard">
           <CampaignList

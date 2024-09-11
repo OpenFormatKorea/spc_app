@@ -11,7 +11,7 @@ import ItemList from "@/components/layout/item/ItemList";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { fetchGetCampaignDetails, fetchModifyCampaign, fetchDeleteCampaign } from "@/lib/campaign/apis";
 import { fetchGetItemList } from "@/lib/item/apis";
-
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
   const shop_id: any = getShopIdFromCookies(context);
@@ -70,8 +70,6 @@ const DetailsCampaign = (
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
-    const shop_id: any = getShopIdFromCookies(context);
-
     const infoCheck = (info: CampaignArgs) => {
       if (!info.title) {
         alert("캠페인 명을 입력 해주세요.");
@@ -127,7 +125,23 @@ const DetailsCampaign = (
   const theadStyle = "px-1 py-2 text-center border-b border-gray-200 text-sm text-gray-700";
   const tbodyStyle = "px-2 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all";
   return (
-    <DashboardContainer title={"캠페인 상세 정보"}>
+    <DashboardContainer>
+      <div className="flex w-full justify-between items-center mb-3">
+        <div className="subject-container flex w-full">
+          <a className="text-2xl lg:text-4xl font-bold">캠페인 상세 정보</a>
+        </div>
+
+        <div className="button-container flex justify-end w-full">
+          <button
+            className="flex items-center justify-center bg-gray-400 text-white border p-2 rounded-lg cursor-pointer"
+            onClick={handleSubmit}
+            id="cancel_modify_campaign"
+          >
+            <ArrowBackIosIcon fontSize="small" />
+            <span className="ml-1">뒤로가기</span>
+          </button>
+        </div>
+      </div>
       <div className="flex flex-col md:flex-row w-full md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <CampaignDetails
@@ -141,22 +155,6 @@ const DetailsCampaign = (
             setStart_date={setStart_date}
             setEnd_date={setEnd_date}
           />
-          <div className="flex items-center justify-end mt-4 gap-x-2">
-            <button
-              id="delete_campaign"
-              className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer w-[50%]"
-              onClick={handleSubmit}
-            >
-              삭제하기
-            </button>
-            <button
-              id="modify_campaign"
-              className="border p-2 bg-blue-500 text-white rounded-lg  cursor-pointer w-[50%]"
-              onClick={handleSubmit}
-            >
-              수정하기
-            </button>
-          </div>
         </ContentsContainer>
         <ContentsContainer variant="campaign">
           <ItemList
@@ -168,16 +166,21 @@ const DetailsCampaign = (
           />
         </ContentsContainer>
       </div>
-      <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
-        <div className="flex space-x-2 w-full lg:w-fit">
-          <button
-            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
-            onClick={handleSubmit}
-            id="cancel_modify_campaign"
-          >
-            뒤로가기
-          </button>
-        </div>
+      <div className="flex items-center justify-end mt-4 gap-x-2 gap-y-2">
+        <button
+          id="modify_campaign"
+          className="border p-2 bg-blue-500 text-white rounded-lg  cursor-pointer w-full lg:w-fit"
+          onClick={handleSubmit}
+        >
+          수정하기
+        </button>
+        <button
+          id="delete_campaign"
+          className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer w-full lg:w-fit"
+          onClick={handleSubmit}
+        >
+          삭제하기
+        </button>
       </div>
     </DashboardContainer>
   );

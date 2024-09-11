@@ -48,10 +48,10 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
 
   return (
     <div className="contents-container w-full justify-center">
-      <h1 className="font-bold text-base pb-2 border-b mb-4 w-full flex justify-between items-center">
+      <h1 className=" text-base pb-2 border-b mb-4 w-full flex justify-between items-center">
         <div>
-          <div className="">캠페인 상세정보</div>
-          <div className="font-normal text-xs text-gray-500 pt-2">상세 정보 옵션</div>
+          <div className="font-bold text-lg">캠페인 상세정보</div>
+          <div className="text-sm text-gray-500">상세 정보 옵션</div>
         </div>
         {page_type === "DETAILS" ? (
           <div>
@@ -74,7 +74,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       </h1>
 
       <div className="inputForm flex flex-col text-left w-full pb-2">
-        <label className="text-sm font-bold pb-2">캠페인 명</label>
+        <label className="text-xs pt-2 text-gray-500">캠페인 명</label>
         <InputTextBox
           type="text"
           id="title"
@@ -86,7 +86,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         />
       </div>
       <div className="inputForm flex flex-col text-left w-full">
-        <label className="text-md font-bold py-2">캠페인 설명</label>
+        <label className="text-xs pt-4 text-gray-500">캠페인 설명</label>
         <InputTextBox
           type="text"
           id="description"
@@ -98,7 +98,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         />
       </div>
       <div className="inputForm flex flex-col text-left w-full pb-2">
-        <label className="text-md font-bold py-2">기간 종류</label>
+        <label className="text-xs py-4 text-gray-500">기간 종류</label>
         <div className="flex justify-between w[full] md:w-[300px] lg:w-[300px]">
           <InputRadioBox
             label="무기한"
@@ -119,7 +119,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         </div>
       </div>
       <div className="flex flex-col w-full text-left">
-        <label className="text-md font-bold py-2">캠페인 기간</label>
+        <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
         <div className="lg:flex sm:items-center w-full gap-2">
           <InputTextBox
             type="text"

@@ -1,20 +1,47 @@
-import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import { GetServerSidePropsContext } from "next";
-
-const handleSubmit = async (event: React.FormEvent) => {
-  const { id } = event.currentTarget;
-  console.log("id", id);
+import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import MyPageDetails from "@/components/layout/mypage/MyPageDetails";
+import { fetchGetUserInfo } from "@/lib/mypage/apis";
+import { UserInfoProps } from "@/lib/mypage/types";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import router from "next/router";
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const data = await fetchGetUserInfo(context);
+  return { props: { data } };
 };
-const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
+const DetailsMyPage = (data: UserInfoProps, context: GetServerSidePropsContext) => {
+  const userInfo = data.data;
+  const handleSubmit = async (event: React.FormEvent) => {
+    const { id } = event.currentTarget;
+    if (id === "back_dashboard") {
+      router.push("/dashboard");
+    }
+  };
   return (
-    <DashboardContainer title="마이 페이지">
+    <DashboardContainer>
+      <div className="flex w-full justify-between items-center mb-3">
+        <div className="subject-container flex w-full">
+          <a className="text-2xl lg:text-4xl font-bold">마이 페이지</a>
+        </div>
+
+        <div className="button-container flex justify-end w-full">
+          <button
+            className="flex items-center justify-center bg-gray-400 text-white border p-2 rounded-lg cursor-pointer"
+            onClick={handleSubmit}
+            id="back_dashboard"
+          >
+            <ArrowBackIosIcon fontSize="small" />
+            <span className="ml-1">뒤로가기</span>
+          </button>
+        </div>
+      </div>
       <div className="flex flex-col sm:flex-row md:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
-        <ContentsContainer variant="campaign">my page</ContentsContainer>
-        <ContentsContainer variant="campaign">test</ContentsContainer>
+        <ContentsContainer variant="dashboard">
+          <MyPageDetails username={userInfo.username} email={userInfo.email}></MyPageDetails>
+        </ContentsContainer>
       </div>
     </DashboardContainer>
   );
 };
-
-export default DetailsItem;
+export default DetailsMyPage;

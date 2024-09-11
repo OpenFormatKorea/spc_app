@@ -78,17 +78,9 @@ const ItemList: React.FC<ItemListProps> = (
             </div>
           </h1>
         </div>
-        <div className="items-center justify-between hidden lg:flex">
-          <button
-            className="p-2 bg-red-500 text-white rounded-lg cursor-pointer"
-            id="delete_items"
-            onClick={(e) => handleAction(e, "delete", "")}
-          >
-            선택삭제
-          </button>
-        </div>
+
         <div className="my-2 w-full">
-          <table className="w-full bg-white border border-gray-200 rounded-lg text-center hidden lg:table">
+          <table className="w-full bg-white border border-gray-200 text-center hidden lg:table">
             <thead>
               <tr className="bg-gray-200">
                 <th className={theadStyle}>
@@ -120,7 +112,21 @@ const ItemList: React.FC<ItemListProps> = (
                     />
                   </td>
                   <td className={tbodyStyle}>{item.title}</td>
-                  <td className={tbodyStyle}>{item.item_type === "PRODUCT" ? "상품" : "프로모션"}</td>
+                  <td className={tbodyStyle}>
+                    {item.item_type === "PRODUCT" ? (
+                      <div className="w-full flex justify-center">
+                        <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
+                          상품
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="w-full flex justify-center">
+                        <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
+                          프로모션
+                        </div>
+                      </div>
+                    )}
+                  </td>
                   <td className={tbodyStyle}>
                     {new Date(item.created_at).toLocaleDateString("ko-KR", {
                       year: "numeric",
@@ -150,6 +156,15 @@ const ItemList: React.FC<ItemListProps> = (
               )}
             </tbody>
           </table>
+        </div>
+        <div className="items-center justify-between hidden lg:flex">
+          <button
+            className="p-1 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
+            id="delete_items"
+            onClick={(e) => handleAction(e, "delete", "")}
+          >
+            선택삭제
+          </button>
         </div>
       </div>
       {/* Mobile-friendly layout */}

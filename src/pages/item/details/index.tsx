@@ -8,6 +8,7 @@ import RewardCard from "@/components/layout/item/RewardCard";
 import router from "next/router";
 import RewardComponent from "@/components/layout/item/RewardList";
 import { fetchGetItemDetails } from "@/lib/item/apis";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
@@ -74,7 +75,23 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
   };
 
   return (
-    <DashboardContainer title="아이템 상세">
+    <DashboardContainer>
+      <div className="flex w-full justify-between items-center mb-3">
+        <div className="subject-container flex w-full">
+          <a className="text-2xl lg:text-4xl font-bold">아이템 상세</a>
+        </div>
+
+        <div className="button-container flex justify-end w-full">
+          <button
+            className="flex items-center justify-center bg-gray-400 text-white border p-2 rounded-lg cursor-pointer"
+            onClick={handleSubmit}
+            id="back_campaign_details"
+          >
+            <ArrowBackIosIcon fontSize="small" />
+            <span className="ml-1">뒤로가기</span>
+          </button>
+        </div>
+      </div>
       <div className="flex flex-col sm:flex-row md:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails
@@ -106,17 +123,6 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
           />
           <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />
         </ContentsContainer>
-      </div>
-      <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
-        <div className="flex space-x-2 w-full lg:w-fit">
-          <button
-            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
-            onClick={handleSubmit}
-            id="back_campaign_details"
-          >
-            뒤로가기
-          </button>
-        </div>
       </div>
     </DashboardContainer>
   );

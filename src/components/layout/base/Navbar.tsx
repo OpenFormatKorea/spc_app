@@ -26,21 +26,26 @@ const Navbar = () => {
     }
   };
   return (
-    <nav className="bg-sky-900 w-[250px] fixed h-[100%] lg:block hidden lg:w-[250px] lg:fixed lg:h-[100%]">
+    <nav className="bg-gray-400 w-[250px] fixed h-[100%] lg:block hidden lg:w-[250px] lg:fixed lg:h-[100%]">
       <div className="flex items-center justify-center h-[70px] p-3">
         <a onClick={handleLogo}>
-          <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
+          <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[] cursor-pointer mr-4" />
         </a>
       </div>
       <div className="pt-4">
-        <div className="main-menu">
+        {" "}
+        <div className={`pl-4 pb-4 text-sm text-white `}>main</div>
+        <div className="main-menu pl-3">
           <Navmenu menutitle="대시보드" link="/dashboard" />
           <Navmenu menutitle="캠페인" link="/campaign" />
+        </div>
+        <div className={`pl-4 py-4 text-sm text-white `}>setting</div>
+        <div className="main-menu pl-3">
           <Navmenu menutitle="마이 페이지" link="/mypage" />
         </div>
-        <div className="setting-menu absolute bottom-[20%] w-full">
+        <div className="setting-menu absolute bottom-[5%] w-full">
           <div
-            className="h-[55px] flex items-center text-md cursor-pointer transition-all duration-300 text-white w-full p-4 lg:bg-sky-900 sm:bg-sky-700 scale-100"
+            className="h-[55px] flex items-center text-md cursor-pointer transition-all duration-300 text-white w-full p-4 lg:bg-gray-400 sm:bg-gray-400 scale-100"
             onClick={handleSignOut}
           >
             <div className="pl-2 flex items-center">

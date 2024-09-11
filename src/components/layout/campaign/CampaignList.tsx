@@ -27,8 +27,8 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
     <>
       <div className=" flex w-full pb-2 border-b-[1px] mb-4">
         <div className="w-[80%]">
-          <div>캠페인</div>
-          <div className="font-normal text-sm text-gray-500 pt-2">현재 사용중인 캠페인 목록이에요.</div>
+          <div className="font-bold text-lg">캠페인</div>
+          <div className="font-normal text-sm text-gray-500 pt-1">현재 사용중인 캠페인 목록이에요.</div>
         </div>
         {!isCampaignPage && (
           <div
@@ -85,10 +85,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                       })
                     : ""}
                 </td>
-                <td
-                  className="px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center flex"
-                  onClick={(e) => e.stopPropagation()}
-                >
+                <td className="px-2 py-2 text-sm border-b border-gray-200" onClick={(e) => e.stopPropagation()}>
                   <CampaignActiveButton view="PC" campaign={campaign} />
                 </td>
               </tr>

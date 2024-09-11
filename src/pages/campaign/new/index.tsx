@@ -6,7 +6,7 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState, useRef } from "react";
 import { fetchCreateCampaign } from "@/lib/campaign/apis";
-import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
@@ -71,11 +71,29 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
       } else {
         console.error("입력한 정보가 유효하지 않습니다.");
       }
+    } else if (id === "cancel_modify_campaign") {
+      router.push("/campaign");
     }
   };
 
   return (
     <DashboardContainer title="새 캠페인 생성">
+      <div className="flex w-full justify-between items-center">
+        <div className="subject-container flex w-full items-center">
+          <a className="text-2xl sm:text-[30px] font-bold">새 캠페인 생성</a>
+        </div>
+
+        <div className="button-container flex justify-end w-full">
+          <button
+            className="flex items-center justify-center bg-gray-400 text-white border p-2 rounded-lg cursor-pointer"
+            onClick={handleSubmit}
+            id="cancel_modify_campaign"
+          >
+            <ArrowBackIosIcon fontSize="small" />
+            <span className="ml-1">뒤로가기</span>
+          </button>
+        </div>
+      </div>
       <ContentsContainer variant="dashboard">
         <CampaignDetails
           page_type="NEW"

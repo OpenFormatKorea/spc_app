@@ -5,10 +5,6 @@ import router from "next/router";
 import Navmenu from "@/components/layout/base/Navmenu";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-interface HeaderProps {
-  title: string;
-}
-
 const headerBtnstyle = "p-2 cursor-pointer bg-white rounded-lg text-xs text-center min-w-[65px]";
 
 export const handleSignOut = async (event?: React.FormEvent) => {
@@ -27,55 +23,83 @@ export const handleSignOut = async (event?: React.FormEvent) => {
 const handleLogo = () => {
   router.push("/dashboard");
 };
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <header className="bg-sky-600 fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px] z-10">
+    <header className="bg-gray-400 fixed top-0 w-full lg:hidden z-10">
       <div className="flex items-center h-[60px] px-6 w-full">
         <div className="flex items-center lg:hidden">
           <a onClick={handleLogo}>
-            <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
+            <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[25px] cursor-pointer mr-4" />
           </a>
         </div>
-        <div className="w-full">
-          <div className="font-semibold text-lg min-w-[150px] mr-auto text-white hidden lg:block">{title}</div>
-        </div>
 
-        <div className="lg:hidden flex items-center">
+        <div className="lg:hidden flex items-center mr-0 ml-auto">
           <button onClick={toggleMenu} className="text-white focus:outline-none">
-            {isMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+            {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </div>
       </div>
-
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="bg-sky-600 text-white lg:hidden flex flex-col items-start p-4">
+        <div className="bg-gray-400 text-white lg:hidden flex flex-col items-start p-4">
           <Navmenu menutitle="대시보드" link="/dashboard" />
           <Navmenu menutitle="캠페인" link="/campaign" />
-          <Navmenu menutitle="마이 페이지" link="/mypage" />
           <div className="border-t border-white my-2 w-full"></div>
-
+          <Navmenu menutitle="My Page" link="/mypage" />
           <div
-            className="p-4 cursor-pointer flex "
+            className="py-2 cursor-pointer flex"
             onClick={(event) => {
               handleSignOut(event);
               toggleMenu();
             }}
           >
             <LogoutIcon fontSize="small" />
-            <div className="w-full text-left pl-3 text-sm">
+            <div className="w-full text-left pl-3 text-md">
               <a>로그아웃</a>
             </div>
           </div>
         </div>
       )}
     </header>
+    // <header className="bg-sky-600 fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px] z-10">
+    //   <div className="flex items-center h-[60px] px-6 w-full">
+    //     <div className="flex items-center lg:hidden">
+    //       <a onClick={handleLogo}>
+    //         <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
+    //       </a>
+    //     </div>
+    //     <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
+
+    //     <div className="lg:hidden flex items-center">
+    //       <button onClick={toggleMenu} className="text-white focus:outline-none">
+    //         {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+    //       </button>
+    //     </div>
+    //   </div>
+    //   {/* Mobile Menu */}
+    //   {isMenuOpen && (
+    //     <div className="bg-sky-600 text-white lg:hidden flex flex-col items-start p-4">
+    //       <Navmenu menutitle="대시보드" link="/dashboard" />
+    //       <Navmenu menutitle="캠페인" link="/campaign" />
+    //       <div className="border-t border-white my-2 w-full"></div>
+    //       <Navmenu menutitle="My Page" link="/mypage" />
+    //       <div
+    //         className="py-2 cursor-pointer"
+    //         onClick={(event) => {
+    //           handleSignOut(event);
+    //           toggleMenu();
+    //         }}
+    //       >
+    //         Sign out
+    //       </div>
+    //     </div>
+    //   )}
+    // </header>
   );
 };
 
