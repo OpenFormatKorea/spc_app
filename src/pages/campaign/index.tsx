@@ -50,7 +50,7 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
 
   return (
-    <DashboardContainer title="캠페인">
+    <DashboardContainer>
       <div className="flex w-full justify-between items-center mb-3">
         <div className="subject-container flex w-full">
           <a className="text-2xl lg:text-4xl font-bold">캠페인</a>
