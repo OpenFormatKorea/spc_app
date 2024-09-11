@@ -77,7 +77,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   };
 
   return (
-    <DashboardContainer title="새 캠페인 생성">
+    <DashboardContainer>
       <div className="flex w-full justify-between items-center">
         <div className="subject-container flex w-full items-center">
           <a className="text-2xl sm:text-[30px] font-bold">새 캠페인 생성</a>
