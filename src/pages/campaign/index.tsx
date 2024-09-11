@@ -55,17 +55,6 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
         <div className="subject-container flex w-full">
           <a className="text-2xl lg:text-4xl font-bold">캠페인</a>
         </div>
-
-        <div className="button-container flex justify-end w-full">
-          <button
-            className="flex items-center justify-center bg-blue-500 text-white border p-2 rounded-lg cursor-pointer"
-            onClick={handleButton}
-            id="cancel_modify_campaign"
-          >
-            <AddIcon fontSize="small" />
-            <span className="ml-1">캠페인추가</span>
-          </button>
-        </div>
       </div>
       <div className="wrapper-container">
         <div className="contents-container w-full justify-center lg:space-x-4 sm:space-y-4">

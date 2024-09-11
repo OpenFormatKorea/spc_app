@@ -96,7 +96,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
     <DashboardContainer>
       <div className="flex w-full justify-between items-center mb-3">
         <div className="subject-container flex w-full">
-          <a className="text-2xl lg:text-4xl font-bold">새 아이템 추가</a>
+          <a className="text-2xl lg:text-4xl font-bold">아이템 추가</a>
         </div>
       </div>
       <div className="flex flex-col lg:flex-row w-full justify-center lg:space-x-4">

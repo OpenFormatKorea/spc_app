@@ -168,18 +168,18 @@ const DetailsCampaign = (
       </div>
       <div className="flex items-center justify-end mt-4 gap-x-2 gap-y-2">
         <button
-          id="modify_campaign"
-          className="border p-2 bg-blue-500 text-white rounded-lg  cursor-pointer w-full lg:w-fit"
-          onClick={handleSubmit}
-        >
-          수정하기
-        </button>
-        <button
           id="delete_campaign"
           className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer w-full lg:w-fit"
           onClick={handleSubmit}
         >
           삭제하기
+        </button>
+        <button
+          id="modify_campaign"
+          className="border p-2 bg-blue-500 text-white rounded-lg  cursor-pointer w-full lg:w-fit"
+          onClick={handleSubmit}
+        >
+          수정하기
         </button>
       </div>
     </DashboardContainer>

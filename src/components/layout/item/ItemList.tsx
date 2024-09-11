@@ -209,13 +209,13 @@ const ItemList: React.FC<ItemListProps> = (
             </div>
             <div className="w-full pt-2 flex justify-center space-x-2 text-white text-sm">
               <button
-                className="w-[50%] p-2 cursor-pointer rounded-md bg-red-500"
+                className="w-[50%] p-2 cursor-pointer rounded-md bg-red-400"
                 onClick={(e) => handleAction(e, "delete", item.id)}
               >
                 삭제
               </button>
               <button
-                className="w-[50%] p-2 cursor-pointer rounded-md bg-blue-500"
+                className="w-[50%] p-2 cursor-pointer rounded-md bg-blue-400"
                 onClick={() => handleItemClick(item.id)}
               >
                 상세보기
@@ -231,15 +231,17 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         )}
       </div>
-      <div
-        id="create_item"
-        className="bg-blue-500 flex w-full text-white mt-4 p-2 rounded-lg text-center justify-center cursor-pointer font-normal"
-        onClick={handleButton}
-      >
-        <div className="pr-1 flex text-center items-center">
-          <AddIcon fontSize="small" />
+      <div className="flex w-full text-white text-center lg:justify-end">
+        <div
+          id="create_item"
+          className="bg-blue-500 flex w-full lg:w-fit text-white mt-4 p-2 rounded-lg justify-center cursor-pointer font-normal"
+          onClick={handleButton}
+        >
+          <div className="pr-1 flex text-center items-center">
+            <AddIcon fontSize="small" />
+          </div>
+          아이템 추가
         </div>
-        아이템 추가
       </div>
     </>
   );

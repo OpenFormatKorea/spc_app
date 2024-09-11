@@ -106,13 +106,13 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
             return (
               <div
                 key={campaign.id || i}
-                className="bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 cursor-pointer"
+                className="shadow-sm bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 cursor-pointer"
                 id={campaign.id}
                 onClick={handleCampaignClick}
               >
                 <div
                   className="font-bold mb-2 text-black w-full pb-1 border-b flex justify-between"
-                  onClick={(e) => e.stopPropagation()} // You stop propagation only for the title section
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <div> {campaign.title}</div>
                   <div>
@@ -128,7 +128,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
 
                 <div className="text-sm flex pr-2">
                   <div className="w-[100px]">
-                    <strong>캠페인 활성 기간: </strong>
+                    <strong>활성 기간: </strong>
                   </div>
                   {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
                     year: "numeric",
