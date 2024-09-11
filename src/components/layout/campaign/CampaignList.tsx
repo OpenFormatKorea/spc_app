@@ -13,15 +13,37 @@ interface CampaignListProps {
 const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, apiResponse, handleButton }) => {
   const router = useRouter();
   const [isCampaignPage, setIsCampaignPage] = useState(false);
+  const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({}); // Holds active statuses for all campaigns
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
-  }, [router.pathname]);
-  const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
+
+    // Initialize active status map from the campaign data
+    const initialStatus = Array.isArray(apiResponse)
+      ? apiResponse.reduce(
+          (acc, campaign) => {
+            acc[campaign.id] = campaign.active;
+            return acc;
+          },
+          {} as { [key: string]: boolean }
+        )
+      : {};
+
+    setActiveStatusMap(initialStatus);
+  }, [router.pathname, apiResponse]);
 
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     router.replace(`/campaign/details?campaign_id=${id}`, undefined, { shallow: true, scroll: false });
   };
+
+  const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) => {
+    setActiveStatusMap((prevState) => ({
+      ...prevState,
+      [campaignId]: newStatus,
+    }));
+  };
+
+  const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
 
   return (
     <>
@@ -86,7 +108,12 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                     : ""}
                 </td>
                 <td className="px-2 py-2 text-sm border-b border-gray-200" onClick={(e) => e.stopPropagation()}>
-                  <CampaignActiveButton view="PC" campaign={campaign} />
+                  <CampaignActiveButton
+                    view="PC"
+                    campaign={campaign}
+                    activeStatus={activeStatusMap[campaign.id]}
+                    toggleCampaignActiveStatus={toggleCampaignActiveStatus}
+                  />
                 </td>
               </tr>
             ))}
@@ -116,7 +143,12 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                 >
                   <div> {campaign.title}</div>
                   <div>
-                    <CampaignActiveButton view="MOBILE" campaign={campaign} />
+                    <CampaignActiveButton
+                      view="MOBILE"
+                      campaign={campaign}
+                      activeStatus={activeStatusMap[campaign.id]}
+                      toggleCampaignActiveStatus={toggleCampaignActiveStatus}
+                    />
                   </div>
                 </div>
                 <div className="text-sm flex pr-2">

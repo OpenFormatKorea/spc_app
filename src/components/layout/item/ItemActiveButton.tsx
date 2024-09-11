@@ -4,25 +4,23 @@ import React, { useState } from "react";
 interface ItemActiveButtonProps {
   view: "MOBILE" | "PC";
   item_id: string;
-  active: boolean;
+  activeStatus: boolean;
   campaign_id: string;
+  toggleItemActiveStatus: (itemId: string, newStatus: boolean) => void;
 }
+
 const ItemActiveButton: React.FC<ItemActiveButtonProps> = (
-  { view, item_id, active, campaign_id },
+  { view, item_id, activeStatus, campaign_id, toggleItemActiveStatus },
   context: GetServerSidePropsContext
 ) => {
-  const [activeStatus, setActiveStatus] = useState(active);
-
   const handleActiveStatus = async () => {
     const newActiveStatus = !activeStatus;
-    if (confirm("캠페인 활성화 상태를 변경하시겠어요?")) {
-      setActiveStatus(newActiveStatus);
+    if (confirm("아이템 활성화 상태를 변경하시겠어요?")) {
+      toggleItemActiveStatus(item_id, newActiveStatus);
       const result = await fetchActivateItem(item_id, campaign_id, context);
-      if (result.status === 200) {
-        return true;
-      } else {
-        alert("캠페인 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
-        setActiveStatus(!newActiveStatus);
+      if (result.status !== 200) {
+        alert("아이템 활성화 상태 변경 실패. 상태 코드: " + result.status);
+        toggleItemActiveStatus(item_id, !newActiveStatus);
       }
     }
   };

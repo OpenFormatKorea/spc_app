@@ -6,18 +6,18 @@ import React, { useState } from "react";
 interface CampaignActiveButtonProps {
   view: "MOBILE" | "PC";
   campaign: CampaignArgs;
+  activeStatus: boolean; // Pass down the active status
+  toggleCampaignActiveStatus: (campaignId: string, newStatus: boolean) => void; // Callback to update parent state
 }
 
 const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
-  { view, campaign },
+  { view, campaign, activeStatus, toggleCampaignActiveStatus },
   context: GetServerSidePropsContext
 ) => {
-  const [activeStatus, setActiveStatus] = useState(campaign.active);
   const campaign_id = campaign.id ? campaign.id.toString() : "0";
   const handleActiveStatus = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation(); // Stop event propagation to parent div
+    e.stopPropagation();
     const newActiveStatus = !activeStatus;
-    setActiveStatus(newActiveStatus); // Update UI immediately
 
     if (confirm("캠페인 활성화 상태를 변경하시겠어요?")) {
       const dataObj = {
@@ -32,12 +32,11 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
 
       const result = await fetchModifyCampaign(campaign_id, dataObj, context);
 
-      if (result.status !== 200) {
+      if (result.status === 200) {
+        toggleCampaignActiveStatus(campaign_id, newActiveStatus);
+      } else {
         alert("캠페인 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
-        setActiveStatus(!newActiveStatus);
       }
-    } else {
-      setActiveStatus(!newActiveStatus);
     }
   };
 

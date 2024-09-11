@@ -2,7 +2,7 @@ import { fetchDeleteItems, fetchActivateItem } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
 interface ItemListProps {
@@ -22,7 +22,17 @@ const ItemList: React.FC<ItemListProps> = (
 
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
-
+  const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({});
+  useEffect(() => {
+    const initialStatus = items.reduce(
+      (acc, item) => {
+        acc[item.id] = item.active;
+        return acc;
+      },
+      {} as { [key: string]: boolean }
+    );
+    setActiveStatusMap(initialStatus);
+  }, [items]);
   const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
     let result;
     if (actionType === "delete" && confirm("선택하신 아이템을 삭제하시겠어요?")) {
@@ -38,6 +48,13 @@ const ItemList: React.FC<ItemListProps> = (
       alert(`오류 발생: ${result.status}`);
       console.error(`오류 발생: ${result.status}`);
     }
+  };
+
+  const toggleItemActiveStatus = (itemId: string, newStatus: boolean) => {
+    setActiveStatusMap((prevState) => ({
+      ...prevState,
+      [itemId]: newStatus,
+    }));
   };
 
   const handleItemClick = (itemId: string) => {
@@ -143,7 +160,13 @@ const ItemList: React.FC<ItemListProps> = (
                   </td>
 
                   <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
-                    <ItemActiveButton view="PC" item_id={item.id} campaign_id={campaign_id} active={item.active} />
+                    <ItemActiveButton
+                      view="PC"
+                      item_id={item.id}
+                      campaign_id={campaign_id}
+                      activeStatus={activeStatusMap[item.id]}
+                      toggleItemActiveStatus={toggleItemActiveStatus}
+                    />
                   </td>
                 </tr>
               ))}
@@ -177,7 +200,13 @@ const ItemList: React.FC<ItemListProps> = (
             >
               <div> {item.title}</div>
               <div>
-                <ItemActiveButton view="MOBILE" item_id={item.id} campaign_id={campaign_id} active={item.active} />
+                <ItemActiveButton
+                  view="MOBILE"
+                  item_id={item.id}
+                  campaign_id={campaign_id}
+                  activeStatus={activeStatusMap[item.id]}
+                  toggleItemActiveStatus={toggleItemActiveStatus}
+                />
               </div>
             </div>
             <div className="text-sm flex pr-2">
