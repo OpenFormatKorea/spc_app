@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   };
 
   return (
-    <header className="bg-sky-600 fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px]">
+    <header className="bg-sky-600 fixed top-0 w-full lg:w-[calc(100%-250px)] lg:ml-[250px] z-10">
       <div className="flex items-center h-[60px] px-6 w-full">
         <div className="flex items-center lg:hidden">
           <a onClick={handleLogo}>

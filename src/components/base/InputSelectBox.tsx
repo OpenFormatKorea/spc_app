@@ -22,11 +22,6 @@ const InputSelectBox: React.FC<InputSelectBoxArgs> = ({ id, value, options, onCh
       <option key="3" value="3">
         3
       </option>
-      {/* {options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
-        </option>
-      ))} */}
     </select>
   );
 };

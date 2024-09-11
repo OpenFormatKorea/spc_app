@@ -16,7 +16,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
   }, [router.pathname]);
-  const [campaigns, setCampaigns] = useState(Array.isArray(apiResponse) ? apiResponse : []);
+  const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
 
   //const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -26,10 +26,10 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
 
   return (
     <>
-      <div className="font-bold text-xl flex w-full pb-2 border-b-[1px] mb-4">
+      <div className=" flex w-full pb-2 border-b-[1px] mb-4">
         <div className="w-[80%]">
-          <div>캠페인</div>
-          <div className="font-normal text-sm w-full">현재 사용중인 캠페인 목록이에요.</div>
+          <div className="font-bold text-xl">캠페인</div>
+          <div className="font-normal text-sm text-gray-500 pt-2">현재 사용중인 캠페인 목록이에요.</div>
         </div>
         {!isCampaignPage && (
           <div

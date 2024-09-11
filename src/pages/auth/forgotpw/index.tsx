@@ -32,14 +32,9 @@ const resetpw = () => {
     }
   };
 
-  const postResetPW = async (info: AuthArgs) => {
-    const result = await fetchResetPW(resetPWInfo);
-    return result;
-  };
-
   const handleSubmit = async (event: React.FormEvent) => {
     if (infoCheck(resetPWInfo)) {
-      const result = await postResetPW(resetPWInfo);
+      const result = await fetchResetPW(resetPWInfo);
       if (result.success) {
         alert(result.message);
 
