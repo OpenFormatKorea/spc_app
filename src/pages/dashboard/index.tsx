@@ -45,11 +45,9 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
     }
   };
 
-  useEffect(() => {}, [apiResponse, authResponse]);
-
   return (
-    <DashboardContainer title="대시보드" onclick={handleButton} onclickText="" buttonId="dashboard">
-      <div className="contents-container w-full justify-center">
+    <DashboardContainer title="대시보드">
+      <div className="contents-container w-full justify-center ">
         <ContentsContainer variant="dashboard">
           <CampaignList
             theadStyle={theadStyle}

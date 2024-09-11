@@ -6,6 +6,7 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState, useRef } from "react";
 import { fetchCreateCampaign } from "@/lib/campaign/apis";
+import AddIcon from "@mui/icons-material/Add";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
@@ -74,7 +75,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   };
 
   return (
-    <DashboardContainer title="새 캠페인 생성" onclick={handleSubmit} onclickText="저장하기" buttonId="create_campaign">
+    <DashboardContainer title="새 캠페인 생성">
       <ContentsContainer variant="dashboard">
         <CampaignDetails
           page_type="NEW"
@@ -86,6 +87,15 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           setStart_date={setStartDate}
           setEnd_date={setEndDate}
         />
+        <div className="button-container w-full pt-4 flex items-center justify-center ">
+          <button
+            className={`border p-2 w-full text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500`}
+            onClick={handleSubmit}
+            id="create_campaign"
+          >
+            저장하기
+          </button>
+        </div>
       </ContentsContainer>
     </DashboardContainer>
   );

@@ -28,6 +28,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   useCondition,
   setUseCondition,
 }) => {
+  const isSignupAndReferee = target === "referee" && trigger === "SIGNUP";
   const handleTimingChange = (
     key: keyof ItemConditions["payment_timing"],
     value: PaymentTimingType | number | null
@@ -146,9 +147,9 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
               label="한번만"
               name={`${target}_${trigger}_payment_frequency_type`}
               value={PaymentFrequencyType.ONCE}
-              checked={itemConditions.payment_frequency.type === PaymentFrequencyType.ONCE}
+              checked={itemConditions.payment_frequency.type === PaymentFrequencyType.ONCE || isSignupAndReferee}
               onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.ONCE)}
-              disabled={false}
+              disabled={isSignupAndReferee} // Disable when it's "signup" and "referee"
             />
             <InputRadioBox
               label="반복"
@@ -156,7 +157,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
               value={PaymentFrequencyType.REP}
               checked={itemConditions.payment_frequency.type === PaymentFrequencyType.REP}
               onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.REP)}
-              disabled={false}
+              disabled={isSignupAndReferee} // Disable when it's "signup" and "referee"
             />
             <InputRadioBox
               label="무제한"
@@ -164,9 +165,10 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
               value={PaymentFrequencyType.UNL}
               checked={itemConditions.payment_frequency.type === PaymentFrequencyType.UNL}
               onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.UNL)}
-              disabled={false}
+              disabled={isSignupAndReferee} // Disable when it's "signup" and "referee"
             />
           </div>
+
           <div
             className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_frequency.type === PaymentFrequencyType.REP ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"}`}
           >

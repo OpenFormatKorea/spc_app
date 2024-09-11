@@ -4,11 +4,12 @@ import { GetServerSidePropsContext } from "next";
 import React, { useState } from "react";
 
 interface CampaignActiveButtonProps {
+  view: "MOBILE" | "PC";
   campaign: CampaignArgs;
 }
 
 const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
-  { campaign },
+  { view, campaign },
   context: GetServerSidePropsContext
 ) => {
   const [activeStatus, setActiveStatus] = useState(campaign.active);
@@ -44,14 +45,14 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
     <div className="flex w-full justify-center text-center z-0">
       <input
         type="checkbox"
-        id={`campaign-activation-` + campaign_id}
+        id={`${view}-campaign-activation-` + campaign_id}
         className="peer sr-only opacity-0"
         name="active"
         checked={activeStatus}
         onChange={handleActiveStatus}
       />
       <label
-        htmlFor={`campaign-activation-` + campaign_id}
+        htmlFor={`${view}-campaign-activation-` + campaign_id}
         className="relative z-0 flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-400 px-0.5 outline-none transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:shadow before:transition-transform before:duration-300 peer-checked:bg-green-500 peer-checked:before:translate-x-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-green-500"
       >
         {" "}

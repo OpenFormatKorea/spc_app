@@ -18,11 +18,8 @@ const InputTextBox: React.FC<InputTextArgs> = ({ disabled, type, id, placeholder
       input[type="number"]::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
-      }
-
-      <<<<<<< Updated upstream
-        /* Firefox */
-        input[type="number"] {
+      } /* Firefox */
+      input[type="number"] {
         -moz-appearance: textfield;
       }
     `}</style>

@@ -61,7 +61,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
       if (result.status === 200) {
         alert(result.message);
         if (result.success) {
-          router.push("/campaign");
+          router.push(`/campaign/details?campaign_id=${campaign_id}`);
         }
       } else {
         alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
@@ -93,8 +93,8 @@ const NewItem = (context: GetServerSidePropsContext) => {
   }, [router.isReady, router.query]);
 
   return (
-    <DashboardContainer title="새 아이템 생성" onclick={handleSubmit} onclickText="저장하기" buttonId="create_item">
-      <div className="flex flex-col md:flex-row w-full justify-center lg:space-x-4">
+    <DashboardContainer title="새 아이템 생성">
+      <div className="flex flex-col lg:flex-row w-full justify-center lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails
             page_type="NEW"
@@ -125,6 +125,24 @@ const NewItem = (context: GetServerSidePropsContext) => {
           />
           <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
         </ContentsContainer>
+      </div>
+      <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
+        <div className="flex space-x-2 w-full lg:w-fit">
+          <button
+            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
+            onClick={handleSubmit}
+            id="cancel_create_item"
+          >
+            취소하기
+          </button>
+          <button
+            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+            onClick={handleSubmit}
+            id="create_item"
+          >
+            저장하기
+          </button>
+        </div>
       </div>
     </DashboardContainer>
   );

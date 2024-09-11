@@ -3,6 +3,7 @@ import { FaBars, FaTimes } from "react-icons/fa"; // Importing icons for menu
 import { deleteCookie, getCookie } from "cookies-next";
 import router from "next/router";
 import Navmenu from "@/components/layout/base/Navmenu";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface HeaderProps {
   title: string;
@@ -41,19 +42,13 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[20px] cursor-pointer mr-4" />
           </a>
         </div>
-        <h2 className="font-semibold text-lg min-w-[150px] mr-auto text-white">{title}</h2>
-        <div className="space-x-2 hidden lg:flex">
-          <div className="p-2 cursor-pointer bg-white rounded-lg text-xs text-center min-w-[65px]">My Page</div>
-          <div
-            className="p-2 cursor-pointer bg-white rounded-lg text-xs text-center min-w-[65px]"
-            onClick={handleSignOut}
-          >
-            Sign out
-          </div>
+        <div className="w-full">
+          <div className="font-semibold text-lg min-w-[150px] mr-auto text-white hidden lg:block">{title}</div>
         </div>
+
         <div className="lg:hidden flex items-center">
           <button onClick={toggleMenu} className="text-white focus:outline-none">
-            {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            {isMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
           </button>
         </div>
       </div>
@@ -63,16 +58,20 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
         <div className="bg-sky-600 text-white lg:hidden flex flex-col items-start p-4">
           <Navmenu menutitle="대시보드" link="/dashboard" />
           <Navmenu menutitle="캠페인" link="/campaign" />
+          <Navmenu menutitle="마이 페이지" link="/mypage" />
           <div className="border-t border-white my-2 w-full"></div>
-          <Navmenu menutitle="My Page" link="/mypage" />
+
           <div
-            className="py-2 cursor-pointer"
+            className="p-4 cursor-pointer flex "
             onClick={(event) => {
               handleSignOut(event);
               toggleMenu();
             }}
           >
-            Sign out
+            <LogoutIcon fontSize="small" />
+            <div className="w-full text-left pl-3 text-sm">
+              <a>로그아웃</a>
+            </div>
           </div>
         </div>
       )}

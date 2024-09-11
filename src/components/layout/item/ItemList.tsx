@@ -1,10 +1,10 @@
-import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
 import { fetchDeleteItems, fetchActivateItem } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
 interface ItemListProps {
   theadStyle: string;
   tbodyStyle: string;
@@ -23,117 +23,70 @@ const ItemList: React.FC<ItemListProps> = (
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    const { id } = event.currentTarget;
+  const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
+    let result;
+    if (actionType === "delete" && confirm("선택하신 아이템을 삭제하시겠어요?")) {
+      result = await fetchDeleteItems([itemId], campaign_id, context);
+    } else if (actionType === "activate" && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
+      result = await fetchActivateItem(itemId, campaign_id, context);
+    }
 
-    if (id === "delete_items" && confirm("선택하신 아이템들을 삭제하시겠어요?")) {
-      const item_ids = Object.keys(selectedItems).filter((key) => selectedItems[key]);
-      const result = await fetchDeleteItems(item_ids, campaign_id, context);
-      if (result.status === 200) {
-        alert(result.message);
-        window.location.reload();
-      } else {
-        alert("아이템 삭제를 실패 하였습니다. 상태 코드: " + result.status);
-        console.error("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
-      }
-    } else if (id.includes("activate_item_") && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
-      const item_id = id.replace("activate_item_", "");
-      const result = await fetchActivateItem(item_id, campaign_id, context);
-      if (result.status === 200) {
-        alert("아이템 활성화 상태를 변경 하였습니다. ");
-        window.location.reload();
-      } else {
-        alert("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
-        console.error("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: ", result.status);
-      }
+    if (result?.status === 200) {
+      alert(result.message);
+      window.location.reload();
+    } else if (result) {
+      alert(`오류 발생: ${result.status}`);
+      console.error(`오류 발생: ${result.status}`);
     }
   };
 
-  const handleItemDelete = async (event: React.FormEvent) => {
-    const { id } = event.currentTarget;
-
-    if (confirm("선택하신 아이템을 삭제하시겠어요?")) {
-      const item_ids = [id];
-      const result = await fetchDeleteItems(item_ids, campaign_id, context);
-      if (result.status === 200) {
-        alert(result.message);
-        window.location.reload();
-      } else {
-        alert("아이템 삭제를 실패 하였습니다. 상태 코드: " + result.status);
-        console.error("아이템 삭제를 실패 하였습니다. 상태 코드:", result.status);
-      }
-    }
-  };
-
-  const handleItemClick = (event: React.MouseEvent<HTMLElement>) => {
-    const { id } = event.currentTarget;
+  const handleItemClick = (itemId: string) => {
     if (router.pathname.includes("/campaign/details")) {
-      router.replace(
-        {
-          pathname: "/item/details",
-          query: { campaign_id: campaign_id, item_id: id },
-        },
-        undefined,
-        {
-          shallow: true,
-          scroll: false,
-        }
-      );
+      router.replace({
+        pathname: "/item/details",
+        query: { campaign_id, item_id: itemId },
+      });
     }
   };
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
-    setSelectAll(checked);
-
-    const newSelectedItems = items.reduce(
-      (acc, item) => {
-        acc[item.id] = checked;
-        return acc;
-      },
+    const isChecked = e.target.checked;
+    setSelectAll(isChecked);
+    const updatedSelectedItems = items.reduce(
+      (acc, item) => ({ ...acc, [item.id]: isChecked }),
       {} as { [key: string]: boolean }
     );
-
-    setSelectedItems(newSelectedItems);
+    setSelectedItems(updatedSelectedItems);
   };
 
-  const handleCheckboxChange = (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
-    setSelectedItems((prevState) => {
-      const newSelectedItems = {
-        ...prevState,
-        [id]: checked,
-      };
-
-      // Check if all items are selected
-      const allSelected = items.every((item) => newSelectedItems[item.id]);
-      setSelectAll(allSelected); // Update the selectAll state based on this check
-
-      return newSelectedItems;
+  const handleCheckboxChange = (itemId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    setSelectedItems((prev) => {
+      const updatedItems = { ...prev, [itemId]: isChecked };
+      setSelectAll(items.every((item) => updatedItems[item.id]));
+      return updatedItems;
     });
   };
   return (
     <>
       <div>
         <div className="flex w-full">
-          <h1 className="font-bold text-base pb-2 border-b mb-5 w-full flex justify-between items-center">
+          <h1 className="font-bold text-base pb-2 border-b mb-2 w-full flex justify-between items-center">
             <div>
               <div className="text-xl">아이템</div>
-              <div className="font-normal text-sm">현재 사용중인 아이템 목록이에요.</div>
-            </div>
-            <div
-              id="create_item"
-              className="bg-blue-500 text-white p-2 rounded-lg text-center cursor-pointer font-normal flex items-center"
-              onClick={handleButton}
-            >
-              <div className="pr-1 flex items-center">
-                <AddIcon fontSize="small" />
-              </div>
-              아이템 추가
+              <div className="font-normal text-sm text-gray-500 pt-2">현재 사용중인 아이템 목록이에요.</div>
             </div>
           </h1>
         </div>
-
+        <div className="items-center justify-between hidden lg:flex">
+          <button
+            className="p-2 bg-red-500 text-white rounded-lg cursor-pointer"
+            id="delete_items"
+            onClick={(e) => handleAction(e, "delete", "")}
+          >
+            선택삭제
+          </button>
+        </div>
         <div className="my-2 w-full">
           <table className="w-full bg-white border border-gray-200 rounded-lg text-center hidden lg:table">
             <thead>
@@ -156,7 +109,7 @@ const ItemList: React.FC<ItemListProps> = (
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr className="cursor-pointer" key={item.id} id={item.id} onClick={handleItemClick}>
+                <tr key={item.id} className="cursor-pointer" onClick={() => handleItemClick(item.id)}>
                   <td className={`${tbodyStyle} px-2`} onClick={(e) => e.stopPropagation()}>
                     <input
                       type="checkbox"
@@ -184,7 +137,7 @@ const ItemList: React.FC<ItemListProps> = (
                   </td>
 
                   <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
-                    <ItemActiveButton item_id={item.id} campaign_id={campaign_id} active={item.active} />
+                    <ItemActiveButton view="PC" item_id={item.id} campaign_id={campaign_id} active={item.active} />
                   </td>
                 </tr>
               ))}
@@ -197,29 +150,28 @@ const ItemList: React.FC<ItemListProps> = (
               )}
             </tbody>
           </table>
-          <div className="items-center justify-start mt-5 hidden lg:flex">
-            <button
-              className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer"
-              id="delete_items"
-              onClick={handleSubmit}
-            >
-              선택삭제
-            </button>
-          </div>
         </div>
       </div>
       {/* Mobile-friendly layout */}
       <div className="block lg:hidden">
         {items.map((item, i) => (
           <div key={item.id || i} className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 ">
-            <div className="font-bold mb-2 text-black w-full pb-1 border-b">{item.title}</div>
+            <div
+              className="font-bold mb-2 text-black w-full pb-1 border-b flex justify-between"
+              onClick={(e) => e.stopPropagation()} // You stop propagation only for the title section
+            >
+              <div> {item.title}</div>
+              <div>
+                <ItemActiveButton view="MOBILE" item_id={item.id} campaign_id={campaign_id} active={item.active} />
+              </div>
+            </div>
             <div className="text-sm flex pr-2">
               <div className="w-[100px]">
                 <strong>아이템 종류: </strong>
               </div>
               {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
             </div>
-            <div className="text-sm flex pr-2">
+            <div className="text-sm flex w-full pr-2">
               <div className="w-[100px]">
                 <strong>생성일: </strong>
               </div>
@@ -240,18 +192,16 @@ const ItemList: React.FC<ItemListProps> = (
                 day: "numeric",
               })}
             </div>
-            <div className="flex space-x-4 items-center justify-center p-2">
+            <div className="w-full pt-2 flex justify-center space-x-2 text-white text-sm">
               <button
-                className="text-white text-sm min-w-[60px] bg-red-400 py-1 px-2 cursor-pointer rounded-md"
-                id={item.id}
-                onClick={handleItemDelete}
+                className="w-[50%] p-2 cursor-pointer rounded-md bg-red-500"
+                onClick={(e) => handleAction(e, "delete", item.id)}
               >
                 삭제
               </button>
               <button
-                className="text-white text-sm min-w-[60px] bg-blue-400 py-1 px-2 cursor-pointer rounded-md"
-                id={item.id}
-                onClick={handleItemClick}
+                className="w-[50%] p-2 cursor-pointer rounded-md bg-blue-500"
+                onClick={() => handleItemClick(item.id)}
               >
                 상세보기
               </button>
@@ -259,8 +209,22 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         ))}
         {!items.length && (
-          <div className="text-center text-gray-500">사용중인 아이템이 없습니다. 새로운 캠페인을 생성해보세요.</div>
+          <div className="text-center text-gray-500">
+            사용중인 아이템이 없습니다.
+            <br />
+            새로운 캠페인을 생성해보세요.
+          </div>
         )}
+      </div>
+      <div
+        id="create_item"
+        className="bg-blue-500 flex w-full text-white mt-4 p-2 rounded-lg text-center justify-center cursor-pointer font-normal"
+        onClick={handleButton}
+      >
+        <div className="pr-1 flex text-center items-center">
+          <AddIcon fontSize="small" />
+        </div>
+        아이템 추가
       </div>
     </>
   );

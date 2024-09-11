@@ -18,7 +18,6 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
   }, [router.pathname]);
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
 
-  //const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     router.replace(`/campaign/details?campaign_id=${id}`, undefined, { shallow: true, scroll: false });
@@ -28,7 +27,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
     <>
       <div className=" flex w-full pb-2 border-b-[1px] mb-4">
         <div className="w-[80%]">
-          <div className="font-bold text-xl">캠페인</div>
+          <div>캠페인</div>
           <div className="font-normal text-sm text-gray-500 pt-2">현재 사용중인 캠페인 목록이에요.</div>
         </div>
         {!isCampaignPage && (
@@ -56,13 +55,27 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
             {campaigns.map((campaign, i) => (
               <tr className="cursor-pointer" key={campaign.id || i} id={campaign.id} onClick={handleCampaignClick}>
                 <td className={tbodyStyle}>{campaign.title}</td>
-                <td className={tbodyStyle}>{campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}</td>
+                <td className={tbodyStyle}>
+                  {campaign.period_type === "LIMITED" ? (
+                    <div className="w-full flex justify-center">
+                      <div className="bg-yellow-200 w-fit px-2 py-1 rounded-md text-yellow-600 font-semibold text-sm">
+                        기간 제한
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full flex justify-center">
+                      <div className="bg-green-200 w-fit px-2 py-1 rounded-md text-green-600 font-semibold text-sm">
+                        무기한
+                      </div>
+                    </div>
+                  )}
+                </td>
                 <td className={tbodyStyle}>
                   {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
-                  })}
+                  })}{" "}
                   ~{" "}
                   {campaign.end_date && campaign.end_date !== ""
                     ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
@@ -76,7 +89,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                   className="px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center flex"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <CampaignActiveButton campaign={campaign} />
+                  <CampaignActiveButton view="PC" campaign={campaign} />
                 </td>
               </tr>
             ))}
@@ -106,7 +119,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                 >
                   <div> {campaign.title}</div>
                   <div>
-                    <CampaignActiveButton campaign={campaign} />
+                    <CampaignActiveButton view="MOBILE" campaign={campaign} />
                   </div>
                 </div>
                 <div className="text-sm flex pr-2">
@@ -124,7 +137,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                     year: "numeric",
                     month: "long",
                     day: "numeric",
-                  })}
+                  })}{" "}
                   ~{" "}
                   {campaign.end_date && campaign.end_date !== ""
                     ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
