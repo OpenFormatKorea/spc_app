@@ -22,8 +22,8 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   rewards,
   setRewards,
 }) => {
-  const inputformClass = "flex flex-col text-left w-full lg:max-w-[350px] min-w-[300px] mb-4";
-  const labelClass = "font-gray-600 text-sm font-bold text-left w-full mt-4";
+  const inputformClass = "inputForm flex flex-col text-left w-full pb-6";
+  const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [disableInput, setDisableInput] = useState(false);
@@ -52,7 +52,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
     <>
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">리워드</h1>
       <div className={inputformClass}>
-        <label className={labelClass}>리워드 종류</label>
+        <label className={radioButtonLabelClass}>리워드 종류</label>
         <div className="flex justify-between w-full lg:max-w-[350px] ">
           <InputRadioBox
             label="쿠폰"

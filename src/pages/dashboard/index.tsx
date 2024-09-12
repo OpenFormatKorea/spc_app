@@ -47,9 +47,9 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
 
   return (
     <DashboardContainer>
-      <div className="flex w-full justify-between items-center mb-3">
+      <div className="flex w-full justify-between items-center mb-3 h-[42px]">
         <div className="subject-container flex w-full">
-          <a className="text-2xl lg:text-4xl font-bold">대시보드</a>
+          <a className="text-2xl font-bold">대시보드</a>
         </div>
       </div>
       <div className="contents-container w-full justify-center ">

@@ -122,13 +122,13 @@ const DetailsCampaign = (
     }
   };
 
-  const theadStyle = "px-1 py-2 text-center border-b border-gray-200 text-sm text-gray-700";
-  const tbodyStyle = "px-2 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all";
+  const theadStyle = "px-1 py-2 text-center text-sm text-gray-500";
+  const tbodyStyle = "px-2 py-2 text-sm whitespace-normal break-words break-all";
   return (
     <DashboardContainer>
-      <div className="flex w-full justify-between items-center mb-3">
+      <div className="flex w-full justify-between items-center mb-3 h-[42px]">
         <div className="subject-container flex w-full">
-          <a className="text-2xl lg:text-4xl font-bold">캠페인 상세 정보</a>
+          <a className="text-2xl font-bold">캠페인 상세 정보</a>
         </div>
 
         <div className="button-container flex justify-end w-full">
@@ -142,7 +142,7 @@ const DetailsCampaign = (
           </button>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row w-full md:space-x-4 lg:space-x-4">
+      <div className="flex flex-col md:flex-row w-full md:space-x-4 lg:space-x-4 ">
         <ContentsContainer variant="campaign">
           <CampaignDetails
             page_type="DETAILS"
@@ -166,7 +166,7 @@ const DetailsCampaign = (
           />
         </ContentsContainer>
       </div>
-      <div className="flex items-center justify-end mt-4 gap-x-2 gap-y-2">
+      <div className="flex items-center justify-end mt-6 gap-x-2 gap-y-2">
         <button
           id="delete_campaign"
           className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer w-full lg:w-fit"

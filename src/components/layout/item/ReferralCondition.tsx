@@ -74,12 +74,12 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   };
 
   return (
-    <div className="p-4 border w-full bg-white rounded-2xl">
-      <div className="flex items-center mb-4 border-b-[1px]">
-        <label className="font-gray-600 text-lg font-bold text-left w-full">
+    <div className="p-3 w-full bg-white rounded-xl shadow-sm">
+      <div className="flex items-center border-b-[1px] pb-2 mb-1">
+        <label className="font-gray-600 text-md font-bold text-left w-full flex">
           {target === "referrer" ? "추천인" : "피추천인"}
         </label>
-        <div className="mr-2 mb-3 items-center flex">
+        <div className="flex items-center">
           <input
             type="checkbox"
             className="peer sr-only opacity-0"
@@ -103,7 +103,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
       >
         <div className={inputFormClass}>
           <label className={labelClass}>{rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 시점</label>
-          <div className="flex justify-between w-full mt-2">
+          <div className="flex justify-between w-full text-sm mt-2">
             <InputRadioBox
               label="즉시 지급"
               name={`${target}_${trigger}_payment_timing_type`}
@@ -125,7 +125,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
           <div
             className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_timing.type === PaymentTimingType.DEL ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"}`}
           >
-            <div className="flex text-left w-[120px] mt-2 text-gray-500">
+            <div className="flex text-left text-sm w-[120px] text-gray-500 items-end">
               <InputTextBox
                 type="text"
                 id={`${target}_${trigger}_delay_days`}
@@ -142,7 +142,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
 
         <div className={inputFormClass}>
           <label className={labelClass}>{rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 횟수</label>
-          <div className="flex justify-between w-full mt-2">
+          <div className="flex justify-between w-full text-sm mt-2">
             <InputRadioBox
               label="한번만"
               name={`${target}_${trigger}_payment_frequency_type`}
@@ -172,7 +172,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
           <div
             className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_frequency.type === PaymentFrequencyType.REP ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"}`}
           >
-            <div className="flex text-left w-[150px] mb-2 text-gray-500">
+            <div className="flex text-left text-sm w-[120px] text-gray-500 items-end">
               <div className="flex min-w-fit items-center mr-2">최대</div>
               <InputTextBox
                 type="number"

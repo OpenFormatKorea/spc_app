@@ -47,26 +47,27 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
 
   return (
     <>
-      <div className=" flex w-full pb-2 border-b-[1px] mb-4">
-        <div className="w-[80%]">
-          <div className="font-bold text-lg">캠페인</div>
-          <div className="font-normal text-sm text-gray-500 pt-1">현재 사용중인 캠페인 목록이에요.</div>
-        </div>
-        {!isCampaignPage && (
-          <div
-            id="more_campaign"
-            className="w-[20%] text-right text-sm pr-1 justify-center cursor-pointer text-blue-400"
-            onClick={handleButton}
-          >
-            더보기
+      <div className="w-full pb-2 mb-2">
+        <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">
+          <div className="w-[80%]">
+            <div className="font-bold text-lg">캠페인</div>
+            <div className="font-normal text-sm text-gray-500">현재 사용중인 캠페인 목록이에요.</div>
           </div>
-        )}
+          {!isCampaignPage && (
+            <div
+              id="more_campaign"
+              className="w-[20%] text-right text-sm pr-1 justify-center cursor-pointer text-blue-400"
+              onClick={handleButton}
+            >
+              더보기
+            </div>
+          )}
+        </div>
       </div>
-
       <div className="py-2 w-full">
-        <table className="w-full bg-white border border-gray-200 hidden lg:table">
+        <table className="w-full border border-gray-100 text-center hidden lg:table">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="bg-gray-100">
               <th className={theadStyle}>캠페인 명</th>
               <th className={theadStyle}>타입</th>
               <th className={theadStyle}>캠페인 생성일</th>

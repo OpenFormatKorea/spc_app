@@ -27,6 +27,9 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   setStart_date,
   setEnd_date,
 }) => {
+  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
+  const labelClass = "text-xs pt-4 text-gray-500";
+  const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPeriod_type(e.target.value as PeriodType);
   };
@@ -36,6 +39,12 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [activeStatus, setActiveStatus] = useState<boolean>(campaignArgs.active);
+
+  useEffect(() => {
+    const initialStatus = !campaignArgs.active;
+    setActiveStatus(initialStatus);
+  }, [campaignArgs]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -46,13 +55,17 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
     }
   };
 
+  const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) => {
+    setActiveStatus(newStatus);
+  };
   return (
-    <div className="contents-container w-full justify-center">
-      <h1 className=" text-base pb-2 border-b mb-4 w-full flex justify-between items-center">
-        <div>
-          <div className="font-bold text-lg">캠페인 상세정보</div>
-          <div className="text-sm text-gray-500">상세 정보 옵션</div>
+    <div className="w-full pb-2 mb-2">
+      <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">
+        <div className="w-full">
+          <div className="font-bold text-lg">캠페인 상세 정보</div>
+          <div className="font-normal text-sm text-gray-500">상세 정보 옵션</div>
         </div>
+
         {page_type === "DETAILS" ? (
           <div>
             <CampaignActiveButton
@@ -66,14 +79,16 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
                 end_date: campaignArgs.end_date,
                 active: campaignArgs.active,
               }}
+              activeStatus={activeStatus}
+              toggleCampaignActiveStatus={toggleCampaignActiveStatus}
             />
           </div>
         ) : (
           <></>
         )}
-      </h1>
+      </div>
 
-      <div className="inputForm flex flex-col text-left w-full pb-2">
+      <div className={inputFormClass}>
         <label className="text-xs pt-2 text-gray-500">캠페인 명</label>
         <InputTextBox
           type="text"
@@ -85,8 +100,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           disabled={false}
         />
       </div>
-      <div className="inputForm flex flex-col text-left w-full">
-        <label className="text-xs pt-4 text-gray-500">캠페인 설명</label>
+      <div className={inputFormClass}>
+        <label className={labelClass}>캠페인 설명</label>
         <InputTextBox
           type="text"
           id="description"
@@ -97,8 +112,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           disabled={false}
         />
       </div>
-      <div className="inputForm flex flex-col text-left w-full pb-2">
-        <label className="text-xs py-4 text-gray-500">기간 종류</label>
+      <div className={inputFormClass}>
+        <label className={radioButtonLabelClass}>기간 종류</label>
         <div className="flex justify-between w[full] md:w-[300px] lg:w-[300px]">
           <InputRadioBox
             label="무기한"
@@ -118,8 +133,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
       </div>
-      <div className="flex flex-col w-full text-left">
-        <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
+      <div className={inputFormClass}>
+        <label className={labelClass}>캠페인 기간</label>
         <div className="lg:flex sm:items-center w-full gap-2">
           <InputTextBox
             type="text"
@@ -129,7 +144,6 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             onChange={(e) => setStart_date(e.target.value)}
             disabled={false}
           />
-
           <div className="text-md sm:my-2 sm:w-full lg:w-[25px] sm:text-center flex justify-center">~</div>
           <InputTextBox
             type="text"
@@ -143,8 +157,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       </div>
       {page_type === "NEW" ? (
         <>
-          <div className="inputForm flex flex-col text-left w-full">
-            <label className="text-md font-bold py-4">캠페인 활성화</label>
+          <div className={inputFormClass}>
+            <label className={radioButtonLabelClass}>캠페인 활성화</label>
             <div className="flex justify-between w-[250px] lg:w-[300px] ">
               <InputRadioBox
                 label="활성화"

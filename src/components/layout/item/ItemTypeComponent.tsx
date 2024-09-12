@@ -20,6 +20,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   setPromotionInputs,
 }) => {
   const [disableInput, setDisableInput] = useState(false);
+  const inputFormClass = "inputForm flex text-left w-full pb-2";
 
   useEffect(() => {
     setDisableInput(page_type === "DETAILS");
@@ -56,11 +57,11 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   };
 
   return (
-    <div className="contents-container w-full justify-between">
+    <div className="contents-container w-full justify-between pt-4">
       {/* Product Inputs for item_type === PD */}
       {item_type === ItemType.PD &&
         productInputs.map((input, index) => (
-          <div key={index} className="inputForm flex items-center w-full mb-2 text-left">
+          <div key={index} className={inputFormClass}>
             <InputTextBox
               type="text"
               id={`product_model_code_${index}`}
@@ -88,7 +89,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
       {/* Promotion Inputs for item_type === PM */}
       {item_type === ItemType.PM &&
         promotionInputs.map((input, index) => (
-          <div key={index} className="inputForm flex items-center w-full mb-2">
+          <div key={index} className={inputFormClass}>
             <InputTextBox
               type="text"
               id={`promotion_description_${index}`}

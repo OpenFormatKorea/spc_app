@@ -1,7 +1,7 @@
 import { fetchModifyCampaign } from "@/lib/campaign/apis";
 import { CampaignArgs } from "@/lib/campaign/types";
 import { GetServerSidePropsContext } from "next";
-import React, { useState } from "react";
+import React from "react";
 
 interface CampaignActiveButtonProps {
   view: "MOBILE" | "PC";

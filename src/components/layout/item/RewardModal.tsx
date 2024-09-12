@@ -37,9 +37,8 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
   const [point_amount, setPointAmount] = useState<number>(0);
   const [referrerState, setReferrerState] = useState<RewardPolicyArgs>(defaultPolicy);
   const [refereeState, setRefereeState] = useState<RewardPolicyArgs>(defaultPolicy);
-  const inputFormClass = "flex flex-col text-left min-w-[250px] mb-1";
-  const labelClass = "font-gray-600 text-sm font-bold text-left mt-1";
-
+  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
+  const labelClass = "text-xs pt-2 text-gray-500";
   const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => {
     return {
       SIGNUP: {
@@ -121,16 +120,16 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
   };
 
   return (
-    <div className="items-center justify-center text-center p-2">
-      <h1 className="w-full text-left text-2xl font-bold pb-2 border-b-[1px] mb-4">
+    <div className="flex flex-col items-center justify-center text-center">
+      <h1 className="w-full text-left text-xl font-bold pb-2">
         {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가 설정
       </h1>
 
       <div className="flex flex-col items-center max-h-[550px] overflow-y-scroll my-2">
-        <div className="flex flex-col  bg-white rounded-xl my-4">
-          <div className="flex p-6 bg-gray-100 justify-center rounded-xl mb-4 flex-col items-center w-full">
-            <div className="flex flex-col text-left w-full mb-1">
-              <label className="font-gray-600 text-lg font-bold text-left mb-2">
+        <div className="flex flex-col bg-white p-3">
+          <div className="flex flex-col justify-center items-center w-full rounded-xl mb-4">
+            <div className="flex flex-col w-full mb-2 text-left">
+              <label className="font-gray-600 text-md font-bold mb-2">
                 {reward_type === RewardType.CO ? "쿠폰 코드" : "지급 포인트 금액"}
               </label>
               <InputTextBox

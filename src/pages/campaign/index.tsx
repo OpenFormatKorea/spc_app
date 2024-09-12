@@ -51,9 +51,9 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
 
   return (
     <DashboardContainer>
-      <div className="flex w-full justify-between items-center mb-3">
+      <div className="flex w-full justify-between items-center mb-3 h-[42px]">
         <div className="subject-container flex w-full">
-          <a className="text-2xl lg:text-4xl font-bold">캠페인</a>
+          <a className="text-2xl font-bold">캠페인</a>
         </div>
       </div>
       <div className="wrapper-container">
@@ -67,7 +67,7 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
             />
             <div className="button-container w-full flex lg:justify-end py-3">
               <button
-                className={`border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500`}
+                className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
                 onClick={handleButton}
                 id="new_campaign"
               >

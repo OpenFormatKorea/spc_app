@@ -1,3 +1,4 @@
+import AuthContainer from "@/components/layout/auth/AuthContainer";
 import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 import { authenticateUserforLogin } from "@/lib/auth";
 import { fetchLogIn } from "@/lib/auth/apis";
@@ -75,7 +76,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="AuthContainer w-full bg-sky-600 flex justify-center items-center text-center h-screen">
+    <AuthContainer>
       <div className="flex justify-center items-center h-screen">
         <AuthLogin
           username={username}
@@ -91,7 +92,7 @@ const Login: React.FC = () => {
           handleKeyDown={handleKeyDown}
         />
       </div>
-    </div>
+    </AuthContainer>
   );
 };
 

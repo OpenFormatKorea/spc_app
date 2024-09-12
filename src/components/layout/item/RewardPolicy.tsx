@@ -96,10 +96,10 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
   };
 
   return (
-    <div className="bg-gray-100 rounded-xl w-full min-w-[320px]">
-      <div className="flex flex-col lg:flex-row items-center mb-4 border-b pb-2">
-        <label className="text-lg font-bold text-left w-full">{trigger === "SIGNUP" ? "회원가입" : "구매 후"}</label>
-        <div className="mr-2 flex justify-end w-full">
+    <div className="w-full min-w-[320px] p-4 bg-gray-100 mb-3 rounded-lg">
+      <div className="flex lg:flex-row pb-2 items-center border-b w-full ">
+        <label className="text-lg font-bold w-full text-left">{trigger === "SIGNUP" ? "회원가입" : "구매 후"}</label>
+        <div className="flex justify-end w-full mr-2">
           <input
             type="checkbox"
             className="peer sr-only opacity-0"
@@ -109,7 +109,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
           />
           <label
             htmlFor={`usePolicy-${trigger}`}
-            className="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-400 px-0.5 outline-gray-400 transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:shadow before:transition-transform before:duration-300 peer-checked:bg-green-500 peer-checked:before:translate-x-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-400 peer-checked:peer-focus-visible:outline-green-500"
+            className="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-400 px-0.5 transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:shadow before:transition-transform before:duration-300 peer-checked:bg-green-500 peer-checked:before:translate-x-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-400 peer-checked:peer-focus-visible:outline-green-500"
           >
             <span className="sr-only">Enable</span>
           </label>
@@ -120,7 +120,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
           usePolicy ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"
         }`}
       >
-        <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
+        <div className="flex flex-col lg:flex-row pt-3 space-y-2 lg:space-y-0 lg:space-x-3">
           <ReferralCondition
             trigger={trigger}
             target="referrer"

@@ -63,8 +63,8 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
     });
   }, [signUpRefereeConditions, purchaseRefereeConditions]);
   return (
-    <div className="flex flex-col items-center justify-between space-y-4 w-full">
-      <div className="flex flex-col w-full lg:flex-row bg-gray-100 p-6 rounded-xl">
+    <div className="flex flex-col items-center  mb-3">
+      <div className="flex flex-col rounded-lg ">
         <RewardPolicy
           trigger="SIGNUP"
           inputformClass={inputformClass}
@@ -83,7 +83,7 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
           setRefereeConditions={setSignUpRefereeConditions}
         />
       </div>
-      <div className="flex flex-col w-full lg:flex-row bg-gray-100 p-6 rounded-xl">
+      <div className="flex flex-col rounded-lg">
         <RewardPolicy
           trigger="PURCHASE"
           inputformClass={inputformClass}

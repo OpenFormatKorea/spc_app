@@ -26,35 +26,37 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
 }) => {
   return (
     <AuthContainer>
-      <div className="min-w-[380px] w-[40vh] min-h-[380px] border-2 border-gray-300 p-6 bg-white flex flex-col justify-center items-center text-center rounded-2xl shadow-lg">
+      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-white flex flex-col justify-center  items-center text-center">
         <div className="text-xl m-2">비밀번호 찾기</div>
-        <AuthInputBox
-          label="이메일:"
-          type="text"
-          id="email"
-          placeholder="이메일을 입력하세요."
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <AuthInputBox
-          label="아이디:"
-          type="text"
-          id="username"
-          placeholder="아이디를 입력하세요."
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
+        <div className="flex flex-col w-full items-start justify-between">
+          <AuthInputBox
+            label="이메일:"
+            type="text"
+            id="email"
+            placeholder="이메일을 입력하세요."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <AuthInputBox
+            label="아이디:"
+            type="text"
+            id="username"
+            placeholder="아이디를 입력하세요."
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
         <AuthButton disabled={buttonDisabled} label="임시 비밀번호 발급" buttonRef={buttonRef} onClick={handleSubmit} />
         <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
-          <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
+          <div className="mr-2 ml-2 text-sm cursor-pointer">
             <button id="signup" onClick={handleButton}>
               회원가입
             </button>
           </div>
           <div>|</div>
-          <div className="mr-2 ml-2 text-sm font-semibold cursor-pointer">
+          <div className="mr-2 ml-2 text-sm cursor-pointer">
             <button id="login" onClick={handleButton}>
               로그인
             </button>

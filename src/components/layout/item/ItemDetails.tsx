@@ -46,8 +46,10 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
 ) => {
   const [disableInput, setDisableInput] = useState(itemArgs.active);
   const item_id = itemArgs.id || "";
-  const inputFormClass = "flex flex-col text-left w-full mb-2";
-  const labelClass = "text-sm font-bold mt-4";
+  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
+  const labelClass = "text-xs pt-4 text-gray-500";
+  const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
+
   const handleItemTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItem_type(e.target.value as ItemType);
   };
@@ -136,7 +138,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
         />
       </div>
       <div className={inputFormClass}>
-        <label className={labelClass}>아이템 종류</label>
+        <label className={radioButtonLabelClass}>아이템 종류</label>
         <div className="flex h-[42px] items-center w-full mb-2">
           <div className="flex space-x-20 text-left w-full lg:max-w-[458px]">
             <InputRadioBox

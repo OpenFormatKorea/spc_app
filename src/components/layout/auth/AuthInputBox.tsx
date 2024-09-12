@@ -10,8 +10,8 @@ interface AuthInputBoxProps {
 }
 const AuthInputBox: React.FC<AuthInputBoxProps> = ({ label, type, id, placeholder, value, onChange, onKeyDown }) => {
   return (
-    <div className="flex w-full mx-2 mt-2 p-1 justify-start items-center text-left">
-      <a className="w-[25%] m-2 text-xs">{label}</a>
+    <div className="w-full justify-start items-center text-left pt-1">
+      <a className="w-[25%] mb-4 text-xs text-gray-500">{label}</a>
       <input
         type={type}
         id={id}

@@ -86,103 +86,100 @@ const ItemList: React.FC<ItemListProps> = (
   };
   return (
     <>
-      <div>
-        <div className="flex w-full">
-          <h1 className="font-bold text-base pb-2 border-b mb-2 w-full flex justify-between items-center">
-            <div>
-              <div className="text-xl">아이템</div>
-              <div className="font-normal text-sm text-gray-500 pt-2">현재 사용중인 아이템 목록이에요.</div>
-            </div>
-          </h1>
-        </div>
-
-        <div className="my-2 w-full">
-          <table className="w-full bg-white border border-gray-200 text-center hidden lg:table">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className={theadStyle}>
+      <div className="flex w-full">
+        <h1 className="font-bold text-base pb-2 border-b mb-2 w-full flex justify-between items-center">
+          <div>
+            <div className="text-xl">아이템</div>
+            <div className="font-normal text-sm text-gray-500">현재 사용중인 아이템 목록이에요.</div>
+          </div>
+        </h1>
+      </div>
+      <div className="w-full py-3 hidden lg:block">
+        <table className="w-full border border-gray-100 text-center hidden lg:table">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className={theadStyle}>
+                <input
+                  type="checkbox"
+                  id={`item_all`}
+                  name={`item_all`}
+                  checked={selectAll}
+                  onChange={handleSelectAll}
+                />
+              </th>
+              <th className={theadStyle}>아이템 명</th>
+              <th className={theadStyle}>아이템 종류</th>
+              <th className={theadStyle}>생성일</th>
+              <th className={theadStyle}>수정일</th>
+              <th className={theadStyle}>활성화</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item.id} className="cursor-pointer" onClick={() => handleItemClick(item.id)}>
+                <td className={`${tbodyStyle} px-2`} onClick={(e) => e.stopPropagation()}>
                   <input
                     type="checkbox"
-                    id={`item_all`}
-                    name={`item_all`}
-                    checked={selectAll}
-                    onChange={handleSelectAll}
+                    id={`item_${item.id}`}
+                    name={`item_${item.id}`}
+                    checked={selectedItems[item.id] || false}
+                    onChange={handleCheckboxChange(item.id)}
                   />
-                </th>
-                <th className={theadStyle}>아이템 명</th>
-                <th className={theadStyle}>아이템 종류</th>
-                <th className={theadStyle}>생성일</th>
-                <th className={theadStyle}>수정일</th>
-                <th className={theadStyle}>활성화</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => (
-                <tr key={item.id} className="cursor-pointer" onClick={() => handleItemClick(item.id)}>
-                  <td className={`${tbodyStyle} px-2`} onClick={(e) => e.stopPropagation()}>
-                    <input
-                      type="checkbox"
-                      id={`item_${item.id}`}
-                      name={`item_${item.id}`}
-                      checked={selectedItems[item.id] || false}
-                      onChange={handleCheckboxChange(item.id)}
-                    />
-                  </td>
-                  <td className={tbodyStyle}>{item.title}</td>
-                  <td className={tbodyStyle}>
-                    {item.item_type === "PRODUCT" ? (
-                      <div className="w-full flex justify-center">
-                        <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
-                          상품
-                        </div>
+                </td>
+                <td className={tbodyStyle}>{item.title}</td>
+                <td className={tbodyStyle}>
+                  {item.item_type === "PRODUCT" ? (
+                    <div className="w-full flex justify-center">
+                      <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
+                        프로덕트
                       </div>
-                    ) : (
-                      <div className="w-full flex justify-center">
-                        <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
-                          프로모션
-                        </div>
+                    </div>
+                  ) : (
+                    <div className="w-full flex justify-center">
+                      <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
+                        프로모션
                       </div>
-                    )}
-                  </td>
-                  <td className={tbodyStyle}>
-                    {new Date(item.created_at).toLocaleDateString("ko-KR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </td>
-                  <td className={tbodyStyle}>
-                    {new Date(item.updated_at).toLocaleDateString("ko-KR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </td>
+                    </div>
+                  )}
+                </td>
+                <td className={tbodyStyle}>
+                  {new Date(item.created_at).toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </td>
+                <td className={tbodyStyle}>
+                  {new Date(item.updated_at).toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </td>
 
-                  <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
-                    <ItemActiveButton
-                      view="PC"
-                      item_id={item.id}
-                      campaign_id={campaign_id}
-                      activeStatus={activeStatusMap[item.id]}
-                      toggleItemActiveStatus={toggleItemActiveStatus}
-                    />
-                  </td>
-                </tr>
-              ))}
-              {!items.length && (
-                <tr>
-                  <td className={tbodyStyle} colSpan={4}>
-                    현재 사용중인 아이템이 없어요, 새로운 아이템을 등록해 주세요.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="items-center justify-between hidden lg:flex">
+                <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
+                  <ItemActiveButton
+                    view="PC"
+                    item_id={item.id}
+                    campaign_id={campaign_id}
+                    activeStatus={activeStatusMap[item.id]}
+                    toggleItemActiveStatus={toggleItemActiveStatus}
+                  />
+                </td>
+              </tr>
+            ))}
+            {!items.length && (
+              <tr>
+                <td className={tbodyStyle} colSpan={4}>
+                  현재 사용중인 아이템이 없어요, 새로운 아이템을 등록해 주세요.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        <div className="items-center justify-between hidden pt-4 lg:flex">
           <button
-            className="p-1 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
+            className="py-1 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
             id="delete_items"
             onClick={(e) => handleAction(e, "delete", "")}
           >
@@ -191,9 +188,13 @@ const ItemList: React.FC<ItemListProps> = (
         </div>
       </div>
       {/* Mobile-friendly layout */}
-      <div className="block lg:hidden">
+      <div className="block mt-2 lg:hidden">
         {items.map((item, i) => (
-          <div key={item.id || i} className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 ">
+          <div
+            key={item.id || i}
+            className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 cursor-pointer"
+            onClick={() => handleItemClick(item.id)}
+          >
             <div
               className="font-bold mb-2 text-black w-full pb-1 border-b flex justify-between"
               onClick={(e) => e.stopPropagation()} // You stop propagation only for the title section
@@ -209,13 +210,21 @@ const ItemList: React.FC<ItemListProps> = (
                 />
               </div>
             </div>
-            <div className="text-sm flex pr-2">
+            <div className="text-sm flex pr-2 items-center">
               <div className="w-[100px]">
                 <strong>아이템 종류: </strong>
               </div>
-              {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
+              {item.item_type === "PRODUCT" ? (
+                <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
+                  프로덕트
+                </div>
+              ) : (
+                <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
+                  프로모션
+                </div>
+              )}
             </div>
-            <div className="text-sm flex w-full pr-2">
+            <div className="text-sm flex pr-2 items-center">
               <div className="w-[100px]">
                 <strong>생성일: </strong>
               </div>
@@ -225,7 +234,7 @@ const ItemList: React.FC<ItemListProps> = (
                 day: "numeric",
               })}
             </div>
-            <div className="text-sm flex pr-2">
+            <div className="text-sm flex pr-2 items-center">
               <div className="w-[100px]">
                 <strong>캠페인 수정일: </strong>
               </div>
@@ -236,19 +245,15 @@ const ItemList: React.FC<ItemListProps> = (
                 day: "numeric",
               })}
             </div>
-            <div className="w-full pt-2 flex justify-center space-x-2 text-white text-sm">
-              <button
-                className="w-[50%] p-2 cursor-pointer rounded-md bg-red-400"
-                onClick={(e) => handleAction(e, "delete", item.id)}
-              >
-                삭제
-              </button>
-              <button
-                className="w-[50%] p-2 cursor-pointer rounded-md bg-blue-400"
-                onClick={() => handleItemClick(item.id)}
-              >
-                상세보기
-              </button>
+            <div className="w-full flex justify-end ">
+              <div className="w-[50%] pt-2 flex justify-end space-x-2 text-white text-sm">
+                <button
+                  className="w-[60px] p-2 cursor-pointer rounded-md bg-red-500"
+                  onClick={(e) => handleAction(e, "delete", item.id)}
+                >
+                  삭제
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -263,7 +268,7 @@ const ItemList: React.FC<ItemListProps> = (
       <div className="flex w-full text-white text-center lg:justify-end">
         <div
           id="create_item"
-          className="bg-blue-500 flex w-full lg:w-fit text-white mt-4 p-2 rounded-lg justify-center cursor-pointer font-normal"
+          className="p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
           onClick={handleButton}
         >
           <div className="pr-1 flex text-center items-center">
