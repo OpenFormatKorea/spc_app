@@ -26,8 +26,8 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
 }) => {
   return (
     <AuthContainer>
-      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-white flex flex-col justify-center  items-center text-center">
-        <div className="text-xl m-2">비밀번호 찾기</div>
+      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-blue-200 flex flex-col justify-center  items-center text-center">
+        <div className="text-xl font-semibold m-2 w-full text-left">비밀번호 찾기</div>
         <div className="flex flex-col w-full items-start justify-between">
           <AuthInputBox
             label="이메일:"

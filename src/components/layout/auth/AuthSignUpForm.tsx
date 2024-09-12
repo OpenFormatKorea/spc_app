@@ -4,7 +4,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { authenticateUserforLogin } from "@/lib/auth";
 import { GetServerSideProps } from "next";
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { ChangeEvent } from "react";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return authenticateUserforLogin(context);
 };
@@ -49,8 +49,8 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
   handleKeyDown,
 }) => {
   return (
-    <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-white flex flex-col justify-center items-center text-center">
-      <div className="text-xl m-2">회원가입</div>
+    <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-blue-200 flex flex-col justify-center items-center text-center">
+      <div className="text-xl font-semibold m-2 w-full text-left">회원가입</div>
       <div className="flex flex-col w-full items-start justify-between">
         <AuthInputBox
           label="아이디:"
@@ -88,8 +88,8 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
           onChange={handlePasswordChange}
           onKeyDown={handleKeyDown}
         />
-        <div className="flex justify-between w-full text-xs text-left mx-2 my-2">
-          <p className="text-gray-500">* 비밀번호는 최소 8자, 대문자, 특수기호 포함</p>
+        <div className="flex justify-between w-full text-xs text-left mt-2">
+          <p className="text-gray-500">*비밀번호는 최소 8자, 대문자, 특수기호 포함</p>
           <a>
             [<a style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</a>]
           </a>
@@ -105,12 +105,15 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
             onKeyDown={handleKeyDown}
           />
 
-          <button className="text-xs border bg-white p-2 cursor-pointer" onClick={() => setShowPw(!showPW)}>
+          <button
+            className="text-xs border bg-white p-1 ml-2 mb-[5px] cursor-pointer"
+            onClick={() => setShowPw(!showPW)}
+          >
             {showPW ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
           </button>
         </div>
       </div>
-      <div className=" w-full text-xs text-right mx-2 pt-2">
+      <div className="flex justify-between w-full text-xs text-left mt-2">
         <p>
           [<a style={{ color: instantPWChk ? "green" : "red" }}>{instantPWChk ? "일치" : "불일치"}</a>]
         </p>

@@ -5,8 +5,7 @@ interface AuthContainerProps {
 
 const AuthContainer: React.FC<AuthContainerProps> = ({ children }) => {
   return (
-    <div className="AuthContainer flex  w-full bg-blue-300 justify-center items-center text-center h-screen">
-      <div className="flex justify-center items-center h-screen"></div>
+    <div className="AuthContainer flex  w-full bg-gray-400 justify-center items-center text-center h-screen">
       <main>{children}</main>
     </div>
   );

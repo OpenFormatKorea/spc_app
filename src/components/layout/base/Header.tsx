@@ -50,15 +50,19 @@ const Header: React.FC = () => {
           <div className="border-t border-white my-2 w-full"></div>
           <Navmenu menutitle="마이 페이지" link="/mypage" />
           <div
-            className="py-2 cursor-pointer flex"
-            onClick={(event) => {
-              handleSignOut(event);
-              toggleMenu();
-            }}
+            className={`h-[55px] w-full flex items-center justify-center text-md cursor-pointer text-white mx-auto transition-all duration-300`}
           >
-            <LogoutIcon fontSize="small" />
-            <div className="w-full text-left pl-3 text-md">
-              <a>로그아웃</a>
+            <div
+              className="p-2 flex items-center justify-center transition-all duration-300 rounded-xl w-[95%]"
+              onClick={(event) => {
+                handleSignOut(event);
+                toggleMenu();
+              }}
+            >
+              <LogoutIcon fontSize="small" />
+              <div className="w-full text-left pl-3">
+                <a>로그아웃</a>
+              </div>
             </div>
           </div>
         </div>

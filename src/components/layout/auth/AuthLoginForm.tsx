@@ -31,8 +31,8 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
 }) => {
   return (
     <AuthContainer>
-      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-white flex flex-col justify-center  items-center text-center">
-        <div className="text-xl m-2">로그인</div>
+      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-blue-200 flex flex-col justify-center items-center text-center">
+        <div className="text-xl font-semibold m-2 w-full text-left">로그인</div>
         <div className="flex flex-col w-full items-start justify-between">
           <AuthInputBox
             label="아이디"
@@ -53,7 +53,10 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={handleKeyDown}
             />
-            <button className="text-xs border bg-white p-2 cursor-pointer" onClick={() => setShowPw(!showPW)}>
+            <button
+              className="text-xs border bg-white p-1 ml-2 mb-[5px] cursor-pointer"
+              onClick={() => setShowPw(!showPW)}
+            >
               {showPW ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
             </button>
           </div>
