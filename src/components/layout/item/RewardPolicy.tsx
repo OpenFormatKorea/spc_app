@@ -1,5 +1,5 @@
-import React, { KeyboardEvent } from "react";
-import { ItemConditions, PaymentFrequencyType, PaymentTimingType, RewardType } from "@/lib/item/types";
+import React, { KeyboardEvent, useEffect } from "react";
+import { ItemConditions, RewardType } from "@/lib/item/types";
 import ReferralCondition from "@/components/layout/item/ReferralCondition";
 
 interface RewardPolicyProps {
@@ -18,9 +18,11 @@ interface RewardPolicyProps {
   setUseRefereeCondition: React.Dispatch<React.SetStateAction<boolean>>;
   refereeConditions: ItemConditions;
   setRefereeConditions: React.Dispatch<React.SetStateAction<ItemConditions>>;
+  defaultConditions: ItemConditions;
 }
 
 const RewardPolicy: React.FC<RewardPolicyProps> = ({
+  defaultConditions,
   trigger,
   inputformClass,
   labelClass,
@@ -37,7 +39,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
   refereeConditions,
   setRefereeConditions,
 }) => {
-  const defaultConditions = {
+  const defaultNullConditions = {
     payment_timing: {
       type: null,
       delay_days: null,
@@ -47,53 +49,61 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
       repeat_count: null,
     },
   };
-  const handleSignUpCheckboxChange = () => {
+  const toggleCheckboxChange = (
+    setUsePolicy: React.Dispatch<React.SetStateAction<boolean>>,
+    setUseRefereeCondition: React.Dispatch<React.SetStateAction<boolean>>,
+    setUseReffererCondition: React.Dispatch<React.SetStateAction<boolean>>,
+    setRefereeConditions: React.Dispatch<React.SetStateAction<ItemConditions>>,
+    setReferrerConditions: React.Dispatch<React.SetStateAction<ItemConditions>>,
+    defaultConditions: ItemConditions,
+    defaultNullConditions: ItemConditions
+  ) => {
     setUsePolicy((prev) => {
       const newUsePolicy = !prev;
       if (!newUsePolicy) {
+        setUseRefereeCondition(false);
         setUseReffererCondition(false);
-        setReferrerConditions(defaultConditions);
-        setRefereeConditions(defaultConditions);
+        setReferrerConditions(defaultNullConditions);
+        setRefereeConditions(defaultNullConditions);
       } else {
+        setUseRefereeCondition(true);
         setUseReffererCondition(true);
-        setReferrerConditions({
-          payment_timing: {
-            type: PaymentTimingType.IMM,
-            delay_days: null,
-          },
-          payment_frequency: {
-            type: PaymentFrequencyType.ONCE,
-            repeat_count: null,
-          },
-        });
+        setRefereeConditions(defaultConditions);
+        setReferrerConditions(defaultConditions);
       }
       return newUsePolicy;
     });
   };
 
-  const handlePurchaseCheckboxChange = () => {
-    setUsePolicy((prev) => {
-      const newUsePolicy = !prev;
-      if (!newUsePolicy) {
-        setUseRefereeCondition(false);
-        setRefereeConditions(defaultConditions);
-        setReferrerConditions(defaultConditions);
-      } else {
-        setUseRefereeCondition(true);
-        setRefereeConditions({
-          payment_timing: {
-            type: PaymentTimingType.IMM,
-            delay_days: null,
-          },
-          payment_frequency: {
-            type: PaymentFrequencyType.ONCE,
-            repeat_count: null,
-          },
-        });
-      }
-      return newUsePolicy;
-    });
+  const handleSignUpCheckboxChange = () => {
+    toggleCheckboxChange(
+      setUsePolicy,
+      setUseRefereeCondition,
+      setUseReffererCondition,
+      setRefereeConditions,
+      setReferrerConditions,
+      defaultConditions,
+      defaultNullConditions
+    );
   };
+
+  const handlePurchaseCheckboxChange = () => {
+    toggleCheckboxChange(
+      setUsePolicy,
+      setUseRefereeCondition,
+      setUseReffererCondition,
+      setRefereeConditions,
+      setReferrerConditions,
+      defaultConditions,
+      defaultNullConditions
+    );
+  };
+
+  useEffect(() => {
+    if (!useReffererCondition && !useRefereeCondition) {
+      setUsePolicy(false);
+    }
+  }, [useReffererCondition, useRefereeCondition, usePolicy, setUsePolicy]);
 
   return (
     <div className="w-full min-w-[320px] p-4 bg-gray-100 mb-3 rounded-lg">

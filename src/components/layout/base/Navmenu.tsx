@@ -59,7 +59,6 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
       >
         {/* Icon */}
         {renderIcon()}
-
         <div className="w-full text-left pl-3">
           <span>{menutitle}</span>
         </div>

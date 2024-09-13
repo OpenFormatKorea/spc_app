@@ -28,8 +28,8 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gray-400 fixed top-0 w-full lg:hidden z-10">
-      <div className="flex items-center h-[60px] px-6 w-full">
+    <header className=" fixed top-0 w-full lg:hidden z-10 opacity-95">
+      <div className=" bg-gray-400  flex items-center h-[60px] px-6 w-full">
         <div className="flex items-center lg:hidden">
           <a onClick={handleLogo}>
             <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[25px] cursor-pointer mr-4" />

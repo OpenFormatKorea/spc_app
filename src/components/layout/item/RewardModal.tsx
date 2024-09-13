@@ -34,7 +34,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
     },
   };
   const [coupon_code, setCouponCode] = useState("");
-  const [point_amount, setPointAmount] = useState<number>(0);
+  const [point_amount, setPointAmount] = useState<number>();
   const [referrerState, setReferrerState] = useState<RewardPolicyArgs>(defaultPolicy);
   const [refereeState, setRefereeState] = useState<RewardPolicyArgs>(defaultPolicy);
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
@@ -103,6 +103,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
 
     return true;
   }
+
   const onclickAddItemConditions = () => {
     const rewardConditionsArgs: RewardsArgs = {
       reward_type,
@@ -126,11 +127,11 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
       </h1>
 
       <div className="flex flex-col items-center max-h-[550px] overflow-y-scroll my-2">
-        <div className="flex flex-col bg-white p-3">
+        <div className="flex flex-col bg-white p-3 rounded-lg">
           <div className="flex flex-col justify-center items-center w-full rounded-xl mb-4">
             <div className="flex flex-col w-full mb-2 text-left">
-              <label className="font-gray-600 text-md font-bold mb-2">
-                {reward_type === RewardType.CO ? "쿠폰 코드" : "지급 포인트 금액"}
+              <label className="font-gray-300 text-sm font-semibold mb-2">
+                {reward_type === RewardType.CO ? "쿠폰 코드" : " 지급 포인트 금액"}
               </label>
               <InputTextBox
                 type={reward_type === RewardType.CO ? "text" : "number"}

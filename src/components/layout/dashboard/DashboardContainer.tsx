@@ -7,7 +7,7 @@ interface DashboarContainerProps {
 
 const DashboardContainer: React.FC<DashboarContainerProps> = ({ children }) => {
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col bg-gradient-to-b from-gray-400 to-gray-500">
       <Navbar />
       <Header />
       <DashboardMain children={children} />

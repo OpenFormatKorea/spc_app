@@ -88,7 +88,7 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
             id="back_campaign_details"
           >
             <ArrowBackIosIcon fontSize="small" />
-            <span className="ml-1">뒤로가기</span>
+            <span className="ml-1 sm:hidden">뒤로가기</span>
           </button>
         </div>
       </div>

@@ -90,7 +90,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
             id="cancel_modify_campaign"
           >
             <ArrowBackIosIcon fontSize="small" />
-            <span className="ml-1">뒤로가기</span>
+            <span className="hidden lg:block lg:ml-1">뒤로가기</span>
           </button>
         </div>
       </div>

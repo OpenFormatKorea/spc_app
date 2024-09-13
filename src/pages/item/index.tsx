@@ -17,9 +17,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
-  const theadStyle =
-    " border-b border-gray-200 text-left text-sm font-medium text-gray-700 max-w-[300px] text-center p-2";
-  const tbodyStyle = " border-b border-gray-200 whitespace-normal text-sm break-words break-all p-2";
+  // Table styles
+  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+  const tbodyStyle =
+    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   const router = useRouter();
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;

@@ -170,8 +170,10 @@ const ItemList: React.FC<ItemListProps> = (
             ))}
             {!items.length && (
               <tr>
-                <td className={tbodyStyle} colSpan={4}>
-                  현재 사용중인 아이템이 없어요, 새로운 아이템을 등록해 주세요.
+                <td className={tbodyStyle} colSpan={6}>
+                  현재 사용중인 아이템이 없어요,
+                  <br />
+                  새로운 아이템을 등록해 주세요.
                 </td>
               </tr>
             )}
@@ -196,10 +198,10 @@ const ItemList: React.FC<ItemListProps> = (
             onClick={() => handleItemClick(item.id)}
           >
             <div
-              className="font-bold mb-2 text-black w-full pb-1 border-b flex justify-between"
-              onClick={(e) => e.stopPropagation()} // You stop propagation only for the title section
+              className="font-bold mb-2 text-black w-full pb-1 border-b flex  justify-between"
+              onClick={(e) => e.stopPropagation()}
             >
-              <div> {item.title}</div>
+              <div className="h-full items-end">{item.title}</div>
               <div>
                 <ItemActiveButton
                   view="MOBILE"
@@ -258,14 +260,14 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         ))}
         {!items.length && (
-          <div className="text-center text-gray-500">
-            사용중인 아이템이 없습니다.
+          <div className="text-center text-gray-500 p-3">
+            현재 사용중인 아이템이 없어요,
             <br />
-            새로운 캠페인을 생성해보세요.
+            새로운 아이템을 등록해 주세요.
           </div>
         )}
       </div>
-      <div className="flex w-full text-white text-center lg:justify-end">
+      <div className="flex w-full text-white text-center lg:justify-end pt-2">
         <div
           id="create_item"
           className="p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"

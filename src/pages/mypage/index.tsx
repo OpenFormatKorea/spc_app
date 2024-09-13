@@ -32,7 +32,7 @@ const DetailsMyPage = (data: UserInfoProps, context: GetServerSidePropsContext) 
             id="back_dashboard"
           >
             <ArrowBackIosIcon fontSize="small" />
-            <span className="ml-1">뒤로가기</span>
+            <span className="ml-1 hidden">뒤로가기</span>
           </button>
         </div>
       </div>

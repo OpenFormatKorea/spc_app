@@ -26,7 +26,7 @@ const Navbar = () => {
     }
   };
   return (
-    <nav className="bg-gray-400 w-[250px] fixed h-[100%] lg:block hidden lg:w-[250px] lg:fixed lg:h-[100%]">
+    <nav className=" w-[250px] fixed h-[100%] lg:block hidden lg:w-[250px] lg:fixed lg:h-[100%]">
       <div className="flex items-center justify-center h-[70px] p-3">
         <a onClick={handleLogo}>
           <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[] cursor-pointer mr-4" />
@@ -45,7 +45,7 @@ const Navbar = () => {
         </div>
         <div className="setting-menu absolute bottom-[5%] w-full">
           <div
-            className="h-[55px] flex items-center text-md cursor-pointer transition-all duration-300 text-white w-full p-4 lg:bg-gray-400 sm:bg-gray-400 scale-100"
+            className="h-[55px] flex items-center text-md cursor-pointer transition-all duration-300 text-white w-full p-4"
             onClick={handleSignOut}
           >
             <div className="pl-2 flex items-center">

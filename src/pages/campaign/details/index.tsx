@@ -122,8 +122,10 @@ const DetailsCampaign = (
     }
   };
 
-  const theadStyle = "px-1 py-2 text-center text-sm text-gray-500";
-  const tbodyStyle = "px-2 py-2 text-sm whitespace-normal break-words break-all";
+  // Table styles
+  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+  const tbodyStyle =
+    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   return (
     <DashboardContainer>
       <div className="flex w-full justify-between items-center mb-3 h-[42px]">
@@ -138,7 +140,7 @@ const DetailsCampaign = (
             id="cancel_modify_campaign"
           >
             <ArrowBackIosIcon fontSize="small" />
-            <span className="ml-1">뒤로가기</span>
+            <span className="ml-1 sm:hidden">뒤로가기</span>
           </button>
         </div>
       </div>

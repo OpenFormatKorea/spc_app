@@ -134,7 +134,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
             return (
               <div
                 key={campaign.id || i}
-                className="shadow-sm bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 cursor-pointer"
+                className="shadow-sm bg-gray-100 p-4 mb-4 rounded-xltext-gray-600 space-y-1 cursor-pointer"
                 id={campaign.id}
                 onClick={handleCampaignClick}
               >
@@ -163,19 +163,25 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                   <div className="w-[100px]">
                     <strong>활성 기간: </strong>
                   </div>
-                  {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}{" "}
-                  ~{" "}
-                  {campaign.end_date && campaign.end_date !== ""
-                    ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
+                  <div>
+                    <div>
+                      {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
-                      })
-                    : ""}
+                      })}
+                    </div>
+                    <div>~</div>
+                    <div>
+                      {campaign.end_date && campaign.end_date !== ""
+                        ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        : ""}
+                    </div>
+                  </div>
                 </div>
               </div>
             );

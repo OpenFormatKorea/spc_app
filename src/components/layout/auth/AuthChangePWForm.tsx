@@ -44,7 +44,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
 }) => {
   return (
     <AuthContainer>
-      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-blue-200 flex flex-col justify-center items-center text-center">
+      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-gradient-to-b from-blue-200 to-blue-300 flex flex-col justify-center items-center text-center">
         <div className="text-xl font-semibold m-2 w-full text-left">비밀번호 변경</div>
         <div className="flex flex-col w-full items-start justify-between">
           <AuthInputBox

@@ -16,7 +16,7 @@ const HomePage = () => {
 
   return (
     <AuthContainer>
-      <div className="LoginBox min-w-[380px] min-h-[380px] rounded-xl bg-blue-200 flex flex-col justify-center items-center">
+      <div className="LoginBox min-w-[380px] min-h-[380px] rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 flex flex-col justify-center items-center">
         <div className="m-10 flex justify-center">
           <img src="/images/incento_logo.png" alt="Incento Logo" className="w-[180px]" />
         </div>
