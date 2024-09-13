@@ -133,19 +133,27 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
               <label className="font-gray-300 text-sm font-semibold mb-2">
                 {reward_type === RewardType.CO ? "쿠폰 코드" : " 지급 포인트 금액"}
               </label>
-              <InputTextBox
-                type={reward_type === RewardType.CO ? "text" : "number"}
-                id={reward_type === RewardType.CO ? "coupon_code" : "point_amount"}
-                placeholder={
-                  reward_type === RewardType.CO ? "쿠폰 코드를 입력하세요." : "원하시는 지급 포인트 금액을 입력하세요."
-                }
-                value={reward_type === RewardType.CO ? coupon_code : point_amount}
-                onChange={(e) =>
-                  reward_type === RewardType.CO ? setCouponCode(e.target.value) : setPointAmount(Number(e.target.value))
-                }
-                onKeyDown={handleKeyDown}
-                disabled={false}
-              />
+
+              <div className="flex w-full items-end">
+                <InputTextBox
+                  type={reward_type === RewardType.CO ? "text" : "number"}
+                  id={reward_type === RewardType.CO ? "coupon_code" : "point_amount"}
+                  placeholder={
+                    reward_type === RewardType.CO
+                      ? "쿠폰 코드를 입력하세요."
+                      : "원하시는 지급 포인트 금액을 입력하세요."
+                  }
+                  value={reward_type === RewardType.CO ? coupon_code : point_amount}
+                  onChange={(e) =>
+                    reward_type === RewardType.CO
+                      ? setCouponCode(e.target.value)
+                      : setPointAmount(Number(e.target.value))
+                  }
+                  onKeyDown={handleKeyDown}
+                  disabled={false}
+                />
+                <label className="font-gray-300 text-sm font-semibold ml-2">포인트</label>
+              </div>
             </div>
           </div>
           <RewardPolicySetting

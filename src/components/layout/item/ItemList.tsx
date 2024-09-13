@@ -2,7 +2,7 @@ import { fetchDeleteItems, fetchActivateItem } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
 interface ItemListProps {
@@ -18,8 +18,7 @@ const ItemList: React.FC<ItemListProps> = (
   context: GetServerSidePropsContext
 ) => {
   const router = useRouter();
-  const items = Array.isArray(apiResponse) ? apiResponse : [];
-
+  const items = useMemo(() => (Array.isArray(apiResponse) ? apiResponse : []), [apiResponse]);
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
   const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({});
@@ -273,9 +272,8 @@ const ItemList: React.FC<ItemListProps> = (
           className="p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
           onClick={handleButton}
         >
-          <div className="pr-1 flex text-center items-center">
-            <AddIcon fontSize="small" />
-          </div>
+          <AddIcon fontSize="small" />
+          <div className="flex text-center items-center"></div>
           아이템 추가
         </div>
       </div>
