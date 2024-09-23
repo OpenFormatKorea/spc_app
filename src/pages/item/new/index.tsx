@@ -4,7 +4,6 @@ import ItemDetails from "@/components/layout/item/ItemDetails";
 import {
   ItemType,
   ItemArgs,
-  KakaoArgs,
   ProductsArgs,
   PromotionsArgs,
   RewardType,
@@ -14,12 +13,36 @@ import {
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import RewardCard from "@/components/layout/item/RewardCard";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import RewardComponent from "@/components/layout/item/RewardList";
 import { fetchCreateItem } from "@/lib/item/apis";
 import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
+import { fetchGetProductCodeList } from "@/lib/campaign/apis";
+import { getShopIdFromCookies } from "@/lib/helper";
+import { ApiResponse } from "@/lib/types";
+import ProductList from "@/components/layout/item/ProductList";
 
-const NewItem = (context: GetServerSidePropsContext) => {
+// Fetches campaign data during server-side rendering
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const response = await fetchGetProductCodeList(context);
+  const shop_id = getShopIdFromCookies(context);
+
+  if (!shop_id) {
+    return {
+      redirect: {
+        destination: "auth/login",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      apiResponse: response,
+    },
+  };
+};
+
+const NewItem: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }, context: GetServerSidePropsContext) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [campaign_id, setCampaign_id] = useState("");
@@ -51,6 +74,9 @@ const NewItem = (context: GetServerSidePropsContext) => {
   const [item_type, setItem_type] = useState<ItemType>(ItemType.PD);
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
   const [active, setActive] = useState(false);
+  const data = apiResponse.data;
+  const pageable = data.pageable;
+  const content = data.content;
 
   const itemArgs: ItemArgs = {
     title,
@@ -62,7 +88,6 @@ const NewItem = (context: GetServerSidePropsContext) => {
     campaign_id,
     active,
   };
-
   const infoCheck = () => {
     if (!title) {
       alert("아이템 명을 입력해주세요.");
@@ -105,6 +130,9 @@ const NewItem = (context: GetServerSidePropsContext) => {
       buttonRef.current?.click();
     }
   };
+  const handleButton = (event: React.MouseEvent<HTMLElement>) => {
+    console.log("TEST");
+  };
 
   useEffect(() => {
     if (router.isReady) {
@@ -139,6 +167,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
             setActive={setActive}
             handleKeyDown={handleKeyDown}
           />
+          <ProductList apiResponse={apiResponse} campaign_id={campaign_id} handleButton={handleButton} />
         </ContentsContainer>
         <ContentsContainer variant="campaign">
           <ItemTypeDetails

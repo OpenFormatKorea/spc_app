@@ -72,6 +72,42 @@ export enum PaymentFrequencyType {
   UNL = "UNLIMITED",
 }
 
+export interface PBProductListArgs {
+  content: ProductListArgs[];
+  pageable: PageableArgs;
+  totalElements: Number;
+  totalPages: Number;
+  last: boolean;
+  number: Number;
+  size: Number;
+  numberOfElements: Number;
+  sort: PageNationSortArgs;
+  first: boolean;
+  empty: boolean;
+}
+
+export interface ProductListArgs {
+  gid: string;
+  name: string;
+  posThumb: string | null;
+  thumb: string | null;
+}
+
+export interface PageableArgs {
+  sort: PageNationSortArgs;
+  offset: Number;
+  pageNumber: Number;
+  pageSize: Number;
+  paged: boolean;
+  unpaged: boolean;
+}
+
+export interface PageNationSortArgs {
+  sorted: boolean;
+  unsorted: boolean;
+  empty: boolean;
+}
+
 export interface KakaoShareArgs {
   shop_name: string;
   image: string;

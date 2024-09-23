@@ -180,7 +180,7 @@ const ItemList: React.FC<ItemListProps> = (
         </table>
         <div className="items-center justify-between hidden pt-4 lg:flex">
           <button
-            className="py-1 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
+            className="py-2 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
             id="delete_items"
             onClick={(e) => handleAction(e, "delete", "")}
           >
