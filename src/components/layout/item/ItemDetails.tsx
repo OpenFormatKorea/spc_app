@@ -107,7 +107,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
       </div>
       <KakaoShareTemplate
         page_type={page_type}
-        disableInput={false}
+        disableInput={disableInput}
         kakaoShareArgs={kakaoShareArgs}
         setKakaoShareArgs={setKakaoShareArgs}
         handleKeyDown={handleKeyDown}

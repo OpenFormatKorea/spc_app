@@ -84,6 +84,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         name="image"
                         onChange={onChangeImage("image")}
                         ref={imageFileInput}
+                        disabled={disableInput}
                       />
                       <div
                         className="relative h-full w-full flex items-center justify-center group"
@@ -110,6 +111,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                               name="shop_logo"
                               onChange={onChangeImage("shop_logo")}
                               ref={shopLogoFileInput}
+                              disabled={disableInput}
                             />
                             <div
                               className="relative h-full w-full flex items-center justify-center group"

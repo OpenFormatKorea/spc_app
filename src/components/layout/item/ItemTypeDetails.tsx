@@ -12,7 +12,7 @@ interface ItemTypeDetailsProps {
   setItem_type: (value: ItemType) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>; // Updated type
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>; // Updated type
-  openModal: () => void;
+  openModal?: () => void;
 }
 
 const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({

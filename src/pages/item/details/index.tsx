@@ -44,15 +44,7 @@ const DetailsItem = (apiResponse: any) => {
   const campaign_id = apiResponse.campaign_id;
   const response = apiResponse.apiResponse;
   const [title, setTitle] = useState(response.title);
-  // const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>({ message: "" });
-  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
-    shop_name: "incento",
-    image: "/images/kakao/kakaolink-no-logo-default.png",
-    shop_logo: "/images/kakao/kakaolink-no-logo-default.png",
-    title: "타이틀 예시",
-    description: "여기에 내용을 적어주세요",
-    button_name: "자세히 보기",
-  });
+  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(response.kakao_args);
   const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
   const [item_type, setItem_type] = useState<ItemType>(response.item_type);
   const [active, setActive] = useState(response.active);
