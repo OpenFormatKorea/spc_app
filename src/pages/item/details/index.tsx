@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
+const DetailsItem = (apiResponse: any) => {
   const campaign_id = apiResponse.campaign_id;
   const response = apiResponse.apiResponse;
   const [title, setTitle] = useState(response.title);
@@ -58,7 +58,22 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
   const [active, setActive] = useState(response.active);
   const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
-    response.products?.length > 0 ? [...response.products] : [{ product_model_code: "" }]
+    response.products?.length > 0
+      ? [...response.products]
+      : [
+          {
+            product_model_code: "",
+            product_model_name: "",
+            images: [
+              {
+                posThumb: "",
+              },
+              {
+                thumb: "",
+              },
+            ],
+          },
+        ]
   );
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
     response.promotions?.length > 0 ? [...response.promotions] : [{ description: "" }]
@@ -74,7 +89,6 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
     active,
     campaign_id,
   };
-  console.log("itemArgs", itemArgs);
   const handleSubmit = () => {
     router.push(`/campaign/details?campaign_id=${campaign_id}`);
   };

@@ -22,6 +22,8 @@ const ItemList: React.FC<ItemListProps> = (
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
   const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({});
+  const selectedItemIds = Object.keys(selectedItems).filter((key) => selectedItems[key]);
+
   useEffect(() => {
     const initialStatus = items.reduce(
       (acc, item) => {
@@ -32,10 +34,13 @@ const ItemList: React.FC<ItemListProps> = (
     );
     setActiveStatusMap(initialStatus);
   }, [items]);
+
   const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
     let result;
     if (actionType === "delete" && confirm("선택하신 아이템을 삭제하시겠어요?")) {
       result = await fetchDeleteItems([itemId], campaign_id, context);
+    } else if (actionType === "delete_items" && confirm("선택하신 아이템을 삭제하시겠어요?")) {
+      result = await fetchDeleteItems(selectedItemIds, campaign_id, context);
     } else if (actionType === "activate" && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
       result = await fetchActivateItem(itemId, campaign_id, context);
     }
@@ -130,13 +135,13 @@ const ItemList: React.FC<ItemListProps> = (
                   {item.item_type === "PRODUCT" ? (
                     <div className="w-full flex justify-center">
                       <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
-                        프로덕트
+                        상품
                       </div>
                     </div>
                   ) : (
                     <div className="w-full flex justify-center">
                       <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
-                        프로모션
+                        쿠폰
                       </div>
                     </div>
                   )}
@@ -182,7 +187,7 @@ const ItemList: React.FC<ItemListProps> = (
           <button
             className="py-2 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
             id="delete_items"
-            onClick={(e) => handleAction(e, "delete", "")}
+            onClick={(e) => handleAction(e, "delete_items", "")}
           >
             선택삭제
           </button>
@@ -216,12 +221,10 @@ const ItemList: React.FC<ItemListProps> = (
                 <strong>아이템 종류: </strong>
               </div>
               {item.item_type === "PRODUCT" ? (
-                <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
-                  프로덕트
-                </div>
+                <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">상품</div>
               ) : (
                 <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
-                  프로모션
+                  쿠폰
                 </div>
               )}
             </div>

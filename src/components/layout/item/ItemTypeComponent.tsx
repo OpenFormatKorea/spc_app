@@ -65,8 +65,8 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
             <InputTextBox
               type="text"
               id={`product_model_code_${index}`}
-              placeholder="모델 코드를 입력하세요."
-              value={input.product_model_code || input.model_code}
+              placeholder="상품 모델 코드를 입력하세요."
+              value={input.product_model_code}
               onChange={(e) => handleInputChange(e.target.value, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               disabled={disableInput}

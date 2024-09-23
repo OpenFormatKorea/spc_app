@@ -66,7 +66,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
       setDisableInput(false);
     }
   }, [page_type]);
-
   return (
     <>
       <div className="contents-container w-full justify-center items-center">

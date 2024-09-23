@@ -1,6 +1,6 @@
 import InputRadioBox from "@/components/base/InputRadio";
 import ItemTypeComponent from "@/components/layout/item/ItemTypeComponent";
-import { ItemArgs, ProductsArgs, PromotionsArgs, KakaoShareArgs, ItemType } from "@/lib/item/types";
+import { ItemArgs, ProductsArgs, PromotionsArgs, ItemType } from "@/lib/item/types";
 import { useState, useEffect } from "react";
 
 interface ItemTypeDetailsProps {
@@ -12,6 +12,7 @@ interface ItemTypeDetailsProps {
   setItem_type: (value: ItemType) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>; // Updated type
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>; // Updated type
+  openModal: () => void;
 }
 
 const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
@@ -23,18 +24,21 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   setItem_type,
   setProductInputs,
   setPromotionInputs,
+  openModal,
 }) => {
   const [disableInput, setDisableInput] = useState(itemArgs.active);
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
-
   const handleItemTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItem_type(e.target.value as ItemType);
   };
 
   const handleAddInput = () => {
     if (item_type === ItemType.PD) {
-      setProductInputs((prev: ProductsArgs[] = []) => [...prev, { product_model_code: "" }]);
+      setProductInputs((prev: ProductsArgs[] = []) => [
+        ...prev,
+        { product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] },
+      ]);
     } else if (item_type === ItemType.PM) {
       setPromotionInputs((prev: PromotionsArgs[] = []) => [...prev, { description: "" }]);
     }
@@ -58,7 +62,7 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
         <div className="flex h-[42px] items-center w-full mb-2">
           <div className="flex space-x-20 text-left w-full lg:max-w-[458px]">
             <InputRadioBox
-              label="프로덕트"
+              label="상품"
               name="item_type"
               value={ItemType.PD}
               checked={itemArgs.item_type === ItemType.PD}
@@ -79,7 +83,8 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
             className={`border p-1 ${
               disableInput ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 cursor-pointer"
             }  text-white rounded-lg min-w-[45px] text-center `}
-            onClick={handleAddInput}
+            // onClick={handleAddInput}
+            onClick={openModal}
             disabled={disableInput}
           >
             추가

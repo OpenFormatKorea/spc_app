@@ -43,7 +43,6 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
   };
 
   const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
-  console.log("campaigns", campaigns);
 
   return (
     <>

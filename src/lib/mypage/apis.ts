@@ -7,7 +7,6 @@ export async function fetchGetUserInfo(context: GetServerSidePropsContext) {
 
   try {
     const response = await fetchAPI(context, apiUrl, "GET", {});
-    console.log("response", response);
     return response;
   } catch (error) {
     return { success: false, message: "Failed to get user info" };

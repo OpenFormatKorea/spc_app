@@ -1,43 +1,43 @@
-import { ApiResponse, ProductListArgs } from "@/lib/types";
-import { GetServerSidePropsContext } from "next";
+import { ApiResponse } from "@/lib/types";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import item from "@/pages/item";
-import ItemActiveButton from "@/components/layout/item/ItemActiveButton";
+import { getShopIdFromCookies } from "@/lib/helper";
+import { ProductListArgs, RewardType } from "@/lib/item/types";
 
 interface ProductListProps {
-  apiResponse: ApiResponse;
   campaign_id: string;
-  handleButton: (e: React.MouseEvent<HTMLDivElement>) => void;
+  apiResponse: ApiResponse;
 }
 
-const ProductList: React.FC<ProductListProps> = (
-  { apiResponse, handleButton, campaign_id },
-  context: GetServerSidePropsContext
-) => {
+// Fetches campaign data during server-side rendering
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const shop_id = getShopIdFromCookies(context);
+  if (!shop_id) {
+    return {
+      redirect: {
+        destination: "auth/login",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
+
+const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) => {
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
-  const router = useRouter();
-  const data = apiResponse.data;
+  // const data = apiResponse.data;
+  const data = apiResponse?.data;
   const products = useMemo(() => (Array.isArray(data.content) ? data.content : []), [data.content]);
-
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
-
   const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
     let result;
     if (actionType === "select_products" && confirm("해당 상품을 선택 하시겠어요?")) {
-    }
-  };
-
-  const handleItemClick = (itemId: string) => {
-    if (router.pathname.includes("/campaign/details")) {
-      router.replace({
-        pathname: "/item/details",
-        query: { campaign_id, item_id: itemId },
-      });
     }
   };
 
@@ -45,7 +45,7 @@ const ProductList: React.FC<ProductListProps> = (
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
     const updatedSelectedItems = products.reduce(
-      (acc: Number, product: ProductListArgs) => ({ ...acc, [products.gid]: isChecked }),
+      (acc: Number, product: ProductListArgs) => ({ ...acc, [product.gid]: isChecked }),
       {} as { [key: string]: boolean }
     );
     setSelectedItems(updatedSelectedItems);
@@ -59,135 +59,90 @@ const ProductList: React.FC<ProductListProps> = (
       return updatedItems;
     });
   };
+
   return (
     <>
-      <div className="w-full py-3 hidden lg:block">
-        <table className="w-full border border-gray-100 text-center hidden lg:table">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className={theadStyle}>
-                <input
-                  type="checkbox"
-                  id={`item_all`}
-                  name={`item_all`}
-                  checked={selectAll}
-                  onChange={handleSelectAll}
-                />
-              </th>
-              <th className={theadStyle}>프로덕트 ID</th>
-              <th className={theadStyle}>프로덕트 명</th>
-              <th className={theadStyle}>POS 썸네일</th>
-              {/* <th className={theadStyle}>일반 썸네일</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product: ProductListArgs) => (
-              <tr key={product.gid} className="cursor-pointer" onClick={() => handleItemClick(item.id)}>
-                <td className={`${tbodyStyle} px-2`} onClick={(e) => e.stopPropagation()}>
-                  <input
-                    type="checkbox"
-                    id={`item_${product.gid}`}
-                    name={`item_${product.gid}`}
-                    checked={selectedItems[product.gid] || false}
-                    onChange={handleCheckboxChange(product.gid)}
-                  />
-                </td>
-                <td className={tbodyStyle}>{product.gid}</td>
-                <td className={tbodyStyle}>{product.name}</td>
-                <td className={tbodyStyle}>
-                  <img src={products.posThumb} className="max-w-[100px] max-h-[100px]" />
-                </td>
-                {/* <td className={tbodyStyle}>
-                  <img src={items.thumb} className="max-w-[100px] max-h-[100px]" />
-                </td> */}
-              </tr>
-            ))}
-            {!products.length && (
-              <tr>
-                <td className={tbodyStyle} colSpan={6}>
-                  현재 사용중인 아이템이 없어요,
-                  <br />
-                  새로운 아이템을 등록해 주세요.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div className="items-center justify-between hidden pt-4 lg:flex">
-          <button
-            className="py-2 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
-            id="delete_items"
-            onClick={(e) => handleAction(e, "delete", "")}
-          >
-            선택삭제
-          </button>
-        </div>
-      </div>
-      {/* Mobile-friendly layout */}
-      <div className="block mt-2 lg:hidden">
-        {products.map((product: ProductListArgs, i: Number) => (
-          <div
-            key={products.gid || i}
-            className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 cursor-pointer"
-            onClick={() => handleItemClick(product.gid)}
-          >
-            <div
-              className="font-bold mb-2 text-black w-full pb-1 border-b flex  justify-between"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="h-full items-end">{products.title}</div>
-            </div>
-            <div className="text-sm flex pr-2 items-center">
-              <div className="w-[100px]">
-                <strong>프로덕트 ID: </strong>
-              </div>
+      <div className="flex flex-col items-center justify-center text-center">
+        <h1 className="w-full text-left text-xl font-bold pb-2">상품 선택</h1>
 
-              {product.gid}
-            </div>
-            <div className="text-sm flex pr-2 items-center">
-              <div className="w-[100px]">
-                <strong>프로덕트 명: </strong>
+        <div className="flex flex-col items-center max-w-[440px] lg:max-w-full max-h-[550px] overflow-y-scroll my-2">
+          <div className="flex flex-col bg-white p-3 rounded-lg">
+            <div className="flex flex-col justify-center items-center w-full rounded-xl mb-4">
+              <div className="flex flex-col w-full mb-2 text-left">
+                <label className="font-gray-300 text-sm font-semibold mb-2">선택된 상품</label>
+                <div>
+                  {Object.keys(selectedItems)
+                    .filter((gid) => selectedItems[gid]) // Filter the selected items
+                    .map((gid, index, array) => {
+                      const product = products.find((p: any) => p.gid === gid);
+                      return product ? (
+                        <a key={product.gid} className="pr-1">
+                          {product.gid}
+                          {/* Conditionally add a comma if it's not the last item */}
+                          {index < array.length - 1 && ","}
+                        </a>
+                      ) : null;
+                    })}
+                </div>
               </div>
-              {product.name}
             </div>
-            <div className="text-sm flex pr-2 items-center">
-              <div className="w-[100px]">
-                <strong>썸네일: </strong>
-              </div>
-            </div>
-            <div>
-              <img src={product.thumb || ""} className="w-[100px] h-[100px] bg-blue-500" />
-            </div>
-            <div className="w-full flex justify-end ">
-              <div className="w-[50%] pt-2 flex justify-end space-x-2 text-white text-sm">
-                <button
-                  className="w-[60px] p-2 cursor-pointer rounded-md bg-red-500"
-                  onClick={(e) => handleAction(e, "delete", product.gid)}
-                >
-                  삭제
-                </button>
-              </div>
+            <div className="w-full py-3 block">
+              <table className="w-full border border-gray-100 text-center table">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className={theadStyle}>
+                      <input
+                        type="checkbox"
+                        id={`item_all`}
+                        name={`item_all`}
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
+                    </th>
+                    <th className={theadStyle}>POS 썸네일</th>
+                    <th className={theadStyle}>상품 ID</th>
+                    <th className={theadStyle}>상품명</th>
+                    {/* <th className={theadStyle}>일반 썸네일</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product: ProductListArgs) => (
+                    <tr key={product.gid}>
+                      <td className={`${tbodyStyle} px-2`}>
+                        <input
+                          type="checkbox"
+                          id={`item_${product.gid}`}
+                          name={`item_${product.gid}`}
+                          checked={selectedItems[product.gid] || false}
+                          onChange={handleCheckboxChange(product.gid)}
+                        />
+                      </td>
+                      <td className={tbodyStyle}>
+                        <div className="w-full flex justify-center items-center text-center ">
+                          <img
+                            src={product.thumb || "/images/kakao/kakaolink-no-logo-default.png"}
+                            className="w-[50px] h-[50px] lg:w-[100px] lg:h-[100px]"
+                          />
+                        </div>
+                      </td>
+                      <td className={tbodyStyle}>{product.gid}</td>
+                      <td className={tbodyStyle}>{product.name}</td>
+                    </tr>
+                  ))}
+                  {!products.length && (
+                    <tr>
+                      <td className={tbodyStyle} colSpan={6}>
+                        현재 추가가능한 상품이 없어요.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
-        ))}
-        {!products.length && (
-          <div className="text-center text-gray-500 p-3">
-            현재 사용중인 아이템이 없어요,
-            <br />
-            새로운 아이템을 등록해 주세요.
-          </div>
-        )}
-      </div>
-      <div className="flex w-full text-white text-center lg:justify-end pt-2">
-        <div
-          id="create_item"
-          className="p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
-          onClick={handleButton}
-        >
-          <AddIcon fontSize="small" />
-          <div className="flex text-center items-center"></div>
-          아이템 추가
         </div>
+
+        <button className="bg-blue-500 text-white rounded-lg p-2 w-full mt-4">상품 추가</button>
       </div>
     </>
   );

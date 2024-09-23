@@ -89,8 +89,7 @@ export interface PBProductListArgs {
 export interface ProductListArgs {
   gid: string;
   name: string;
-  posThumb: string | null;
-  thumb: string | null;
+  image: [{ posThumb: string | null }, { thumb: string | null }];
 }
 
 export interface PageableArgs {
@@ -115,4 +114,15 @@ export interface KakaoShareArgs {
   title: string;
   description: string;
   button_name: string;
+}
+
+export interface ProductListArgs {
+  gid: string;
+  name: string;
+  posThumb: string | null;
+  thumb: string | null;
+}
+export interface PromotionListArgs {
+  cpnId: string;
+  name: string;
 }
