@@ -16,3 +16,11 @@ export enum PeriodType {
   L = "LIMITED",
   UL = "UNLIMITED",
 }
+export interface KakaoTemplateArgs {
+  shop_name: string;
+  image: string;
+  shop_logo: string;
+  title: string;
+  description: string;
+  button_name: string;
+}

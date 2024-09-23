@@ -1,14 +1,24 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import { ItemType, ItemArgs, KakaoArgs, ProductsArgs, PromotionsArgs, RewardType, RewardsArgs } from "@/lib/item/types";
+import {
+  ItemType,
+  ItemArgs,
+  KakaoArgs,
+  ProductsArgs,
+  PromotionsArgs,
+  RewardType,
+  RewardsArgs,
+  KakaoShareArgs,
+} from "@/lib/item/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useState, useRef, useEffect, KeyboardEvent } from "react";
+import { useState, useRef, KeyboardEvent } from "react";
 import ItemDetails from "@/components/layout/item/ItemDetails";
 import RewardCard from "@/components/layout/item/RewardCard";
 import router from "next/router";
 import RewardComponent from "@/components/layout/item/RewardList";
 import { fetchGetItemDetails } from "@/lib/item/apis";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
@@ -33,10 +43,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
   const campaign_id = apiResponse.campaign_id;
   const response = apiResponse.apiResponse;
-  //const item_id = response.id || "";
   const [title, setTitle] = useState(response.title);
-  const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>(response.kakao_args || {});
-  const [kakao_message, setKakao_message] = useState(kakaoArgs.message || "");
+  // const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>({ message: "" });
+  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
+    shop_name: "incento",
+    image: "/images/kakao/kakaolink-no-logo-default.png",
+    shop_logo: "/images/kakao/kakaolink-no-logo-default.png",
+    title: "타이틀 예시",
+    description: "여기에 내용을 적어주세요",
+    button_name: "자세히 보기",
+  });
   const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
   const [item_type, setItem_type] = useState<ItemType>(response.item_type);
   const [active, setActive] = useState(response.active);
@@ -51,17 +67,14 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
     id: response.id || "",
     title,
     item_type,
-    kakao_args: kakaoArgs,
+    kakao_args: kakaoShareArgs,
     products: [response.products],
     promotions: [response.promotions],
     rewards,
     active,
     campaign_id,
   };
-  useEffect(() => {
-    setKakaoArgs({ message: kakao_message });
-  }, [kakao_message]);
-
+  console.log("itemArgs", itemArgs);
   const handleSubmit = () => {
     router.push(`/campaign/details?campaign_id=${campaign_id}`);
   };
@@ -98,21 +111,29 @@ const DetailsItem = (apiResponse: any, context: GetServerSidePropsContext) => {
             page_type="DETAILS"
             item_type={item_type}
             itemArgs={itemArgs}
-            kakao_message={kakao_message}
+            kakaoShareArgs={kakaoShareArgs}
             campaign_id={campaign_id}
-            productInputs={productInputs}
-            promotionInputs={promotionInputs}
             active={active}
-            setProductInputs={setProductInputs}
-            setPromotionInputs={setPromotionInputs}
             setItem_type={setItem_type}
             setTitle={setTitle}
-            setKakao_message={setKakao_message}
+            setProductInputs={setProductInputs}
+            setPromotionInputs={setPromotionInputs}
+            setKakaoShareArgs={setKakaoShareArgs}
             setActive={setActive}
             handleKeyDown={handleKeyDown}
           />
         </ContentsContainer>
         <ContentsContainer variant="campaign">
+          <ItemTypeDetails
+            page_type="DETAILS"
+            item_type={item_type}
+            itemArgs={itemArgs}
+            productInputs={productInputs}
+            promotionInputs={promotionInputs}
+            setItem_type={setItem_type}
+            setProductInputs={setProductInputs}
+            setPromotionInputs={setPromotionInputs}
+          />
           <RewardComponent
             page_type="DETAILS"
             handleKeyDown={handleKeyDown}

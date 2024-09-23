@@ -169,8 +169,8 @@ const ItemList: React.FC<ItemListProps> = (
             ))}
             {!items.length && (
               <tr>
-                <td className={tbodyStyle} colSpan={6}>
-                  현재 사용중인 아이템이 없어요,
+                <td className={"text-center text-sm text-gray-500 p-3"} colSpan={6}>
+                  현재 사용중인 아이템이 없어요
                   <br />
                   새로운 아이템을 등록해 주세요.
                 </td>
@@ -259,8 +259,8 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         ))}
         {!items.length && (
-          <div className="text-center text-gray-500 p-3">
-            현재 사용중인 아이템이 없어요,
+          <div className="text-center text-sm text-gray-500 p-3">
+            현재 사용중인 아이템이 없어요
             <br />
             새로운 아이템을 등록해 주세요.
           </div>

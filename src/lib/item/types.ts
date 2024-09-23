@@ -1,9 +1,11 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface ItemArgs {
   id?: string;
   campaign_id: string;
   title: string;
   item_type: ItemType;
-  kakao_args: KakaoArgs;
+  kakao_args: KakaoShareArgs;
   products: ProductsArgs[];
   promotions: PromotionsArgs[];
 
@@ -20,7 +22,8 @@ export interface KakaoArgs {
 export interface ProductsArgs {
   id?: string;
   product_model_code: string;
-  model_code?: string;
+  product_model_name: string;
+  images: [{ posThumb: string }, { thumb: string }];
 }
 export interface PromotionsArgs {
   id?: string;
@@ -67,4 +70,13 @@ export enum PaymentFrequencyType {
   ONCE = "ONCE",
   REP = "REPEAT",
   UNL = "UNLIMITED",
+}
+
+export interface KakaoShareArgs {
+  shop_name: string;
+  image: string;
+  shop_logo: string;
+  title: string;
+  description: string;
+  button_name: string;
 }

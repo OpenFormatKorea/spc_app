@@ -52,12 +52,12 @@ export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, c
     shop_id: shop_id,
     campaign_id: campaign_id,
   };
+  console.log("dataObj", dataObj);
 
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-create`;
 
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
-
     if (response.status === "200" && response.message === "success") {
       return {
         status: 200,
@@ -175,6 +175,13 @@ export async function fetchActivateItem(item_id: string, campaign_id: string, co
   const dataObj = {
     campaign_id: campaign_id,
     shop_id: shop_id,
+    products: [
+      {
+        product_model_code: "000662",
+        product_model_name: "케잌1호",
+        images: [{ posThumb: "/item_mst/007800_ORD.PNG" }, { thumb: "/item_mst/007800_ORD.PNG" }],
+      },
+    ],
   };
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);

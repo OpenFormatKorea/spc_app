@@ -152,7 +152,9 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
                   onKeyDown={handleKeyDown}
                   disabled={false}
                 />
-                <label className="font-gray-300 text-sm font-semibold ml-2">포인트</label>
+                {reward_type == RewardType.PO && (
+                  <label className="font-gray-300 text-sm font-semibold ml-2">포인트</label>
+                )}
               </div>
             </div>
           </div>

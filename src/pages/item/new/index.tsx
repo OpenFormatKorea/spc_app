@@ -1,22 +1,52 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemDetails from "@/components/layout/item/ItemDetails";
-import { ItemType, ItemArgs, KakaoArgs, ProductsArgs, PromotionsArgs, RewardType, RewardsArgs } from "@/lib/item/types";
+import {
+  ItemType,
+  ItemArgs,
+  KakaoArgs,
+  ProductsArgs,
+  PromotionsArgs,
+  RewardType,
+  RewardsArgs,
+  KakaoShareArgs,
+} from "@/lib/item/types";
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import RewardCard from "@/components/layout/item/RewardCard";
 import { GetServerSidePropsContext } from "next";
 import RewardComponent from "@/components/layout/item/RewardList";
 import { fetchCreateItem } from "@/lib/item/apis";
+import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
 
 const NewItem = (context: GetServerSidePropsContext) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [campaign_id, setCampaign_id] = useState("");
-  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([{ product_model_code: "" }]);
+  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
+    {
+      product_model_code: "",
+      product_model_name: "",
+      images: [
+        {
+          posThumb: "",
+        },
+        {
+          thumb: "",
+        },
+      ],
+    },
+  ]);
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
-  const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>({ message: "" });
-  const [kakao_message, setKakao_message] = useState<string>("");
+  // const [kakaoArgs, setKakaoArgs] = useState<KakaoArgs>({ message: "" });
+  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
+    shop_name: "incento",
+    image: "/images/kakao/kakaolink-no-logo-default.png",
+    shop_logo: "/images/kakao/kakaolink-no-logo-default.png",
+    title: "타이틀 예시",
+    description: "여기에 내용을 적어주세요",
+    button_name: "자세히 보기",
+  });
   const [rewards, setRewards] = useState<RewardsArgs[]>([]);
   const [item_type, setItem_type] = useState<ItemType>(ItemType.PD);
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
@@ -25,7 +55,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
   const itemArgs: ItemArgs = {
     title,
     item_type,
-    kakao_args: kakaoArgs,
+    kakao_args: kakaoShareArgs,
     products: productInputs,
     promotions: promotionInputs,
     rewards,
@@ -36,10 +66,6 @@ const NewItem = (context: GetServerSidePropsContext) => {
   const infoCheck = () => {
     if (!title) {
       alert("아이템 명을 입력해주세요.");
-      return false;
-    }
-    if (!kakao_message) {
-      alert("카카오 메시지를 입력해주세요.");
       return false;
     }
     if (!productInputs[0].product_model_code && !promotionInputs[0].description) {
@@ -57,6 +83,7 @@ const NewItem = (context: GetServerSidePropsContext) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     if (event.currentTarget.id === "create_item" && infoCheck()) {
+      console.log("itemArgs", itemArgs);
       const result = await fetchCreateItem(itemArgs, campaign_id, context);
       if (result.status === 200) {
         alert(result.message);
@@ -80,10 +107,6 @@ const NewItem = (context: GetServerSidePropsContext) => {
   };
 
   useEffect(() => {
-    setKakaoArgs({ message: kakao_message });
-  }, [kakao_message]);
-
-  useEffect(() => {
     if (router.isReady) {
       const campaignId = router.query.campaign_id;
       if (typeof campaignId === "string") {
@@ -105,21 +128,29 @@ const NewItem = (context: GetServerSidePropsContext) => {
             page_type="NEW"
             item_type={item_type}
             itemArgs={itemArgs}
-            kakao_message={kakao_message}
+            kakaoShareArgs={kakaoShareArgs}
             campaign_id={campaign_id}
-            productInputs={productInputs}
-            promotionInputs={promotionInputs}
             active={active}
             setItem_type={setItem_type}
             setTitle={setTitle}
             setProductInputs={setProductInputs}
             setPromotionInputs={setPromotionInputs}
-            setKakao_message={setKakao_message}
+            setKakaoShareArgs={setKakaoShareArgs}
             setActive={setActive}
             handleKeyDown={handleKeyDown}
           />
         </ContentsContainer>
         <ContentsContainer variant="campaign">
+          <ItemTypeDetails
+            page_type="NEW"
+            item_type={item_type}
+            itemArgs={itemArgs}
+            productInputs={productInputs}
+            promotionInputs={promotionInputs}
+            setItem_type={setItem_type}
+            setProductInputs={setProductInputs}
+            setPromotionInputs={setPromotionInputs}
+          />
           <RewardComponent
             page_type="NEW"
             handleKeyDown={handleKeyDown}

@@ -48,9 +48,9 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
               {reward.reward_type === "COUPON" ? reward.coupon_code : `${reward.point_amount} 포인트`}
             </div>
           </h1>
-          <div className="flex flex-col lg:flex-row w-full ">
+          <div className="flex flex-col lg:flex-row w-full bg-white rounded-xl">
             {triggerTypes.map((trigger) => (
-              <div key={trigger} className="flex flex-col bg-white p-3 w-full mt-3 ">
+              <div key={trigger} className="flex flex-col  p-3 w-full ">
                 <div className="text-base font-bold w-full mb-2">{trigger === "SIGNUP" ? "회원가입" : "구매 후"}</div>
                 <div className="flex flex-col space-y-4">
                   {conditionTypes.map((type) => {
@@ -59,7 +59,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
                     const policy = trigger === "SIGNUP" ? conditions?.SIGNUP : conditions?.PURCHASE;
 
                     return (
-                      <div key={type} className="bg-gray-100 p-2 space-y-1 w-full min-h-[145px] rounded-xl">
+                      <div key={type} className="bg-gray-100 p-2 space-y-1 w-full min-h-[145px]">
                         <div className="text-base w-full mb-2 pb-1 border-b">
                           {type === "referrer_conditions" ? "추천인" : "피추천인"}
                         </div>
