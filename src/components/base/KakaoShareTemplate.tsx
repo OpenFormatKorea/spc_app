@@ -1,47 +1,41 @@
+import React, { useEffect, useRef, useState } from "react";
 import InputTextBox from "@/components/base/InputText";
 import { KakaoShareArgs } from "@/lib/item/types";
-import React, { useEffect, useRef, useState } from "react";
 interface KakaoShareProps {
   page_type: string;
   disableInput: boolean;
   kakaoShareArgs: KakaoShareArgs;
+  image: string;
+  shop_logo: string;
+  image_result?: string;
+  shop_logo_result?: string;
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onChangeImage: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   page_type,
   disableInput,
+  image,
+  shop_logo,
+  image_result,
+  shop_logo_result,
   kakaoShareArgs,
   setKakaoShareArgs,
   handleKeyDown,
+  onChangeImage,
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-4";
   const labelClass = "text-xs pt-4 text-gray-500";
-
+  const imageFileInput = useRef<HTMLInputElement>(null);
+  const shopLogoFileInput = useRef<HTMLInputElement>(null);
   const [shop_name, setShop_name] = useState(kakaoShareArgs.shop_name);
   const [title, setTitle] = useState(kakaoShareArgs.title);
   const [description, setDescription] = useState(kakaoShareArgs.description);
   const [button_name, setButton_name] = useState(kakaoShareArgs.button_name);
-  const [image, setImage] = useState<string>(kakaoShareArgs.image);
-  const imageFileInput = useRef<HTMLInputElement | null>(null);
-  const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
-  const shopLogoFileInput = useRef<HTMLInputElement | null>(null);
-
-  const onChangeImage = (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2 && typeof reader.result === "string" && imgType === "image") {
-          setImage(reader.result);
-        } else if (reader.readyState === 2 && typeof reader.result === "string" && imgType === "shop_logo") {
-          setShop_logo(reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const [img_url, setImg_url] = useState(image);
+  const [shop_logo_url, setShop_logo_url] = useState(shop_logo);
 
   useEffect(() => {
     if (page_type === "NEW") {
@@ -52,16 +46,17 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   }, [page_type]);
 
   useEffect(() => {
+    setImg_url(image);
+    setShop_logo_url(shop_logo);
     setKakaoShareArgs({
       shop_name: shop_name,
       title: title,
       description: description,
       button_name: button_name,
-      image: image,
-      shop_logo: shop_logo,
+      image: img_url,
+      shop_logo: shop_logo_url,
     });
-    console.log("kakaoShareArgs", kakaoShareArgs);
-  }, [shop_name, title, description, button_name, image, shop_logo]);
+  }, [shop_name, title, description, button_name, image_result, shop_logo_result]);
 
   return (
     <>
@@ -81,23 +76,25 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         type="file"
                         style={{ display: "none" }}
                         accept="image/jpg,image/png,image/jpeg"
-                        name="image"
+                        name="image_result"
                         onChange={onChangeImage("image")}
                         ref={imageFileInput}
                         disabled={disableInput}
                       />
                       <div
                         className="relative h-full w-full flex items-center justify-center group"
-                        onClick={() => {
-                          imageFileInput.current?.click();
-                        }}
+                        onClick={() => imageFileInput.current?.click()}
                       >
                         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
                           <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             사진 업로드
                           </span>
                         </div>
-                        <img className="h-full w-full " src={image} alt="Selected" />
+                        <img
+                          className="h-full w-full "
+                          src={image_result || "/images/kakao/kakaolink-no-logo-default.png"}
+                          alt="Selected"
+                        />
                       </div>
                     </div>
                     <div className="box-border flex h-[calc(100%-460px)] min-w-full flex-col  items-start justify-between">
@@ -108,24 +105,21 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                               type="file"
                               style={{ display: "none" }}
                               accept="image/jpg,image/png,image/jpeg"
-                              name="shop_logo"
+                              name="shop_logo_result"
                               onChange={onChangeImage("shop_logo")}
                               ref={shopLogoFileInput}
                               disabled={disableInput}
                             />
+
                             <div
                               className="relative h-full w-full flex items-center justify-center group"
-                              onClick={() => {
-                                shopLogoFileInput.current?.click();
-                              }}
+                              onClick={() => shopLogoFileInput.current?.click()}
                             >
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <img
-                                  className="h-full w-full rounded-[8px] bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 "
-                                  src={shop_logo}
-                                  alt="Selected"
-                                />
-                              </div>
+                              <img
+                                className="h-full w-full rounded-[8px]"
+                                src={shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"}
+                                alt="Selected"
+                              />
                             </div>
                           </div>
 
@@ -152,7 +146,11 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                           >
                             <div className="flex select-none flex-row items-center gap-1">
                               <div className="h-[16px] w-[16px] border border-gray-300" style={{ borderRadius: "35%" }}>
-                                <img className="h-full w-full " src={shop_logo} style={{ borderRadius: "35%" }} />
+                                <img
+                                  className="h-full w-full "
+                                  src={`${shop_logo_result}` || "/images/kakao/kakaolink-no-logo-default.png"}
+                                  style={{ borderRadius: "35%" }}
+                                />
                               </div>
                               <p className="text-gray-400 text-xs">{shop_name}</p>
                             </div>

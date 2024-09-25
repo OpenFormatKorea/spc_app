@@ -1,7 +1,7 @@
 import CampaignList from "@/components/layout/campaign/CampaignList";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import { authenticateUserforHeader } from "@/lib/auth";
+import { authenticateUser } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -11,15 +11,15 @@ import { AuthArgs } from "@/lib/auth/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const authResponse = authenticateUser(context, "/auth/login");
   const campaignResponse = await fetchGetCampaignList(context);
-  const authResponse = authenticateUserforHeader(context);
 
   const shop_id = getShopIdFromCookies(context);
 
   if (!shop_id) {
     return {
       redirect: {
-        destination: "/home",
+        destination: "/auth/login",
         permanent: false,
       },
     };

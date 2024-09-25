@@ -5,7 +5,7 @@ import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import { CampaignArgs } from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { authenticateUserforHeader } from "@/lib/auth";
+import { authenticateUser } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
 import ItemList from "@/components/layout/item/ItemList";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
@@ -16,7 +16,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
   const shop_id: any = getShopIdFromCookies(context);
 
-  const authResponse = authenticateUserforHeader(context);
+  const authResponse = authenticateUser(context, "/dashboard");
   const itemListApiResponse = await fetchGetItemList(campaign_id, context);
   const cDetailApiResponse = await fetchGetCampaignDetails(campaign_id, shop_id, context);
   if (cDetailApiResponse == null || cDetailApiResponse.shop_id != shop_id) {

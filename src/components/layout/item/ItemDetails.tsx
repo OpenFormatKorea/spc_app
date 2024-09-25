@@ -7,18 +7,22 @@ import { useState, useEffect } from "react";
 
 interface ItemDetailsProps {
   page_type: "DETAILS" | "NEW";
-  item_type: ItemType;
   itemArgs: ItemArgs;
   kakaoShareArgs: KakaoShareArgs;
   campaign_id: string;
   active: boolean;
+  image: string;
+  shop_logo: string;
+  image_result?: string;
+  shop_logo_result?: string;
+  setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   setItem_type: (value: ItemType) => void;
   setTitle: (value: string) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>; // Updated type
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>; // Updated type
-  setKakaoShareArgs: (value: KakaoShareArgs) => void;
   setActive: (value: boolean) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onChangeImage: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ItemDetails: React.FC<ItemDetailsProps> = (
@@ -28,12 +32,17 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     kakaoShareArgs,
     campaign_id,
     active,
+    image,
+    shop_logo,
+    image_result,
+    shop_logo_result,
+    setKakaoShareArgs,
     setTitle,
     setProductInputs,
     setPromotionInputs,
-    setKakaoShareArgs,
     setActive,
     handleKeyDown,
+    onChangeImage,
   },
   context: GetServerSidePropsContext
 ) => {
@@ -106,11 +115,16 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
         </div>
       </div>
       <KakaoShareTemplate
+        image={image}
+        shop_logo={shop_logo}
         page_type={page_type}
         disableInput={disableInput}
         kakaoShareArgs={kakaoShareArgs}
         setKakaoShareArgs={setKakaoShareArgs}
         handleKeyDown={handleKeyDown}
+        image_result={image_result}
+        shop_logo_result={shop_logo_result}
+        onChangeImage={onChangeImage}
       />
     </>
   );

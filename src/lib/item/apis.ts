@@ -1,7 +1,7 @@
-import { fetchAPI } from "@/lib/api";
-import { getShopIdFromCookies } from "@/lib/helper";
 import { ItemArgs, RewardPolicyArgs } from "@/lib/item/types";
+import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
+import { fetchAPI } from "@/lib/api";
 
 // 리퍼럴 아이템
 
@@ -52,7 +52,6 @@ export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, c
     shop_id: shop_id,
     campaign_id: campaign_id,
   };
-
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-create`;
 
   try {
@@ -453,7 +452,6 @@ export async function fetchGetPromotionCodeList(
         empty: false,
       },
     };
-    console.log("response", response);
     return response;
   } catch (error) {
     return null;

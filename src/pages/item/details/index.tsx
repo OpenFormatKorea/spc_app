@@ -1,28 +1,27 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
+import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
+import RewardComponent from "@/components/layout/item/RewardList";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ItemDetails from "@/components/layout/item/ItemDetails";
+import RewardCard from "@/components/layout/item/RewardCard";
+import { useState, useRef, KeyboardEvent } from "react";
+import { fetchGetItemDetails } from "@/lib/item/apis";
+import { getShopIdFromCookies } from "@/lib/helper";
+import { GetServerSideProps } from "next";
+import router from "next/router";
 import {
   ItemType,
   ItemArgs,
-  KakaoArgs,
   ProductsArgs,
   PromotionsArgs,
   RewardType,
   RewardsArgs,
   KakaoShareArgs,
 } from "@/lib/item/types";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useState, useRef, KeyboardEvent } from "react";
-import ItemDetails from "@/components/layout/item/ItemDetails";
-import RewardCard from "@/components/layout/item/RewardCard";
-import router from "next/router";
-import RewardComponent from "@/components/layout/item/RewardList";
-import { fetchGetItemDetails } from "@/lib/item/apis";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
-
+  const shop_id = getShopIdFromCookies(context);
   const IDetailApiResponse = await fetchGetItemDetails(item_id, campaign_id, context);
   if (!IDetailApiResponse) {
     return {
@@ -32,23 +31,40 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
+
   return {
     props: {
       apiResponse: IDetailApiResponse,
-      campaign_id,
+      shop_id: shop_id,
+      campaign_id: campaign_id,
     },
   };
 };
 
-const DetailsItem = (apiResponse: any) => {
-  const campaign_id = apiResponse.campaign_id;
-  const response = apiResponse.apiResponse;
+const DetailsItem = ({
+  apiResponse,
+  shop_id,
+  campaign_id,
+}: {
+  apiResponse: any;
+  shop_id: string;
+  campaign_id: string;
+}) => {
+  const response = apiResponse;
+
   const [title, setTitle] = useState(response.title);
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(response.kakao_args);
+
   const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
   const [item_type, setItem_type] = useState<ItemType>(response.item_type);
   const [active, setActive] = useState(response.active);
   const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
+
+  const [image, setImage] = useState<string>(kakaoShareArgs.image);
+  const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [shopLogoFile, setShopLogoFile] = useState<File | null>(null);
+
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
     response.products?.length > 0
       ? [...response.products]
@@ -81,6 +97,36 @@ const DetailsItem = (apiResponse: any) => {
     active,
     campaign_id,
   };
+
+  const onChangeImage = (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) {
+      alert("Please upload a valid image file.");
+      return;
+    }
+    const fileExtension = file.type.split("/")[1];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === "string") {
+          if (imgType === "image") {
+            setImage(reader.result);
+            setImageFile(file);
+            // setImage_img_type(fileExtension);
+          } else if (imgType === "shop_logo") {
+            setShop_logo(reader.result);
+            setShopLogoFile(file);
+            // setShop_logo_img_type(fileExtension);
+          }
+        } else {
+          console.error("Failed to read the file as string.");
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = () => {
     router.push(`/campaign/details?campaign_id=${campaign_id}`);
   };
@@ -114,19 +160,21 @@ const DetailsItem = (apiResponse: any) => {
       <div className="flex flex-col sm:flex-row md:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails
-            page_type="DETAILS"
-            item_type={item_type}
+            page_type="NEW"
             itemArgs={itemArgs}
             kakaoShareArgs={kakaoShareArgs}
             campaign_id={campaign_id}
             active={active}
             setItem_type={setItem_type}
             setTitle={setTitle}
+            setKakaoShareArgs={setKakaoShareArgs}
             setProductInputs={setProductInputs}
             setPromotionInputs={setPromotionInputs}
-            setKakaoShareArgs={setKakaoShareArgs}
             setActive={setActive}
             handleKeyDown={handleKeyDown}
+            image={image}
+            shop_logo={shop_logo}
+            onChangeImage={onChangeImage}
           />
         </ContentsContainer>
         <ContentsContainer variant="campaign">

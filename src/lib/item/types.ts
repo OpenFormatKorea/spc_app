@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
-
 export interface ItemArgs {
   id?: string;
   campaign_id: string;

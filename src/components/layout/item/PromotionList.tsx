@@ -30,7 +30,6 @@ const PromotionList: React.FC<PromotionListProps> = ({ campaign_id, apiResponse 
   // const data = apiResponse.data;
   const data = apiResponse?.data;
   const promotions = useMemo(() => (Array.isArray(data.content) ? data.content : []), [data.content]);
-  console.log("promotions", promotions);
   const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
   const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
@@ -38,9 +37,6 @@ const PromotionList: React.FC<PromotionListProps> = ({ campaign_id, apiResponse 
     if (actionType === "select_promotions" && confirm("해당 프로모션을 선택 하시겠어요?")) {
     }
   };
-  useEffect(() => {
-    console.log(selectedItems);
-  }, [selectedItems]);
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked);

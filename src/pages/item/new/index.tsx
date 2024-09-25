@@ -1,6 +1,19 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import { fetchCreateItem, fetchGetProductCodeList, fetchGetPromotionCodeList } from "@/lib/item/apis";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
+import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import PromotionList from "@/components/layout/item/PromotionList";
+import RewardComponent from "@/components/layout/item/RewardList";
 import ItemDetails from "@/components/layout/item/ItemDetails";
+import ProductList from "@/components/layout/item/ProductList";
+import RewardCard from "@/components/layout/item/RewardCard";
+import { useState, useRef, KeyboardEvent } from "react";
+import { getShopIdFromCookies } from "@/lib/helper";
+import ReactS3Client from "@/context/ReactS3Client";
+import Modal from "@/components/layout/base/Modal";
+import { ApiResponse } from "@/lib/types";
+import { useRouter } from "next/router";
 import {
   ItemType,
   ItemArgs,
@@ -10,23 +23,12 @@ import {
   RewardsArgs,
   KakaoShareArgs,
 } from "@/lib/item/types";
-import { useRouter } from "next/router";
-import { useState, useRef, useEffect, KeyboardEvent } from "react";
-import RewardCard from "@/components/layout/item/RewardCard";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import RewardComponent from "@/components/layout/item/RewardList";
-import { fetchCreateItem, fetchGetProductCodeList, fetchGetPromotionCodeList } from "@/lib/item/apis";
-import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
-import { getShopIdFromCookies } from "@/lib/helper";
-import ProductList from "@/components/layout/item/ProductList";
-import PromotionList from "@/components/layout/item/PromotionList";
-import { ApiResponse } from "@/lib/types";
-import Modal from "@/components/layout/base/Modal";
 
-// Fetches campaign data during server-side rendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
   const campaign_id = context.query.campaign_id;
+  const productResponse = await fetchGetProductCodeList(campaign_id, context);
+  const promotionResponse = await fetchGetPromotionCodeList(campaign_id, context);
   if (!shop_id || !campaign_id) {
     return {
       redirect: {
@@ -35,25 +37,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const productResponse = await fetchGetProductCodeList(campaign_id, context);
-  const promotionResponse = await fetchGetPromotionCodeList(campaign_id, context);
-
   return {
-    props: { campaign_id: campaign_id, productResponse: productResponse, promotionResponse: promotionResponse },
+    props: {
+      shop_id: shop_id,
+      campaign_id: campaign_id,
+      productResponse: productResponse,
+      promotionResponse: promotionResponse,
+    },
   };
 };
 
 const NewItem = (
   {
+    shop_id,
     campaign_id,
     productResponse,
     promotionResponse,
-  }: { campaign_id: string; productResponse: ApiResponse; promotionResponse: ApiResponse },
+  }: { shop_id: string; campaign_id: string; productResponse: ApiResponse; promotionResponse: ApiResponse },
   context: GetServerSidePropsContext
 ) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  // const [campaign_id, setCampaign_id] = useState("");
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
     {
       product_model_code: "",
@@ -68,18 +73,21 @@ const NewItem = (
       ],
     },
   ]);
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
-    shop_name: "incento",
+    shop_name: "",
     image: "/images/kakao/kakaolink-no-logo-default.png",
     shop_logo: "/images/kakao/kakaolink-no-logo-default.png",
-    title: "타이틀 예시",
-    description: "여기에 내용을 적어주세요",
-    button_name: "자세히 보기",
+    title: "",
+    description: "",
+    button_name: "",
   });
   const [rewards, setRewards] = useState<RewardsArgs[]>([]);
   const [item_type, setItem_type] = useState<ItemType>(ItemType.PD);
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
+  const [image, setImage] = useState<string>(kakaoShareArgs.image);
+  const [image_result, setImage_result] = useState<string>("");
+  const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
+  const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const [active, setActive] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => setIsModalOpen(false);
@@ -119,6 +127,66 @@ const NewItem = (
     return true;
   };
 
+  const onChangeImage = (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) {
+      alert("Please upload a valid image file.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async () => {
+      if (reader.result && typeof reader.result === "string") {
+        if (imgType === "image") {
+          setImage_result(reader.result);
+          let imgUrl = await uploadImage(file, imgType, image);
+          setImage(imgUrl);
+          setKakaoShareArgs((prevArgs) => ({
+            ...prevArgs,
+            image: imgUrl,
+          }));
+        } else if (imgType === "shop_logo") {
+          setShop_logo_result(reader.result);
+          let logoUrl = await uploadImage(file, imgType, shop_logo);
+          setShop_logo(logoUrl);
+          setKakaoShareArgs((prevArgs) => ({
+            ...prevArgs,
+            shop_logo: logoUrl,
+          }));
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+  //이전 이미지 삭제
+  const deletePreviousFile = async (previousFilePath: string): Promise<void> => {
+    try {
+      await ReactS3Client.deleteFile(previousFilePath);
+    } catch (error) {
+      console.error("Failed to delete previous file:", error);
+    }
+  };
+
+  // 업로드 이미지
+  const uploadImage = async (file: File, imgType: string, previousFilePath: string): Promise<string> => {
+    const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
+    const image_img_name = `kakaoShare_image_${shop_id}_${campaign_id}`;
+    const shop_logo_img_name = `kakaoShare_logo_img_${shop_id}_${campaign_id}`;
+    const currentDate = new Date().toISOString().split("T")[0].replace(/-/g, "");
+    const fileName = imgType === "image" ? `${image_img_name}_${currentDate}` : `${shop_logo_img_name}_${currentDate}`;
+    const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
+    try {
+      if (previousFilePath != "") {
+        await deletePreviousFile(previousFilePath); // Delete previous image or logo
+      }
+      await ReactS3Client.uploadFile(file, path);
+      return path;
+    } catch (error) {
+      console.error("Image Upload Failed:", error);
+      throw error;
+    }
+  };
+
+  //아이템 저장
   const handleSubmit = async (event: React.FormEvent) => {
     if (event.currentTarget.id === "create_item" && infoCheck()) {
       const result = await fetchCreateItem(itemArgs, campaign_id, context);
@@ -142,18 +210,6 @@ const NewItem = (
       buttonRef.current?.click();
     }
   };
-  const handleButton = (event: React.MouseEvent<HTMLElement>) => {
-    console.log("TEST");
-  };
-
-  // useEffect(() => {
-  //   if (router.isReady) {
-  //     const campaignId = router.query.campaign_id;
-  //     if (typeof campaignId === "string") {
-  //       setCampaign_id(campaignId);
-  //     }
-  //   }
-  // }, [router.isReady, router.query]);
 
   return (
     <>
@@ -167,18 +223,22 @@ const NewItem = (
           <ContentsContainer variant="campaign">
             <ItemDetails
               page_type="NEW"
-              item_type={item_type}
               itemArgs={itemArgs}
               kakaoShareArgs={kakaoShareArgs}
               campaign_id={campaign_id}
               active={active}
               setItem_type={setItem_type}
               setTitle={setTitle}
+              setKakaoShareArgs={setKakaoShareArgs}
               setProductInputs={setProductInputs}
               setPromotionInputs={setPromotionInputs}
-              setKakaoShareArgs={setKakaoShareArgs}
               setActive={setActive}
               handleKeyDown={handleKeyDown}
+              image={image}
+              shop_logo={shop_logo}
+              image_result={image_result}
+              shop_logo_result={shop_logo_result}
+              onChangeImage={onChangeImage}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">
@@ -193,7 +253,6 @@ const NewItem = (
               setPromotionInputs={setPromotionInputs}
               openModal={openModal}
             />
-
             <RewardComponent
               page_type="NEW"
               handleKeyDown={handleKeyDown}

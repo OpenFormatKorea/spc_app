@@ -1,29 +1,34 @@
 // lib/auth.ts
 import { GetServerSidePropsContext, Redirect } from "next";
-import { getCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 
 type AuthResult = { redirect: Redirect } | { props: {} };
 
-export const authenticateUserforLogin = (context: GetServerSidePropsContext): AuthResult => {
-  const access = getCookie("access", context);
-  if (access) {
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: false,
-      },
-    };
-  }
-  return { props: {} };
-};
-
-export const authenticateUserforHeader = (context: GetServerSidePropsContext): AuthResult => {
+// General authentication function
+const checkAuth = (context: GetServerSidePropsContext): boolean => {
   const access = getCookie("access", context);
   if (!access) {
-    console.error("error : there is no access token.");
+    // If no access token, remove it from cookies (in case it's still set)
+    //deleteCookie("access", { req: context.req, res: context.res });
+    deleteCookie("access");
+    deleteCookie("refresh");
+    deleteCookie("shop_id");
+    return false;
+  }
+  return !!access; // Returns true if access token exists, false otherwise
+};
+
+export const authenticateUser = (context: GetServerSidePropsContext, redirectTo: string): AuthResult => {
+  const { req } = context;
+  const currentPath = req.url || "";
+
+  if (checkAuth(context)) {
+    if (currentPath === redirectTo) {
+      return { props: {} };
+    }
     return {
       redirect: {
-        destination: "/home",
+        destination: redirectTo,
         permanent: false,
       },
     };
