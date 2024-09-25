@@ -4,6 +4,7 @@ import { PaymentFrequencyType, PaymentTimingType, RewardsArgs } from "@/lib/item
 interface RewardCardProps {
   page_type: "DETAILS" | "NEW";
   rewards: RewardsArgs[];
+
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 

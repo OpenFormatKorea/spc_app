@@ -15,6 +15,7 @@ interface ItemDetailsProps {
   shop_logo: string;
   image_result?: string;
   shop_logo_result?: string;
+  disableInput: boolean;
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   setItem_type: (value: ItemType) => void;
   setTitle: (value: string) => void;
@@ -36,6 +37,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     shop_logo,
     image_result,
     shop_logo_result,
+    disableInput,
     setKakaoShareArgs,
     setTitle,
     setProductInputs,
@@ -46,8 +48,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   },
   context: GetServerSidePropsContext
 ) => {
-  const [disableInput, setDisableInput] = useState(false);
-
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const labelClass = "text-xs pt-4 text-gray-500";
   const item_id = itemArgs.id || "";
@@ -65,10 +65,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   };
 
   useEffect(() => {
-    if (page_type === "NEW") {
-      disableInput == false;
-    } else if (page_type === "DETAILS") {
-      disableInput == true;
+    if (page_type === "DETAILS") {
       setProductInputs(itemArgs.products);
       setPromotionInputs(itemArgs.promotions);
     }
@@ -111,7 +108,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
           />
         </div>
       </div>
-
       <KakaoShareTemplate
         image={image}
         shop_logo={shop_logo}

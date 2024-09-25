@@ -58,15 +58,15 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
       <div className="contents-container w-full pt-4">
         <label className="pt-4 font-bold text-gray-500">카카오 메시지 설정</label>
         <div className="block lg:flex lg:gap-4">
-          <div className="w-full lg:w-fit flex items-center lg:items-start justify-center lg:justify-start">
-            <div className="relative mt-4">
-              <div className="w-[320px] mx-auto">
+          <div className=" bg-gray-200 lg:bg-transparent w-full lg:w-fit flex items-center lg:items-start justify-center lg:justify-start rounded-xl">
+            <div className="relative my-4">
+              <div className="hidden lg:block w-[200px] lg:w-[290px] mx-auto">
                 <img src="/images/kakao/kakao-message-template.png" alt="Phone Mockup" />
               </div>
-              <div className="absolute top-[90px] left-[45px]">
-                <div className="flex h-full max-w-[238px] flex-col items-center justify-center rounded-lg bg-white shadow-card_shadow">
-                  <div className="min-h-full min-w-full overflow-hidden rounded-lg">
-                    <div className="h-[238px] w-[238px] cursor-pointer">
+              <div className=" lg:absolute top-0 lg:top-[85px] left-0 lg:left-[40px]">
+                <div className="flex h-full max-w-full flex-col items-center justify-center rounded-lg bg-white shadow-card_shadow">
+                  <div className="min-h-full min-w-full w-[230px] overflow-hidden rounded-lg">
+                    <div className="h-[230px] w-[230px] cursor-pointer">
                       <input
                         type="file"
                         style={{ display: "none" }}
@@ -80,11 +80,15 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         className="relative h-full w-full flex items-center justify-center group"
                         onClick={() => imageFileInput.current?.click()}
                       >
-                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
-                          <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            사진 업로드
-                          </span>
-                        </div>
+                        {page_type == "NEW" ? (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
+                            <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              사진 업로드
+                            </span>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
                         <img
                           className="h-full w-full"
                           src={
@@ -130,7 +134,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                           <p style={{ letterSpacing: "-0.8px", lineHeight: "17px" }}>{title}</p>
                         </div>
                       </div>
-                      <div className="px-[10px] text-[13px] opacity-50">
+                      <div className="px-[10px] text-[13px] opacity-50 break-words">
                         <p style={{ letterSpacing: "-0.3px", lineHeight: "17px" }}>{description}</p>
                       </div>
                       <div className="flex min-w-full flex-col items-center justify-end gap-0 pt-[10px]">

@@ -6,7 +6,7 @@ import Modal from "@/components/layout/base/Modal";
 
 interface RewardComponentProps {
   page_type: "DETAILS" | "NEW";
-
+  disableInput: boolean;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   reward_type: RewardType;
   setRewardType: (value: RewardType) => void;
@@ -16,6 +16,7 @@ interface RewardComponentProps {
 
 const RewardComponent: React.FC<RewardComponentProps> = ({
   page_type,
+  disableInput,
   handleKeyDown,
   reward_type,
   setRewardType,
@@ -24,10 +25,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
 }) => {
   const inputformClass = "inputForm flex flex-col text-left w-full pb-6";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [disableInput, setDisableInput] = useState(false);
-
   const openModal = () => {
     if (reward_type) {
       // Check if reward_type is not an empty string
@@ -37,17 +35,9 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
     }
   };
   const closeModal = () => setIsModalOpen(false);
-
   const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRewardType(e.target.value as RewardType);
   };
-  useEffect(() => {
-    if (page_type === "DETAILS") {
-      setDisableInput(true);
-    } else {
-      setDisableInput(false);
-    }
-  }, [page_type]);
   return (
     <>
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">리워드</h1>

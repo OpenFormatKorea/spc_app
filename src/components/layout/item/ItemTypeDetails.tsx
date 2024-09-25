@@ -9,6 +9,8 @@ interface ItemTypeDetailsProps {
   itemArgs: ItemArgs;
   productInputs: ProductsArgs[];
   promotionInputs: PromotionsArgs[];
+  disableInput: boolean;
+
   setItem_type: (value: ItemType) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>; // Updated type
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>; // Updated type
@@ -21,12 +23,12 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   itemArgs,
   productInputs,
   promotionInputs,
+  disableInput,
   setItem_type,
   setProductInputs,
   setPromotionInputs,
   openModal,
 }) => {
-  const [disableInput, setDisableInput] = useState(itemArgs.active);
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
   const handleItemTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,11 +48,8 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
 
   useEffect(() => {
     if (page_type === "DETAILS") {
-      setDisableInput(true);
       setProductInputs(itemArgs.products);
       setPromotionInputs(itemArgs.promotions);
-    } else {
-      setDisableInput(false);
     }
   }, [page_type]);
 

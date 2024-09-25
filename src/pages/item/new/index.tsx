@@ -248,6 +248,7 @@ const NewItem = (
               image_result={image_result}
               shop_logo_result={shop_logo_result}
               onChangeImage={onChangeImage}
+              disableInput={false}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">
@@ -261,6 +262,7 @@ const NewItem = (
               setProductInputs={setProductInputs}
               setPromotionInputs={setPromotionInputs}
               openModal={openModal}
+              disableInput={false}
             />
             <RewardComponent
               page_type="NEW"
@@ -269,6 +271,7 @@ const NewItem = (
               setRewardType={setReward_Type}
               rewards={rewards}
               setRewards={setRewards}
+              disableInput={false}
             />
             <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
           </ContentsContainer>

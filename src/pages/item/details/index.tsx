@@ -43,15 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const DetailsItem = ({
-  apiResponse,
-  shop_id,
-  campaign_id,
-}: {
-  apiResponse: any;
-  shop_id: string;
-  campaign_id: string;
-}) => {
+const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: string; campaign_id: string }) => {
   const response = apiResponse;
   const page_type = "DETAILS"; // Assuming this value is being used
 
@@ -161,6 +153,7 @@ const DetailsItem = ({
             image={image}
             shop_logo={shop_logo}
             onChangeImage={onChangeImage}
+            disableInput={true}
           />
         </ContentsContainer>
 
@@ -174,6 +167,7 @@ const DetailsItem = ({
             setItem_type={setItem_type}
             setProductInputs={setProductInputs}
             setPromotionInputs={setPromotionInputs}
+            disableInput={true}
           />
 
           <RewardComponent
@@ -183,6 +177,7 @@ const DetailsItem = ({
             setRewardType={setReward_Type}
             rewards={rewards}
             setRewards={setRewards}
+            disableInput={true}
           />
 
           <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />

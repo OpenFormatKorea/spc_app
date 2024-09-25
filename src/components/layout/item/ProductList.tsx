@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) => {
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+    "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   // const data = apiResponse.data;
   const data = apiResponse?.data;
   const products = useMemo(() => (Array.isArray(data.content) ? data.content : []), [data.content]);
@@ -65,20 +65,19 @@ const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) =
       <div className="flex flex-col items-center justify-center text-center">
         <h1 className="w-full text-left text-xl font-bold pb-2">상품 선택</h1>
 
-        <div className="flex flex-col items-center max-w-[440px] lg:max-w-full max-h-[550px] overflow-y-scroll my-2">
+        <div className="flex flex-col items-center max-w-[370px] lg:max-w-full max-h-[550px] overflow-y-scroll my-2">
           <div className="flex flex-col bg-white p-3 rounded-lg">
-            <div className="flex flex-col justify-center items-center w-full rounded-xl mb-4">
+            <div className="flex flex-col justify-center items-center w-full rounded-xl">
               <div className="flex flex-col w-full mb-2 text-left">
                 <label className="font-gray-300 text-sm font-semibold mb-2">선택된 상품</label>
-                <div>
+                <div className="max-w-[300px] break-words">
                   {Object.keys(selectedItems)
-                    .filter((gid) => selectedItems[gid]) // Filter the selected items
+                    .filter((gid) => selectedItems[gid])
                     .map((gid, index, array) => {
                       const product = products.find((p: any) => p.gid === gid);
                       return product ? (
-                        <a key={product.gid} className="pr-1">
+                        <a key={product.gid} className="pr-1 text-sm">
                           {product.gid}
-                          {/* Conditionally add a comma if it's not the last item */}
                           {index < array.length - 1 && ","}
                         </a>
                       ) : null;
@@ -93,8 +92,8 @@ const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) =
                     <th className={theadStyle}>
                       <input
                         type="checkbox"
-                        id={`item_all`}
-                        name={`item_all`}
+                        id="item_all"
+                        name="item_all"
                         checked={selectAll}
                         onChange={handleSelectAll}
                       />
@@ -121,7 +120,7 @@ const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) =
                         <div className="w-full flex justify-center items-center text-center ">
                           <img
                             src={product.thumb || "/images/kakao/kakaolink-no-logo-default.png"}
-                            className="w-[50px] h-[50px] lg:w-[100px] lg:h-[100px]"
+                            className="w-[50px] h-[50px] lg:w-[85px] lg:h-[85px]"
                           />
                         </div>
                       </td>

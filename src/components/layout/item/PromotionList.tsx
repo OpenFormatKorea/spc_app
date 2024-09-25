@@ -60,11 +60,24 @@ const PromotionList: React.FC<PromotionListProps> = ({ campaign_id, apiResponse 
       <div className="flex flex-col items-center justify-center text-center">
         <h1 className="w-full text-left text-xl font-bold pb-2">프로모션 선택</h1>
 
-        <div className="flex flex-col items-center max-w-[440px] lg:max-w-full max-h-[550px] overflow-y-scroll my-2">
+        <div className="flex flex-col items-center max-w-[370px] lg:max-w-full max-h-[550px] overflow-y-scroll my-2">
           <div className="flex flex-col bg-white p-3 rounded-lg">
-            <div className="flex flex-col justify-center items-center w-full rounded-xl mb-4">
+            <div className="flex flex-col justify-center items-center w-full rounded-xl">
               <div className="flex flex-col w-full mb-2 text-left">
                 <label className="font-gray-300 text-sm font-semibold mb-2">선택된 프로모션</label>
+                <div className="max-w-[380px] break-words">
+                  {Object.keys(selectedItems)
+                    .filter((cpnId) => selectedItems[cpnId])
+                    .map((cpnId, index, array) => {
+                      const promotion = promotions.find((p: any) => p.cpnId === cpnId);
+                      return promotion ? (
+                        <a key={promotion.cpnId} className="pr-1 text-sm">
+                          {promotion.cpnId}
+                          {index < array.length - 1 && ","}
+                        </a>
+                      ) : null;
+                    })}
+                </div>
               </div>
             </div>
             <div className="w-full py-3">
