@@ -19,10 +19,12 @@ import {
   RewardsArgs,
   KakaoShareArgs,
 } from "@/lib/item/types";
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
   const shop_id = getShopIdFromCookies(context);
   const IDetailApiResponse = await fetchGetItemDetails(item_id, campaign_id, context);
+
   if (!IDetailApiResponse) {
     return {
       redirect: {
@@ -35,8 +37,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       apiResponse: IDetailApiResponse,
-      shop_id: shop_id,
-      campaign_id: campaign_id,
+      shop_id,
+      campaign_id,
     },
   };
 };
@@ -51,19 +53,16 @@ const DetailsItem = ({
   campaign_id: string;
 }) => {
   const response = apiResponse;
+  const page_type = "DETAILS"; // Assuming this value is being used
 
   const [title, setTitle] = useState(response.title);
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(response.kakao_args);
-
   const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
   const [item_type, setItem_type] = useState<ItemType>(response.item_type);
   const [active, setActive] = useState(response.active);
   const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
-
   const [image, setImage] = useState<string>(kakaoShareArgs.image);
   const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [shopLogoFile, setShopLogoFile] = useState<File | null>(null);
 
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
     response.products?.length > 0
@@ -72,27 +71,21 @@ const DetailsItem = ({
           {
             product_model_code: "",
             product_model_name: "",
-            images: [
-              {
-                posThumb: "",
-              },
-              {
-                thumb: "",
-              },
-            ],
+            images: [{ posThumb: "" }, { thumb: "" }],
           },
         ]
   );
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
     response.promotions?.length > 0 ? [...response.promotions] : [{ description: "" }]
   );
+
   const itemArgs: ItemArgs = {
     id: response.id || "",
     title,
     item_type,
     kakao_args: kakaoShareArgs,
-    products: [response.products],
-    promotions: [response.promotions],
+    products: productInputs,
+    promotions: promotionInputs,
     rewards,
     active,
     campaign_id,
@@ -104,27 +97,17 @@ const DetailsItem = ({
       alert("Please upload a valid image file.");
       return;
     }
-    const fileExtension = file.type.split("/")[1];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.result && typeof reader.result === "string") {
-          if (imgType === "image") {
-            setImage(reader.result);
-            setImageFile(file);
-            // setImage_img_type(fileExtension);
-          } else if (imgType === "shop_logo") {
-            setShop_logo(reader.result);
-            setShopLogoFile(file);
-            // setShop_logo_img_type(fileExtension);
-          }
-        } else {
-          console.error("Failed to read the file as string.");
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.result && typeof reader.result === "string") {
+        if (imgType === "image") {
+          setImage(reader.result);
+        } else if (imgType === "shop_logo") {
+          setShop_logo(reader.result);
         }
-      };
-
-      reader.readAsDataURL(file);
-    }
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = () => {
@@ -138,6 +121,8 @@ const DetailsItem = ({
       buttonRef.current?.click();
     }
   };
+
+  const disableInput = page_type === "DETAILS";
 
   return (
     <DashboardContainer>
@@ -157,10 +142,11 @@ const DetailsItem = ({
           </button>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row md:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
+
+      <div className="flex flex-col sm:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <ItemDetails
-            page_type="NEW"
+            page_type="DETAILS"
             itemArgs={itemArgs}
             kakaoShareArgs={kakaoShareArgs}
             campaign_id={campaign_id}
@@ -177,6 +163,7 @@ const DetailsItem = ({
             onChangeImage={onChangeImage}
           />
         </ContentsContainer>
+
         <ContentsContainer variant="campaign">
           <ItemTypeDetails
             page_type="DETAILS"
@@ -188,6 +175,7 @@ const DetailsItem = ({
             setProductInputs={setProductInputs}
             setPromotionInputs={setPromotionInputs}
           />
+
           <RewardComponent
             page_type="DETAILS"
             handleKeyDown={handleKeyDown}
@@ -196,6 +184,7 @@ const DetailsItem = ({
             rewards={rewards}
             setRewards={setRewards}
           />
+
           <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />
         </ContentsContainer>
       </div>

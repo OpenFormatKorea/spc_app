@@ -126,37 +126,46 @@ const NewItem = (
     }
     return true;
   };
-
-  const onChangeImage = (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeImage = (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !file.type.startsWith("image/")) {
       alert("Please upload a valid image file.");
       return;
     }
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const reader = new FileReader();
     reader.onload = async () => {
       if (reader.result && typeof reader.result === "string") {
         if (imgType === "image") {
           setImage_result(reader.result);
-          let imgUrl = await uploadImage(file, imgType, image);
-          setImage(imgUrl);
-          setKakaoShareArgs((prevArgs) => ({
-            ...prevArgs,
-            image: imgUrl,
-          }));
+          try {
+            let imgUrl = await uploadImage(file, imgType, image);
+            if (imgUrl) {
+              imgUrl = `${imgUrl}.${fileExtension}`;
+              setImage(imgUrl);
+              setKakaoShareArgs((prevArgs) => ({ ...prevArgs, image: imgUrl }));
+            }
+          } catch (error) {
+            console.error("Image upload failed:", error);
+          }
         } else if (imgType === "shop_logo") {
           setShop_logo_result(reader.result);
-          let logoUrl = await uploadImage(file, imgType, shop_logo);
-          setShop_logo(logoUrl);
-          setKakaoShareArgs((prevArgs) => ({
-            ...prevArgs,
-            shop_logo: logoUrl,
-          }));
+          try {
+            let logoUrl = await uploadImage(file, imgType, shop_logo);
+            if (logoUrl) {
+              logoUrl = `${logoUrl}.${fileExtension}`;
+              setShop_logo(logoUrl);
+              setKakaoShareArgs((prevArgs) => ({ ...prevArgs, shop_logo: logoUrl }));
+            }
+          } catch (error) {
+            console.error("Logo upload failed:", error);
+          }
         }
       }
     };
     reader.readAsDataURL(file);
   };
+
   //이전 이미지 삭제
   const deletePreviousFile = async (previousFilePath: string): Promise<void> => {
     try {

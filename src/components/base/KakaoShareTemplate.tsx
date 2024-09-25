@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import InputTextBox from "@/components/base/InputText";
 import { KakaoShareArgs } from "@/lib/item/types";
+
 interface KakaoShareProps {
   page_type: string;
   disableInput: boolean;
@@ -37,22 +38,16 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   const [img_url, setImg_url] = useState(image);
   const [shop_logo_url, setShop_logo_url] = useState(shop_logo);
 
-  useEffect(() => {
-    if (page_type === "NEW") {
-      disableInput == false;
-    } else {
-      disableInput == true;
-    }
-  }, [page_type]);
+  const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
 
   useEffect(() => {
     setImg_url(image);
     setShop_logo_url(shop_logo);
     setKakaoShareArgs({
-      shop_name: shop_name,
-      title: title,
-      description: description,
-      button_name: button_name,
+      shop_name,
+      title,
+      description,
+      button_name,
       image: img_url,
       shop_logo: shop_logo_url,
     });
@@ -61,16 +56,16 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   return (
     <>
       <div className="contents-container w-full pt-4">
-        <label className=" pt-4 font-bold text-gray-500">카카오 메시지 설정</label>
+        <label className="pt-4 font-bold text-gray-500">카카오 메시지 설정</label>
         <div className="block lg:flex lg:gap-4">
           <div className="w-full lg:w-fit flex items-center lg:items-start justify-center lg:justify-start">
             <div className="relative mt-4">
               <div className="w-[320px] mx-auto">
-                <img src={"/images/kakao/kakao-message-template.png"} alt="Phone Mockup" />
+                <img src="/images/kakao/kakao-message-template.png" alt="Phone Mockup" />
               </div>
               <div className="absolute top-[90px] left-[45px]">
                 <div className="flex h-full max-w-[238px] flex-col items-center justify-center rounded-lg bg-white shadow-card_shadow">
-                  <div className=" min-h-full min-w-full overflow-hidden rounded-lg">
+                  <div className="min-h-full min-w-full overflow-hidden rounded-lg">
                     <div className="h-[238px] w-[238px] cursor-pointer">
                       <input
                         type="file"
@@ -91,15 +86,19 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                           </span>
                         </div>
                         <img
-                          className="h-full w-full "
-                          src={image_result || "/images/kakao/kakaolink-no-logo-default.png"}
+                          className="h-full w-full"
+                          src={
+                            page_type === "DETAILS"
+                              ? `${baseUrl}${image}`
+                              : image_result || "/images/kakao/kakaolink-no-logo-default.png"
+                          }
                           alt="Selected"
                         />
                       </div>
                     </div>
-                    <div className="box-border flex h-[calc(100%-460px)] min-w-full flex-col  items-start justify-between">
+                    <div className="box-border flex h-[calc(100%-460px)] min-w-full flex-col items-start justify-between">
                       <div className="mb-2 flex min-w-full flex-col justify-start px-[10px]">
-                        <div className="flex flex-row items-center justify-start border-b  border-gray-100 py-[10px]">
+                        <div className="flex flex-row items-center justify-start border-b border-gray-100 py-[10px]">
                           <div className="h-[23px] w-[23px] rounded-[8px] border border-gray-300 cursor-pointer">
                             <input
                               type="file"
@@ -110,19 +109,21 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                               ref={shopLogoFileInput}
                               disabled={disableInput}
                             />
-
                             <div
                               className="relative h-full w-full flex items-center justify-center group"
                               onClick={() => shopLogoFileInput.current?.click()}
                             >
                               <img
                                 className="h-full w-full rounded-[8px]"
-                                src={shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"}
+                                src={
+                                  page_type === "DETAILS"
+                                    ? `${baseUrl}${shop_logo}`
+                                    : shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"
+                                }
                                 alt="Selected"
                               />
                             </div>
                           </div>
-
                           <p className="ml-1 text-[14px] font-normal">{shop_name}</p>
                         </div>
                         <div className="pt-[10px] text-[14px]">
@@ -136,7 +137,6 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         <button className="center mx-auto mb-1 h-[36px] w-[calc(100%-20px)] rounded-md bg-[#f1f2f4] text-[13px] focus:outline-none">
                           {button_name}
                         </button>
-
                         <div className="mt-1 box-border min-w-full cursor-pointer items-center justify-between bg-white py-[6px] px-[10px]">
                           <a
                             href="https://www.incento.kr"
@@ -147,8 +147,13 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                             <div className="flex select-none flex-row items-center gap-1">
                               <div className="h-[16px] w-[16px] border border-gray-300" style={{ borderRadius: "35%" }}>
                                 <img
-                                  className="h-full w-full "
-                                  src={`${shop_logo_result}` || "/images/kakao/kakaolink-no-logo-default.png"}
+                                  className="h-full w-full"
+                                  src={
+                                    page_type === "DETAILS"
+                                      ? `${baseUrl}${shop_logo}`
+                                      : shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"
+                                  }
+                                  alt="Shop Logo"
                                   style={{ borderRadius: "35%" }}
                                 />
                               </div>
@@ -163,7 +168,8 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex flex-col h-full w-full ">
+
+          <div className="flex flex-col h-full w-full">
             <div className={inputFormClass}>
               <label className={labelClass}>Shop Name</label>
               <InputTextBox
