@@ -5,22 +5,18 @@ import RewardModal from "@/components/layout/item/RewardModal";
 import Modal from "@/components/layout/base/Modal";
 
 interface RewardComponentProps {
-  page_type: "DETAILS" | "NEW";
   disableInput: boolean;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   reward_type: RewardType;
   setRewardType: (value: RewardType) => void;
-  rewards: RewardsArgs[];
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
 const RewardComponent: React.FC<RewardComponentProps> = ({
-  page_type,
   disableInput,
   handleKeyDown,
   reward_type,
   setRewardType,
-  rewards,
   setRewards,
 }) => {
   const inputformClass = "inputForm flex flex-col text-left w-full pb-6";

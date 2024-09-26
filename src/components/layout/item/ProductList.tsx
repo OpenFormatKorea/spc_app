@@ -1,13 +1,15 @@
 import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import { getShopIdFromCookies } from "@/lib/helper";
-import { ProductListArgs, RewardType } from "@/lib/item/types";
+import { ProductListArgs, ProductsArgs } from "@/lib/item/types";
 
 interface ProductListProps {
-  campaign_id: string;
   apiResponse: ApiResponse;
+  setProductInputs: (value: ProductsArgs[]) => void; // This is now a setter function
+  selectedProductItems: string[];
+  setSelectedProductItems: (value: string[]) => void;
+  onClose: () => void;
 }
 
 // Fetches campaign data during server-side rendering
@@ -26,38 +28,71 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) => {
+const ProductList: React.FC<ProductListProps> = ({
+  apiResponse,
+  setProductInputs,
+  selectedProductItems,
+  setSelectedProductItems,
+  onClose,
+}) => {
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
-  // const data = apiResponse.data;
+  const labelClass = "text-xs pt-4 text-gray-500";
   const data = apiResponse?.data;
   const products = useMemo(() => (Array.isArray(data.content) ? data.content : []), [data.content]);
-  const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
+  const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-  const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
-    let result;
-    if (actionType === "select_products" && confirm("해당 상품을 선택 하시겠어요?")) {
-    }
-  };
 
+  // Select/Deselect all products
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
+    if (isChecked) {
+      const allProductIds = products.map((product: ProductListArgs) => product.gid);
+      setSelectedItemList(allProductIds);
+      //setSelectedProductItems(allProductIds);
+
+      const updatedProducts: ProductsArgs[] = products.map((product: ProductListArgs) => ({
+        product_model_code: product.gid,
+        product_model_name: product.name,
+        images: [{ posThumb: product.posThumb || "" }, { thumb: product.thumb || "" }],
+      }));
+      setProductInputs(updatedProducts);
+    } else {
+      setSelectedItemList([]);
+      //setSelectedProductItems([]);
+      setProductInputs([]);
+    }
     setSelectAll(isChecked);
-    const updatedSelectedItems = products.reduce(
-      (acc: Number, product: ProductListArgs) => ({ ...acc, [product.gid]: isChecked }),
-      {} as { [key: string]: boolean }
-    );
-    setSelectedItems(updatedSelectedItems);
   };
 
-  const handleCheckboxChange = (productsGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle individual checkbox toggle
+  const handleCheckboxChange = (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-    setSelectedItems((prev) => {
-      const updatedItems = { ...prev, [productsGid]: isChecked };
-      setSelectAll(products.every((product: ProductListArgs) => updatedItems[products.gid]));
-      return updatedItems;
-    });
+    const updatedSelectedItems = isChecked
+      ? [...selectedItemList, productGid]
+      : selectedItemList.filter((gid) => gid !== productGid);
+
+    setSelectedItemList(updatedSelectedItems);
+    //setSelectedProductItems(updatedSelectedItems);
+
+    const updatedProducts = products
+      .filter((product: ProductListArgs) => updatedSelectedItems.includes(product.gid))
+      .map((product: ProductListArgs) => ({
+        product_model_code: product.gid,
+        product_model_name: product.name,
+        images: [{ posThumb: product.posThumb || "" }, { thumb: product.thumb || "" }],
+      }));
+
+    setProductInputs(updatedProducts);
+    setSelectAll(updatedSelectedItems.length === products.length); // Update selectAll state
+  };
+
+  const handleAction = async () => {
+    if (confirm("해당 상품을 선택 하시겠어요?")) {
+      setSelectedProductItems(selectedItemList);
+      onClose();
+    }
   };
 
   return (
@@ -67,24 +102,8 @@ const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) =
 
         <div className="flex flex-col items-center max-w-[370px] lg:max-w-full max-h-[550px] overflow-y-scroll my-2">
           <div className="flex flex-col bg-white p-3 rounded-lg">
-            <div className="flex flex-col justify-center items-center w-full rounded-xl">
-              <div className="flex flex-col w-full mb-2 text-left">
-                <label className="font-gray-300 text-sm font-semibold mb-2">선택된 상품</label>
-                <div className="max-w-[300px] break-words">
-                  {Object.keys(selectedItems)
-                    .filter((gid) => selectedItems[gid])
-                    .map((gid, index, array) => {
-                      const product = products.find((p: any) => p.gid === gid);
-                      return product ? (
-                        <a key={product.gid} className="pr-1 text-sm">
-                          {product.gid}
-                          {index < array.length - 1 && ","}
-                        </a>
-                      ) : null;
-                    })}
-                </div>
-              </div>
-            </div>
+            <h1 className="w-full text-left text-lg font-bold pb-2">상품을 선택해 주세요.</h1>
+
             <div className="w-full py-3 block">
               <table className="w-full border border-gray-100 text-center table">
                 <thead>
@@ -101,7 +120,6 @@ const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) =
                     <th className={theadStyle}>POS 썸네일</th>
                     <th className={theadStyle}>상품 ID</th>
                     <th className={theadStyle}>상품명</th>
-                    {/* <th className={theadStyle}>일반 썸네일</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -112,7 +130,7 @@ const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) =
                           type="checkbox"
                           id={`item_${product.gid}`}
                           name={`item_${product.gid}`}
-                          checked={selectedItems[product.gid] || false}
+                          checked={selectedItemList.includes(product.gid)}
                           onChange={handleCheckboxChange(product.gid)}
                         />
                       </td>
@@ -120,7 +138,7 @@ const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) =
                         <div className="w-full flex justify-center items-center text-center ">
                           <img
                             src={product.thumb || "/images/kakao/kakaolink-no-logo-default.png"}
-                            className="w-[50px] h-[50px] lg:w-[85px] lg:h-[85px]"
+                            className="w-[50px] h-[50px] lg:w-[70px] lg:h-[70px]"
                           />
                         </div>
                       </td>
@@ -140,8 +158,38 @@ const ProductList: React.FC<ProductListProps> = ({ campaign_id, apiResponse }) =
             </div>
           </div>
         </div>
-
-        <button className="bg-blue-500 text-white rounded-lg p-2 w-full mt-4">상품 추가</button>
+        <div className="flex flex-col w-[350px] lg:w-[450px] h-fit">
+          <div className="flex flex-col w-full mb-2 text-left">
+            <label className={labelClass}>선택된 상품</label>
+            <div className="w-[350px] lg:w-full h-[85px] text-sm mt-2 break-words flex flex-wrap justify-center bg-white rounded-xl p-2 pb-3 overflow-y-auto">
+              {selectedItemList.length === 0 && (
+                <div className="flex items-center justify-center h-full w-full">
+                  <div className="text-center text-gray-600">
+                    선택된 상품이 없습니다.
+                    <br />
+                    상품을 선택해주세요.
+                  </div>
+                </div>
+              )}
+              {selectedItemList.map((gid, index, array) => {
+                const product = products.find((p: any) => p.gid === gid);
+                return (
+                  product && (
+                    <div
+                      key={product.gid}
+                      className="mr-1 mt-1 p-1 w-fit h-fit text-sm text-white bg-blue-300 rounded-md items-center"
+                    >
+                      {product.gid}
+                    </div>
+                  )
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        <button className="bg-blue-500 text-white rounded-lg p-2 w-full mt-4" onClick={handleAction}>
+          상품 추가
+        </button>
       </div>
     </>
   );

@@ -19,10 +19,10 @@ const ItemList: React.FC<ItemListProps> = (
 ) => {
   const router = useRouter();
   const items = useMemo(() => (Array.isArray(apiResponse) ? apiResponse : []), [apiResponse]);
-  const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
+  const [selectedProductItems, setSelectedProductItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
   const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({});
-  const selectedItemIds = Object.keys(selectedItems).filter((key) => selectedItems[key]);
+  const selectedItemIds = Object.keys(selectedProductItems).filter((key) => selectedProductItems[key]);
 
   useEffect(() => {
     const initialStatus = items.reduce(
@@ -77,12 +77,12 @@ const ItemList: React.FC<ItemListProps> = (
       (acc, item) => ({ ...acc, [item.id]: isChecked }),
       {} as { [key: string]: boolean }
     );
-    setSelectedItems(updatedSelectedItems);
+    setSelectedProductItems(updatedSelectedItems);
   };
 
   const handleCheckboxChange = (itemId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-    setSelectedItems((prev) => {
+    setSelectedProductItems((prev) => {
       const updatedItems = { ...prev, [itemId]: isChecked };
       setSelectAll(items.every((item) => updatedItems[item.id]));
       return updatedItems;
@@ -126,7 +126,7 @@ const ItemList: React.FC<ItemListProps> = (
                     type="checkbox"
                     id={`item_${item.id}`}
                     name={`item_${item.id}`}
-                    checked={selectedItems[item.id] || false}
+                    checked={selectedProductItems[item.id] || false}
                     onChange={handleCheckboxChange(item.id)}
                   />
                 </td>

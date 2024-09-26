@@ -10,7 +10,7 @@ interface ItemTypeDetailsProps {
   productInputs: ProductsArgs[];
   promotionInputs: PromotionsArgs[];
   disableInput: boolean;
-
+  selectedProductItems: string[];
   setItem_type: (value: ItemType) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>; // Updated type
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>; // Updated type
@@ -24,6 +24,7 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   productInputs,
   promotionInputs,
   disableInput,
+  selectedProductItems,
   setItem_type,
   setProductInputs,
   setPromotionInputs,
@@ -58,7 +59,7 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">아이템 옵션</h1>
       <div className={inputFormClass}>
         <label className={radioButtonLabelClass}>아이템 종류</label>
-        <div className="flex h-[42px] items-center w-full mb-2">
+        <div className="flex h-[42px] items-center w-full ">
           <div className="flex space-x-20 text-left w-full lg:max-w-[458px]">
             <InputRadioBox
               label="상품"
@@ -82,7 +83,6 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
             className={`border p-1 ${
               disableInput ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 cursor-pointer"
             }  text-white rounded-lg min-w-[45px] text-center `}
-            // onClick={handleAddInput}
             onClick={openModal}
             disabled={disableInput}
           >
@@ -94,6 +94,7 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
           productInputs={productInputs}
           promotionInputs={promotionInputs}
           item_type={item_type}
+          selectedProductItems={selectedProductItems}
           setProductInputs={setProductInputs}
           setPromotionInputs={setPromotionInputs}
         />

@@ -17,15 +17,31 @@ export enum ItemType {
 export interface KakaoArgs {
   message: string;
 }
+
+//for item api create
 export interface ProductsArgs {
   id?: string;
   product_model_code: string;
   product_model_name: string;
   images: [{ posThumb: string }, { thumb: string }];
 }
+
 export interface PromotionsArgs {
   id?: string;
   description: string;
+}
+
+// for API returns
+export interface ProductListArgs {
+  gid: string;
+  name: string;
+  posThumb: string | null;
+  thumb: string | null;
+}
+
+export interface PromotionListArgs {
+  cpnId: string;
+  name: string;
 }
 
 //리워드 관련
@@ -112,15 +128,4 @@ export interface KakaoShareArgs {
   title: string;
   description: string;
   button_name: string;
-}
-
-export interface ProductListArgs {
-  gid: string;
-  name: string;
-  posThumb: string | null;
-  thumb: string | null;
-}
-export interface PromotionListArgs {
-  cpnId: string;
-  name: string;
 }

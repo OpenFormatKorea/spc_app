@@ -30,7 +30,7 @@ const PromotionList: React.FC<PromotionListProps> = ({ campaign_id, apiResponse 
   // const data = apiResponse.data;
   const data = apiResponse?.data;
   const promotions = useMemo(() => (Array.isArray(data.content) ? data.content : []), [data.content]);
-  const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
+  const [selectedProductItems, setSelectedProductItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
   const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
     let result;
@@ -44,12 +44,12 @@ const PromotionList: React.FC<PromotionListProps> = ({ campaign_id, apiResponse 
       (acc: Number, promotion: PromotionListArgs) => ({ ...acc, [promotion.cpnId]: isChecked }),
       {} as { [key: string]: boolean }
     );
-    setSelectedItems(updatedSelectedItems);
+    setSelectedProductItems(updatedSelectedItems);
   };
 
   const handleCheckboxChange = (promotionCpnId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-    setSelectedItems((prev) => {
+    setSelectedProductItems((prev) => {
       const updatedItems = { ...prev, [promotionCpnId]: isChecked };
       setSelectAll(promotions.every((promotion: PromotionListArgs) => updatedItems[promotion.cpnId]));
       return updatedItems;
@@ -66,8 +66,8 @@ const PromotionList: React.FC<PromotionListProps> = ({ campaign_id, apiResponse 
               <div className="flex flex-col w-full mb-2 text-left">
                 <label className="font-gray-300 text-sm font-semibold mb-2">선택된 프로모션</label>
                 <div className="max-w-[380px] break-words">
-                  {Object.keys(selectedItems)
-                    .filter((cpnId) => selectedItems[cpnId])
+                  {Object.keys(selectedProductItems)
+                    .filter((cpnId) => selectedProductItems[cpnId])
                     .map((cpnId, index, array) => {
                       const promotion = promotions.find((p: any) => p.cpnId === cpnId);
                       return promotion ? (
@@ -105,7 +105,7 @@ const PromotionList: React.FC<PromotionListProps> = ({ campaign_id, apiResponse 
                           type="checkbox"
                           id={`item_${promotion.cpnId}`}
                           name={`item_${promotion.cpnId}`}
-                          checked={selectedItems[promotion.cpnId] || false}
+                          checked={selectedProductItems[promotion.cpnId] || false}
                           onChange={handleCheckboxChange(promotion.cpnId)}
                         />
                       </td>

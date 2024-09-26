@@ -59,6 +59,7 @@ const NewItem = (
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
+  const [selectedProductItems, setSelectedProductItems] = useState<string[]>([]);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
     {
       product_model_code: "",
@@ -183,6 +184,7 @@ const NewItem = (
     const currentDate = new Date().toISOString().split("T")[0].replace(/-/g, "");
     const fileName = imgType === "image" ? `${image_img_name}_${currentDate}` : `${shop_logo_img_name}_${currentDate}`;
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
+
     try {
       if (previousFilePath != "") {
         await deletePreviousFile(previousFilePath); // Delete previous image or logo
@@ -258,6 +260,7 @@ const NewItem = (
               itemArgs={itemArgs}
               productInputs={productInputs}
               promotionInputs={promotionInputs}
+              selectedProductItems={selectedProductItems}
               setItem_type={setItem_type}
               setProductInputs={setProductInputs}
               setPromotionInputs={setPromotionInputs}
@@ -265,42 +268,48 @@ const NewItem = (
               disableInput={false}
             />
             <RewardComponent
-              page_type="NEW"
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
               setRewardType={setReward_Type}
-              rewards={rewards}
               setRewards={setRewards}
               disableInput={false}
             />
             <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
           </ContentsContainer>
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
-            {item_type == ItemType.PD ? (
-              <ProductList apiResponse={productResponse} campaign_id={campaign_id} />
-            ) : (
-              <PromotionList apiResponse={promotionResponse} campaign_id={campaign_id} />
-            )}
-          </Modal>
         </div>
-        <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
-          <div className="flex space-x-2 w-full lg:w-fit">
-            <button
-              className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
-              onClick={handleSubmit}
-              id="cancel_create_item"
-            >
-              취소하기
-            </button>
-            <button
-              className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
-              onClick={handleSubmit}
-              id="create_item"
-            >
-              저장하기
-            </button>
+        <div>
+          <div className="button-container w-full pt-4 flex justify-between lg:justify-end ">
+            <div className="flex space-x-2 w-full lg:w-fit">
+              <button
+                className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
+                onClick={handleSubmit}
+                id="cancel_create_item"
+              >
+                취소하기
+              </button>
+              <button
+                className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+                onClick={handleSubmit}
+                id="create_item"
+              >
+                저장하기
+              </button>
+            </div>
           </div>
         </div>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          {item_type == ItemType.PD ? (
+            <ProductList
+              apiResponse={productResponse}
+              selectedProductItems={selectedProductItems}
+              setSelectedProductItems={setSelectedProductItems}
+              setProductInputs={setProductInputs}
+              onClose={closeModal}
+            />
+          ) : (
+            <PromotionList apiResponse={promotionResponse} campaign_id={campaign_id} />
+          )}
+        </Modal>
       </DashboardContainer>
     </>
   );
