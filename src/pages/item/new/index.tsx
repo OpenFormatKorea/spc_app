@@ -1,49 +1,41 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import { fetchCreateItem, fetchGetProductCodeList, fetchGetPromotionCodeList } from "@/lib/item/apis";
+import { fetchCreateItem, fetchGetProductCodeList, fetchGetCouponCodeList } from "@/lib/item/apis";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import PromotionList from "@/components/layout/item/PromotionList";
-import RewardComponent from "@/components/layout/item/RewardList";
+import RewardComponent from "@/components/layout/item/RewardComponent";
 import ItemDetails from "@/components/layout/item/ItemDetails";
 import ProductList from "@/components/layout/item/ProductList";
 import RewardCard from "@/components/layout/item/RewardCard";
 import { useState, useRef, KeyboardEvent } from "react";
 import { getShopIdFromCookies } from "@/lib/helper";
 import ReactS3Client from "@/context/ReactS3Client";
-import Modal from "@/components/layout/base/Modal";
 import { ApiResponse } from "@/lib/types";
 import { useRouter } from "next/router";
 import {
   ItemType,
   ItemArgs,
-  ProductsArgs,
-  PromotionsArgs,
   RewardType,
   RewardsArgs,
   KakaoShareArgs,
+  ProductsArgs,
+  PromotionsArgs,
+  CouponListArgs,
+  CouponsArgs,
 } from "@/lib/item/types";
+import CouponList from "@/components/layout/item/CouponList";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
   const campaign_id = context.query.campaign_id;
-  const productResponse = await fetchGetProductCodeList(campaign_id, context);
-  const promotionResponse = await fetchGetPromotionCodeList(campaign_id, context);
+  const productResponse = await fetchGetProductCodeList(context);
+  const couponResponse = await fetchGetCouponCodeList(context);
+
   if (!shop_id || !campaign_id) {
-    return {
-      redirect: {
-        destination: "auth/login",
-        permanent: false,
-      },
-    };
+    return { redirect: { destination: "auth/login", permanent: false } };
   }
   return {
-    props: {
-      shop_id: shop_id,
-      campaign_id: campaign_id,
-      productResponse: productResponse,
-      promotionResponse: promotionResponse,
-    },
+    props: { shop_id, campaign_id, productResponse, couponResponse },
   };
 };
 
@@ -52,28 +44,24 @@ const NewItem = (
     shop_id,
     campaign_id,
     productResponse,
-    promotionResponse,
-  }: { shop_id: string; campaign_id: string; productResponse: ApiResponse; promotionResponse: ApiResponse },
+    couponResponse,
+  }: {
+    shop_id: string;
+    campaign_id: string;
+    productResponse: ApiResponse;
+    couponResponse: ApiResponse;
+  },
   context: GetServerSidePropsContext
 ) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
-  const [selectedProductItems, setSelectedProductItems] = useState<string[]>([]);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
-    {
-      product_model_code: "",
-      product_model_name: "",
-      images: [
-        {
-          posThumb: "",
-        },
-        {
-          thumb: "",
-        },
-      ],
-    },
+    { product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] },
   ]);
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
+  const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
+  const [selectedProductItems, setSelectedProductItems] = useState<ProductsArgs[]>([]);
+  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
     shop_name: "",
     image: "/images/kakao/kakaolink-no-logo-default.png",
@@ -91,15 +79,10 @@ const NewItem = (
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const [active, setActive] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const closeModal = () => setIsModalOpen(false);
-  const openModal = () => {
-    if (reward_type) {
-      // Check if reward_type is not an empty string
-      setIsModalOpen(true);
-    } else {
-      alert("리워드 종류를 선택해주세요.");
-    }
-  };
+  const openModal = () => (reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요."));
+
   const itemArgs: ItemArgs = {
     title,
     item_type,
@@ -110,6 +93,7 @@ const NewItem = (
     campaign_id,
     active,
   };
+
   const infoCheck = () => {
     if (!title) {
       alert("아이템 명을 입력해주세요.");
@@ -127,6 +111,7 @@ const NewItem = (
     }
     return true;
   };
+
   const onChangeImage = (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !file.type.startsWith("image/")) {
@@ -135,6 +120,7 @@ const NewItem = (
     }
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const reader = new FileReader();
+
     reader.onload = async () => {
       if (reader.result && typeof reader.result === "string") {
         if (imgType === "image") {
@@ -142,8 +128,7 @@ const NewItem = (
           try {
             let imgUrl = await uploadImage(file, imgType, image);
             if (imgUrl) {
-              imgUrl = `${imgUrl}.${fileExtension}`;
-              setImage(imgUrl);
+              setImage(`${imgUrl}.${fileExtension}`);
               setKakaoShareArgs((prevArgs) => ({ ...prevArgs, image: imgUrl }));
             }
           } catch (error) {
@@ -154,8 +139,7 @@ const NewItem = (
           try {
             let logoUrl = await uploadImage(file, imgType, shop_logo);
             if (logoUrl) {
-              logoUrl = `${logoUrl}.${fileExtension}`;
-              setShop_logo(logoUrl);
+              setShop_logo(`${logoUrl}.${fileExtension}`);
               setKakaoShareArgs((prevArgs) => ({ ...prevArgs, shop_logo: logoUrl }));
             }
           } catch (error) {
@@ -167,8 +151,7 @@ const NewItem = (
     reader.readAsDataURL(file);
   };
 
-  //이전 이미지 삭제
-  const deletePreviousFile = async (previousFilePath: string): Promise<void> => {
+  const deletePreviousFile = async (previousFilePath: string) => {
     try {
       await ReactS3Client.deleteFile(previousFilePath);
     } catch (error) {
@@ -176,19 +159,16 @@ const NewItem = (
     }
   };
 
-  // 업로드 이미지
-  const uploadImage = async (file: File, imgType: string, previousFilePath: string): Promise<string> => {
+  const uploadImage = async (file: File, imgType: string, previousFilePath: string) => {
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const image_img_name = `kakaoShare_image_${shop_id}_${campaign_id}`;
-    const shop_logo_img_name = `kakaoShare_logo_img_${shop_id}_${campaign_id}`;
+    const imageFileName = `kakaoShare_image_${shop_id}_${campaign_id}`;
+    const logoFileName = `kakaoShare_logo_img_${shop_id}_${campaign_id}`;
     const currentDate = new Date().toISOString().split("T")[0].replace(/-/g, "");
-    const fileName = imgType === "image" ? `${image_img_name}_${currentDate}` : `${shop_logo_img_name}_${currentDate}`;
+    const fileName = imgType === "image" ? `${imageFileName}_${currentDate}` : `${logoFileName}_${currentDate}`;
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
 
     try {
-      if (previousFilePath != "") {
-        await deletePreviousFile(previousFilePath); // Delete previous image or logo
-      }
+      if (previousFilePath) await deletePreviousFile(previousFilePath);
       await ReactS3Client.uploadFile(file, path);
       return path;
     } catch (error) {
@@ -197,15 +177,12 @@ const NewItem = (
     }
   };
 
-  //아이템 저장
   const handleSubmit = async (event: React.FormEvent) => {
     if (event.currentTarget.id === "create_item" && infoCheck()) {
       const result = await fetchCreateItem(itemArgs, campaign_id, context);
       if (result.status === 200) {
         alert(result.message);
-        if (result.success) {
-          router.push(`/campaign/details?campaign_id=${campaign_id}`);
-        }
+        if (result.success) router.push(`/campaign/details?campaign_id=${campaign_id}`);
       } else {
         alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
       }
@@ -258,21 +235,25 @@ const NewItem = (
               page_type="NEW"
               item_type={item_type}
               itemArgs={itemArgs}
-              productInputs={productInputs}
-              promotionInputs={promotionInputs}
               selectedProductItems={selectedProductItems}
+              setPromotionInputs={setPromotionInputs}
               setItem_type={setItem_type}
               setProductInputs={setProductInputs}
-              setPromotionInputs={setPromotionInputs}
               openModal={openModal}
+              handleKeyDown={handleKeyDown}
               disableInput={false}
             />
             <RewardComponent
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
+              selectedCouponItems={selectedCouponItems}
+              couponInputs={couponInputs}
               setRewardType={setReward_Type}
               setRewards={setRewards}
               disableInput={false}
+              apiResponse={couponResponse}
+              setSelectedCouponItems={setSelectedCouponItems}
+              setCouponInputs={setCouponInputs}
             />
             <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
           </ContentsContainer>
@@ -297,19 +278,14 @@ const NewItem = (
             </div>
           </div>
         </div>
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
-          {item_type == ItemType.PD ? (
-            <ProductList
-              apiResponse={productResponse}
-              selectedProductItems={selectedProductItems}
-              setSelectedProductItems={setSelectedProductItems}
-              setProductInputs={setProductInputs}
-              onClose={closeModal}
-            />
-          ) : (
-            <PromotionList apiResponse={promotionResponse} campaign_id={campaign_id} />
-          )}
-        </Modal>
+        <ProductList
+          apiResponse={productResponse}
+          productInputs={productInputs}
+          setSelectedProductItems={setSelectedProductItems}
+          setProductInputs={setProductInputs}
+          onClose={closeModal}
+          isOpen={isModalOpen}
+        />
       </DashboardContainer>
     </>
   );

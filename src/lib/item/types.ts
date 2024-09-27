@@ -30,6 +30,10 @@ export interface PromotionsArgs {
   id?: string;
   description: string;
 }
+export interface CouponsArgs {
+  coupon_code: string;
+  coupon_name: string;
+}
 
 // for API returns
 export interface ProductListArgs {

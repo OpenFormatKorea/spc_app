@@ -1,19 +1,18 @@
 import InputRadioBox from "@/components/base/InputRadio";
 import ItemTypeComponent from "@/components/layout/item/ItemTypeComponent";
-import { ItemArgs, ProductsArgs, PromotionsArgs, ItemType } from "@/lib/item/types";
-import { useState, useEffect } from "react";
+import { ItemArgs, ProductsArgs, ItemType, PromotionsArgs } from "@/lib/item/types";
+import { useEffect } from "react";
 
 interface ItemTypeDetailsProps {
   page_type: "DETAILS" | "NEW";
   item_type: ItemType;
   itemArgs: ItemArgs;
-  productInputs: ProductsArgs[];
-  promotionInputs: PromotionsArgs[];
+  selectedProductItems: ProductsArgs[];
   disableInput: boolean;
-  selectedProductItems: string[];
   setItem_type: (value: ItemType) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>; // Updated type
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>; // Updated type
+  handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   openModal?: () => void;
 }
 
@@ -21,30 +20,18 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   page_type,
   item_type,
   itemArgs,
-  productInputs,
-  promotionInputs,
   disableInput,
   selectedProductItems,
   setItem_type,
   setProductInputs,
   setPromotionInputs,
+  handleKeyDown,
   openModal,
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
   const handleItemTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItem_type(e.target.value as ItemType);
-  };
-
-  const handleAddInput = () => {
-    if (item_type === ItemType.PD) {
-      setProductInputs((prev: ProductsArgs[] = []) => [
-        ...prev,
-        { product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] },
-      ]);
-    } else if (item_type === ItemType.PM) {
-      setPromotionInputs((prev: PromotionsArgs[] = []) => [...prev, { description: "" }]);
-    }
   };
 
   useEffect(() => {
@@ -90,13 +77,10 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
           </button>
         </div>
         <ItemTypeComponent
-          page_type={page_type}
-          productInputs={productInputs}
-          promotionInputs={promotionInputs}
           item_type={item_type}
+          page_type={page_type}
           selectedProductItems={selectedProductItems}
-          setProductInputs={setProductInputs}
-          setPromotionInputs={setPromotionInputs}
+          handleKeyDown={handleKeyDown}
         />
       </div>
     </>

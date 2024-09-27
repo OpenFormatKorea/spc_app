@@ -276,8 +276,6 @@ export async function fetchGetCouponCodeList(context: GetServerSidePropsContext)
   const page = 1;
   const size = 10;
   const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/platform/spc/coupon-list?page=` + page + "&size=" + size;
-  console.log("final_url:", final_url);
-
   try {
     const response = await fetchAPI(context, final_url, "GET", { page: 1, size: 10 });
 

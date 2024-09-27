@@ -171,13 +171,11 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
           />
 
           <RewardComponent
-            page_type="DETAILS"
-            handleKeyDown={handleKeyDown}
             reward_type={reward_type}
             setRewardType={setReward_Type}
-            rewards={rewards}
             setRewards={setRewards}
             disableInput={true}
+            handleKeyDown={handleKeyDown}
           />
 
           <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />

@@ -5,12 +5,21 @@ import { RewardType, RewardsArgs, PaymentTimingType, PaymentFrequencyType, Rewar
 
 interface RewardModalProps {
   reward_type: RewardType;
+  point_amount: number;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   onClose: () => void;
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
+  setPointAmount: (value: number) => void;
 }
 
-const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, onClose, setRewards }) => {
+const RewardModal: React.FC<RewardModalProps> = ({
+  reward_type,
+  handleKeyDown,
+  onClose,
+  setRewards,
+  point_amount,
+  setPointAmount,
+}) => {
   const defaultPolicy = {
     SIGNUP: {
       payment_timing: {
@@ -34,7 +43,6 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
     },
   };
   const [coupon_code, setCouponCode] = useState("");
-  const [point_amount, setPointAmount] = useState<number>();
   const [referrerState, setReferrerState] = useState<RewardPolicyArgs>(defaultPolicy);
   const [refereeState, setRefereeState] = useState<RewardPolicyArgs>(defaultPolicy);
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
@@ -150,7 +158,7 @@ const RewardModal: React.FC<RewardModalProps> = ({ reward_type, handleKeyDown, o
                       : setPointAmount(Number(e.target.value))
                   }
                   onKeyDown={handleKeyDown}
-                  disabled={false}
+                  disabled={true}
                 />
                 {reward_type == RewardType.PO && (
                   <label className="font-gray-300 text-sm font-semibold ml-2">포인트</label>
