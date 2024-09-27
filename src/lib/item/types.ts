@@ -39,7 +39,7 @@ export interface ProductListArgs {
   thumb: string | null;
 }
 
-export interface PromotionListArgs {
+export interface CouponListArgs {
   cpnId: string;
   name: string;
 }
