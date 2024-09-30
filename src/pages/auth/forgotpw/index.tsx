@@ -11,37 +11,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 const resetpw = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const resetPWInfo: AuthArgs = {
     username: username,
-    email: email,
   };
 
   const infoCheck = (info: AuthArgs) => {
     if (!info.username) {
       alert("아이디를 확인 해주세요.");
       return false;
-    } else if (!info.email) {
-      alert("이메일을 확인 해주세요.");
-      return false;
-    } else {
-      return true;
     }
+    return true;
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     if (infoCheck(resetPWInfo)) {
       const result = await fetchResetPW(resetPWInfo);
+      alert(result.message);
       if (result.success) {
-        alert(result.message);
-
-        router.push("/auth/changepw");
+        router.push("/auth/login");
       }
     } else {
-      alert("임시 비밀번호 발급을 실패하였습니다.");
+      alert("비밀번호 잴설정이 실패하였습니다. 인센토 팀으로 문의를 남겨주세요.");
     }
   };
 
@@ -63,17 +56,15 @@ const resetpw = () => {
   };
 
   useEffect(() => {
-    const isFormValid = username !== "" && email !== "";
+    const isFormValid = username !== "";
     setButtonDisabled(!isFormValid);
-  }, [username, email]);
+  }, [username]);
 
   return (
     <AuthContainer>
       <AuthForgotPW
         username={username}
         setUsername={setUsername}
-        email={email}
-        setEmail={setEmail}
         handleButton={handleButton}
         handleSubmit={handleSubmit}
         buttonDisabled={buttonDisabled}

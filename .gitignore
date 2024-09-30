@@ -1,6 +1,5 @@
 node_modules
 .next
-.env
+.env*
 .DS_Store
-.env.production
-.env.development
+.idea

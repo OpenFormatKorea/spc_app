@@ -5,8 +5,6 @@ import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 interface AuthForgotPWProps {
   username: string;
   setUsername: (value: string) => void;
-  email: string;
-  setEmail: (value: string) => void;
   buttonDisabled: boolean;
   handleButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
@@ -16,8 +14,6 @@ interface AuthForgotPWProps {
 const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
   username,
   setUsername,
-  email,
-  setEmail,
   handleButton,
   handleSubmit,
   buttonDisabled,
@@ -26,18 +22,9 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
 }) => {
   return (
     <AuthContainer>
-      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-gradient-to-b from-blue-200 to-blue-300  flex flex-col justify-center  items-center text-center">
+      <div className="min-w-[380px] min-h-[320px] rounded-xl p-6 bg-gradient-to-b from-blue-200 to-blue-300  flex flex-col justify-center  items-center text-center">
         <div className="text-xl font-semibold m-2 w-full text-left">비밀번호 찾기</div>
         <div className="flex flex-col w-full items-start justify-between">
-          <AuthInputBox
-            label="이메일:"
-            type="text"
-            id="email"
-            placeholder="이메일을 입력하세요."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
           <AuthInputBox
             label="아이디:"
             type="text"
@@ -48,7 +35,7 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
             onKeyDown={handleKeyDown}
           />
         </div>
-        <AuthButton disabled={buttonDisabled} label="임시 비밀번호 발급" buttonRef={buttonRef} onClick={handleSubmit} />
+        <AuthButton disabled={buttonDisabled} label="비밀번호 재설정하기" buttonRef={buttonRef} onClick={handleSubmit} />
         <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
           <div className="mr-2 ml-2 text-sm cursor-pointer">
             <button id="signup" onClick={handleButton}>

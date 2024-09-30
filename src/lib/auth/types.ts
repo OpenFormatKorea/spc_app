@@ -6,7 +6,6 @@ export interface AuthArgs {
 }
 
 export interface ChangePWArgs {
-  username: string;
-  old_password: string;
   new_password?: string;
+  token?: string;
 }
