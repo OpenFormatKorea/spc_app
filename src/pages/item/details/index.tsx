@@ -1,10 +1,9 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
-import RewardComponent from "@/components/layout/item/RewardList";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ItemDetails from "@/components/layout/item/ItemDetails";
 import RewardCard from "@/components/layout/item/RewardCard";
+import RewardComponent from "@/components/layout/item/RewardComponent";
 import { useState, useRef, KeyboardEvent } from "react";
 import { fetchGetItemDetails } from "@/lib/item/apis";
 import { getShopIdFromCookies } from "@/lib/helper";
@@ -18,13 +17,13 @@ import {
   RewardType,
   RewardsArgs,
   KakaoShareArgs,
+  CouponsArgs,
 } from "@/lib/item/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
   const shop_id = getShopIdFromCookies(context);
   const IDetailApiResponse = await fetchGetItemDetails(item_id, campaign_id, context);
-
   if (!IDetailApiResponse) {
     return {
       redirect: {
@@ -33,7 +32,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-
   return {
     props: {
       apiResponse: IDetailApiResponse,
@@ -46,16 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: string; campaign_id: string }) => {
   const response = apiResponse;
   const page_type = "DETAILS"; // Assuming this value is being used
-
   const [title, setTitle] = useState(response.title);
-  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(response.kakao_args);
-  const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
-  const [item_type, setItem_type] = useState<ItemType>(response.item_type);
-  const [active, setActive] = useState(response.active);
-  const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
-  const [image, setImage] = useState<string>(kakaoShareArgs.image);
-  const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
-
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
     response.products?.length > 0
       ? [...response.products]
@@ -70,6 +59,18 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
     response.promotions?.length > 0 ? [...response.promotions] : [{ description: "" }]
   );
+  const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
+  const selectedProductItem = [
+    { product_model_code: response.products.model_code, product_model_name: response.products.model_name },
+  ];
+  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
+  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(response.kakao_args);
+  const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
+  const [item_type, setItem_type] = useState<ItemType>(response.item_type);
+  const [active, setActive] = useState(response.active);
+  const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
+  const image: string = kakaoShareArgs.image;
+  const shop_logo: string = kakaoShareArgs.shop_logo;
 
   const itemArgs: ItemArgs = {
     id: response.id || "",
@@ -83,24 +84,7 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
     campaign_id,
   };
 
-  const onChangeImage = (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !file.type.startsWith("image/")) {
-      alert("Please upload a valid image file.");
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result && typeof reader.result === "string") {
-        if (imgType === "image") {
-          setImage(reader.result);
-        } else if (imgType === "shop_logo") {
-          setShop_logo(reader.result);
-        }
-      }
-    };
-    reader.readAsDataURL(file);
-  };
+  const onChangeImage = (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => {};
 
   const handleSubmit = () => {
     router.push(`/campaign/details?campaign_id=${campaign_id}`);
@@ -117,71 +101,82 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
   const disableInput = page_type === "DETAILS";
 
   return (
-    <DashboardContainer>
-      <div className="flex w-full justify-between items-center mb-3 h-[42px]">
-        <div className="subject-container flex w-full">
-          <a className="text-2xl font-bold">아이템 상세</a>
+    <>
+      <DashboardContainer>
+        <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+          <div className="subject-container flex w-full">
+            <a className="text-2xl font-bold">아이템 추가</a>
+          </div>
         </div>
-
-        <div className="button-container flex justify-end w-full">
-          <button
-            className="flex items-center justify-center bg-gray-400 text-white border p-2 rounded-lg cursor-pointer"
-            onClick={handleSubmit}
-            id="back_campaign_details"
-          >
-            <ArrowBackIosIcon fontSize="small" />
-            <span className="ml-1 sm:hidden">뒤로가기</span>
-          </button>
+        <div className="flex flex-col lg:flex-row w-full justify-center lg:space-x-4">
+          <ContentsContainer variant="campaign">
+            <ItemDetails
+              page_type="DETAILS"
+              itemArgs={itemArgs}
+              kakaoShareArgs={kakaoShareArgs}
+              campaign_id={campaign_id}
+              active={active}
+              setItem_type={setItem_type}
+              setTitle={setTitle}
+              setKakaoShareArgs={setKakaoShareArgs}
+              setProductInputs={setProductInputs}
+              setPromotionInputs={setPromotionInputs}
+              setActive={setActive}
+              handleKeyDown={handleKeyDown}
+              image={image}
+              shop_logo={shop_logo}
+              onChangeImage={onChangeImage}
+              disableInput={true}
+            />
+          </ContentsContainer>
+          <ContentsContainer variant="campaign">
+            <ItemTypeDetails
+              page_type="DETAILS"
+              item_type={item_type}
+              itemArgs={itemArgs}
+              selectedProductItems={selectedProductItem}
+              setPromotionInputs={setPromotionInputs}
+              setItem_type={setItem_type}
+              setProductInputs={setProductInputs}
+              handleKeyDown={handleKeyDown}
+              disableInput={true}
+            />
+            <RewardComponent
+              handleKeyDown={handleKeyDown}
+              reward_type={reward_type}
+              selectedCouponItems={selectedCouponItems}
+              couponInputs={couponInputs}
+              setRewardType={setReward_Type}
+              disableInput={true}
+              setSelectedCouponItems={setSelectedCouponItems}
+              setCouponInputs={setCouponInputs}
+              setRewards={setRewards}
+            />
+            <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
+          </ContentsContainer>
         </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
-        <ContentsContainer variant="campaign">
-          <ItemDetails
-            page_type="DETAILS"
-            itemArgs={itemArgs}
-            kakaoShareArgs={kakaoShareArgs}
-            campaign_id={campaign_id}
-            active={active}
-            setItem_type={setItem_type}
-            setTitle={setTitle}
-            setKakaoShareArgs={setKakaoShareArgs}
-            setProductInputs={setProductInputs}
-            setPromotionInputs={setPromotionInputs}
-            setActive={setActive}
-            handleKeyDown={handleKeyDown}
-            image={image}
-            shop_logo={shop_logo}
-            onChangeImage={onChangeImage}
-            disableInput={true}
-          />
-        </ContentsContainer>
-
-        <ContentsContainer variant="campaign">
-          <ItemTypeDetails
-            page_type="DETAILS"
-            item_type={item_type}
-            itemArgs={itemArgs}
-            productInputs={productInputs}
-            promotionInputs={promotionInputs}
-            setItem_type={setItem_type}
-            setProductInputs={setProductInputs}
-            setPromotionInputs={setPromotionInputs}
-            disableInput={true}
-          />
-
-          <RewardComponent
-            reward_type={reward_type}
-            setRewardType={setReward_Type}
-            setRewards={setRewards}
-            disableInput={true}
-            handleKeyDown={handleKeyDown}
-          />
-
-          <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />
-        </ContentsContainer>
-      </div>
-    </DashboardContainer>
+        <div>
+          <div className="button-container w-full pt-4 flex justify-between lg:justify-end ">
+            <div className="flex space-x-2 w-full lg:w-fit">
+              <button
+                className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
+                onClick={handleSubmit}
+                id="cancel_create_item"
+              >
+                취소하기
+              </button>
+              <button
+                className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+                onClick={handleSubmit}
+                id="create_item"
+              >
+                저장하기
+              </button>
+            </div>
+          </div>
+        </div>
+      </DashboardContainer>
+    </>
   );
 };
 

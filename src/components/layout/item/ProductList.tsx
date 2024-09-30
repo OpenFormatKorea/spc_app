@@ -27,7 +27,6 @@ const ProductList: React.FC<ProductListProps> = ({
 
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
 

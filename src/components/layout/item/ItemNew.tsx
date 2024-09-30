@@ -5,7 +5,7 @@ import { ItemType, ItemArgs, ProductsArgs, PromotionsArgs, KakaoShareArgs } from
 import { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
 
-interface ItemDetailsProps {
+interface ItemNewProps {
   page_type: "DETAILS" | "NEW";
   itemArgs: ItemArgs;
   kakaoShareArgs: KakaoShareArgs;
@@ -26,7 +26,7 @@ interface ItemDetailsProps {
   onChangeImage: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ItemDetails: React.FC<ItemDetailsProps> = (
+const ItemNew: React.FC<ItemNewProps> = (
   {
     page_type,
     itemArgs,
@@ -76,24 +76,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
       <div className="contents-container w-full justify-center items-center">
         <h1 className="font-bold text-xl pb-2 border-b-[1px] flex items-center justify-between">
           <div>아이템 옵션</div>
-          {page_type === "DETAILS" && (
-            <div>
-              <input
-                type="checkbox"
-                className="peer sr-only opacity-0"
-                id="item-activation"
-                name="active"
-                checked={active}
-                onChange={handleActiveStatus}
-              />
-              <label
-                htmlFor="item-activation"
-                className="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-400 px-0.5 transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:transition-transform peer-checked:bg-green-500 peer-checked:before:translate-x-full"
-              >
-                <span className="sr-only">Enable</span>
-              </label>
-            </div>
-          )}
         </h1>
         <div className={inputFormClass}>
           <label className={labelClass}>아이템 명</label>
@@ -124,4 +106,4 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   );
 };
 
-export default ItemDetails;
+export default ItemNew;

@@ -45,7 +45,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
                   selectedProductItems.map((inputProduct) => {
                     return (
                       <div
-                        key={`${inputProduct.product_model_code}`} // Adding index to make the key unique
+                        key={`${inputProduct.product_model_code}`}
                         className="mr-1 mt-1 p-1 w-fit h-fit text-sm text-white bg-blue-300 rounded-md"
                       >
                         {inputProduct.product_model_name}
@@ -60,22 +60,20 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
       )}
 
       {item_type === ItemType.PM && (
-        <>
-          <div className="flex flex-col w-full h-fit">
-            <div className={inputFormClass}>
-              <label className={labelClass}>프로모션 코드</label>
-              <InputTextBox
-                type="text"
-                id={`promotion_description`}
-                placeholder="프로모션 설명을 선택하세요."
-                value={""}
-                onChange={(e) => handleInputChange(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e)}
-                disabled={disableInput}
-              />
-            </div>
+        <div className="flex flex-col w-full h-fit">
+          <div className={inputFormClass}>
+            <label className={labelClass}>프로모션 코드</label>
+            <InputTextBox
+              type="text"
+              id={`promotion_description`}
+              placeholder="프로모션 설명을 선택하세요."
+              value={""}
+              onChange={(e) => handleInputChange(e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e)}
+              disabled={disableInput}
+            />
           </div>
-        </>
+        </div>
       )}
     </div>
   );

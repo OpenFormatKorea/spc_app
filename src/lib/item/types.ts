@@ -23,7 +23,7 @@ export interface ProductsArgs {
   id?: string;
   product_model_code: string;
   product_model_name: string;
-  images: [{ posThumb: string }, { thumb: string }];
+  images?: [{ posThumb: string }, { thumb: string }];
 }
 
 export interface PromotionsArgs {
@@ -93,12 +93,12 @@ export enum PaymentFrequencyType {
 export interface PBProductListArgs {
   content: ProductListArgs[];
   pageable: PageableArgs;
-  totalElements: Number;
-  totalPages: Number;
+  totalElements: number;
+  totalPages: number;
   last: boolean;
-  number: Number;
-  size: Number;
-  numberOfElements: Number;
+  number: number;
+  size: number;
+  numberOfElements: number;
   sort: PageNationSortArgs;
   first: boolean;
   empty: boolean;
@@ -112,9 +112,9 @@ export interface ProductListArgs {
 
 export interface PageableArgs {
   sort: PageNationSortArgs;
-  offset: Number;
-  pageNumber: Number;
-  pageSize: Number;
+  offset: number;
+  pageNumber: number;
+  pageSize: number;
   paged: boolean;
   unpaged: boolean;
 }

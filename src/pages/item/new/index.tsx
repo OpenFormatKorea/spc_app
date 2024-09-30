@@ -20,10 +20,9 @@ import {
   KakaoShareArgs,
   ProductsArgs,
   PromotionsArgs,
-  CouponListArgs,
   CouponsArgs,
 } from "@/lib/item/types";
-import CouponList from "@/components/layout/item/CouponList";
+import ItemNew from "@/components/layout/item/ItemNew";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -209,7 +208,7 @@ const NewItem = (
         </div>
         <div className="flex flex-col lg:flex-row w-full justify-center lg:space-x-4">
           <ContentsContainer variant="campaign">
-            <ItemDetails
+            <ItemNew
               page_type="NEW"
               itemArgs={itemArgs}
               kakaoShareArgs={kakaoShareArgs}

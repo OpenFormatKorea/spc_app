@@ -4,7 +4,7 @@ import { CouponListArgs, CouponsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
 
 interface CouponListProps {
-  apiResponse: ApiResponse;
+  apiResponse?: ApiResponse;
   couponInputs: CouponsArgs[];
   setCouponInputs: (value: CouponsArgs[]) => void;
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
