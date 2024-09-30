@@ -25,6 +25,7 @@ const Navbar = () => {
       alert("로그아웃을 실패하였습니다. 잠시 후 다시 시도해주시기 바랍니다.");
     }
   };
+
   return (
     <nav className=" w-[250px] fixed h-[100%] lg:block hidden lg:w-[250px] lg:fixed lg:h-[100%]">
       <div className="flex items-center justify-center h-[70px] p-3">

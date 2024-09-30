@@ -4,7 +4,7 @@ import ItemList from "@/components/layout/item/ItemList";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import { fetchGetItemList } from "@/lib/item/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -16,7 +16,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
+const Item = ({ apiResponse }: { apiResponse: ApiResponse }) => {
   // Table styles
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =

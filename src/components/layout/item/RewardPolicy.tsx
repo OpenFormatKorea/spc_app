@@ -49,6 +49,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
       repeat_count: null,
     },
   };
+
   const toggleCheckboxChange = (
     setUsePolicy: React.Dispatch<React.SetStateAction<boolean>>,
     setUseRefereeCondition: React.Dispatch<React.SetStateAction<boolean>>,

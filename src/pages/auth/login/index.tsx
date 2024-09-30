@@ -1,10 +1,10 @@
 import AuthContainer from "@/components/layout/auth/AuthContainer";
 import AuthLogin from "@/components/layout/auth/AuthLoginForm";
-import { authenticateUser } from "@/lib/auth";
+
 import { fetchLogIn } from "@/lib/auth/apis";
 import { AuthArgs } from "@/lib/auth/types";
 import { setCookie } from "cookies-next";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+
 import { useRouter } from "next/router";
 import { useRef, useState, KeyboardEvent, useEffect } from "react";
 

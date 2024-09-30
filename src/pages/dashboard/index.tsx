@@ -1,7 +1,8 @@
 import CampaignList from "@/components/layout/campaign/CampaignList";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import { authenticateUser } from "@/lib/auth";
+
+import { authenticateUser, deleteCookies } from "@/lib/auth";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";

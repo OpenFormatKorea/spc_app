@@ -13,7 +13,7 @@ interface CampaignListProps {
 const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, apiResponse, handleButton }) => {
   const router = useRouter();
   const [isCampaignPage, setIsCampaignPage] = useState(false);
-  const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({}); // Holds active statuses for all campaigns
+  const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({});
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
 
@@ -30,7 +30,6 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
 
     setActiveStatusMap(initialStatus);
   }, [router.pathname, apiResponse]);
-
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     router.replace(`/campaign/details?campaign_id=${id}`, undefined, { shallow: true, scroll: false });

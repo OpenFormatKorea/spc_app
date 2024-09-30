@@ -1,7 +1,8 @@
-import { fetchAPI } from "@/lib/api";
-import { getShopIdFromCookies } from "@/lib/helper";
 import { ItemArgs, RewardPolicyArgs } from "@/lib/item/types";
+import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
+import { fetchAPI } from "@/lib/api";
+import { error } from "console";
 
 // 리퍼럴 아이템
 
@@ -52,12 +53,10 @@ export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, c
     shop_id: shop_id,
     campaign_id: campaign_id,
   };
-
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-create`;
 
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
-
     if (response.status === "200" && response.message === "success") {
       return {
         status: 200,
@@ -175,6 +174,13 @@ export async function fetchActivateItem(item_id: string, campaign_id: string, co
   const dataObj = {
     campaign_id: campaign_id,
     shop_id: shop_id,
+    // products: [
+    //   {
+    //     product_model_code: "000662",
+    //     product_model_name: "케잌1호",
+    //     images: [{ posThumb: "/item_mst/007800_ORD.PNG" }, { thumb: "/item_mst/007800_ORD.PNG" }],
+    //   },
+    // ],
   };
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
@@ -220,5 +226,88 @@ export async function fetchGetItemDetails(item_id: string, campaign_id: string, 
   } catch (error) {
     console.error("error", error);
     return null;
+  }
+}
+
+export async function fetchGetProductCodeList(context: GetServerSidePropsContext) {
+  const shop_id = getShopIdFromCookies(context);
+  if (!shop_id) {
+    throw new Error("Shop ID not found in cookies.");
+  }
+  const page = 1;
+  const size = 10;
+  const final_url =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/platform/product-list?page=` +
+    page +
+    "&size=" +
+    size +
+    "&shop_id=" +
+    shop_id;
+
+  try {
+    const response = await fetchAPI(context, final_url, "GET", {});
+    return response;
+  } catch (error) {
+    console.error("Error fetching product list:", error);
+
+    // Optionally return a default response or handle this error further up the chain
+    return {
+      response: {
+        status: 500,
+        msg: "Failed to fetch product list",
+      },
+      data: {
+        data: {
+          content: [],
+          pageable: {},
+          totalElements: 0,
+          totalPages: 0,
+          last: true,
+          number: 0,
+          size: 0,
+          numberOfElements: 0,
+          sort: {},
+          first: true,
+          empty: true,
+        },
+      },
+    };
+  }
+}
+
+export async function fetchGetCouponCodeList(context: GetServerSidePropsContext) {
+  const shop_id = getShopIdFromCookies(context);
+  if (!shop_id) {
+    throw new Error("Shop ID not found in cookies.");
+  }
+  const page = 1;
+  const size = 10;
+  const final_url =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` + page + "&size=" + size + "&shop_id=" + shop_id;
+  try {
+    const response = await fetchAPI(context, final_url, "GET", {});
+    return response;
+  } catch (error) {
+    return {
+      response: {
+        status: 500,
+        msg: "Failed to fetch coupon list",
+      },
+      data: {
+        data: {
+          content: [],
+          pageable: {},
+          totalElements: 0,
+          totalPages: 0,
+          last: true,
+          number: 0,
+          size: 0,
+          numberOfElements: 0,
+          sort: {},
+          first: true,
+          empty: true,
+        },
+      },
+    };
   }
 }
