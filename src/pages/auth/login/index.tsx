@@ -7,9 +7,7 @@ import { setCookie } from "cookies-next";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useRef, useState, KeyboardEvent, useEffect } from "react";
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
-  return authenticateUser(context, "/dashboard");
-};
+
 // src/pages/index.tsx
 const Login: React.FC = () => {
   const [showPW, setShowPw] = useState(false);

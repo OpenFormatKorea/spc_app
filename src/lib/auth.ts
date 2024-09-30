@@ -4,18 +4,19 @@ import { deleteCookie, getCookie } from "cookies-next";
 
 type AuthResult = { redirect: Redirect } | { props: {} };
 
-// General authentication function
 const checkAuth = (context: GetServerSidePropsContext): boolean => {
   const access = getCookie("access", context);
   if (!access) {
-    // If no access token, remove it from cookies (in case it's still set)
-    //deleteCookie("access", { req: context.req, res: context.res });
-    deleteCookie("access");
-    deleteCookie("refresh");
-    deleteCookie("shop_id");
+    deleteCookies(context);
     return false;
   }
-  return !!access; // Returns true if access token exists, false otherwise
+  return true;
+};
+
+export const deleteCookies = (context: GetServerSidePropsContext) => {
+  deleteCookie("access");
+  deleteCookie("refresh");
+  deleteCookie("shop_id");
 };
 
 export const authenticateUser = (context: GetServerSidePropsContext, redirectTo: string): AuthResult => {
