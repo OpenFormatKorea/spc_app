@@ -2,12 +2,8 @@ import AuthButton from "@/components/layout/auth/AuthButton";
 import AuthInputBox from "@/components/layout/auth/AuthInputBox";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { authenticateUserforLogin } from "@/lib/auth";
-import { GetServerSideProps } from "next";
 import React, { ChangeEvent } from "react";
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return authenticateUserforLogin(context);
-};
+
 interface AuthSignUpFormProps {
   username: string;
   setUsername: (value: string) => void;
