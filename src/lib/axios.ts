@@ -23,28 +23,36 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     console.log("getAxiosInstanceServer baseURL", baseURL);
     console.log("!access", !access);
     console.log("type of access", access);
+    const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+      refresh,
+    });
+    response;
+    console.log("getAxiosInstanceServer  if (!access) response", response);
 
-    if (!access) {
-      const response = await axios.post(`${baseURL}/account/token/refresh/`, {
-        refresh,
-      });
-      response;
-      console.log("getAxiosInstanceServer  if (!access) response", response);
+    setAccessTokenToCookies(context, response.data.access);
+    setRefreshTokenToCookies(context, response.data.refresh);
 
-      setAccessTokenToCookies(context, response.data.access);
-      setRefreshTokenToCookies(context, response.data.refresh);
-    }
+    // if (!access) {
+    //   const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+    //     refresh,
+    //   });
+    //   response;
+    //   console.log("getAxiosInstanceServer  if (!access) response", response);
 
-    if (typeof access === "undefined") {
-      const response = await axios.post(`${baseURL}/account/token/refresh/`, {
-        refresh,
-      });
-      response;
-      console.log("getAxiosInstanceServer  if typeof access === undefined response", response);
+    //   setAccessTokenToCookies(context, response.data.access);
+    //   setRefreshTokenToCookies(context, response.data.refresh);
+    // }
 
-      setAccessTokenToCookies(context, response.data.access);
-      setRefreshTokenToCookies(context, response.data.refresh);
-    }
+    // if (typeof access === "undefined") {
+    //   const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+    //     refresh,
+    //   });
+    //   response;
+    //   console.log("getAxiosInstanceServer  if typeof access === undefined response", response);
+
+    //   setAccessTokenToCookies(context, response.data.access);
+    //   setRefreshTokenToCookies(context, response.data.refresh);
+    // }
 
     const axiosInstance = axios.create({
       baseURL,
