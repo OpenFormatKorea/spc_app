@@ -23,14 +23,14 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     console.log("getAxiosInstanceServer baseURL", baseURL);
     console.log("!access", !access);
     console.log("type of access", access);
-    const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+    const response = axios.post(`${baseURL}/account/token/refresh/`, {
       refresh,
     });
     response;
     console.log("getAxiosInstanceServer  if (!access) response", response);
 
-    setAccessTokenToCookies(context, response.data.access);
-    setRefreshTokenToCookies(context, response.data.refresh);
+    // setAccessTokenToCookies(context, response.data.access);
+    // setRefreshTokenToCookies(context, response.data.refresh);
 
     // if (!access) {
     //   const response = await axios.post(`${baseURL}/account/token/refresh/`, {
