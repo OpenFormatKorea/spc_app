@@ -40,8 +40,8 @@ const Login: React.FC = () => {
 
   const postLogin = async (info: AuthArgs) => {
     const result = await fetchLogIn(info);
-    const data = result.data;
-    const access = data?.access;
+    // const data = result.data;
+    // const access = data?.access;
     return result;
   };
 
