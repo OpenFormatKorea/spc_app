@@ -24,62 +24,27 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     console.log("!access", !access);
     console.log("type of access", access);
 
-    // If no access token, try refreshing it
-    if (!access && refresh) {
-      try {
-        const response = await axios.post(`${baseURL}/account/token/refresh/`, { refresh });
-        console.log("getAxiosInstanceServer refreshing access token response", response);
-
-        setAccessTokenToCookies(context, response.data.access);
-        setRefreshTokenToCookies(context, response.data.refresh);
-        access = response.data.access; // Update the access token
-      } catch (error) {
-        console.error("Error refreshing access token", error);
-        // Redirect to login if refresh fails
-        if (typeof window !== "undefined") {
-          window.location.replace(
-            process.env.NODE_ENV === "development"
-              ? "http://dev-fe.standalone.incento.kr/auth/login"
-              : "https://dev-fe.standalone.incento.kr/auth/login"
-          );
-        }
-        return; // Exit if refresh fails
-      }
-    }
-
-    // If still no access token, redirect to login
     if (!access) {
-      if (typeof window !== "undefined") {
-        window.location.replace(
-          process.env.NODE_ENV === "development"
-            ? "http://dev-fe.standalone.incento.kr/auth/login"
-            : "https://dev-fe.standalone.incento.kr/auth/login"
-        );
-      }
-      return;
+      const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+        refresh,
+      });
+      response;
+      console.log("getAxiosInstanceServer  if (!access) response", response);
+
+      setAccessTokenToCookies(context, response.data.access);
+      setRefreshTokenToCookies(context, response.data.refresh);
     }
 
-    // if (!access) {
-    //   const response = await axios.post(`${baseURL}/account/token/refresh/`, {
-    //     refresh,
-    //   });
-    //   response;
-    //   console.log("getAxiosInstanceServer  if (!access) response", response);
+    if (typeof access === "undefined") {
+      const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+        refresh,
+      });
+      response;
+      console.log("getAxiosInstanceServer  if typeof access === undefined response", response);
 
-    //   setAccessTokenToCookies(context, response.data.access);
-    //   setRefreshTokenToCookies(context, response.data.refresh);
-    // }
-
-    // if (typeof access === "undefined") {
-    //   const response = await axios.post(`${baseURL}/account/token/refresh/`, {
-    //     refresh,
-    //   });
-    //   response;
-    //   console.log("getAxiosInstanceServer  if typeof access === undefined response", response);
-
-    //   setAccessTokenToCookies(context, response.data.access);
-    //   setRefreshTokenToCookies(context, response.data.refresh);
-    // }
+      setAccessTokenToCookies(context, response.data.access);
+      setRefreshTokenToCookies(context, response.data.refresh);
+    }
 
     const axiosInstance = axios.create({
       baseURL,
