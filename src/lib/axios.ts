@@ -95,7 +95,9 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
   } catch (err) {
     if (typeof window !== "undefined")
       window.location.replace(
-        process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
+        process.env.NODE_ENV === "development"
+          ? "http://dev-fe.standalone.incento.kr/auth/login"
+          : "https://dev-fe.standalone.incento.kr/auth/login"
       );
     return;
   }
@@ -113,7 +115,9 @@ export const getAxiosInstanceClient = () => {
     if (!access) {
       if (typeof window !== "undefined")
         window.location.replace(
-          process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
+          process.env.NODE_ENV === "development"
+            ? "http://dev-fe.standalone.incento.kr/auth/login"
+            : "https://dev-fe.standalone.incento.kr/auth/login"
         );
       return;
     }
@@ -132,7 +136,9 @@ export const getAxiosInstanceClient = () => {
       if (!refresh) {
         if (typeof window !== "undefined")
           window.location.replace(
-            process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
+            process.env.NODE_ENV === "development"
+              ? "http://dev-fe.standalone.incento.kr/auth/login"
+              : "https://dev-fe.standalone.incento.kr/auth/login"
           );
         return req;
       }
@@ -142,7 +148,9 @@ export const getAxiosInstanceClient = () => {
         deleteCookie("refresh");
         if (typeof window !== "undefined")
           window.location.replace(
-            process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
+            process.env.NODE_ENV === "development"
+              ? "http://dev-fe.standalone.incento.kr/auth/login"
+              : "https://dev-fe.standalone.incento.kr/auth/login"
           );
         return req;
       }
@@ -168,14 +176,18 @@ export const getAxiosInstanceClient = () => {
     if (typeof window !== "undefined")
       if (typeof window !== "undefined")
         window.location.replace(
-          process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
+          process.env.NODE_ENV === "development"
+            ? "http://dev-fe.standalone.incento.kr/auth/login"
+            : "https://dev-fe.standalone.incento.kr/auth/login"
         );
       else
         setTimeout(() => {
           if (typeof window !== "undefined")
             if (typeof window !== "undefined")
               window.location.replace(
-                process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
+                process.env.NODE_ENV === "development"
+                  ? "http://dev-fe.standalone.incento.kr/auth/login"
+                  : "https://dev-fe.standalone.incento.kr/auth/login"
               );
         }, 500);
     return;
