@@ -18,11 +18,16 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     const access = getAccessTokenFromCookies(context);
     const refresh = getRefreshTokenFromCookies(context);
     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
-
+    console.log("getAxiosInstanceServer getAccessTokenFromCookies access", access);
+    console.log("getAxiosInstanceServer getRefreshTokenFromCookies refresh", refresh);
+    console.log("getAxiosInstanceServer baseURL", baseURL);
     if (!access) {
       const response = await axios.post(`${baseURL}/account/token/refresh/`, {
         refresh,
       });
+      response;
+      console.log("getAxiosInstanceServer  if (!access) response", response);
+
       setAccessTokenToCookies(context, response.data.access);
       setRefreshTokenToCookies(context, response.data.refresh);
     }
@@ -32,6 +37,7 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
       withCredentials: true,
       headers: { Authorization: `Bearer ${access}` },
     });
+    console.log("getAxiosInstanceServer axiosInstance", axiosInstance);
 
     axiosInstance.interceptors.request.use(async (req: InternalAxiosRequestConfig) => {
       const access_decoded: { exp: number } = jwtDecode(access as string);
