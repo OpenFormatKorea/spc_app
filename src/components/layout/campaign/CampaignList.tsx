@@ -120,7 +120,9 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
             {!campaigns.length && (
               <tr>
                 <td className={tbodyStyle} colSpan={4}>
-                  No campaigns available
+                  생성된 캠페인이 없어요.
+                  <br />
+                  새로운 캠페인은 생성해주세요.
                 </td>
               </tr>
             )}
