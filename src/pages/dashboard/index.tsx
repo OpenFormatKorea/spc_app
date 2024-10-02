@@ -8,10 +8,12 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { AuthArgs } from "@/lib/auth/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
+import { getShopIdFromCookies } from "@/lib/helper";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const authResponse = authenticateUser(context, "/auth/login");
-  const campaignResponse = await fetchGetCampaignList(context);
+  const shop_id: string = getShopIdFromCookies(context) || "";
+  const campaignResponse = await fetchGetCampaignList(context, shop_id);
   return {
     props: {
       apiResponse: campaignResponse,
