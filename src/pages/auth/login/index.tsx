@@ -61,7 +61,7 @@ const Login: React.FC = () => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
       if (result.success) {
-        setCookie("access", result.data?.access);
+        setCookie("access_standalone", result.data?.access);
         setCookie("refresh", result.data?.refresh);
         setCookie("shop_id", result.data?.shop_id);
         router.push("/dashboard");

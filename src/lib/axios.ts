@@ -89,7 +89,7 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
  */
 export const getAxiosInstanceClient = () => {
   try {
-    const access = getCookie("access");
+    const access = getCookie("access_standalone");
     const refresh = getCookie("refresh");
     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
     if (!access) {
