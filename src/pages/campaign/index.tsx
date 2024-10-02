@@ -12,8 +12,8 @@ import { getCookie } from "cookies-next";
 
 // Fetches campaign data during server-side rendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const shop_id: string = getShopIdFromCookies(context) || "";
-  const response = await fetchGetCampaignList(context, shop_id);
+  const shop_id = getShopIdFromCookies(context);
+  const response = await fetchGetCampaignList(context);
   console.log("getCookie('shop_id'):", getCookie("shop_id"));
   console.log("index response", response);
   console.log("index shop_id", shop_id);

@@ -12,8 +12,7 @@ import { getShopIdFromCookies } from "@/lib/helper";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const authResponse = authenticateUser(context, "/auth/login");
-  const shop_id: string = getShopIdFromCookies(context) || "";
-  const campaignResponse = await fetchGetCampaignList(context, shop_id);
+  const campaignResponse = await fetchGetCampaignList(context);
   return {
     props: {
       apiResponse: campaignResponse,

@@ -105,14 +105,14 @@ export async function fetchDeleteCampaign(campaign_id: string, context: GetServe
   }
 }
 
-export async function fetchGetCampaignList(context: GetServerSidePropsContext, shop_id: string) {
-  // const shop_id = getShopIdFromCookies(context);
+export async function fetchGetCampaignList(context: GetServerSidePropsContext) {
+  const shop_id = getShopIdFromCookies(context);
   const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns/` + shop_id;
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    console.log("campaign shop_id", shop_id);
     console.log("campaign response", response);
+    console.log("campaign shop_id", shop_id);
     return response.data;
   } catch (error) {
     return null;
