@@ -16,10 +16,10 @@ import { GetServerSidePropsContext } from "next";
 
 export const getAxiosInstanceServer = async (context: GetServerSidePropsContext) => {
   try {
-    const access = getAccessTokenFromCookies(context);
+    //const access = getAccessTokenFromCookies(context);
     const refresh = getRefreshTokenFromCookies(context);
     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
-    console.log("getAxiosInstanceServer getAccessTokenFromCookies access", access);
+    //console.log("getAxiosInstanceServer getAccessTokenFromCookies access", access);
     console.log("getAxiosInstanceServer getRefreshTokenFromCookies refresh", refresh);
     console.log("getAxiosInstanceServer baseURL", baseURL);
 
@@ -31,6 +31,7 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     console.log("getAxiosInstanceServer  if (!access) loop response", response);
 
     setAccessTokenToCookies(context, response.data.access);
+    const access = getAccessTokenFromCookies(context);
     setRefreshTokenToCookies(context, response.data.refresh);
     //    }
 
