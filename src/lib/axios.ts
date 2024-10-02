@@ -6,6 +6,7 @@ import {
 } from "@/lib/helper";
 import axios, { AxiosHeaders, InternalAxiosRequestConfig } from "axios";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { access } from "fs";
 import { jwtDecode } from "jwt-decode";
 import { GetServerSidePropsContext } from "next";
 
@@ -15,44 +16,23 @@ import { GetServerSidePropsContext } from "next";
 
 export const getAxiosInstanceServer = async (context: GetServerSidePropsContext) => {
   try {
-    let access = getAccessTokenFromCookies(context);
+    const access = getAccessTokenFromCookies(context);
     const refresh = getRefreshTokenFromCookies(context);
     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
     console.log("getAxiosInstanceServer getAccessTokenFromCookies access", access);
     console.log("getAxiosInstanceServer getRefreshTokenFromCookies refresh", refresh);
     console.log("getAxiosInstanceServer baseURL", baseURL);
-    console.log("!access", !access);
-    console.log("type of access", access);
-    const response = axios.post(`${baseURL}/account/token/refresh/`, {
+
+    // if (!access) {
+    const response = await axios.post(`${baseURL}/account/token/refresh/`, {
       refresh,
     });
     response;
-    console.log("getAxiosInstanceServer  if (!access) response", response);
+    console.log("getAxiosInstanceServer  if (!access) loop response", response);
 
-    // setAccessTokenToCookies(context, response.data.access);
-    // setRefreshTokenToCookies(context, response.data.refresh);
-
-    // if (!access) {
-    //   const response = await axios.post(`${baseURL}/account/token/refresh/`, {
-    //     refresh,
-    //   });
-    //   response;
-    //   console.log("getAxiosInstanceServer  if (!access) response", response);
-
-    //   setAccessTokenToCookies(context, response.data.access);
-    //   setRefreshTokenToCookies(context, response.data.refresh);
-    // }
-
-    // if (typeof access === "undefined") {
-    //   const response = await axios.post(`${baseURL}/account/token/refresh/`, {
-    //     refresh,
-    //   });
-    //   response;
-    //   console.log("getAxiosInstanceServer  if typeof access === undefined response", response);
-
-    //   setAccessTokenToCookies(context, response.data.access);
-    //   setRefreshTokenToCookies(context, response.data.refresh);
-    // }
+    setAccessTokenToCookies(context, response.data.access);
+    setRefreshTokenToCookies(context, response.data.refresh);
+    //    }
 
     const axiosInstance = axios.create({
       baseURL,
