@@ -23,7 +23,18 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     console.log("getAxiosInstanceServer baseURL", baseURL);
     console.log("!access", !access);
 
-    if (!access === false || access === undefined) {
+    if (!access) {
+      const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+        refresh,
+      });
+      response;
+      console.log("getAxiosInstanceServer  if (!access) response", response);
+
+      setAccessTokenToCookies(context, response.data.access);
+      setRefreshTokenToCookies(context, response.data.refresh);
+    }
+
+    if (access === "undefined") {
       const response = await axios.post(`${baseURL}/account/token/refresh/`, {
         refresh,
       });
