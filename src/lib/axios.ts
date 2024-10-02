@@ -29,6 +29,7 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
 
     const axiosInstance = axios.create({
       baseURL,
+      withCredentials: true,
       headers: { Authorization: `Bearer ${access}` },
     });
 
@@ -49,7 +50,9 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
       if (!refresh) {
         if (typeof window !== "undefined")
           window.location.replace(
-            process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
+            process.env.NODE_ENV === "development"
+              ? "http://dev-fe.standalone.incento.kr/auth/login"
+              : "https://dev-fe.standalone.incento.kr/auth/login"
           );
         return req;
       }
@@ -64,7 +67,9 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
         });
         if (typeof window !== "undefined")
           window.location.replace(
-            process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
+            process.env.NODE_ENV === "development"
+              ? "http://dev-fe.standalone.incento.kr/auth/login"
+              : "https://dev-fe.standalone.incento.kr//login"
           );
         return req;
       }
