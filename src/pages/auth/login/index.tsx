@@ -60,8 +60,11 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
+      console.log("result.data:: handle submit: ", result.data);
+
       if (result.success) {
         setCookie("access_standalone", result.data?.access);
+        console.log("result.data?.access:: handle submit: ", result.data?.access);
         setCookie("refresh", result.data?.refresh);
         setCookie("shop_id", result.data?.shop_id);
         router.push("/dashboard");
