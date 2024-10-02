@@ -64,8 +64,8 @@ const NewItem = (
   const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
     shop_name: "",
-    image: "/images/kakao/kakaolink-no-logo-default.png",
-    shop_logo: "/images/kakao/kakaolink-no-logo-default.png",
+    image: "images/kakao/kakaolink-no-logo-default.png",
+    shop_logo: "images/kakao/kakaolink-no-logo-default.png",
     title: "",
     description: "",
     button_name: "",
