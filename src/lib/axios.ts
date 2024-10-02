@@ -23,14 +23,12 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
       const response = await axios.post(`${baseURL}/account/token/refresh/`, {
         refresh,
       });
-      response;
       setAccessTokenToCookies(context, response.data.access);
       setRefreshTokenToCookies(context, response.data.refresh);
     }
 
     const axiosInstance = axios.create({
       baseURL,
-      withCredentials: true,
       headers: { Authorization: `Bearer ${access}` },
     });
 
@@ -51,9 +49,7 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
       if (!refresh) {
         if (typeof window !== "undefined")
           window.location.replace(
-            process.env.NODE_ENV === "development"
-              ? "http://dev-fe.standalone.incento.kr/auth/login"
-              : "https://dev-fe.standalone.incento.kr/auth/login"
+            process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
           );
         return req;
       }
@@ -68,9 +64,7 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
         });
         if (typeof window !== "undefined")
           window.location.replace(
-            process.env.NODE_ENV === "development"
-              ? "http://dev-fe.standalone.incento.kr/auth/login"
-              : "https://dev-fe.standalone.incento.kr/auth/login"
+            process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
           );
         return req;
       }
@@ -86,7 +80,9 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
       return req;
     });
 
+    // Add a response interceptor to log response headers
     axiosInstance.interceptors.response.use((response) => {
+      // Log the response headers
       return response;
     });
 
@@ -94,46 +90,11 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
   } catch (err) {
     if (typeof window !== "undefined")
       window.location.replace(
-        process.env.NODE_ENV === "development"
-          ? "http://dev-fe.standalone.incento.kr/auth/login"
-          : "https://dev-fe.standalone.incento.kr/auth/login"
+        process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
       );
     return;
   }
 };
-
-// export const getAxiosInstanceServer = async (context: GetServerSidePropsContext) => {
-//   try {
-//     const access = getAccessTokenFromCookies(context);
-//     const refresh = getRefreshTokenFromCookies(context);
-//     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
-
-//     const req: InternalAxiosRequestConfig = {
-//       headers: new AxiosHeaders({
-//         Authorization: `Bearer ${access}`,
-//       }),
-//     };
-
-//     const axiosInstance = axios.create({
-//       baseURL,
-//       withCredentials: true,
-//       headers: req.headers,
-//     });
-
-//     console.log("axiosInstance req.headers.Authorization:: ", req.headers.Authorization);
-//     console.log("axiosInstance:: ", axiosInstance);
-//     return axiosInstance;
-//   } catch (err) {
-//     if (typeof window !== "undefined") {
-//       window.location.replace(
-//         process.env.NODE_ENV === "development"
-//           ? "http://dev-fe.standalone.incento.kr/auth/login"
-//           : "https://dev-fe.standalone.incento.kr/auth/login"
-//       );
-//     }
-//     return;
-//   }
-// };
 
 /**
  *
@@ -147,16 +108,13 @@ export const getAxiosInstanceClient = () => {
     if (!access) {
       if (typeof window !== "undefined")
         window.location.replace(
-          process.env.NODE_ENV === "development"
-            ? "http://dev-fe.standalone.incento.kr/auth/login"
-            : "https://dev-fe.standalone.incento.kr/auth/login"
+          process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
         );
       return;
     }
 
     const axiosInstance = axios.create({
       baseURL,
-      withCredentials: true,
       headers: { Authorization: `Bearer ${access}` },
     });
 
@@ -168,9 +126,7 @@ export const getAxiosInstanceClient = () => {
       if (!refresh) {
         if (typeof window !== "undefined")
           window.location.replace(
-            process.env.NODE_ENV === "development"
-              ? "http://dev-fe.standalone.incento.kr/auth/login"
-              : "https://dev-fe.standalone.incento.kr/auth/login"
+            process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
           );
         return req;
       }
@@ -180,9 +136,7 @@ export const getAxiosInstanceClient = () => {
         deleteCookie("refresh");
         if (typeof window !== "undefined")
           window.location.replace(
-            process.env.NODE_ENV === "development"
-              ? "http://dev-fe.standalone.incento.kr/auth/login"
-              : "https://dev-fe.standalone.incento.kr/auth/login"
+            process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
           );
         return req;
       }
@@ -208,18 +162,14 @@ export const getAxiosInstanceClient = () => {
     if (typeof window !== "undefined")
       if (typeof window !== "undefined")
         window.location.replace(
-          process.env.NODE_ENV === "development"
-            ? "http://dev-fe.standalone.incento.kr/auth/login"
-            : "https://dev-fe.standalone.incento.kr/auth/login"
+          process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
         );
       else
         setTimeout(() => {
           if (typeof window !== "undefined")
             if (typeof window !== "undefined")
               window.location.replace(
-                process.env.NODE_ENV === "development"
-                  ? "http://dev-fe.standalone.incento.kr/auth/login"
-                  : "https://dev-fe.standalone.incento.kr/auth/login"
+                process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
               );
         }, 500);
     return;
