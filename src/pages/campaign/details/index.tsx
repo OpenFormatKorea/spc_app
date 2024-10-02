@@ -15,7 +15,6 @@ import { authenticateUser } from "@/lib/auth";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
   const shop_id: any = getShopIdFromCookies(context);
-
   const authResponse = authenticateUser(context, "/dashboard");
   const itemListApiResponse = await fetchGetItemList(campaign_id, context);
   const cDetailApiResponse = await fetchGetCampaignDetails(campaign_id, shop_id, context);
