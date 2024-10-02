@@ -34,12 +34,12 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
       setRefreshTokenToCookies(context, response.data.refresh);
     }
 
-    if (access === "undefined") {
+    if (typeof access === "undefined") {
       const response = await axios.post(`${baseURL}/account/token/refresh/`, {
         refresh,
       });
       response;
-      console.log("getAxiosInstanceServer  if (!access) response", response);
+      console.log("getAxiosInstanceServer  if typeof access === undefined response", response);
 
       setAccessTokenToCookies(context, response.data.access);
       setRefreshTokenToCookies(context, response.data.refresh);
