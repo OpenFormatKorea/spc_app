@@ -111,6 +111,7 @@ export async function fetchGetCampaignList(context: GetServerSidePropsContext) {
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
+    console.log("response", response);
     return response.data;
   } catch (error) {
     return null;
