@@ -69,7 +69,7 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
           window.location.replace(
             process.env.NODE_ENV === "development"
               ? "http://dev-fe.standalone.incento.kr/auth/login"
-              : "https://dev-fe.standalone.incento.kr//login"
+              : "https://dev-fe.standalone.incento.kr/auth/login"
           );
         return req;
       }
