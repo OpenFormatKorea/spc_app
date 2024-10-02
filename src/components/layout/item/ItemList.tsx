@@ -19,9 +19,11 @@ const ItemList: React.FC<ItemListProps> = (
 ) => {
   const router = useRouter();
   const items = useMemo(() => (Array.isArray(apiResponse) ? apiResponse : []), [apiResponse]);
-  const [selectedItems, setSelectedItems] = useState<{ [key: string]: boolean }>({});
+  const [selectedProductItems, setSelectedProductItems] = useState<{ [key: string]: boolean }>({});
   const [selectAll, setSelectAll] = useState(false);
   const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({});
+  const selectedItemIds = Object.keys(selectedProductItems).filter((key) => selectedProductItems[key]);
+
   useEffect(() => {
     const initialStatus = items.reduce(
       (acc, item) => {
@@ -32,10 +34,13 @@ const ItemList: React.FC<ItemListProps> = (
     );
     setActiveStatusMap(initialStatus);
   }, [items]);
+
   const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
     let result;
     if (actionType === "delete" && confirm("선택하신 아이템을 삭제하시겠어요?")) {
       result = await fetchDeleteItems([itemId], campaign_id, context);
+    } else if (actionType === "delete_items" && confirm("선택하신 아이템을 삭제하시겠어요?")) {
+      result = await fetchDeleteItems(selectedItemIds, campaign_id, context);
     } else if (actionType === "activate" && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
       result = await fetchActivateItem(itemId, campaign_id, context);
     }
@@ -72,12 +77,12 @@ const ItemList: React.FC<ItemListProps> = (
       (acc, item) => ({ ...acc, [item.id]: isChecked }),
       {} as { [key: string]: boolean }
     );
-    setSelectedItems(updatedSelectedItems);
+    setSelectedProductItems(updatedSelectedItems);
   };
 
   const handleCheckboxChange = (itemId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-    setSelectedItems((prev) => {
+    setSelectedProductItems((prev) => {
       const updatedItems = { ...prev, [itemId]: isChecked };
       setSelectAll(items.every((item) => updatedItems[item.id]));
       return updatedItems;
@@ -121,7 +126,7 @@ const ItemList: React.FC<ItemListProps> = (
                     type="checkbox"
                     id={`item_${item.id}`}
                     name={`item_${item.id}`}
-                    checked={selectedItems[item.id] || false}
+                    checked={selectedProductItems[item.id] || false}
                     onChange={handleCheckboxChange(item.id)}
                   />
                 </td>
@@ -130,13 +135,13 @@ const ItemList: React.FC<ItemListProps> = (
                   {item.item_type === "PRODUCT" ? (
                     <div className="w-full flex justify-center">
                       <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
-                        프로덕트
+                        상품
                       </div>
                     </div>
                   ) : (
                     <div className="w-full flex justify-center">
                       <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
-                        프로모션
+                        쿠폰
                       </div>
                     </div>
                   )}
@@ -169,8 +174,8 @@ const ItemList: React.FC<ItemListProps> = (
             ))}
             {!items.length && (
               <tr>
-                <td className={tbodyStyle} colSpan={6}>
-                  현재 사용중인 아이템이 없어요,
+                <td className={"text-center text-sm text-gray-500 p-3"} colSpan={6}>
+                  현재 사용중인 아이템이 없어요
                   <br />
                   새로운 아이템을 등록해 주세요.
                 </td>
@@ -180,9 +185,9 @@ const ItemList: React.FC<ItemListProps> = (
         </table>
         <div className="items-center justify-between hidden pt-4 lg:flex">
           <button
-            className="py-1 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
+            className="py-2 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
             id="delete_items"
-            onClick={(e) => handleAction(e, "delete", "")}
+            onClick={(e) => handleAction(e, "delete_items", "")}
           >
             선택삭제
           </button>
@@ -216,12 +221,10 @@ const ItemList: React.FC<ItemListProps> = (
                 <strong>아이템 종류: </strong>
               </div>
               {item.item_type === "PRODUCT" ? (
-                <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
-                  프로덕트
-                </div>
+                <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">상품</div>
               ) : (
                 <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
-                  프로모션
+                  쿠폰
                 </div>
               )}
             </div>
@@ -259,8 +262,8 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         ))}
         {!items.length && (
-          <div className="text-center text-gray-500 p-3">
-            현재 사용중인 아이템이 없어요,
+          <div className="text-center text-sm text-gray-500 p-3">
+            현재 사용중인 아이템이 없어요
             <br />
             새로운 아이템을 등록해 주세요.
           </div>

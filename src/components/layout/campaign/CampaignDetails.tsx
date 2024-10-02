@@ -40,12 +40,6 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [activeStatus, setActiveStatus] = useState<boolean>(campaignArgs.active);
-
-  useEffect(() => {
-    const initialStatus = !campaignArgs.active;
-    setActiveStatus(initialStatus);
-  }, [campaignArgs]);
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();

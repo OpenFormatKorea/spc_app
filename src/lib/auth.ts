@@ -6,6 +6,7 @@ type AuthResult = { redirect: Redirect } | { props: {} };
 
 const checkAuth = (context: GetServerSidePropsContext): boolean => {
   const access = getCookie("access", context);
+  console.log("checkAuth context", context);
   if (!access) {
     deleteCookies(context);
     return false;

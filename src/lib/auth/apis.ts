@@ -20,10 +20,10 @@ export async function fetchSignUp(info: AuthArgs) {
     });
 
     document.cookie = `access=${access};path=/;domain=${
-        process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
+      process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
     }`;
     document.cookie = `refresh=${refresh};path=/;domain=${
-        process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
+      process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
     }`;
     return { success: true, message: "회원가입 성공하였습니다." };
   } catch (error) {
@@ -40,6 +40,10 @@ export async function fetchLogIn(info: AuthArgs) {
     const {
       data: { access, refresh, shop_id },
     }: { data: { access: string; refresh: string; shop_id: string } } = await axios.post(apiUrl, {
+      username,
+      password,
+    });
+    const response = await axios.post(apiUrl, {
       username,
       password,
     });
@@ -74,8 +78,8 @@ export async function fetchResetPW(info: AuthArgs) {
     return { success: true, message: `요청이 접수되었습니다. 아이디와 연결된 이메일을 확인해주세요`, status };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      console.log('Error response:', error.response);
-      const {status, data} = error.response;
+      console.log("Error response:", error.response);
+      const { status, data } = error.response;
     }
     return { success: false, message: "아이디를 확인 해 주세요", status };
   }
@@ -92,38 +96,38 @@ export async function fetchChangePW(info: ChangePWArgs) {
       password,
       token,
     });
-    const {access, refresh} = response.data;
+    const { access, refresh } = response.data;
     document.cookie = `access=${access};path=/;domain=${
-        process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
+      process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
     }`;
     document.cookie = `refresh=${refresh};path=/;domain=${
-        process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
+      process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
     }`;
-    return {success: true, message: "비밀번호 변경을 성공하였습니다."};
+    return { success: true, message: "비밀번호 변경을 성공하였습니다." };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      console.log('Error response:', error.response);
-      const {status, data} = error.response;
+      console.log("Error response:", error.response);
+      const { status, data } = error.response;
       // Handle specific error status codes
       if (status === 400) {
         let messages = data["password"] || [];
         for (let message of messages) {
           if (message === "This password is too common.") {
-            return {success: false, message: "비밀번호가 너무 흔합니다. 다른 비밀번호를 사용해주세요"};
+            return { success: false, message: "비밀번호가 너무 흔합니다. 다른 비밀번호를 사용해주세요" };
           }
           if (message === "The password is too similar to the username.") {
-            return {success: false, message: "비밀번호가 아이디와 너무 유사합니다. 다른 비밀번호를 사용해주세요"};
+            return { success: false, message: "비밀번호가 아이디와 너무 유사합니다. 다른 비밀번호를 사용해주세요" };
           }
           if (message === "The password is too similar to the email.") {
-            return {success: false, message: "비밀번호가 이메일과 너무 유사합니다. 다른 비밀번호를 사용해주세요"};
+            return { success: false, message: "비밀번호가 이메일과 너무 유사합니다. 다른 비밀번호를 사용해주세요" };
           }
         }
-        return {success: false, message: "인센토 팀으로 문의를 남겨주세요"};
+        return { success: false, message: "인센토 팀으로 문의를 남겨주세요" };
       }
       if (status === 404) {
-        return {success: false, message: "비밀번호 재설정 링크가 만료되었습니다. 다시 시도해주세요"};
+        return { success: false, message: "비밀번호 재설정 링크가 만료되었습니다. 다시 시도해주세요" };
       }
     }
-    return {success: false, message: "인센토 팀으로 문의를 남겨주세요"};
+    return { success: false, message: "인센토 팀으로 문의를 남겨주세요" };
   }
 }
