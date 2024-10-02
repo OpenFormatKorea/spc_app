@@ -120,6 +120,7 @@ export const getAxiosInstanceClient = () => {
 
     const axiosInstance = axios.create({
       baseURL,
+      withCredentials: true,
       headers: { Authorization: `Bearer ${access}` },
     });
 
