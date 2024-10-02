@@ -60,7 +60,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
-      console.log("result.data:: handle submit: ", result.data);
+      console.log("result: handle submit: ", result);
 
       if (result.success) {
         setCookie("access_standalone", result.data?.access);
