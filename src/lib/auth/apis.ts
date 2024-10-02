@@ -19,7 +19,7 @@ export async function fetchSignUp(info: AuthArgs) {
       password,
     });
 
-    document.cookie = `access_standalone=${access};path=/;domain=${
+    document.cookie = `access=${access};path=/;domain=${
       process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
     }`;
     document.cookie = `refresh=${refresh};path=/;domain=${

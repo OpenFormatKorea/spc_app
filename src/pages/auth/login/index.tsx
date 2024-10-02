@@ -62,7 +62,7 @@ const Login: React.FC = () => {
       const result = await postLogin(loginInfo);
       console.log("result: handle submit: ", result);
       if (result.success) {
-        setCookie("access_standalone", result.data?.access);
+        setCookie("access", result.data?.access);
         console.log("result.data?.access:: handle submit: ", result.data?.access);
         setCookie("refresh", result.data?.refresh);
         setCookie("shop_id", result.data?.shop_id);

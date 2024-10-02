@@ -13,75 +13,127 @@ import { GetServerSidePropsContext } from "next";
  * Returns Axios instance for Next.js server: cannot access browser window
  */
 
-// export const getAxiosInstanceServer = async (context: GetServerSidePropsContext, req: InternalAxiosRequestConfig) => {
-//   try {
-//     const access = getAccessTokenFromCookies(context);
-//     const refresh = getRefreshTokenFromCookies(context);
-//     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
-
-//     if (!access) {
-//       const response = await axios.post(`${baseURL}/account/token/refresh/`, {
-//         refresh,
-//       });
-//       response;
-//       setAccessTokenToCookies(context, response.data.access);
-//       setRefreshTokenToCookies(context, response.data.refresh);
-//     }
-
-//     const axiosInstance = axios.create({
-//       baseURL,
-//       withCredentials: true,
-//       headers: { Authorization: `Bearer ${access}` },
-//     });
-
-//     req.headers.Authorization = `Bearer ${access as string}`;
-
-//     console.log("axiosInstance req.headers.Authorization:: ", req.headers.Authorization);
-//     console.log("axiosInstance:: ", axiosInstance);
-//     return axiosInstance;
-//   } catch (err) {
-//     if (typeof window !== "undefined")
-//       window.location.replace(
-//         process.env.NODE_ENV === "development"
-//           ? "http://dev-fe.standalone.incento.kr/auth/login"
-//           : "https://dev-fe.standalone.incento.kr/auth/login"
-//       );
-//     return;
-//   }
-// };
-
 export const getAxiosInstanceServer = async (context: GetServerSidePropsContext) => {
   try {
     const access = getAccessTokenFromCookies(context);
     const refresh = getRefreshTokenFromCookies(context);
     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
 
-    const req: InternalAxiosRequestConfig = {
-      headers: new AxiosHeaders({
-        Authorization: `Bearer ${access}`,
-      }),
-    };
+    if (!access) {
+      const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+        refresh,
+      });
+      response;
+      setAccessTokenToCookies(context, response.data.access);
+      setRefreshTokenToCookies(context, response.data.refresh);
+    }
 
     const axiosInstance = axios.create({
       baseURL,
       withCredentials: true,
-      headers: req.headers,
+      headers: { Authorization: `Bearer ${access}` },
     });
 
-    console.log("axiosInstance req.headers.Authorization:: ", req.headers.Authorization);
-    console.log("axiosInstance:: ", axiosInstance);
+    axiosInstance.interceptors.request.use(async (req: InternalAxiosRequestConfig) => {
+      const access_decoded: { exp: number } = jwtDecode(access as string);
+      const isExpired = access_decoded.exp * 1000 < new Date().getTime();
+
+      if (isExpired) {
+        const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+          refresh,
+        });
+        setAccessTokenToCookies(context, response.data.access);
+        setRefreshTokenToCookies(context, response.data.refresh);
+
+        req.headers.Authorization = `Bearer ${response.data.access as string}`;
+        return req;
+      }
+      if (!refresh) {
+        if (typeof window !== "undefined")
+          window.location.replace(
+            process.env.NODE_ENV === "development"
+              ? "http://dev-fe.standalone.incento.kr/auth/login"
+              : "https://dev-fe.standalone.incento.kr/auth/login"
+          );
+        return req;
+      }
+
+      const refresh_decoded: { exp: number } = jwtDecode(refresh as string);
+      if (refresh_decoded.exp * 1000 < new Date().getTime()) {
+        deleteCookie("access", {
+          ...context,
+        });
+        deleteCookie("refresh", {
+          ...context,
+        });
+        if (typeof window !== "undefined")
+          window.location.replace(
+            process.env.NODE_ENV === "development"
+              ? "http://dev-fe.standalone.incento.kr/auth/login"
+              : "https://dev-fe.standalone.incento.kr/auth/login"
+          );
+        return req;
+      }
+      // const response = await axios.post(`${baseURL}/account/token/refresh/`, {
+      //   refresh,
+      // });
+      // setAccessTokenToCookies(context, response.data.access);
+      // setRefreshTokenToCookies(context, response.data.refresh);
+
+      // if (!req.headers) req.headers = {} as AxiosRequestHeaders;
+      // req.headers.Authorization = `Bearer ${response.data.access as string}`;
+
+      return req;
+    });
+
+    axiosInstance.interceptors.response.use((response) => {
+      return response;
+    });
+
     return axiosInstance;
   } catch (err) {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined")
       window.location.replace(
         process.env.NODE_ENV === "development"
           ? "http://dev-fe.standalone.incento.kr/auth/login"
           : "https://dev-fe.standalone.incento.kr/auth/login"
       );
-    }
     return;
   }
 };
+
+// export const getAxiosInstanceServer = async (context: GetServerSidePropsContext) => {
+//   try {
+//     const access = getAccessTokenFromCookies(context);
+//     const refresh = getRefreshTokenFromCookies(context);
+//     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
+
+//     const req: InternalAxiosRequestConfig = {
+//       headers: new AxiosHeaders({
+//         Authorization: `Bearer ${access}`,
+//       }),
+//     };
+
+//     const axiosInstance = axios.create({
+//       baseURL,
+//       withCredentials: true,
+//       headers: req.headers,
+//     });
+
+//     console.log("axiosInstance req.headers.Authorization:: ", req.headers.Authorization);
+//     console.log("axiosInstance:: ", axiosInstance);
+//     return axiosInstance;
+//   } catch (err) {
+//     if (typeof window !== "undefined") {
+//       window.location.replace(
+//         process.env.NODE_ENV === "development"
+//           ? "http://dev-fe.standalone.incento.kr/auth/login"
+//           : "https://dev-fe.standalone.incento.kr/auth/login"
+//       );
+//     }
+//     return;
+//   }
+// };
 
 /**
  *
@@ -89,7 +141,7 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
  */
 export const getAxiosInstanceClient = () => {
   try {
-    const access = getCookie("access_standalone");
+    const access = getCookie("access");
     const refresh = getCookie("refresh");
     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
     if (!access) {
@@ -124,7 +176,7 @@ export const getAxiosInstanceClient = () => {
       }
       const refresh_decoded: { exp: number } = jwtDecode(refresh as string);
       if (refresh_decoded.exp * 1000 < new Date().getTime()) {
-        deleteCookie("access_standalone");
+        deleteCookie("access");
         deleteCookie("refresh");
         if (typeof window !== "undefined")
           window.location.replace(
@@ -138,7 +190,7 @@ export const getAxiosInstanceClient = () => {
         refresh,
       });
 
-      setCookie("access_standalone", response.data.access);
+      setCookie("access", response.data.access);
       setCookie("refresh", response.data.refresh);
 
       const axiosInstance = axios.create({

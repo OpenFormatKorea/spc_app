@@ -5,7 +5,7 @@ import { deleteCookie, getCookie } from "cookies-next";
 type AuthResult = { redirect: Redirect } | { props: {} };
 
 const checkAuth = (context: GetServerSidePropsContext): boolean => {
-  const access = getCookie("access_standalone", context);
+  const access = getCookie("access", context);
   console.log("checkAuth context", context);
   if (!access) {
     deleteCookies(context);
@@ -15,7 +15,7 @@ const checkAuth = (context: GetServerSidePropsContext): boolean => {
 };
 
 export const deleteCookies = (context: GetServerSidePropsContext) => {
-  deleteCookie("access_standalone");
+  deleteCookie("access");
   deleteCookie("refresh");
   deleteCookie("shop_id");
 };

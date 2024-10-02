@@ -8,9 +8,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 export const handleSignOut = async (event?: React.FormEvent) => {
   if (event) event.preventDefault();
 
-  const access = getCookie("access_standalone");
+  const access = getCookie("access");
   if (access) {
-    deleteCookie("access_standalone");
+    deleteCookie("access");
     deleteCookie("refresh");
     deleteCookie("shop_id");
     router.push("/home");
