@@ -9,9 +9,11 @@ interface ItemTypeDetailsProps {
   itemArgs: ItemArgs;
   selectedProductItems: ProductsArgs[];
   disableInput: boolean;
+  description: string;
   setItem_type: (value: ItemType) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>; // Updated type
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>; // Updated type
+  setDescription: (value: string) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   openModal?: () => void;
 }
@@ -22,9 +24,11 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   itemArgs,
   disableInput,
   selectedProductItems,
+  description,
   setItem_type,
   setProductInputs,
   setPromotionInputs,
+  setDescription,
   handleKeyDown,
   openModal,
 }) => {
@@ -33,14 +37,13 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   const handleItemTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setItem_type(e.target.value as ItemType);
   };
-
   useEffect(() => {
     if (page_type === "DETAILS") {
       setProductInputs(itemArgs.products);
       setPromotionInputs(itemArgs.promotions);
     }
   }, [page_type]);
-
+  console.log("itemArgs", itemArgs);
   return (
     <>
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">아이템 옵션</h1>
@@ -65,20 +68,25 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
               disabled={disableInput}
             />
           </div>
-          <button
-            id="create_item_container"
-            className={`border p-1 ${
-              disableInput ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 cursor-pointer"
-            }  text-white rounded-lg min-w-[45px] text-center `}
-            onClick={openModal}
-            disabled={disableInput}
-          >
-            추가
-          </button>
+          {itemArgs.item_type === ItemType.PD && (
+            <button
+              id="create_item_container"
+              className={`border p-1 ${
+                disableInput ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 cursor-pointer"
+              }  text-white rounded-lg min-w-[45px] text-center `}
+              onClick={openModal}
+              disabled={disableInput}
+            >
+              추가
+            </button>
+          )}
         </div>
         <ItemTypeComponent
           item_type={item_type}
           page_type={page_type}
+          itemArgs={itemArgs}
+          description={description}
+          setDescription={setDescription}
           selectedProductItems={selectedProductItems}
           handleKeyDown={handleKeyDown}
         />

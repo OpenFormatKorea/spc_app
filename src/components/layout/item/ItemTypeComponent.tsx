@@ -1,18 +1,24 @@
 import InputTextBox from "@/components/base/InputText";
-import { ItemType, ProductsArgs } from "@/lib/item/types";
+import { ItemArgs, ItemType, ProductsArgs, PromotionsArgs } from "@/lib/item/types";
 import { useEffect, useState } from "react";
 
 interface ItemTypeComponentProps {
   page_type: "DETAILS" | "NEW";
   item_type: ItemType;
+  itemArgs: ItemArgs;
   selectedProductItems: ProductsArgs[];
+  description: string;
+  setDescription: (value: string) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   page_type,
   item_type,
+  itemArgs,
   selectedProductItems,
+  description,
+  setDescription,
   handleKeyDown,
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
@@ -22,8 +28,6 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   useEffect(() => {
     setDisableInput(page_type === "DETAILS");
   }, [page_type]);
-
-  const handleInputChange = (value: string) => {};
 
   return (
     <div className="contents-container w-full justify-between pb-4">
@@ -67,8 +71,8 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
               type="text"
               id={`promotion_description`}
               placeholder="프로모션 설명을 선택하세요."
-              value={""}
-              onChange={(e) => handleInputChange(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
               disabled={disableInput}
             />
