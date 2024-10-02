@@ -15,9 +15,9 @@ const Navbar = () => {
   const handleSignOut = async (event?: React.FormEvent) => {
     if (event) event.preventDefault();
 
-    const access = getCookie("access");
+    const access = getCookie("access_standalone");
     if (access) {
-      deleteCookie("access");
+      deleteCookie("access_standalone");
       deleteCookie("refresh");
       deleteCookie("shop_id");
       router.push("/home");

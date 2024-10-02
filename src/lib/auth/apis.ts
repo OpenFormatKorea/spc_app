@@ -19,7 +19,7 @@ export async function fetchSignUp(info: AuthArgs) {
       password,
     });
 
-    document.cookie = `access=${access};path=/;domain=${
+    document.cookie = `access_standalone=${access};path=/;domain=${
       process.env.NODE_ENV === "production" ? ".incento.kr" : "localhost"
     }`;
     document.cookie = `refresh=${refresh};path=/;domain=${
@@ -47,10 +47,7 @@ export async function fetchLogIn(info: AuthArgs) {
       username,
       password,
     });
-    console.log("fetchLogin access:", access);
-    console.log("fetchLogin refresh:", refresh);
-    console.log("fetchLogin shop_id:", shop_id);
-    console.log("fetchLogin response:", response);
+
     return { success: true, message: "로그인에 성공 하였습니다.", data: { access, refresh, shop_id } };
   } catch (error) {
     return { success: false, message: "아이디와 비밀번호를 확인 해 주세요" };

@@ -11,7 +11,7 @@ export function getShopIdFromCookies(context: GetServerSidePropsContext) {
 }
 
 export function getAccessTokenFromCookies(context: GetServerSidePropsContext) {
-  const acceess = getCookie("access", {
+  const acceess = getCookie("access_standalone", {
     ...context,
   });
   return acceess;
@@ -25,11 +25,11 @@ export function getRefreshTokenFromCookies(context: GetServerSidePropsContext) {
 }
 
 export function setAccessTokenToCookies(context: GetServerSidePropsContext, token: string) {
-  deleteCookie("access", {
+  deleteCookie("access_standalone", {
     ...context,
   });
 
-  setCookie("access", token, {
+  setCookie("access_standalone", token, {
     ...context,
   });
 }

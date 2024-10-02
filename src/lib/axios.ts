@@ -124,7 +124,7 @@ export const getAxiosInstanceClient = () => {
       }
       const refresh_decoded: { exp: number } = jwtDecode(refresh as string);
       if (refresh_decoded.exp * 1000 < new Date().getTime()) {
-        deleteCookie("access");
+        deleteCookie("access_standalone");
         deleteCookie("refresh");
         if (typeof window !== "undefined")
           window.location.replace(
@@ -138,7 +138,7 @@ export const getAxiosInstanceClient = () => {
         refresh,
       });
 
-      setCookie("access", response.data.access);
+      setCookie("access_standalone", response.data.access);
       setCookie("refresh", response.data.refresh);
 
       const axiosInstance = axios.create({
