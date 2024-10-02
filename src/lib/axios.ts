@@ -20,6 +20,8 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     const refresh = getRefreshTokenFromCookies(context);
     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
     //console.log("getAxiosInstanceServer getAccessTokenFromCookies access", access);
+    console.log("getAxiosInstanceServer context", context);
+
     console.log("getAxiosInstanceServer getRefreshTokenFromCookies refresh", refresh);
     console.log("getAxiosInstanceServer baseURL", baseURL);
 
