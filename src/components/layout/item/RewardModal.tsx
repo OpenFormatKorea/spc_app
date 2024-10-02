@@ -148,8 +148,6 @@ const RewardModal: React.FC<RewardModalProps> = ({
       } else {
         return false;
       }
-
-      console.log("rewardConditionsArgs", index, rewardConditionsArgs);
     });
   };
   useEffect(() => {});

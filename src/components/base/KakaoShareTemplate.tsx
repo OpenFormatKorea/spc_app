@@ -129,7 +129,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                 }
                                 alt="Selected"
                                 onError={(e) => {
-                                  e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png"; // Corrected path with leading slash
+                                  e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png";
                                 }}
                               />
                             </div>
@@ -165,7 +165,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                   }
                                   alt="Shop Logo"
                                   onError={(e) => {
-                                    e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png"; // Corrected path with leading slash
+                                    e.currentTarget.src = "images/kakao/kakaolink-no-logo-default.png"; // Corrected path with leading slash
                                   }}
                                   style={{ borderRadius: "35%" }}
                                 />

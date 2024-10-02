@@ -93,14 +93,16 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
               </div>
             ))}
           </div>
-          <div className="flex justify-end">
-            <button
-              className="p-1 mt-2 bg-red-500 cursor-pointer text-white rounded-lg min-w-[45px]"
-              onClick={() => handleDeleteRewards(index)}
-            >
-              삭제
-            </button>
-          </div>
+          {page_type === "DETAILS" && (
+            <div className="flex justify-end">
+              <button
+                className="p-1 mt-2 bg-red-500 cursor-pointer text-white rounded-lg min-w-[45px]"
+                onClick={() => handleDeleteRewards(index)}
+              >
+                삭제
+              </button>
+            </div>
+          )}
         </div>
       ))}
     </>

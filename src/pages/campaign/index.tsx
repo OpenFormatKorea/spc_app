@@ -14,9 +14,6 @@ import { getCookie } from "cookies-next";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
   const response = await fetchGetCampaignList(context);
-  console.log("getCookie('shop_id'):", getCookie("shop_id"));
-  console.log("index response", response);
-  console.log("index shop_id", shop_id);
   if (!shop_id) {
     return {
       redirect: {

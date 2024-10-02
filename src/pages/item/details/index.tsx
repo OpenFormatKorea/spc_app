@@ -24,8 +24,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
   const shop_id = getShopIdFromCookies(context);
   const IDetailApiResponse = await fetchGetItemDetails(item_id, campaign_id, context);
-  console.log("IDetailApiResponse", IDetailApiResponse);
-
   if (!IDetailApiResponse) {
     return {
       redirect: {
@@ -45,7 +43,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: string; campaign_id: string }) => {
   const response = apiResponse;
-  console.log("response", response);
   const page_type = "DETAILS"; // Assuming this value is being used
   const [title, setTitle] = useState(response.title);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
@@ -74,7 +71,8 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
   const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
   const [item_type, setItem_type] = useState<ItemType>(response.item_type);
   const [active, setActive] = useState(response.active);
-  const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
+  const [reward_type, setReward_Type] = useState<RewardType>(response.rewards[0].reward_type);
+
   const image: string = kakaoShareArgs.image;
   const shop_logo: string = kakaoShareArgs.shop_logo;
   const [description, setDescription] = useState<string>(response.promotions.description || "");
@@ -151,6 +149,7 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
               disableInput={true}
             />
             <RewardComponent
+              page_type="DETAILS"
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
               selectedCouponItems={selectedCouponItems}
@@ -161,7 +160,7 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
               setCouponInputs={setCouponInputs}
               setRewards={setRewards}
             />
-            <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
+            <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />
           </ContentsContainer>
         </div>
         <div>
