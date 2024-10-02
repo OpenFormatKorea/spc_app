@@ -24,6 +24,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
   const shop_id = getShopIdFromCookies(context);
   const IDetailApiResponse = await fetchGetItemDetails(item_id, campaign_id, context);
+  console.log("IDetailApiResponse", IDetailApiResponse);
+
   if (!IDetailApiResponse) {
     return {
       redirect: {
@@ -43,6 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: string; campaign_id: string }) => {
   const response = apiResponse;
+  console.log("response", response);
   const page_type = "DETAILS"; // Assuming this value is being used
   const [title, setTitle] = useState(response.title);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
@@ -61,7 +64,10 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
   );
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
   const selectedProductItem = [
-    { product_model_code: response.products.model_code, product_model_name: response.products.model_name },
+    {
+      product_model_code: response.products?.[0]?.model_code || "",
+      product_model_name: response.products?.[0]?.model_name || "",
+    },
   ];
   const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(response.kakao_args);
@@ -71,6 +77,7 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
   const [reward_type, setReward_Type] = useState<RewardType>(response.reward_type || "");
   const image: string = kakaoShareArgs.image;
   const shop_logo: string = kakaoShareArgs.shop_logo;
+  const [description, setDescription] = useState<string>(response.promotions.description || "");
 
   const itemArgs: ItemArgs = {
     id: response.id || "",
@@ -134,8 +141,10 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
               page_type="DETAILS"
               item_type={item_type}
               itemArgs={itemArgs}
+              description={description}
               selectedProductItems={selectedProductItem}
               setPromotionInputs={setPromotionInputs}
+              setDescription={setDescription}
               setItem_type={setItem_type}
               setProductInputs={setProductInputs}
               handleKeyDown={handleKeyDown}

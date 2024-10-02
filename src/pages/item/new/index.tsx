@@ -7,7 +7,7 @@ import RewardComponent from "@/components/layout/item/RewardComponent";
 import ItemDetails from "@/components/layout/item/ItemDetails";
 import ProductList from "@/components/layout/item/ProductList";
 import RewardCard from "@/components/layout/item/RewardCard";
-import { useState, useRef, KeyboardEvent } from "react";
+import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import { getShopIdFromCookies } from "@/lib/helper";
 import ReactS3Client from "@/context/ReactS3Client";
 import { ApiResponse } from "@/lib/types";
@@ -57,7 +57,8 @@ const NewItem = (
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
     { product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] },
   ]);
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
+  const [description, setDescription] = useState<string>("");
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: description }]);
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
   const [selectedProductItems, setSelectedProductItems] = useState<ProductsArgs[]>([]);
   const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
@@ -198,6 +199,10 @@ const NewItem = (
     }
   };
 
+  useEffect(() => {
+    setPromotionInputs([{ description: description }]);
+  }, [description]);
+
   return (
     <>
       <DashboardContainer>
@@ -235,7 +240,9 @@ const NewItem = (
               item_type={item_type}
               itemArgs={itemArgs}
               selectedProductItems={selectedProductItems}
+              description={description}
               setPromotionInputs={setPromotionInputs}
+              setDescription={setDescription}
               setItem_type={setItem_type}
               setProductInputs={setProductInputs}
               openModal={openModal}
