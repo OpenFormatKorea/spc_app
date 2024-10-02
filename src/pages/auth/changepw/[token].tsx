@@ -6,9 +6,9 @@ import {GetServerSideProps} from "next";
 import {useRouter} from "next/router";
 import {KeyboardEvent, useEffect, useRef, useState} from "react";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    return authenticateUser(context, "/auth/login");
-};
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//     return authenticateUser(context, "/auth/login");
+// };
 const changepw = () => {
     const [showPW, setShowPw] = useState(false);
     const [buttonDisabled, setButtonDisabled] = useState(true);
