@@ -13,7 +13,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
   const conditionTypes = ["referrer_conditions", "referee_conditions"] as const;
   const labelClass = "labelClass flex items-center text-sm text-left text-gray-500 w-[100px]";
   const inputFormClass = "inputForm flex items-center text-sm";
-
+  console.log("rewards", rewards);
   const handleDeleteRewards = (indexToDelete: number) => {
     if (confirm("리워드를 삭제하시겠습니까?")) {
       setRewards((prevRewards) => prevRewards.filter((_, index) => index !== indexToDelete));
