@@ -1,7 +1,6 @@
 // lib/auth.ts
 import { GetServerSidePropsContext, Redirect } from "next";
-import { getAccessTokenFromCookies } from "@/lib/helper";
-import { deleteCookies } from "@/lib/common";
+import { deleteCookies, getAccessTokenFromCookies } from "@/lib/helper";
 
 type AuthResult = { redirect: Redirect } | { props: {} };
 

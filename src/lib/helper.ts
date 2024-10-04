@@ -63,6 +63,15 @@ export function setLoading(dispatch: any, loading: boolean) {
   });
 }
 
+export const deleteCookies = () => {
+  deleteCookie("access_standalone");
+  deleteCookie("refresh_standalone");
+  deleteCookie("shop_id_standalone");
+  console.log("access_standalone deleted", getCookie("access_standalone"));
+  console.log("refresh_standalone deleted", getCookie("refresh_standalone"));
+  console.log("shop_id_standalone deleted", getCookie("shop_id_standalone"));
+};
+
 export const success_dispatch = (res: { status: number; message?: string }, dispatch: React.Dispatch<AnyAction>) => {
   if (res.status < 300 && res.status >= 200) {
     dispatch({

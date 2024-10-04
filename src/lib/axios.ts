@@ -28,7 +28,6 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
 
     const axiosInstance = axios.create({
       baseURL,
-      withCredentials: true,
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
