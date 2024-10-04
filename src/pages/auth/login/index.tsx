@@ -3,7 +3,12 @@ import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 
 import { fetchLogIn } from "@/lib/auth/apis";
 import { AuthArgs } from "@/lib/auth/types";
-import { setAccessTokenToCookies, setRefreshTokenToCookies, setShopIdTokenToCookies } from "@/lib/helper";
+import {
+  deleteCookies,
+  setAccessTokenToCookies,
+  setRefreshTokenToCookies,
+  setShopIdTokenToCookies,
+} from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
 
 import { useRouter } from "next/router";
@@ -62,6 +67,7 @@ const Login = (context: GetServerSidePropsContext) => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
       if (result.success) {
+        deleteCookies();
         const access: string = result.data?.access || "";
         const refresh: string = result.data?.refresh || "";
         const shop_id: string = result.data?.shop_id || "";
