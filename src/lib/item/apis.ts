@@ -2,7 +2,6 @@ import { ItemArgs, RewardPolicyArgs } from "@/lib/item/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
 import { fetchAPI } from "@/lib/api";
-import { error } from "console";
 
 // 리퍼럴 아이템
 

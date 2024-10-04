@@ -1,6 +1,6 @@
 import React, { KeyboardEvent, useEffect } from "react";
 import { ItemConditions, RewardType } from "@/lib/item/types";
-import ReferralCondition from "@/components/layout/item/ReferralCondition";
+import ReferralCondition from "@/components/layout/item/reward/ReferralCondition";
 
 interface RewardPolicyProps {
   trigger: string;

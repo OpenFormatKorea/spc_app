@@ -1,28 +1,27 @@
-import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import { fetchCreateItem, fetchGetProductCodeList, fetchGetCouponCodeList } from "@/lib/item/apis";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import RewardComponent from "@/components/layout/item/RewardComponent";
-import ItemDetails from "@/components/layout/item/ItemDetails";
-import ProductList from "@/components/layout/item/ProductList";
-import RewardCard from "@/components/layout/item/RewardCard";
-import { useState, useRef, KeyboardEvent, useEffect } from "react";
+import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import ItemNew from "@/components/layout/item/item/ItemNew";
+import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
+import ProductList from "@/components/layout/item/modal/ProductList";
+import RewardCard from "@/components/layout/item/reward/RewardCard";
+import RewardComponent from "@/components/layout/item/reward/RewardComponent";
 import { getShopIdFromCookies } from "@/lib/helper";
-import ReactS3Client from "@/context/ReactS3Client";
-import { ApiResponse } from "@/lib/types";
-import { useRouter } from "next/router";
+import { fetchGetProductCodeList, fetchGetCouponCodeList, fetchCreateItem } from "@/lib/item/apis";
 import {
-  ItemType,
-  ItemArgs,
-  RewardType,
-  RewardsArgs,
-  KakaoShareArgs,
   ProductsArgs,
   PromotionsArgs,
   CouponsArgs,
+  KakaoShareArgs,
+  RewardsArgs,
+  ItemType,
+  RewardType,
+  ItemArgs,
 } from "@/lib/item/types";
-import ItemNew from "@/components/layout/item/ItemNew";
+import { ApiResponse } from "@/lib/types";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+import { useState, useRef, useEffect, KeyboardEvent } from "react";
+import ReactS3Client from "@/lib/aws/ReactS3Client";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -178,6 +177,7 @@ const NewItem = (
 
   const handleSubmit = async (event: React.FormEvent) => {
     if (event.currentTarget.id === "create_item" && infoCheck()) {
+      console.log("create_item itemArgs", itemArgs);
       const result = await fetchCreateItem(itemArgs, campaign_id, context);
       if (result.status === 200) {
         alert(result.message);

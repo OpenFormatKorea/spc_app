@@ -1,6 +1,6 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import ItemList from "@/components/layout/item/ItemList";
+import ItemList from "@/components/layout/item/item/ItemList";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";

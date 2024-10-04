@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
+import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import ItemList from "@/components/layout/item/item/ItemList";
+import { authenticateUser } from "@/lib/auth";
+import { fetchGetCampaignDetails, fetchModifyCampaign, fetchDeleteCampaign } from "@/lib/campaign/apis";
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { ApiResponse } from "@/lib/types";
-import ItemList from "@/components/layout/item/ItemList";
-import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import { fetchGetCampaignDetails, fetchModifyCampaign, fetchDeleteCampaign } from "@/lib/campaign/apis";
 import { fetchGetItemList } from "@/lib/item/apis";
+import { ApiResponse } from "@/lib/types";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { authenticateUser } from "@/lib/auth";
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
   const shop_id: any = getShopIdFromCookies(context);

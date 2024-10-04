@@ -1,6 +1,6 @@
 import React, { useState, KeyboardEvent, Dispatch, useEffect } from "react";
 import InputTextBox from "@/components/base/InputText";
-import RewardPolicySetting from "@/components/layout/item/RewardPolicySetting";
+import RewardPolicySetting from "@/components/layout/item/reward/RewardPolicySetting";
 import {
   RewardType,
   RewardsArgs,

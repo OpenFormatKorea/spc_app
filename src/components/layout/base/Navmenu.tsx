@@ -6,7 +6,6 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
-import LogoutIcon from "@mui/icons-material/Logout";
 
 interface NavmenuProps {
   menutitle: string;

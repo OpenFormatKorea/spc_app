@@ -1,6 +1,5 @@
 import InputTextBox from "@/components/base/InputText";
 import KakaoShareTemplate from "@/components/base/KakaoShareTemplate";
-import { fetchActivateItem } from "@/lib/item/apis";
 import { ItemType, ItemArgs, ProductsArgs, PromotionsArgs, KakaoShareArgs } from "@/lib/item/types";
 import { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";

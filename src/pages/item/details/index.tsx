@@ -1,9 +1,8 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import ItemTypeDetails from "@/components/layout/item/ItemTypeDetails";
-import ItemDetails from "@/components/layout/item/ItemDetails";
-import RewardCard from "@/components/layout/item/RewardCard";
-import RewardComponent from "@/components/layout/item/RewardComponent";
+import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
+import ItemDetails from "@/components/layout/item/item/ItemDetails";
+import RewardComponent from "@/components/layout/item/reward/RewardComponent";
 import { useState, useRef, KeyboardEvent } from "react";
 import { fetchGetItemDetails } from "@/lib/item/apis";
 import { getShopIdFromCookies } from "@/lib/helper";
@@ -19,6 +18,7 @@ import {
   KakaoShareArgs,
   CouponsArgs,
 } from "@/lib/item/types";
+import RewardCard from "@/components/layout/item/reward/RewardCard";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;

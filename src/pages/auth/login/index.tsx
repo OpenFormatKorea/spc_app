@@ -1,6 +1,5 @@
 import AuthContainer from "@/components/layout/auth/AuthContainer";
 import AuthLogin from "@/components/layout/auth/AuthLoginForm";
-
 import { fetchLogIn } from "@/lib/auth/apis";
 import { AuthArgs } from "@/lib/auth/types";
 import {
@@ -10,7 +9,6 @@ import {
   setShopIdTokenToCookies,
 } from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
-
 import { useRouter } from "next/router";
 import { useRef, useState, KeyboardEvent } from "react";
 

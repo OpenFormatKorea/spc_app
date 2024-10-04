@@ -1,5 +1,5 @@
 import InputRadioBox from "@/components/base/InputRadio";
-import ItemTypeComponent from "@/components/layout/item/ItemTypeComponent";
+import ItemTypeComponent from "@/components/layout/item/item/ItemTypeComponent";
 import { ItemArgs, ProductsArgs, ItemType, PromotionsArgs } from "@/lib/item/types";
 import { useEffect } from "react";
 

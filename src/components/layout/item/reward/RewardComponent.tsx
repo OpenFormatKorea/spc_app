@@ -1,10 +1,10 @@
 import React, { useState, KeyboardEvent, useEffect } from "react";
 import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
-import CouponList from "@/components/layout/item/CouponList";
 import { ApiResponse } from "@/lib/types";
 import InputTextBox from "@/components/base/InputText";
-import RewardModal from "@/components/layout/item/RewardModal";
+import RewardModal from "@/components/layout/item/reward/RewardModal";
+import CouponList from "@/components/layout/item/modal/CouponList";
 
 interface RewardComponentProps {
   apiResponse?: ApiResponse;
@@ -47,11 +47,6 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
 
-  // const handleInputChange = (value: string) => {};
-  // useEffect(() => {
-  //   setSelectedCouponItems([]);
-  //   setCouponInputs([]);
-  // }, [reward_type]);
   return (
     <>
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">리워드</h1>

@@ -2,7 +2,6 @@ import { ApiResponse } from "@/lib/types";
 import { useMemo, useState } from "react";
 import { ProductListArgs, ProductsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
-import item from "@/pages/item";
 
 interface ProductListProps {
   apiResponse: ApiResponse;

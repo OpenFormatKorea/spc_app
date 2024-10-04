@@ -6,7 +6,7 @@ import {
   RewardPolicyArgs,
   RewardType,
 } from "@/lib/item/types";
-import RewardPolicy from "@/components/layout/item/RewardPolicy";
+import RewardPolicy from "@/components/layout/item/reward/RewardPolicy";
 
 interface RewardPolicySettingProps {
   inputformClass: string;

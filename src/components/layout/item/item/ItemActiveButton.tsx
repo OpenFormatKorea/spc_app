@@ -1,6 +1,5 @@
 import { fetchActivateItem } from "@/lib/item/apis";
 import { GetServerSidePropsContext } from "next";
-import React, { useState } from "react";
 interface ItemActiveButtonProps {
   view: "MOBILE" | "PC";
   item_id: string;

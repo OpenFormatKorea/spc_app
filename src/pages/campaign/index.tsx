@@ -8,7 +8,6 @@ import React from "react";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import AddIcon from "@mui/icons-material/Add";
-import { getCookie } from "cookies-next";
 
 // Fetches campaign data during server-side rendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
