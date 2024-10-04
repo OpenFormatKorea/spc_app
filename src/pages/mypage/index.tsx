@@ -4,13 +4,13 @@ import MyPageDetails from "@/components/layout/mypage/MyPageDetails";
 import { fetchGetUserInfo } from "@/lib/mypage/apis";
 import { UserInfoProps } from "@/lib/mypage/types";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetServerSideProps } from "next";
 import router from "next/router";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await fetchGetUserInfo(context);
   return { props: { data } };
 };
-const DetailsMyPage = (data: UserInfoProps, context: GetServerSidePropsContext) => {
+const DetailsMyPage = (data: UserInfoProps) => {
   const userInfo = data.data;
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;

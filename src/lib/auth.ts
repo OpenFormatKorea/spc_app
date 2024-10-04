@@ -1,23 +1,17 @@
 // lib/auth.ts
 import { GetServerSidePropsContext, Redirect } from "next";
-import { deleteCookie, getCookie } from "cookies-next";
+import { getAccessTokenFromCookies } from "@/lib/helper";
+import { deleteCookies } from "@/lib/common";
 
 type AuthResult = { redirect: Redirect } | { props: {} };
 
 const checkAuth = (context: GetServerSidePropsContext): boolean => {
-  const access = getCookie("access", context);
-  console.log("checkAuth context", context);
+  const access = getAccessTokenFromCookies(context);
   if (!access) {
-    deleteCookies(context);
+    deleteCookies();
     return false;
   }
   return true;
-};
-
-export const deleteCookies = (context: GetServerSidePropsContext) => {
-  deleteCookie("access");
-  deleteCookie("refresh");
-  deleteCookie("shop_id");
 };
 
 export const authenticateUser = (context: GetServerSidePropsContext, redirectTo: string): AuthResult => {

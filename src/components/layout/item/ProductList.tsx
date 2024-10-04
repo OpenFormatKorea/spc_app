@@ -2,6 +2,7 @@ import { ApiResponse } from "@/lib/types";
 import { useMemo, useState } from "react";
 import { ProductListArgs, ProductsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
+import item from "@/pages/item";
 
 interface ProductListProps {
   apiResponse: ApiResponse;
@@ -24,49 +25,47 @@ const ProductList: React.FC<ProductListProps> = ({
     () => (Array.isArray(apiResponse?.data.data.content) ? apiResponse.data.data.content : []),
     [apiResponse]
   );
-
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
+    setSelectAll(isChecked);
     if (isChecked) {
       const allProducts = products.map((product: ProductListArgs) => ({
         product_model_code: product.gid,
         product_model_name: product.name,
         images: [{ posThumb: product.posThumb || "" }, { thumb: product.thumb || "" }],
       }));
-
-      const allProductIds = products.map((product: ProductListArgs) => product.gid); // Array of all product IDs
       setProductInputs(allProducts);
-      setSelectedItemList(allProductIds);
+      setSelectedItemList(products.map((product: ProductListArgs) => product.gid));
     } else {
       setProductInputs([]);
       setSelectedItemList([]);
     }
-    setSelectAll(isChecked);
   };
 
-  // Handle individual checkbox toggle
   const handleCheckboxChange = (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-    const updatedSelectedItems = isChecked
-      ? [...selectedItemList, productGid]
-      : selectedItemList.filter((gid) => gid !== productGid);
-
-    const updatedProducts = products
-      .filter((product: ProductListArgs) => updatedSelectedItems.includes(product.gid))
-      .map((product: ProductListArgs) => ({
-        product_model_code: product.gid,
-        product_model_name: product.name,
-        images: [{ posThumb: product.posThumb || "" }, { thumb: product.thumb || "" }],
-      }));
-
-    setProductInputs(updatedProducts);
-    setSelectAll(updatedSelectedItems.length === products.length);
+    setSelectedItemList((prevSelected) => {
+      let updatedSelectedItems;
+      if (isChecked) {
+        updatedSelectedItems = [...prevSelected, productGid];
+      } else {
+        updatedSelectedItems = prevSelected.filter((gid) => gid !== productGid);
+      }
+      const updatedProducts = products
+        .filter((product: ProductListArgs) => updatedSelectedItems.includes(product.gid))
+        .map((product: ProductListArgs) => ({
+          product_model_code: product.gid,
+          product_model_name: product.name,
+          images: [{ posThumb: product.posThumb || "" }, { thumb: product.thumb || "" }],
+        }));
+      setProductInputs(updatedProducts);
+      setSelectAll(updatedSelectedItems.length === products.length);
+      return updatedSelectedItems;
+    });
   };
 
-  // Handle the final action for product selection
   const handleAction = async () => {
     if (confirm("해당 상품을 선택 하시겠어요?")) {
       setSelectedProductItems(productInputs);
@@ -74,7 +73,6 @@ const ProductList: React.FC<ProductListProps> = ({
     }
   };
 
-  // Styling for table headers and body cells
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle = "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
   const labelClass = "text-xs pt-4 text-gray-500";
@@ -100,8 +98,9 @@ const ProductList: React.FC<ProductListProps> = ({
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th className={theadStyle}>POS 썸네일</th>
                     <th className={theadStyle}>상품 ID</th>
+
+                    <th className={theadStyle}>POS 썸네일</th>
                     <th className={theadStyle}>상품명</th>
                   </tr>
                 </thead>
@@ -113,12 +112,12 @@ const ProductList: React.FC<ProductListProps> = ({
                           type="checkbox"
                           id={`item_${product.gid}`}
                           name={`item_${product.gid}`}
-                          checked={productInputs.some(
-                            (inputProduct) => inputProduct.product_model_code === product.gid
-                          )}
+                          checked={selectedItemList.includes(product.gid)}
                           onChange={handleCheckboxChange(product.gid)}
                         />
                       </td>
+                      <td className={tbodyStyle}>{product.gid}</td>
+
                       <td className={tbodyStyle}>
                         <div className="w-full flex justify-center items-center text-center">
                           <img
@@ -128,7 +127,6 @@ const ProductList: React.FC<ProductListProps> = ({
                           />
                         </div>
                       </td>
-                      <td className={tbodyStyle}>{product.gid}</td>
                       <td className={tbodyStyle}>{product.name}</td>
                     </tr>
                   ))}

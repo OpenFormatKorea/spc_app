@@ -9,8 +9,6 @@ interface ItemNewProps {
   page_type: "DETAILS" | "NEW";
   itemArgs: ItemArgs;
   kakaoShareArgs: KakaoShareArgs;
-  campaign_id: string;
-  active: boolean;
   image: string;
   shop_logo: string;
   image_result?: string;
@@ -21,7 +19,6 @@ interface ItemNewProps {
   setTitle: (value: string) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>;
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>;
-  setActive: (value: boolean) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onChangeImage: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -31,8 +28,6 @@ const ItemNew: React.FC<ItemNewProps> = (
     page_type,
     itemArgs,
     kakaoShareArgs,
-    campaign_id,
-    active,
     image,
     shop_logo,
     image_result,
@@ -42,7 +37,6 @@ const ItemNew: React.FC<ItemNewProps> = (
     setTitle,
     setProductInputs,
     setPromotionInputs,
-    setActive,
     handleKeyDown,
     onChangeImage,
   },
@@ -50,19 +44,6 @@ const ItemNew: React.FC<ItemNewProps> = (
 ) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const labelClass = "text-xs pt-4 text-gray-500";
-  const item_id = itemArgs.id || "";
-
-  const handleActiveStatus = async () => {
-    const newActiveStatus = !itemArgs.active;
-    if (page_type === "DETAILS" && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
-      setActive(newActiveStatus);
-      const result = await fetchActivateItem(item_id, campaign_id, context);
-      if (result.status !== 200) {
-        alert("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
-        setActive(!newActiveStatus);
-      }
-    }
-  };
 
   useEffect(() => {
     if (page_type === "DETAILS") {

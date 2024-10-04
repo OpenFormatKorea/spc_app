@@ -64,8 +64,8 @@ const NewItem = (
   const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
     shop_name: "",
-    image: "/images/kakao/kakaolink-no-logo-default.png",
-    shop_logo: "/images/kakao/kakaolink-no-logo-default.png",
+    image: "images/kakao/kakaolink-no-logo-default.png",
+    shop_logo: "images/kakao/kakaolink-no-logo-default.png",
     title: "",
     description: "",
     button_name: "",
@@ -77,7 +77,6 @@ const NewItem = (
   const [image_result, setImage_result] = useState<string>("");
   const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
-  const [active, setActive] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
@@ -91,7 +90,7 @@ const NewItem = (
     promotions: promotionInputs,
     rewards,
     campaign_id,
-    active,
+    active: false,
   };
 
   const infoCheck = () => {
@@ -217,14 +216,11 @@ const NewItem = (
               page_type="NEW"
               itemArgs={itemArgs}
               kakaoShareArgs={kakaoShareArgs}
-              campaign_id={campaign_id}
-              active={active}
               setItem_type={setItem_type}
               setTitle={setTitle}
               setKakaoShareArgs={setKakaoShareArgs}
               setProductInputs={setProductInputs}
               setPromotionInputs={setPromotionInputs}
-              setActive={setActive}
               handleKeyDown={handleKeyDown}
               image={image}
               shop_logo={shop_logo}
@@ -250,6 +246,7 @@ const NewItem = (
               disableInput={false}
             />
             <RewardComponent
+              page_type="NEW"
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
               selectedCouponItems={selectedCouponItems}

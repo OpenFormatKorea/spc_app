@@ -5,41 +5,51 @@ import { UploadResponse } from "react-aws-s3-typescript/dist/types";
 import { AnyAction } from "../interfaces/index";
 import ReactS3Client from "../context/ReactS3Client";
 
-export function getShopIdFromCookies(context: GetServerSidePropsContext) {
-  const shop = getCookie("shop_id", { ...context });
-  return shop;
-}
-
 export function getAccessTokenFromCookies(context: GetServerSidePropsContext) {
-  const acceess = getCookie("access", {
+  const acceess = getCookie("access_standalone", {
     ...context,
   });
   return acceess;
 }
 
 export function getRefreshTokenFromCookies(context: GetServerSidePropsContext) {
-  const refresh = getCookie("refresh", {
+  const refresh = getCookie("refresh_standalone", {
     ...context,
   });
   return refresh;
 }
 
+export function getShopIdFromCookies(context: GetServerSidePropsContext) {
+  const shop = getCookie("shop_id_standalone", { ...context });
+  return shop;
+}
+
 export function setAccessTokenToCookies(context: GetServerSidePropsContext, token: string) {
-  deleteCookie("access", {
+  deleteCookie("access_standalone", {
     ...context,
   });
 
-  setCookie("access", token, {
+  setCookie("access_standalone", token, {
     ...context,
   });
 }
 
 export function setRefreshTokenToCookies(context: GetServerSidePropsContext, token: string) {
-  deleteCookie("refresh", {
+  deleteCookie("refresh_standalone", {
     ...context,
   });
 
-  setCookie("refresh", token, {
+  setCookie("refresh_standalone", token, {
+    ...context,
+  });
+}
+
+export function setShopIdTokenToCookies(context: GetServerSidePropsContext, token: string) {
+  deleteCookie("shop_id_standalone", {
+    ...context,
+  });
+
+  setCookie("shop_id_standalone", token, {
     ...context,
   });
 }
@@ -102,7 +112,7 @@ export const uploadToAWS = async (images: { [key: string]: File }): Promise<Uplo
         d = Math.floor(d / 16);
         return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
       });
-      const path = getCookie("shop") + "/" + uuid;
+      const path = getCookie("shop_id_standalone") + "/" + uuid;
 
       const res = await ReactS3Client.uploadFile(images[key] as File, path);
       return res;

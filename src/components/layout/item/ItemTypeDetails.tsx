@@ -43,7 +43,6 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
       setPromotionInputs(itemArgs.promotions);
     }
   }, [page_type]);
-  console.log("itemArgs", itemArgs);
   return (
     <>
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">아이템 옵션</h1>

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
-import { CampaignArgs } from "@/lib/campaign/types";
+import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { ApiResponse } from "@/lib/types";
@@ -51,7 +51,7 @@ const DetailsCampaign = (
 ) => {
   const [title, setTitle] = useState(cDetailApiResponse.title);
   const [description, setDescription] = useState(cDetailApiResponse.description);
-  const [period_type, setPeriod_type] = useState(cDetailApiResponse.period_type);
+  const [periodType, setPeriod_type] = useState(cDetailApiResponse.period_type);
   const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
   const [active, setActive] = useState(cDetailApiResponse.active);
@@ -61,12 +61,16 @@ const DetailsCampaign = (
   const campaignArgs: CampaignArgs = {
     title: title,
     description: description,
-    period_type: period_type,
+    period_type: periodType,
     start_date: start_date,
     end_date: end_date,
     active: active,
   };
-
+  useEffect(() => {
+    if (periodType === PeriodType.UL) {
+      setEnd_date("");
+    }
+  }, [campaignArgs.period_type]);
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
     const infoCheck = (info: CampaignArgs) => {
@@ -147,6 +151,7 @@ const DetailsCampaign = (
         <ContentsContainer variant="campaign">
           <CampaignDetails
             page_type="DETAILS"
+            periodType={periodType}
             campaign_id={campaign_id}
             campaignArgs={campaignArgs}
             setPeriod_type={setPeriod_type}

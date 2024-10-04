@@ -8,6 +8,7 @@ import RewardModal from "@/components/layout/item/RewardModal";
 
 interface RewardComponentProps {
   apiResponse?: ApiResponse;
+  page_type: string;
   selectedCouponItems: CouponsArgs[];
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   couponInputs: CouponsArgs[];
@@ -21,6 +22,7 @@ interface RewardComponentProps {
 
 const RewardComponent: React.FC<RewardComponentProps> = ({
   apiResponse,
+  page_type,
   setSelectedCouponItems,
   selectedCouponItems,
   couponInputs,
@@ -33,6 +35,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
+  const labelClass = "text-xs pt-4 text-gray-500";
   const [point_amount, setPointAmount] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
@@ -44,13 +47,11 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
 
-  const handleInputChange = (value: string) => {};
-  useEffect(() => {
-    setSelectedCouponItems([]);
-    setCouponInputs([]);
-  }, [reward_type]);
-
-  const labelClass = "text-xs pt-4 text-gray-500";
+  // const handleInputChange = (value: string) => {};
+  // useEffect(() => {
+  //   setSelectedCouponItems([]);
+  //   setCouponInputs([]);
+  // }, [reward_type]);
   return (
     <>
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">리워드</h1>
@@ -121,7 +122,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               </div>
             </div>
           )}
-          {reward_type === RewardType.PO && (
+          {reward_type === RewardType.PO && page_type === "NEW" && (
             <div className="flex flex-col w-full h-fit">
               <div className={inputFormClass}>
                 <label className={labelClass}>포인트</label>
