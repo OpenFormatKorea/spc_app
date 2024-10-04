@@ -98,6 +98,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
         <CampaignDetails
           page_type="NEW"
           campaignArgs={campaignArgs}
+          periodType={periodType}
           setPeriod_type={setPeriodType}
           setDescription={setDescription}
           setActive={setActive}

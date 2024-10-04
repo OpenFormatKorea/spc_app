@@ -5,7 +5,7 @@ import {
   setRefreshTokenToCookies,
 } from "@/lib/helper";
 import axios, { AxiosHeaders, InternalAxiosRequestConfig } from "axios";
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { deleteCookie } from "cookies-next";
 import { jwtDecode } from "jwt-decode";
 import { GetServerSidePropsContext } from "next";
 
@@ -56,10 +56,10 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
 
       const refresh_decoded: { exp: number } = jwtDecode(refresh as string);
       if (refresh_decoded.exp * 1000 < new Date().getTime()) {
-        deleteCookie("access", {
+        deleteCookie("access_standalone", {
           ...context,
         });
-        deleteCookie("refresh", {
+        deleteCookie("refresh_standalone", {
           ...context,
         });
         if (typeof window !== "undefined")
@@ -133,10 +133,10 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
  *
  * @returns Axios instance for next.js client: can access browser window
  */
-export const getAxiosInstanceClient = () => {
+export const getAxiosInstanceClient = (context: GetServerSidePropsContext) => {
   try {
-    const access = getCookie("access");
-    const refresh = getCookie("refresh");
+    const access = getAccessTokenFromCookies(context);
+    const refresh = getRefreshTokenFromCookies(context);
     const baseURL = `${process.env.NEXT_PUBLIC_SERVER_API}`;
     if (!access) {
       if (typeof window !== "undefined")
@@ -165,8 +165,8 @@ export const getAxiosInstanceClient = () => {
       }
       const refresh_decoded: { exp: number } = jwtDecode(refresh as string);
       if (refresh_decoded.exp * 1000 < new Date().getTime()) {
-        deleteCookie("access");
-        deleteCookie("refresh");
+        deleteCookie("access_standalone");
+        deleteCookie("refresh_standalone");
         if (typeof window !== "undefined")
           window.location.replace(
             process.env.NODE_ENV === "development" ? "http://localhost:3000/login" : "https://www.incento.kr/login"
@@ -177,8 +177,8 @@ export const getAxiosInstanceClient = () => {
         refresh,
       });
 
-      setCookie("access", response.data.access);
-      setCookie("refresh", response.data.refresh);
+      setAccessTokenToCookies(context, "access_standalone");
+      setRefreshTokenToCookies(context, "refresh_standalone");
 
       const axiosInstance = axios.create({
         baseURL,

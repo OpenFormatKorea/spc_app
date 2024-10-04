@@ -41,7 +41,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: string; campaign_id: string }) => {
+const DetailsItem = ({
+  apiResponse,
+  shop_id,
+  campaign_id,
+}: {
+  apiResponse: any;
+  shop_id: string;
+  campaign_id: string;
+}) => {
   const response = apiResponse;
   const page_type = "DETAILS"; // Assuming this value is being used
   const [title, setTitle] = useState(response.title);
@@ -71,11 +79,10 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
   const [rewards, setRewards] = useState<RewardsArgs[]>(response.rewards || []);
   const [item_type, setItem_type] = useState<ItemType>(response.item_type);
   const [active, setActive] = useState(response.active);
-  const [reward_type, setReward_Type] = useState<RewardType>(response.rewards[0].reward_type);
-
+  const [reward_type, setReward_Type] = useState<RewardType>(response.rewards[0]?.reward_type || RewardType.CO);
   const image: string = kakaoShareArgs.image;
   const shop_logo: string = kakaoShareArgs.shop_logo;
-  const [description, setDescription] = useState<string>(response.promotions.description || "");
+  const [description, setDescription] = useState<string>(response.promotions?.description || "");
 
   const itemArgs: ItemArgs = {
     id: response.id || "",
@@ -107,7 +114,7 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; shop_id: 
 
   return (
     <>
-      <DashboardContainer>
+      <DashboardContainer shop_id={shop_id}>
         <div className="flex w-full justify-between items-center mb-3 h-[42px]">
           <div className="subject-container flex w-full">
             <a className="text-2xl font-bold">아이템 추가</a>

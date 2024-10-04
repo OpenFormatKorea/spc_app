@@ -1,27 +1,10 @@
 import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa"; // Importing icons for menu
-import { deleteCookie, getCookie } from "cookies-next";
-import router from "next/router";
 import Navmenu from "@/components/layout/base/Navmenu";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { handleLogo, handleSignOut, showShopID } from "@/lib/common";
 
-export const handleSignOut = async (event?: React.FormEvent) => {
-  if (event) event.preventDefault();
-
-  const access = getCookie("access");
-  if (access) {
-    deleteCookie("access");
-    deleteCookie("refresh");
-    deleteCookie("shop_id");
-    router.push("/home");
-  } else {
-    alert("로그아웃을 실패하였습니다. 잠시 후 다시 시도해주시기 바랍니다.");
-  }
-};
-const handleLogo = () => {
-  router.push("/dashboard");
-};
-const Header: React.FC = () => {
+const Header = ({ shop_id }: { shop_id: string }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -64,6 +47,12 @@ const Header: React.FC = () => {
                 <a>로그아웃</a>
               </div>
             </div>
+          </div>
+          <div className="w-full flex flex-col justify-center px-5">
+            <label className="text-xs text-white"> SHOP ID</label>
+            <label id="shop_id" className="flex text-xs text-white">
+              {shop_id}
+            </label>
           </div>
         </div>
       )}

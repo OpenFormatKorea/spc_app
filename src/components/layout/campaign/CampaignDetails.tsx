@@ -7,6 +7,7 @@ import React, { useRef, KeyboardEvent, useState, useEffect } from "react";
 interface CampaignDetailsProps {
   page_type: "NEW" | "DETAILS";
   campaignArgs: CampaignArgs;
+  periodType: PeriodType;
   setPeriod_type: (value: PeriodType) => void;
   setDescription: (value: string) => void;
   setActive: (value: boolean) => void;
@@ -20,6 +21,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   page_type,
   campaignArgs,
   campaign_id,
+  periodType,
   setPeriod_type,
   setDescription,
   setActive,
@@ -52,6 +54,11 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) => {
     setActiveStatus(newStatus);
   };
+  useEffect(() => {
+    if (periodType === PeriodType.UL) {
+      setEnd_date("");
+    }
+  }, [campaignArgs.period_type]);
   return (
     <div className="w-full pb-2 mb-2">
       <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">

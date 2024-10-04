@@ -67,6 +67,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
         <table className="w-full border border-gray-100 text-center hidden lg:table">
           <thead>
             <tr className="bg-gray-100">
+              <th className={theadStyle}>캠페인 ID</th>
               <th className={theadStyle}>캠페인 명</th>
               <th className={theadStyle}>타입</th>
               <th className={theadStyle}>캠페인 생성일</th>
@@ -76,6 +77,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
           <tbody>
             {campaigns.map((campaign, i) => (
               <tr className="cursor-pointer" key={campaign.id || i} id={campaign.id} onClick={handleCampaignClick}>
+                <td className={tbodyStyle}>{campaign.id}</td>
                 <td className={tbodyStyle}>{campaign.title}</td>
                 <td className={tbodyStyle}>
                   {campaign.period_type === "LIMITED" ? (

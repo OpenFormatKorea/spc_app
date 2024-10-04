@@ -29,16 +29,14 @@ const CouponList: React.FC<CouponListProps> = ({
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
+    setSelectAll(isChecked);
     if (isChecked) {
       const allProducts = coupons.map((coupon: CouponListArgs) => ({
         coupon_code: coupon.cpnId,
         coupon_name: coupon.name,
       }));
-
-      const allProductIds = coupons.map((coupon: CouponListArgs) => coupon.cpnId); // Array of all product IDs
       setCouponInputs(allProducts);
-      setSelectedItemList(allProductIds);
+      setSelectedItemList(coupons.map((coupon: CouponListArgs) => coupon.cpnId));
     } else {
       setCouponInputs([]);
       setSelectedItemList([]);
@@ -48,19 +46,27 @@ const CouponList: React.FC<CouponListProps> = ({
 
   const handleCheckboxChange = (couponCpnId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-    const updatedSelectedItems = isChecked
-      ? [...selectedItemList, couponCpnId]
-      : selectedItemList.filter((gid) => gid !== couponCpnId);
 
-    const updatedCoupons = coupons
-      .filter((coupon: CouponListArgs) => updatedSelectedItems.includes(coupon.cpnId))
-      .map((coupon: CouponListArgs) => ({
-        coupon_code: coupon.cpnId,
-        coupon_name: coupon.name,
-      }));
+    setSelectedItemList((prevSelected: string[]) => {
+      let updatedSelectedItems: string[];
 
-    setCouponInputs(updatedCoupons);
-    setSelectAll(updatedSelectedItems.length === coupons.length);
+      if (isChecked) {
+        updatedSelectedItems = [...prevSelected, couponCpnId];
+      } else {
+        updatedSelectedItems = prevSelected.filter((cpnId) => cpnId !== couponCpnId);
+      }
+
+      const updatedCoupons = coupons
+        .filter((coupon: CouponListArgs) => updatedSelectedItems.includes(coupon.cpnId))
+        .map((coupon: CouponListArgs) => ({
+          coupon_code: coupon.cpnId,
+          coupon_name: coupon.name,
+        }));
+      setCouponInputs(updatedCoupons);
+      setSelectAll(updatedSelectedItems.length === coupons.length);
+
+      return updatedSelectedItems;
+    });
   };
 
   const handleAction = async () => {

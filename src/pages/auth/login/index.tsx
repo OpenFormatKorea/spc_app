@@ -3,13 +3,14 @@ import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 
 import { fetchLogIn } from "@/lib/auth/apis";
 import { AuthArgs } from "@/lib/auth/types";
-import { setCookie } from "cookies-next";
+import { setAccessTokenToCookies, setRefreshTokenToCookies, setShopIdTokenToCookies } from "@/lib/helper";
+import { GetServerSidePropsContext } from "next";
 
 import { useRouter } from "next/router";
 import { useRef, useState, KeyboardEvent, useEffect } from "react";
 
 // src/pages/index.tsx
-const Login: React.FC = () => {
+const Login = (context: GetServerSidePropsContext) => {
   const [showPW, setShowPw] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -61,9 +62,13 @@ const Login: React.FC = () => {
     if (infoCheck(loginInfo)) {
       const result = await postLogin(loginInfo);
       if (result.success) {
-        setCookie("access", result.data?.access);
-        setCookie("refresh", result.data?.refresh);
-        setCookie("shop_id", result.data?.shop_id);
+        const access: string = result.data?.access || "";
+        const refresh: string = result.data?.refresh || "";
+        const shop_id: string = result.data?.shop_id || "";
+
+        setAccessTokenToCookies(context, access);
+        setRefreshTokenToCookies(context, refresh);
+        setShopIdTokenToCookies(context, shop_id);
         router.push("/dashboard");
       } else {
         alert(result.message);
