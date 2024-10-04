@@ -46,16 +46,13 @@ const CouponList: React.FC<CouponListProps> = ({
 
   const handleCheckboxChange = (couponCpnId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
     setSelectedItemList((prevSelected: string[]) => {
       let updatedSelectedItems: string[];
-
       if (isChecked) {
         updatedSelectedItems = [...prevSelected, couponCpnId];
       } else {
         updatedSelectedItems = prevSelected.filter((cpnId) => cpnId !== couponCpnId);
       }
-
       const updatedCoupons = coupons
         .filter((coupon: CouponListArgs) => updatedSelectedItems.includes(coupon.cpnId))
         .map((coupon: CouponListArgs) => ({
@@ -64,7 +61,6 @@ const CouponList: React.FC<CouponListProps> = ({
         }));
       setCouponInputs(updatedCoupons);
       setSelectAll(updatedSelectedItems.length === coupons.length);
-
       return updatedSelectedItems;
     });
   };
@@ -114,7 +110,7 @@ const CouponList: React.FC<CouponListProps> = ({
                           type="checkbox"
                           id={`item_${coupon.cpnId}`}
                           name={`item_${coupon.cpnId}`}
-                          checked={couponInputs.some((inputCoupon) => inputCoupon.coupon_code === coupon.cpnId)}
+                          checked={selectedItemList.includes(coupon.cpnId)}
                           onChange={handleCheckboxChange(coupon.cpnId)}
                         />
                       </td>

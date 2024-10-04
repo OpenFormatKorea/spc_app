@@ -27,7 +27,6 @@ const ProductList: React.FC<ProductListProps> = ({
   );
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState<boolean>(false);
-
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
@@ -47,16 +46,13 @@ const ProductList: React.FC<ProductListProps> = ({
 
   const handleCheckboxChange = (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-
     setSelectedItemList((prevSelected) => {
       let updatedSelectedItems;
-
       if (isChecked) {
         updatedSelectedItems = [...prevSelected, productGid];
       } else {
         updatedSelectedItems = prevSelected.filter((gid) => gid !== productGid);
       }
-
       const updatedProducts = products
         .filter((product: ProductListArgs) => updatedSelectedItems.includes(product.gid))
         .map((product: ProductListArgs) => ({
@@ -66,7 +62,6 @@ const ProductList: React.FC<ProductListProps> = ({
         }));
       setProductInputs(updatedProducts);
       setSelectAll(updatedSelectedItems.length === products.length);
-
       return updatedSelectedItems;
     });
   };
@@ -77,6 +72,7 @@ const ProductList: React.FC<ProductListProps> = ({
       onClose();
     }
   };
+
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle = "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
   const labelClass = "text-xs pt-4 text-gray-500";

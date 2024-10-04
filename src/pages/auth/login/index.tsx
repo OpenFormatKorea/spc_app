@@ -7,7 +7,7 @@ import { setAccessTokenToCookies, setRefreshTokenToCookies, setShopIdTokenToCook
 import { GetServerSidePropsContext } from "next";
 
 import { useRouter } from "next/router";
-import { useRef, useState, KeyboardEvent, useEffect } from "react";
+import { useRef, useState, KeyboardEvent } from "react";
 
 // src/pages/index.tsx
 const Login = (context: GetServerSidePropsContext) => {
