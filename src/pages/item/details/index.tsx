@@ -114,7 +114,7 @@ const DetailsItem = ({
 
   return (
     <>
-      <DashboardContainer shop_id={shop_id}>
+      <DashboardContainer>
         <div className="flex w-full justify-between items-center mb-3 h-[42px]">
           <div className="subject-container flex w-full">
             <a className="text-2xl font-bold">아이템 추가</a>
