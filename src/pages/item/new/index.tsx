@@ -1,6 +1,5 @@
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import ItemNew from "@/components/layout/item/item/ItemNew";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ProductList from "@/components/layout/item/modal/ProductList";
 import RewardCard from "@/components/layout/item/reward/RewardCard";
