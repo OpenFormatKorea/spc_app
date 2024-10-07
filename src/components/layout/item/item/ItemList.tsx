@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import ItemActiveButton from "@/components/layout/item/item/ItemActiveButton";
+
 interface ItemListProps {
   theadStyle: string;
   tbodyStyle: string;
@@ -35,14 +36,12 @@ const ItemList: React.FC<ItemListProps> = (
     setActiveStatusMap(initialStatus);
   }, [items]);
 
-  const handleAction = async (event: React.FormEvent, actionType: string, itemId: string) => {
+  const handleAction = async (actionType: string, itemId?: string) => {
     let result;
     if (actionType === "delete" && confirm("선택하신 아이템을 삭제하시겠어요?")) {
-      result = await fetchDeleteItems([itemId], campaign_id, context);
-    } else if (actionType === "delete_items" && confirm("선택하신 아이템을 삭제하시겠어요?")) {
-      result = await fetchDeleteItems(selectedItemIds, campaign_id, context);
+      result = await fetchDeleteItems(itemId ? [itemId] : selectedItemIds, campaign_id, context);
     } else if (actionType === "activate" && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
-      result = await fetchActivateItem(itemId, campaign_id, context);
+      result = await fetchActivateItem(itemId!, campaign_id, context);
     }
 
     if (result?.status === 200) {
@@ -88,6 +87,7 @@ const ItemList: React.FC<ItemListProps> = (
       return updatedItems;
     });
   };
+
   return (
     <>
       <div className="flex w-full">
@@ -99,17 +99,11 @@ const ItemList: React.FC<ItemListProps> = (
         </h1>
       </div>
       <div className="w-full py-3 hidden lg:block">
-        <table className="w-full border border-gray-100 text-center hidden lg:table">
+        <table className="w-full border border-gray-100 text-center">
           <thead>
             <tr className="bg-gray-100">
               <th className={theadStyle}>
-                <input
-                  type="checkbox"
-                  id={`item_all`}
-                  name={`item_all`}
-                  checked={selectAll}
-                  onChange={handleSelectAll}
-                />
+                <input type="checkbox" id="item_all" name="item_all" checked={selectAll} onChange={handleSelectAll} />
               </th>
               <th className={theadStyle}>아이템 명</th>
               <th className={theadStyle}>아이템 종류</th>
@@ -132,19 +126,15 @@ const ItemList: React.FC<ItemListProps> = (
                 </td>
                 <td className={tbodyStyle}>{item.title}</td>
                 <td className={tbodyStyle}>
-                  {item.item_type === "PRODUCT" ? (
-                    <div className="w-full flex justify-center">
-                      <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">
-                        상품
-                      </div>
+                  <div className="w-full flex justify-center">
+                    <div
+                      className={`w-fit px-2 py-1 rounded-md font-semibold text-sm ${
+                        item.item_type === "PRODUCT" ? "bg-blue-200 text-blue-600" : "bg-orange-200 text-orange-600"
+                      }`}
+                    >
+                      {item.item_type === "PRODUCT" ? "상품" : "쿠폰"}
                     </div>
-                  ) : (
-                    <div className="w-full flex justify-center">
-                      <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
-                        쿠폰
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </td>
                 <td className={tbodyStyle}>
                   {new Date(item.created_at).toLocaleDateString("ko-KR", {
@@ -160,7 +150,6 @@ const ItemList: React.FC<ItemListProps> = (
                     day: "numeric",
                   })}
                 </td>
-
                 <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
                   <ItemActiveButton
                     view="PC"
@@ -174,7 +163,7 @@ const ItemList: React.FC<ItemListProps> = (
             ))}
             {!items.length && (
               <tr>
-                <td className={"text-center text-sm text-gray-500 p-3"} colSpan={6}>
+                <td className="text-center text-sm text-gray-500 p-3" colSpan={6}>
                   현재 사용중인 아이템이 없어요
                   <br />
                   새로운 아이템을 등록해 주세요.
@@ -187,7 +176,7 @@ const ItemList: React.FC<ItemListProps> = (
           <button
             className="py-2 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
             id="delete_items"
-            onClick={(e) => handleAction(e, "delete_items", "")}
+            onClick={() => handleAction("delete")}
           >
             선택삭제
           </button>
@@ -195,38 +184,36 @@ const ItemList: React.FC<ItemListProps> = (
       </div>
       {/* Mobile-friendly layout */}
       <div className="block mt-2 lg:hidden">
-        {items.map((item, i) => (
+        {items.map((item) => (
           <div
-            key={item.id || i}
+            key={item.id}
             className=" bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 cursor-pointer"
             onClick={() => handleItemClick(item.id)}
           >
             <div
-              className="font-bold mb-2 text-black w-full pb-1 border-b flex  justify-between"
+              className="font-bold mb-2 text-black w-full pb-1 border-b flex justify-between"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="h-full items-end">{item.title}</div>
-              <div>
-                <ItemActiveButton
-                  view="MOBILE"
-                  item_id={item.id}
-                  campaign_id={campaign_id}
-                  activeStatus={activeStatusMap[item.id]}
-                  toggleItemActiveStatus={toggleItemActiveStatus}
-                />
-              </div>
+              <div className="w-full">{item.title}</div>
+              <ItemActiveButton
+                view="MOBILE"
+                item_id={item.id}
+                campaign_id={campaign_id}
+                activeStatus={activeStatusMap[item.id]}
+                toggleItemActiveStatus={toggleItemActiveStatus}
+              />
             </div>
             <div className="text-sm flex pr-2 items-center">
               <div className="w-[100px]">
                 <strong>아이템 종류: </strong>
               </div>
-              {item.item_type === "PRODUCT" ? (
-                <div className="bg-blue-200 w-fit px-2 py-1 rounded-md text-blue-600 font-semibold text-sm">상품</div>
-              ) : (
-                <div className="bg-orange-200 w-fit px-2 py-1 rounded-md text-orange-600 font-semibold text-sm">
-                  쿠폰
-                </div>
-              )}
+              <div
+                className={`w-fit px-2 py-1 rounded-md font-semibold text-sm ${
+                  item.item_type === "PRODUCT" ? "bg-blue-200 text-blue-600" : "bg-orange-200 text-orange-600"
+                }`}
+              >
+                {item.item_type === "PRODUCT" ? "상품" : "쿠폰"}
+              </div>
             </div>
             <div className="text-sm flex pr-2 items-center">
               <div className="w-[100px]">
@@ -242,22 +229,22 @@ const ItemList: React.FC<ItemListProps> = (
               <div className="w-[100px]">
                 <strong>캠페인 수정일: </strong>
               </div>
-
               {new Date(item.updated_at).toLocaleDateString("ko-KR", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
               })}
             </div>
-            <div className="w-full flex justify-end ">
-              <div className="w-[50%] pt-2 flex justify-end space-x-2 text-white text-sm">
-                <button
-                  className="w-[60px] p-2 cursor-pointer rounded-md bg-red-500"
-                  onClick={(e) => handleAction(e, "delete", item.id)}
-                >
-                  삭제
-                </button>
-              </div>
+            <div className="w-full flex justify-end">
+              <button
+                className="w-[60px] p-2 rounded-md bg-red-500 text-white text-sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAction("delete", item.id);
+                }}
+              >
+                삭제
+              </button>
             </div>
           </div>
         ))}
@@ -272,11 +259,10 @@ const ItemList: React.FC<ItemListProps> = (
       <div className="flex w-full text-white text-center lg:justify-end pt-2">
         <div
           id="create_item"
-          className="p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+          className="p-2 w-full lg:w-fit rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
           onClick={handleButton}
         >
           <AddIcon fontSize="small" />
-          <div className="flex text-center items-center"></div>
           아이템 추가
         </div>
       </div>

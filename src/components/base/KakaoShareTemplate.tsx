@@ -12,7 +12,7 @@ interface KakaoShareProps {
   shop_logo_result?: string;
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onChangeImage: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeImage?: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
@@ -51,19 +51,19 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
       image: img_url,
       shop_logo: shop_logo_url,
     });
-  }, [shop_name, title, description, button_name, image_result, shop_logo_result]);
+  }, [shop_name, title, description, button_name, img_url, shop_logo_url]);
 
   return (
     <>
       <div className="contents-container w-full pt-4">
         <label className="pt-4 font-bold text-gray-500">카카오 메시지 설정</label>
         <div className="block lg:flex lg:gap-4">
-          <div className=" bg-gray-200 lg:bg-transparent w-full lg:w-fit flex items-center lg:items-start justify-center lg:justify-start rounded-xl">
+          <div className="bg-gray-200 lg:bg-transparent w-full lg:w-fit flex items-center lg:items-start justify-center lg:justify-start rounded-xl">
             <div className="relative my-4">
               <div className="hidden lg:block w-[200px] lg:w-[290px] mx-auto">
                 <img src="/images/kakao/kakao-message-template.png" alt="Phone Mockup" />
               </div>
-              <div className=" lg:absolute top-0 lg:top-[85px] left-0 lg:left-[40px]">
+              <div className="lg:absolute top-0 lg:top-[85px] left-0 lg:left-[40px]">
                 <div className="flex h-full max-w-full flex-col items-center justify-center rounded-lg bg-white shadow-card_shadow">
                   <div className="min-h-full min-w-full w-[230px] overflow-hidden rounded-lg">
                     <div className="h-[230px] w-[230px] cursor-pointer">
@@ -72,7 +72,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         style={{ display: "none" }}
                         accept="image/jpg,image/png,image/jpeg"
                         name="image_result"
-                        onChange={onChangeImage("image")}
+                        onChange={onChangeImage ? onChangeImage("image") : undefined}
                         ref={imageFileInput}
                         disabled={disableInput}
                       />
@@ -80,14 +80,12 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         className="relative h-full w-full flex items-center justify-center group"
                         onClick={() => imageFileInput.current?.click()}
                       >
-                        {page_type == "NEW" ? (
+                        {page_type === "NEW" && (
                           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
                             <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                               사진 업로드
                             </span>
                           </div>
-                        ) : (
-                          <></>
                         )}
                         <img
                           className="h-full w-full"
@@ -98,7 +96,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                           }
                           alt="Selected"
                           onError={(e) => {
-                            e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png"; // Corrected path with leading slash
+                            e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png";
                           }}
                         />
                       </div>
@@ -112,7 +110,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                               style={{ display: "none" }}
                               accept="image/jpg,image/png,image/jpeg"
                               name="shop_logo_result"
-                              onChange={onChangeImage("shop_logo")}
+                              onChange={onChangeImage ? onChangeImage("shop_logo") : undefined}
                               ref={shopLogoFileInput}
                               disabled={disableInput}
                             />
@@ -164,9 +162,6 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                       : shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"
                                   }
                                   alt="Shop Logo"
-                                  // onError={(e) => {
-                                  //   e.currentTarget.src = "images/kakao/kakaolink-no-logo-default.png"; // Corrected path with leading slash
-                                  // }}
                                   style={{ borderRadius: "35%" }}
                                 />
                               </div>

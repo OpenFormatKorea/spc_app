@@ -11,8 +11,8 @@ interface ItemTypeDetailsProps {
   disableInput: boolean;
   description: string;
   setItem_type: (value: ItemType) => void;
-  setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>; // Updated type
-  setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>; // Updated type
+  setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>;
+  setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>;
   setDescription: (value: string) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   openModal?: () => void;
@@ -83,7 +83,6 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
         <ItemTypeComponent
           item_type={item_type}
           page_type={page_type}
-          itemArgs={itemArgs}
           description={description}
           setDescription={setDescription}
           selectedProductItems={selectedProductItems}

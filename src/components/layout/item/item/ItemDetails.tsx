@@ -9,8 +9,6 @@ interface ItemDetailsProps {
   page_type: "DETAILS" | "NEW";
   itemArgs: ItemArgs;
   kakaoShareArgs: KakaoShareArgs;
-  campaign_id: string;
-  active: boolean;
   image: string;
   shop_logo: string;
   image_result?: string;
@@ -21,9 +19,10 @@ interface ItemDetailsProps {
   setTitle: (value: string) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>;
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>;
-  setActive: (value: boolean) => void;
+  setActive?: (value: boolean) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onChangeImage: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeImage?: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  campaign_id?: string;
 }
 
 const ItemDetails: React.FC<ItemDetailsProps> = (
@@ -31,8 +30,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     page_type,
     itemArgs,
     kakaoShareArgs,
-    campaign_id,
-    active,
     image,
     shop_logo,
     image_result,
@@ -45,31 +42,30 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     setActive,
     handleKeyDown,
     onChangeImage,
+    campaign_id,
   },
   context: GetServerSidePropsContext
 ) => {
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
-  const labelClass = "text-xs pt-4 text-gray-500";
-  const item_id = itemArgs.id || "";
-
-  const handleActiveStatus = async () => {
-    const newActiveStatus = !itemArgs.active;
-    if (page_type === "DETAILS" && confirm("아이템 활성화 상태를 변경하시겠어요?")) {
-      setActive(newActiveStatus);
-      const result = await fetchActivateItem(item_id, campaign_id, context);
-      if (result.status !== 200) {
-        alert("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
-        setActive(!newActiveStatus);
-      }
-    }
-  };
-
   useEffect(() => {
     if (page_type === "DETAILS") {
       setProductInputs(itemArgs.products);
       setPromotionInputs(itemArgs.promotions);
     }
-  }, [page_type, itemArgs.products, itemArgs.promotions]);
+  }, [page_type, itemArgs.products, itemArgs.promotions, setProductInputs, setPromotionInputs]);
+
+  const handleActiveStatus = async () => {
+    if (page_type === "DETAILS" && setActive && campaign_id && itemArgs.id) {
+      const newActiveStatus = !itemArgs.active;
+      if (confirm("아이템 활성화 상태를 변경하시겠어요?")) {
+        setActive(newActiveStatus);
+        const result = await fetchActivateItem(itemArgs.id, campaign_id, context);
+        if (result.status !== 200) {
+          alert("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
+          setActive(!newActiveStatus);
+        }
+      }
+    }
+  };
 
   return (
     <>
@@ -83,7 +79,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
                 className="peer sr-only opacity-0"
                 id="item-activation"
                 name="active"
-                checked={active}
+                checked={itemArgs.active}
                 onChange={handleActiveStatus}
               />
               <label
@@ -95,8 +91,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
             </div>
           )}
         </h1>
-        <div className={inputFormClass}>
-          <label className={labelClass}>아이템 명</label>
+        <div className="inputForm flex flex-col text-left w-full pb-2">
+          <label className="text-xs pt-4 text-gray-500">아이템 명</label>
           <InputTextBox
             type="text"
             id="title"
