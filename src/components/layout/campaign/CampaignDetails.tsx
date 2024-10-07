@@ -7,7 +7,7 @@ import React, { useRef, KeyboardEvent, useState, useEffect } from "react";
 interface CampaignDetailsProps {
   page_type: "NEW" | "DETAILS";
   campaignArgs: CampaignArgs;
-  periodType: PeriodType;
+  period_type: PeriodType;
   setPeriod_type: (value: PeriodType) => void;
   setDescription: (value: string) => void;
   setActive: (value: boolean) => void;
@@ -21,7 +21,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   page_type,
   campaignArgs,
   campaign_id,
-  periodType,
+  period_type,
   setPeriod_type,
   setDescription,
   setActive,
@@ -29,42 +29,32 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   setStart_date,
   setEnd_date,
 }) => {
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
-  const labelClass = "text-xs pt-4 text-gray-500";
-  const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPeriod_type(e.target.value as PeriodType);
-  };
-
-  const handleActiveRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setActive(e.target.value === "true");
-  };
-
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const [activeStatus, setActiveStatus] = useState<boolean>(campaignArgs.active);
-  const [endDateActiveStatus, setEndDateActiveStatus] = useState<boolean>(true);
+  const [endDateActiveStatus, setEndDateActiveStatus] = useState<boolean>(period_type !== PeriodType.UL);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (period_type === PeriodType.UL) {
+      setEnd_date(null);
+      setEndDateActiveStatus(true);
+    } else {
+      setEnd_date(campaignArgs.end_date || null);
+      setEndDateActiveStatus(false);
+    }
+  }, [period_type, campaignArgs.end_date, setEnd_date]);
+
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => setPeriod_type(e.target.value as PeriodType);
+
+  const handleActiveRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => setActive(e.target.value === "true");
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (buttonRef.current) {
-        buttonRef.current.click();
-      }
+      buttonRef.current?.click();
     }
   };
 
-  const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) => {
-    setActiveStatus(newStatus);
-  };
-
-  useEffect(() => {
-    if (periodType === PeriodType.UL) {
-      setEnd_date(null);
-      setEndDateActiveStatus(true);
-    } else if (periodType === PeriodType.L) {
-      setEnd_date(campaignArgs.end_date || null); // Retain the original end date if available
-      setEndDateActiveStatus(false);
-    }
-  }, [periodType, campaignArgs.end_date, setEnd_date]);
+  const toggleCampaignActiveStatus = (_: string, newStatus: boolean) => setActiveStatus(newStatus);
 
   return (
     <div className="w-full pb-2 mb-2">
@@ -73,29 +63,17 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           <div className="font-normal text-sm text-gray-500">상세 정보 옵션</div>
         </div>
 
-        {page_type === "DETAILS" ? (
-          <div>
-            <CampaignActiveButton
-              view="PC"
-              campaign={{
-                id: Number(campaign_id),
-                title: campaignArgs.title,
-                description: campaignArgs.description,
-                period_type: campaignArgs.period_type,
-                start_date: campaignArgs.start_date,
-                end_date: campaignArgs.end_date,
-                active: campaignArgs.active,
-              }}
-              activeStatus={activeStatus}
-              toggleCampaignActiveStatus={toggleCampaignActiveStatus}
-            />
-          </div>
-        ) : (
-          <></>
+        {page_type === "DETAILS" && (
+          <CampaignActiveButton
+            view="PC"
+            campaign={{ ...campaignArgs, id: Number(campaign_id) }}
+            activeStatus={activeStatus}
+            toggleCampaignActiveStatus={toggleCampaignActiveStatus}
+          />
         )}
       </div>
 
-      <div className={inputFormClass}>
+      <div className="inputForm flex flex-col text-left w-full pb-2">
         <label className="text-xs pt-2 text-gray-500">캠페인 명</label>
         <InputTextBox
           type="text"
@@ -107,8 +85,9 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           disabled={false}
         />
       </div>
-      <div className={inputFormClass}>
-        <label className={labelClass}>캠페인 설명</label>
+
+      <div className="inputForm flex flex-col text-left w-full pb-2">
+        <label className="text-xs pt-4 text-gray-500">캠페인 설명</label>
         <InputTextBox
           type="text"
           id="description"
@@ -119,14 +98,15 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           disabled={false}
         />
       </div>
-      <div className={inputFormClass}>
-        <label className={radioButtonLabelClass}>기간 종류</label>
-        <div className="flex justify-between w[full] md:w-[300px] lg:w-[300px]">
+
+      <div className="inputForm flex flex-col text-left w-full pb-2">
+        <label className="text-xs pt-4 pb-2 text-gray-500">기간 종류</label>
+        <div className="flex justify-between w-full md:w-[300px] lg:w-[300px]">
           <InputRadioBox
             label="기간 제한"
             name="period_type"
-            value="LIMITED"
-            checked={campaignArgs.period_type === PeriodType.L}
+            value={PeriodType.L}
+            checked={period_type === PeriodType.L}
             onChange={handleRadioChange}
             disabled={false}
           />
@@ -140,8 +120,9 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
       </div>
-      <div className={inputFormClass}>
-        <label className={labelClass}>캠페인 기간</label>
+
+      <div className="inputForm flex flex-col text-left w-full pb-2">
+        <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
         <div className="lg:flex sm:items-center w-full gap-2">
           <InputTextBox
             type="text"
@@ -156,40 +137,37 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             type="text"
             id="end_date"
             placeholder={
-              periodType === PeriodType.L ? "캠페인 종료일을 선택하세요." : "무기한일 경우 시작일만 선택 가능합니다."
+              period_type === PeriodType.L ? "캠페인 종료일을 선택하세요." : "무기한일 경우 시작일만 선택 가능합니다."
             }
-            value={campaignArgs.end_date}
+            value={period_type === PeriodType.L ? campaignArgs.end_date : ""}
             onChange={(e) => setEnd_date(e.target.value)}
             disabled={endDateActiveStatus}
           />
         </div>
       </div>
-      {page_type === "NEW" ? (
-        <>
-          <div className={inputFormClass}>
-            <label className={radioButtonLabelClass}>캠페인 활성화</label>
-            <div className="flex justify-between w-[250px] lg:w-[300px] ">
-              <InputRadioBox
-                label="활성화"
-                name="active"
-                value="true"
-                checked={campaignArgs.active === true}
-                onChange={handleActiveRadioChange}
-                disabled={false}
-              />
-              <InputRadioBox
-                label="비활성화"
-                name="active"
-                value="false"
-                checked={campaignArgs.active === false}
-                onChange={handleActiveRadioChange}
-                disabled={false}
-              />
-            </div>
+
+      {page_type === "NEW" && (
+        <div className="inputForm flex flex-col text-left w-full pb-2">
+          <label className="text-xs pt-4 pb-2 text-gray-500">캠페인 활성화</label>
+          <div className="flex justify-between w-[250px] lg:w-[300px]">
+            <InputRadioBox
+              label="활성화"
+              name="active"
+              value="true"
+              checked={campaignArgs.active}
+              onChange={handleActiveRadioChange}
+              disabled={false}
+            />
+            <InputRadioBox
+              label="비활성화"
+              name="active"
+              value="false"
+              checked={!campaignArgs.active}
+              onChange={handleActiveRadioChange}
+              disabled={false}
+            />
           </div>
-        </>
-      ) : (
-        <></>
+        </div>
       )}
     </div>
   );
