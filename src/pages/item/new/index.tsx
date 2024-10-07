@@ -22,7 +22,6 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import ReactS3Client from "@/lib/aws/ReactS3Client";
-import ItemComponent from "@/components/layout/item/item/ItemDetails";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -101,6 +100,22 @@ const NewItem = (
     }
     if (!productInputs[0].product_model_code && !promotionInputs[0].description) {
       alert("아이템 적용을 원하시는 상품 혹은 쿠폰을 추가해주세요.");
+      return false;
+    }
+    if (!kakaoShareArgs.shop_name) {
+      alert("숍 이름을 입력해주세요.");
+      return false;
+    }
+    if (!kakaoShareArgs.title) {
+      alert("카카오 공유 메시지 타이틀을 입력해주세요.");
+      return false;
+    }
+    if (!kakaoShareArgs.description) {
+      alert("카카오 공유 메시지 설명을 입력해주세요.");
+      return false;
+    }
+    if (!kakaoShareArgs.button_name) {
+      alert("카카오 공유 버튼 이름을 입력해주세요.");
       return false;
     }
     if (

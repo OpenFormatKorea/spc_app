@@ -18,7 +18,6 @@ import {
   KakaoShareArgs,
   CouponsArgs,
 } from "@/lib/item/types";
-import ItemComponent from "@/components/layout/item/item/ItemDetails";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
