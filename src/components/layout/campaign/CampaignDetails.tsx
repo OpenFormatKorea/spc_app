@@ -61,7 +61,10 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
     <div className="w-full pb-2 mb-2">
       <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">
         <div className="w-full">
-          <div className="font-normal text-sm text-gray-500">상세 정보 옵션</div>
+          <div className="text-lg font-bold text-black">
+            {" "}
+            {page_type === "DETAILS" ? "캠페인 상세 정보" : "캠페인 옵션 추가"}
+          </div>
         </div>
         {page_type === "DETAILS" && (
           <div>
@@ -121,31 +124,6 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
       </div>
-
-      {/* <div className="inputForm flex flex-col text-left w-full pb-2">
-        <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
-        <div className="lg:flex sm:items-center w-full gap-2">
-          <InputTextBox
-            type="text"
-            id="start_date"
-            placeholder="캠페인 시작일을 선택하세요."
-            value={campaignArgs.start_date}
-            onChange={(e) => setStart_date(e.target.value)}
-            disabled={false}
-          />
-          <div className="text-md sm:my-2 sm:w-full lg:w-[25px] sm:text-center flex justify-center">~</div>
-          <InputTextBox
-            type="text"
-            id="end_date"
-            placeholder={
-              period_type === PeriodType.L ? "캠페인 종료일을 선택하세요." : "무기한일 경우 시작일만 선택 가능합니다."
-            }
-            value={period_type === PeriodType.L ? campaignArgs.end_date : ""}
-            onChange={(e) => setEnd_date(e.target.value)}
-            disabled={endDateActiveStatus}
-          />
-        </div>
-      </div> */}
       <div className="inputForm flex flex-col text-left w-[50%] pb-2">
         <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
         <div className="sm:items-center w-full gap-2">
