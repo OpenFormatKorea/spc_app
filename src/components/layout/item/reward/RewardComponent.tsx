@@ -48,7 +48,6 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const closeRewardModal = () => setIsRewardModalOpen(false);
   let isDisabled = false;
 
-  // const handleInputChange = (value: string) => {};
   useEffect(() => {
     if (disableInput) {
       isDisabled = true;

@@ -9,8 +9,8 @@ import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetItemList } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import router, { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -56,7 +56,6 @@ const DetailsCampaign = (
   const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
   const [active, setActive] = useState(cDetailApiResponse.active);
-
   const router = useRouter();
 
   const campaignArgs: CampaignArgs = {
@@ -67,11 +66,15 @@ const DetailsCampaign = (
     end_date: end_date,
     active: active,
   };
+
   useEffect(() => {
     if (periodType === PeriodType.UL) {
-      setEnd_date("");
+      setEnd_date(null);
+    } else {
+      setEnd_date(cDetailApiResponse.end_date || null);
     }
-  }, [campaignArgs.period_type]);
+  }, [periodType, cDetailApiResponse.end_date]);
+
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
     const infoCheck = (info: CampaignArgs) => {

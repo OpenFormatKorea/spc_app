@@ -4,7 +4,7 @@ export interface CampaignArgs {
   description: string;
   period_type: PeriodType;
   start_date: string;
-  end_date?: any;
+  end_date?: string | null;
   newStart_date?: Date;
   newEnd_date?: Date;
   active: boolean;

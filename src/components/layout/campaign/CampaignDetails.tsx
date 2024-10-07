@@ -13,7 +13,7 @@ interface CampaignDetailsProps {
   setActive: (value: boolean) => void;
   setTitle: (value: string) => void;
   setStart_date: (value: string) => void;
-  setEnd_date: (value: any) => void;
+  setEnd_date: (value: string | null) => void;
   campaign_id?: string;
 }
 
@@ -55,15 +55,17 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) => {
     setActiveStatus(newStatus);
   };
+
   useEffect(() => {
     if (periodType === PeriodType.UL) {
-      setEnd_date("");
-      setEndDateActiveStatus(false);
-    } else {
-      setEnd_date(campaignArgs.start_date);
+      setEnd_date(null);
       setEndDateActiveStatus(true);
+    } else if (periodType === PeriodType.L) {
+      setEnd_date(campaignArgs.end_date || null); // Retain the original end date if available
+      setEndDateActiveStatus(false);
     }
-  }, [campaignArgs.period_type]);
+  }, [periodType, campaignArgs.end_date, setEnd_date]);
+
   return (
     <div className="w-full pb-2 mb-2">
       <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">
@@ -153,10 +155,12 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           <InputTextBox
             type="text"
             id="end_date"
-            placeholder="캠페인 시작일을 선택하세요."
+            placeholder={
+              periodType === PeriodType.L ? "캠페인 종료일을 선택하세요." : "무기한일 경우 시작일만 선택 가능합니다."
+            }
             value={campaignArgs.end_date}
             onChange={(e) => setEnd_date(e.target.value)}
-            disabled={false}
+            disabled={endDateActiveStatus}
           />
         </div>
       </div>

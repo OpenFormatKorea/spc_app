@@ -15,7 +15,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   const [description, setDescription] = useState("");
   const [periodType, setPeriodType] = useState(PeriodType.L);
   const [startDate, setStartDate] = useState("2024-08-14 00:00:00");
-  const [endDate, setEndDate] = useState("2024-08-16 00:00:00");
+  const [end_date, setEnd_date] = useState<string | null>("2024-08-16 00:00:00");
   const [active, setActive] = useState(true);
 
   // Function to validate campaign information
@@ -45,7 +45,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
     description,
     period_type: periodType,
     start_date: startDate,
-    end_date: endDate,
+    end_date: end_date,
     active,
   };
 
@@ -75,7 +75,13 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
       router.push("/campaign");
     }
   };
-
+  // useEffect(() => {
+  //   if (periodType === PeriodType.UL) {
+  //     setEnd_date(null);
+  //   } else {
+  //     setEnd_date(campaignArgs.start_date);
+  //   }
+  // }, [periodType]);
   return (
     <DashboardContainer>
       <div className="flex w-full justify-between items-center mb-3 h-[42px]">
@@ -104,7 +110,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           setActive={setActive}
           setTitle={setTitle}
           setStart_date={setStartDate}
-          setEnd_date={setEndDate}
+          setEnd_date={setEnd_date}
         />
         <div className="button-container w-full pt-4 flex items-center justify-center ">
           <button
