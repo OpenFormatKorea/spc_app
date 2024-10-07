@@ -42,6 +42,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [activeStatus, setActiveStatus] = useState<boolean>(campaignArgs.active);
+  const [endDateActiveStatus, setEndDateActiveStatus] = useState<boolean>(true);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -57,13 +58,16 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   useEffect(() => {
     if (periodType === PeriodType.UL) {
       setEnd_date("");
+      setEndDateActiveStatus(false);
+    } else {
+      setEnd_date(campaignArgs.start_date);
+      setEndDateActiveStatus(true);
     }
   }, [campaignArgs.period_type]);
   return (
     <div className="w-full pb-2 mb-2">
       <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">
         <div className="w-full">
-          <div className="font-bold text-lg">캠페인 상세 정보</div>
           <div className="font-normal text-sm text-gray-500">상세 정보 옵션</div>
         </div>
 
@@ -117,18 +121,18 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         <label className={radioButtonLabelClass}>기간 종류</label>
         <div className="flex justify-between w[full] md:w-[300px] lg:w-[300px]">
           <InputRadioBox
-            label="무기한"
-            name="period_type"
-            value={PeriodType.UL}
-            checked={campaignArgs.period_type === PeriodType.UL}
-            onChange={handleRadioChange}
-            disabled={false}
-          />
-          <InputRadioBox
             label="기간 제한"
             name="period_type"
             value="LIMITED"
             checked={campaignArgs.period_type === PeriodType.L}
+            onChange={handleRadioChange}
+            disabled={false}
+          />
+          <InputRadioBox
+            label="무기한"
+            name="period_type"
+            value={PeriodType.UL}
+            checked={campaignArgs.period_type === PeriodType.UL}
             onChange={handleRadioChange}
             disabled={false}
           />

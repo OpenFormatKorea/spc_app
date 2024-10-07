@@ -258,7 +258,7 @@ const NewItem = (
               setSelectedCouponItems={setSelectedCouponItems}
               setCouponInputs={setCouponInputs}
             />
-            <RewardCard rewards={rewards} setRewards={setRewards} page_type="NEW" />
+            <RewardCard page_type="NEW" rewards={rewards} setRewards={setRewards} />
           </ContentsContainer>
         </div>
         <div>

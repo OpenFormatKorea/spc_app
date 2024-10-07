@@ -4,7 +4,6 @@ import { PaymentFrequencyType, PaymentTimingType, RewardsArgs } from "@/lib/item
 interface RewardCardProps {
   page_type: "DETAILS" | "NEW";
   rewards: RewardsArgs[];
-
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
@@ -13,7 +12,6 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
   const conditionTypes = ["referrer_conditions", "referee_conditions"] as const;
   const labelClass = "labelClass flex items-center text-sm text-left text-gray-500 w-[100px]";
   const inputFormClass = "inputForm flex items-center text-sm";
-  console.log("rewards", rewards);
   const handleDeleteRewards = (indexToDelete: number) => {
     if (confirm("리워드를 삭제하시겠습니까?")) {
       setRewards((prevRewards) => prevRewards.filter((_, index) => index !== indexToDelete));
@@ -42,7 +40,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
   return (
     <>
       {rewards.map((reward, index) => (
-        <div className="rounded-xl bg-gray-100 text-sm p-4" key={index} id={`rewards_${index}`}>
+        <div className="rounded-xl bg-gray-100 text-sm p-4 mb-4" key={index} id={`rewards_${index}`}>
           <h1 className="flex w-full mb-2 justify-between items-center">
             <div className="font-semibold text-base">
               {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
@@ -93,7 +91,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ page_type, rewards, setRewards 
               </div>
             ))}
           </div>
-          {page_type === "DETAILS" && (
+          {page_type === "NEW" && (
             <div className="flex justify-end">
               <button
                 className="p-1 mt-2 bg-red-500 cursor-pointer text-white rounded-lg min-w-[45px]"

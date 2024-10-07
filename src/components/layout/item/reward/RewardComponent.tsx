@@ -33,7 +33,6 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   disableInput,
   handleKeyDown,
 }) => {
-  console.log("couponInputs", couponInputs.length);
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
   const labelClass = "text-xs pt-4 text-gray-500";
@@ -56,7 +55,6 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
     } else if (couponInputs.length === 0) {
       isDisabled = true;
     }
-    console.log("couponInputs", couponInputs);
   }, [couponInputs.length]);
   return (
     <>
@@ -144,16 +142,16 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               </div>
             </div>
           )}
-          {page_type === "NEW" && (
+          {(page_type === "NEW" || (couponInputs.length !== 0 && point_amount !== 0)) && (
             <button
               id="create_item_container"
               className={`border p-1 ${
-                disableInput || couponInputs.length === 0 || point_amount === 0
+                couponInputs.length === 0 && point_amount === 0
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-blue-500 cursor-pointer"
               } text-white rounded-lg min-w-[45px] text-center`}
               onClick={openRewardModal}
-              disabled={isDisabled}
+              disabled={couponInputs.length === 0 && point_amount === 0}
             >
               리워드 추가
             </button>

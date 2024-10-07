@@ -54,11 +54,8 @@ const RewardModal: React.FC<RewardModalProps> = ({
       },
     },
   };
-  // const [coupon_code, setCouponCode] = useState("");
   const [referrerState, setReferrerState] = useState<RewardPolicyArgs>(defaultPolicy);
   const [refereeState, setRefereeState] = useState<RewardPolicyArgs>(defaultPolicy);
-  const [selectedCouponName, setSelectedCouponName] = useState<string[]>([]);
-  const [selectedCouponCode, setSelectedCouponCode] = useState<string[]>([]);
 
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const labelClass = "text-xs pt-2 text-gray-500";
@@ -134,14 +131,15 @@ const RewardModal: React.FC<RewardModalProps> = ({
     }
   };
   const onclickAddCouponItemConditions = () => {
-    couponInputs.map((inputCoupon: CouponsArgs, index) => {
-      const couponCodes = couponInputs.map((inputCoupon) => inputCoupon.coupon_code);
+    couponInputs.forEach((inputCoupon: CouponsArgs) => {
+      // Create rewardConditionsArgs based on the reward type
       const rewardConditionsArgs: RewardsArgs = {
         reward_type,
-        ...(reward_type === RewardType.CO && { couponCodes }),
+        ...(reward_type === RewardType.CO ? { coupon_code: String(inputCoupon.coupon_code) } : {}),
         referrer_conditions: generatePolicy(referrerState),
         referee_conditions: generatePolicy(refereeState),
       };
+
       if (infoCheck()) {
         setRewards((prevRewards) => [...prevRewards, rewardConditionsArgs]);
         onClose();
@@ -150,7 +148,6 @@ const RewardModal: React.FC<RewardModalProps> = ({
       }
     });
   };
-  useEffect(() => {});
 
   return (
     <>

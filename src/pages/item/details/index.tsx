@@ -41,7 +41,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; campaign_id: string }) => {
   const response = apiResponse;
-  console.log("DetailsItem response", response);
   const page_type = "DETAILS";
   const [title, setTitle] = useState(response.title);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([

@@ -108,7 +108,6 @@ export async function fetchDeleteCampaign(campaign_id: string, context: GetServe
 export async function fetchGetCampaignList(context: GetServerSidePropsContext) {
   const shop_id = getShopIdFromCookies(context);
   const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns/` + shop_id;
-  console.log("final_url", final_url);
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
 

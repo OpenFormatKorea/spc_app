@@ -13,7 +13,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [periodType, setPeriodType] = useState(PeriodType.UL);
+  const [periodType, setPeriodType] = useState(PeriodType.L);
   const [startDate, setStartDate] = useState("2024-08-14 00:00:00");
   const [endDate, setEndDate] = useState("2024-08-16 00:00:00");
   const [active, setActive] = useState(true);
