@@ -3,8 +3,8 @@ import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import { ApiResponse } from "@/lib/types";
 import InputTextBox from "@/components/base/InputText";
-import RewardModal from "@/components/layout/item/reward/RewardModal";
 import CouponList from "@/components/layout/item/modal/CouponList";
+import RewardModal from "@/components/layout/item/reward/RewardModal";
 
 interface RewardComponentProps {
   apiResponse?: ApiResponse;
@@ -33,6 +33,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   disableInput,
   handleKeyDown,
 }) => {
+  console.log("couponInputs", couponInputs.length);
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
   const labelClass = "text-xs pt-4 text-gray-500";
@@ -46,7 +47,17 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const openModal = () => (reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요."));
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
+  let isDisabled = false;
 
+  // const handleInputChange = (value: string) => {};
+  useEffect(() => {
+    if (disableInput) {
+      isDisabled = true;
+    } else if (couponInputs.length === 0) {
+      isDisabled = true;
+    }
+    console.log("couponInputs", couponInputs);
+  }, [couponInputs.length]);
   return (
     <>
       <h1 className="font-bold text-xl pb-2 border-b-[1px]">리워드</h1>
@@ -133,14 +144,16 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               </div>
             </div>
           )}
-          {disableInput === false && (
+          {page_type === "NEW" && (
             <button
               id="create_item_container"
               className={`border p-1 ${
-                disableInput ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 cursor-pointer"
-              }  text-white rounded-lg min-w-[45px] text-center `}
+                disableInput || couponInputs.length === 0 || point_amount === 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 cursor-pointer"
+              } text-white rounded-lg min-w-[45px] text-center`}
               onClick={openRewardModal}
-              disabled={disableInput}
+              disabled={isDisabled}
             >
               리워드 추가
             </button>
