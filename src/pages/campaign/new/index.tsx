@@ -11,11 +11,21 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
 
+  const today = new Date();
+  const getFormattedDate = (): string => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    const hours = String(today.getHours()).padStart(2, "0");
+    const minutes = String(today.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day} ${hours}:${minutes}:00`;
+  };
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [period_type, setPeriod_type] = useState(PeriodType.L);
-  const [start_date, setStart_date] = useState("2024-08-14 00:00:00");
-  const [end_date, setEnd_date] = useState<string | null>("2024-08-16 00:00:00");
+  const [start_date, setStart_date] = useState(getFormattedDate);
+  const [end_date, setEnd_date] = useState<string | null>(getFormattedDate);
   const [active, setActive] = useState(true);
 
   // Validate campaign information
@@ -34,6 +44,13 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
     }
     if (info.period_type === PeriodType.L && !info.end_date) {
       alert("캠페인 종료 시간을 선택 해주세요.");
+      return false;
+    }
+    // Check if start_date is earlier than end_date
+    const startDateTime = new Date(info.start_date).getTime();
+    const endDateTime = new Date(info.end_date || "").getTime();
+    if (info.period_type === PeriodType.L && startDateTime >= endDateTime) {
+      alert("캠페인 시작 시간은 종료 시간보다 빨라야 합니다.");
       return false;
     }
     return true;
@@ -89,7 +106,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           </button>
         </div>
       </div>
-      <ContentsContainer variant="dashboard">
+      <ContentsContainer variant="campaign">
         <CampaignDetails
           page_type="NEW"
           campaignArgs={campaignArgs}

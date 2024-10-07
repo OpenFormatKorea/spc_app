@@ -118,6 +118,13 @@ const DetailsCampaign = (
       alert("캠페인 종료 시간을 선택 해주세요.");
       return false;
     }
+    // Check if start_date is earlier than end_date
+    const startDateTime = new Date(info.start_date).getTime();
+    const endDateTime = new Date(info.end_date || "").getTime();
+    if (info.period_type === PeriodType.L && startDateTime >= endDateTime) {
+      alert("캠페인 시작 시간은 종료 시간보다 빨라야 합니다.");
+      return false;
+    }
     return true;
   };
 

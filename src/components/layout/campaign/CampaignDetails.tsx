@@ -1,3 +1,4 @@
+import DatePicker from "@/components/base/DatePicker";
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
@@ -62,17 +63,17 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         <div className="w-full">
           <div className="font-normal text-sm text-gray-500">상세 정보 옵션</div>
         </div>
-
         {page_type === "DETAILS" && (
-          <CampaignActiveButton
-            view="PC"
-            campaign={{ ...campaignArgs, id: Number(campaign_id) }}
-            activeStatus={activeStatus}
-            toggleCampaignActiveStatus={toggleCampaignActiveStatus}
-          />
+          <div>
+            <CampaignActiveButton
+              view="PC"
+              campaign={{ ...campaignArgs, id: Number(campaign_id) }}
+              activeStatus={activeStatus}
+              toggleCampaignActiveStatus={toggleCampaignActiveStatus}
+            />
+          </div>
         )}
       </div>
-
       <div className="inputForm flex flex-col text-left w-full pb-2">
         <label className="text-xs pt-2 text-gray-500">캠페인 명</label>
         <InputTextBox
@@ -121,7 +122,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         </div>
       </div>
 
-      <div className="inputForm flex flex-col text-left w-full pb-2">
+      {/* <div className="inputForm flex flex-col text-left w-full pb-2">
         <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
         <div className="lg:flex sm:items-center w-full gap-2">
           <InputTextBox
@@ -143,6 +144,20 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             onChange={(e) => setEnd_date(e.target.value)}
             disabled={endDateActiveStatus}
           />
+        </div>
+      </div> */}
+      <div className="inputForm flex flex-col text-left w-[50%] pb-2">
+        <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
+        <div className="sm:items-center w-full gap-2">
+          <DatePicker label="캠페인 시작일" value={campaignArgs.start_date} onChange={setStart_date} disabled={false} />
+          {period_type === PeriodType.L && (
+            <DatePicker
+              label="캠페인 종료일"
+              value={period_type === PeriodType.L ? campaignArgs.end_date : null}
+              onChange={setEnd_date}
+              disabled={endDateActiveStatus}
+            />
+          )}
         </div>
       </div>
 

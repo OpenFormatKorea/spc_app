@@ -173,13 +173,17 @@ const ItemList: React.FC<ItemListProps> = (
           </tbody>
         </table>
         <div className="items-center justify-between hidden pt-4 lg:flex">
-          <button
-            className="py-2 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
-            id="delete_items"
-            onClick={() => handleAction("delete")}
-          >
-            선택삭제
-          </button>
+          {!items.length ? (
+            ""
+          ) : (
+            <button
+              className="py-2 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
+              id="delete_items"
+              onClick={() => handleAction("delete")}
+            >
+              선택삭제
+            </button>
+          )}
         </div>
       </div>
       {/* Mobile-friendly layout */}
