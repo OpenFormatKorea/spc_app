@@ -19,10 +19,10 @@ const Signup: React.FC = () => {
   const [shopName, setShopName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordChk, setPasswordChk] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [passwordError, setPasswordError] = useState("사용불가능");
   const [instantPWChk, setInstantPWChk] = useState(false);
   const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,12}$/;
+  const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const signupInfo: AuthArgs = {
@@ -35,7 +35,7 @@ const Signup: React.FC = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     setInstantPWChk(e.target.value === passwordChk);
-    setPasswordError(passwordPattern.test(e.target.value) ? "사용 가능" : "사용 불가능");
+    setPasswordError(passwordPattern.test(e.target.value) ? "사용가능" : "사용불가능");
   };
 
   const handlePasswordChkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +53,7 @@ const Signup: React.FC = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (infoCheck(signupInfo)) {
       const result = await postSignUp(signupInfo);
       alert(result.message);
@@ -60,7 +61,7 @@ const Signup: React.FC = () => {
         router.push("/auth/login");
       }
     } else {
-      alert("화원 가입을 실패 하였습니다.");
+      alert("회원 가입을 실패 하였습니다.");
     }
   };
 
@@ -98,7 +99,7 @@ const Signup: React.FC = () => {
     const isFormValid =
       username !== "" && email !== "" && shopName !== "" && password !== "" && passwordChk !== "" && instantPWChk;
     setButtonDisabled(!isFormValid);
-  }, [username, email, password, passwordChk, instantPWChk]);
+  }, [username, email, shopName, password, passwordChk, instantPWChk]);
 
   return (
     <AuthContainer>

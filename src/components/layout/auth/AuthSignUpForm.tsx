@@ -86,9 +86,10 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
         />
         <div className="flex justify-between w-full text-xs text-left mt-2">
           <p className="text-gray-500">*비밀번호는 최소 8자, 대문자, 특수기호 포함</p>
-          <a>
-            [<a style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</a>]
-          </a>
+          <span>
+            [<span style={passwordError === "사용불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</span>
+            ]
+          </span>
         </div>
         <div className="flex justify-between w-full items-end text-left">
           <AuthInputBox
