@@ -27,6 +27,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   handleKeyDown,
   onChangeImage,
 }) => {
+  console.log("kakaoShareArgs", kakaoShareArgs);
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-4";
   const labelClass = "text-xs pt-4 text-gray-500";
   const imageFileInput = useRef<HTMLInputElement>(null);
@@ -89,11 +90,12 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         )}
                         <img
                           className="h-full w-full"
-                          src={
-                            page_type === "DETAILS"
-                              ? `${image}`
-                              : image_result || "/images/kakao/kakaolink-no-logo-default.png"
-                          }
+                          // src={
+                          //   page_type === "DETAILS"
+                          //     ? `${img_url}`
+                          //     : image_result || "/images/kakao/kakaolink-no-logo-default.png"
+                          // }
+                          src={`${img_url}`}
                           alt="Selected"
                           onError={(e) => {
                             e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png";
@@ -120,11 +122,12 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                             >
                               <img
                                 className="h-full w-full rounded-[8px]"
-                                src={
-                                  page_type === "DETAILS"
-                                    ? `${shop_logo}`
-                                    : shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"
-                                }
+                                // src={
+                                //   page_type === "DETAILS"
+                                //     ? `${shop_logo_url}`
+                                //     : shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"
+                                // }
+                                src={`${shop_logo_url}`}
                                 alt="Selected"
                                 onError={(e) => {
                                   e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png";
