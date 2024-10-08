@@ -55,7 +55,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
     }
   };
 
-  const toggleCampaignActiveStatus = (_: string, newStatus: boolean) => setActiveStatus(newStatus);
+  const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) => setActiveStatus(newStatus);
 
   return (
     <div className="w-full pb-2 mb-2">
