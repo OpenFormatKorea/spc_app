@@ -53,9 +53,10 @@ const NewItem = (
 ) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
-    { product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] },
-  ]);
+  // const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
+  //   { product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] },
+  // ]);
+  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
   const [description, setDescription] = useState("");
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: description }]);
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
@@ -63,8 +64,10 @@ const NewItem = (
   const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
     shop_name: "",
-    image: "images/kakao/kakaolink-no-logo-default.png",
-    shop_logo: "images/kakao/kakaolink-no-logo-default.png",
+    image:
+      "https://incento-standalone.s3.ap-northeast-2.amazonaws.com/standalone/images/kakao/kakaolink-no-logo-default.png ",
+    shop_logo:
+      "https://incento-standalone.s3.ap-northeast-2.amazonaws.com/standalone/images/kakao/kakaolink-no-logo-default.png ",
     title: "",
     description: "",
     button_name: "",
@@ -80,6 +83,7 @@ const NewItem = (
 
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => (reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요."));
+  const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
 
   const itemArgs: ItemArgs = {
     title,
@@ -97,9 +101,11 @@ const NewItem = (
       alert("아이템 명을 입력해주세요.");
       return false;
     }
-    if (!productInputs[0].product_model_code && !promotionInputs[0].description) {
-      alert("아이템 적용을 원하시는 상품 혹은 쿠폰을 추가해주세요.");
-      return false;
+    if (productInputs.length !== 0 && promotionInputs.length !== 0) {
+      if (!productInputs[0].product_model_code && !promotionInputs[0].description) {
+        alert("아이템 적용을 원하시는 상품 혹은 쿠폰을 추가해주세요.");
+        return false;
+      }
     }
     if (!kakaoShareArgs.shop_name) {
       alert("숍 이름을 입력해주세요.");
@@ -140,14 +146,17 @@ const NewItem = (
       if (reader.result && typeof reader.result === "string") {
         try {
           const imgUrl = await uploadImage(file, imgType, imgType === "image" ? image : shop_logo);
+          const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
+          console.log("full_imgUrl", full_imgUrl);
+
           if (imgType === "image") {
             setImage_result(reader.result);
             setImage(`${imgUrl}.${fileExtension}`);
-            setKakaoShareArgs((prevArgs) => ({ ...prevArgs, image: imgUrl }));
+            setKakaoShareArgs((prevArgs) => ({ ...prevArgs, image: full_imgUrl }));
           } else {
             setShop_logo_result(reader.result);
             setShop_logo(`${imgUrl}.${fileExtension}`);
-            setKakaoShareArgs((prevArgs) => ({ ...prevArgs, shop_logo: imgUrl }));
+            setKakaoShareArgs((prevArgs) => ({ ...prevArgs, shop_logo: full_imgUrl }));
           }
         } catch (error) {
           console.error(`${imgType} upload failed:`, error);
@@ -169,9 +178,11 @@ const NewItem = (
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
     const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}`;
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
-
+    console.log("environment", environment);
+    console.log("previousFilePath", previousFilePath);
+    console.log("path", path);
     try {
-      if (previousFilePath) await deletePreviousFile(previousFilePath);
+      deletePreviousFile(previousFilePath);
       await ReactS3Client.uploadFile(file, path);
       return path;
     } catch (error) {
@@ -182,6 +193,11 @@ const NewItem = (
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
+
+    if (productInputs.length === 0) {
+      setProductInputs([{ product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] }]);
+    }
+
     if (id === "create_item" && infoCheck()) {
       const result = await fetchCreateItem(itemArgs, campaign_id, context);
       if (result.status === 200) {
@@ -194,6 +210,21 @@ const NewItem = (
       router.push(`/campaign/details?campaign_id=${campaign_id}`);
     }
   };
+
+  // const handleSubmit = async (event: React.FormEvent) => {
+  //   const { id } = event.currentTarget;
+  //   if (id === "create_item" && infoCheck()) {
+  //     const result = await fetchCreateItem(itemArgs, campaign_id, context);
+  //     if (result.status === 200) {
+  //       alert(result.message);
+  //       if (result.success) router.push(`/campaign/details?campaign_id=${campaign_id}`);
+  //     } else {
+  //       alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
+  //     }
+  //   } else if (id === "cancel_create_item") {
+  //     router.push(`/campaign/details?campaign_id=${campaign_id}`);
+  //   }
+  // };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

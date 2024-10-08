@@ -34,7 +34,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
           <div className="flex flex-col w-full mb-2 text-left">
             <label className={labelClass}>상품 모델 코드</label>
             <div className="w-full h-fit text-sm justify-center mt-2 break-words flex flex-wrap bg-gray-100 rounded-xl p-2 pb-3">
-              {selectedProductItems.length === 0 ? (
+              {!selectedProductItems.length ? (
                 <div className="flex items-center justify-center h-full w-full text-center text-gray-600">
                   선택된 상품이 없습니다.
                   <br />
