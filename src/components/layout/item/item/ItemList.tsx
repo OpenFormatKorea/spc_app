@@ -175,11 +175,18 @@ const ItemList: React.FC<ItemListProps> = (
         <div className="items-center justify-between hidden pt-4 lg:flex">
           {!items.length ? (
             ""
-          ) : (
+          ) : selectedItemIds.length ? (
             <button
               className="py-2 px-2 text-xs bg-red-500 text-white rounded-md cursor-pointer"
               id="delete_items"
               onClick={() => handleAction("delete")}
+            >
+              선택삭제
+            </button>
+          ) : (
+            <button
+              className="py-2 px-2 text-xs bg-gray-400 text-white rounded-md cursor-not-allowed"
+              id="delete_items"
             >
               선택삭제
             </button>
