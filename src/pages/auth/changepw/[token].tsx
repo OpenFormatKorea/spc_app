@@ -11,7 +11,7 @@ const changepw = () => {
   const [newPasswordChk, setNewPasswordChk] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [instantPWChk, setInstantPWChk] = useState(false);
-  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,12}$/;
+  const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const { token } = router.query;
