@@ -1,4 +1,5 @@
 import { AuthArgs, ChangePWArgs } from "@/lib/auth/types";
+import { deleteCookies } from "@/lib/helper";
 import axios from "axios";
 
 //sign up
@@ -36,6 +37,8 @@ export async function fetchLogIn(info: AuthArgs) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/account/login`;
   const username = info.username;
   const password = info.password;
+  deleteCookies();
+
   try {
     const {
       data: { access, refresh, shop_id },
