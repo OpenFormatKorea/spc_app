@@ -90,12 +90,11 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         )}
                         <img
                           className="h-full w-full"
-                          // src={
-                          //   page_type === "DETAILS"
-                          //     ? `${img_url}`
-                          //     : image_result || "/images/kakao/kakaolink-no-logo-default.png"
-                          // }
-                          src={`${img_url}`}
+                          src={
+                            page_type === "DETAILS"
+                              ? `${img_url}`
+                              : image_result || "/images/kakao/kakaolink-no-logo-default.png"
+                          }
                           alt="Selected"
                           onError={(e) => {
                             e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png";
@@ -122,12 +121,11 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                             >
                               <img
                                 className="h-full w-full rounded-[8px]"
-                                // src={
-                                //   page_type === "DETAILS"
-                                //     ? `${shop_logo_url}`
-                                //     : shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"
-                                // }
-                                src={`${shop_logo_url}`}
+                                src={
+                                  page_type === "DETAILS"
+                                    ? `${shop_logo_url}`
+                                    : shop_logo_result || "/images/kakao/kakaolink-no-logo-default.png"
+                                }
                                 alt="Selected"
                                 onError={(e) => {
                                   e.currentTarget.src = "/images/kakao/kakaolink-no-logo-default.png";
