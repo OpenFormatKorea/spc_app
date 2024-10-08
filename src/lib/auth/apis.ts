@@ -118,6 +118,9 @@ export async function fetchChangePW(info: ChangePWArgs) {
           if (message === "The password is too similar to the email.") {
             return { success: false, message: "비밀번호가 이메일과 너무 유사합니다. 다른 비밀번호를 사용해주세요" };
           }
+          if (message === "The password is too similar to the email address.") {
+            return { success: false, message: "비밀번호가 이메일과 너무 유사합니다. 다른 비밀번호를 사용해주세요" };
+          }
         }
         return { success: false, message: "인센토 팀으로 문의를 남겨주세요" };
       }
