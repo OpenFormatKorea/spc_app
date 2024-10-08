@@ -147,15 +147,14 @@ const NewItem = (
         try {
           const imgUrl = await uploadImage(file, imgType, imgType === "image" ? image : shop_logo);
           const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
-          console.log("full_imgUrl", full_imgUrl);
 
           if (imgType === "image") {
             setImage_result(reader.result);
-            setImage(`${imgUrl}.${fileExtension}`);
+            setImage(full_imgUrl);
             setKakaoShareArgs((prevArgs) => ({ ...prevArgs, image: full_imgUrl }));
           } else {
             setShop_logo_result(reader.result);
-            setShop_logo(`${imgUrl}.${fileExtension}`);
+            setShop_logo(full_imgUrl);
             setKakaoShareArgs((prevArgs) => ({ ...prevArgs, shop_logo: full_imgUrl }));
           }
         } catch (error) {
@@ -178,8 +177,6 @@ const NewItem = (
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
     const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}`;
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
-    console.log("environment", environment);
-    console.log("previousFilePath", previousFilePath);
     console.log("path", path);
     try {
       deletePreviousFile(previousFilePath);
