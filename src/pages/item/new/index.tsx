@@ -182,7 +182,7 @@ const NewItem = (
     console.log("previousFilePath", previousFilePath);
     console.log("path", path);
     try {
-      deletePreviousFile(previousFilePath);
+      //deletePreviousFile(previousFilePath);
       await ReactS3Client.uploadFile(file, path);
       return path;
     } catch (error) {
