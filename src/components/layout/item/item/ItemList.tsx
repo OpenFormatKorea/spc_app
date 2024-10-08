@@ -132,7 +132,7 @@ const ItemList: React.FC<ItemListProps> = (
                         item.item_type === "PRODUCT" ? "bg-blue-200 text-blue-600" : "bg-orange-200 text-orange-600"
                       }`}
                     >
-                      {item.item_type === "PRODUCT" ? "상품" : "쿠폰"}
+                      {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
                     </div>
                   </div>
                 </td>
