@@ -48,12 +48,12 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <div className="w-full flex flex-col justify-center px-5">
+          {/* <div className="w-full flex flex-col justify-center px-5">
             <label className="text-xs text-white"> SHOP ID</label>
-            {/* <label id="shop_id" className="flex text-xs text-white">
+            <label id="shop_id" className="flex text-xs text-white">
               {shop_id}
-            </label> */}
-          </div>
+            </label>
+          </div> */}
         </div>
       )}
     </header>

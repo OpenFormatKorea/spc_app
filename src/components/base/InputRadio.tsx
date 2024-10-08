@@ -13,12 +13,12 @@ const InputRadioBox: React.FC<InputRadioBoxProps> = ({ disabled, label, value, n
       type="radio"
       name={name}
       value={value}
-      id={`radio_${value}`}
+      id={`radio_${name}`}
       checked={checked}
       onChange={onChange}
       disabled={disabled}
     />
-    <label htmlFor={`radio_${value}`}>{label}</label>
+    <label htmlFor={`radio_${name}`}>{label}</label>
   </div>
 );
 
