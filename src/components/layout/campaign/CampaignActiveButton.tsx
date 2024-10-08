@@ -24,7 +24,7 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
       const updatedCampaign = { ...campaign, active: newActiveStatus };
 
       const result = await fetchModifyCampaign(campaign_id, updatedCampaign, context);
-
+      console.log("result", result);
       if (result.status === 200) {
         toggleCampaignActiveStatus(campaign_id, newActiveStatus);
       } else {
