@@ -101,12 +101,33 @@ const NewItem = (
       alert("아이템 명을 입력해주세요.");
       return false;
     }
-    if (productInputs.length !== 0 && promotionInputs.length !== 0) {
-      if (!productInputs[0].product_model_code && !promotionInputs[0].description) {
-        alert("아이템 적용을 원하시는 상품 혹은 쿠폰을 추가해주세요.");
+
+    // Ensure that at least one of productInputs or promotionInputs is not empty
+    if (productInputs.length === 0 && promotionInputs.length === 0) {
+      alert("아이템 적용을 원하시는 상품 혹은 쿠폰을 추가해주세요.");
+      return false;
+    }
+
+    // Filter out products with empty product_model_code
+    const validProductInputs = productInputs.filter(
+      (product) => product.product_model_code && product.product_model_name
+    );
+
+    if (item_type === ItemType.PD) {
+      // If the item type is PD, ensure there is at least one valid product
+      if (productInputs.length > 0 && validProductInputs.length === 0) {
+        alert("유효한 상품 모델 코드를 입력해주세요.");
+        return false;
+      }
+    } else {
+      // If not a product item (likely a promotion), check the first promotion for a description
+      if (promotionInputs.length > 0 && !promotionInputs[0].description) {
+        alert("프로모션 설명을 입력해주세요.");
         return false;
       }
     }
+
+    // Validate Kakao share arguments
     if (!kakaoShareArgs.shop_name) {
       alert("숍 이름을 입력해주세요.");
       return false;
@@ -123,12 +144,15 @@ const NewItem = (
       alert("카카오 공유 버튼 이름을 입력해주세요.");
       return false;
     }
+
+    // Check if rewards are missing and ask for confirmation
     if (
       !rewards.length &&
       !confirm("해당 아이템에 아직 리워드가 추가되지 않았어요, 그래도 아이템 생성을 원하시나요?")
     ) {
       return false;
     }
+
     return true;
   };
 
@@ -177,7 +201,6 @@ const NewItem = (
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
     const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}`;
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
-    console.log("path", path);
     try {
       deletePreviousFile(previousFilePath);
       await ReactS3Client.uploadFile(file, path);
