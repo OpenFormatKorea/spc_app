@@ -47,6 +47,8 @@ const changepw = () => {
     setNewPasswordChk(e.target.value);
     if (e.target.value !== new_password) {
       setInstantPWChk(false);
+    } else if (!passwordPattern.test(e.target.value)) {
+      setInstantPWChk(false);
     } else {
       setInstantPWChk(true);
     }
