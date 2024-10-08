@@ -33,32 +33,54 @@ const changepw = () => {
     }
   };
 
-  const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPW(e.target.value);
+  const checkPasswordsMatch = () => {
+    return new_password === newPasswordChk;
+  };
 
-    if (!passwordPattern.test(e.target.value)) {
+  const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setNewPW(newPassword);
+
+    if (!passwordPattern.test(newPassword)) {
       setPasswordError("사용 불가능");
     } else {
       setPasswordError("사용 가능");
     }
+
+    // Check if new password matches confirm password
+    if (newPasswordChk) {
+      setButtonDisabled(!checkPasswordsMatch());
+    }
   };
 
   const handleNewPasswordChkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPasswordChk(e.target.value);
-    if (e.target.value !== new_password) {
-      setInstantPWChk(false);
-    } else if (!passwordPattern.test(e.target.value)) {
-      setInstantPWChk(false);
-    } else {
-      setInstantPWChk(true);
-    }
+    const confirmPassword = e.target.value;
+    setNewPasswordChk(confirmPassword);
+
+    // update instantPWChk state
+    setInstantPWChk(new_password === confirmPassword);
+
+    // Check if the confirm password matches the new password
+    setButtonDisabled(!checkPasswordsMatch());
   };
+
+  // const handleNewPasswordChkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setNewPasswordChk(e.target.value);
+  //   if (e.target.value !== new_password) {
+  //     setInstantPWChk(false);
+  //   } else if (!passwordPattern.test(e.target.value)) {
+  //     setInstantPWChk(false);
+  //   } else {
+  //     setInstantPWChk(true);
+  //   }
+  // };
 
   const postChangePW = async (info: ChangePWArgs) => {
     return await fetchChangePW(info);
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault(); // Prevent default form submission
     if (infoCheck(changePWInfo)) {
       const result = await postChangePW(changePWInfo);
       alert(result.message);
@@ -85,9 +107,10 @@ const changepw = () => {
   };
 
   useEffect(() => {
-    const isFormValid = new_password !== "" && newPasswordChk !== "" && instantPWChk;
-    setButtonDisabled(!isFormValid);
-  }, [new_password, newPasswordChk, instantPWChk]);
+    const isFormValid = new_password !== "" && newPasswordChk !== "" && passwordPattern.test(new_password);
+    setInstantPWChk(new_password === newPasswordChk);
+    setButtonDisabled(!isFormValid || !checkPasswordsMatch());
+  }, [new_password, newPasswordChk]);
 
   return (
     <AuthChangePWForm
