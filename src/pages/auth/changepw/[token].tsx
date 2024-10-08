@@ -57,23 +57,12 @@ const changepw = () => {
     const confirmPassword = e.target.value;
     setNewPasswordChk(confirmPassword);
 
-    // update instantPWChk state
+    // Update instantPWChk state
     setInstantPWChk(new_password === confirmPassword);
 
     // Check if the confirm password matches the new password
     setButtonDisabled(!checkPasswordsMatch());
   };
-
-  // const handleNewPasswordChkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setNewPasswordChk(e.target.value);
-  //   if (e.target.value !== new_password) {
-  //     setInstantPWChk(false);
-  //   } else if (!passwordPattern.test(e.target.value)) {
-  //     setInstantPWChk(false);
-  //   } else {
-  //     setInstantPWChk(true);
-  //   }
-  // };
 
   const postChangePW = async (info: ChangePWArgs) => {
     return await fetchChangePW(info);

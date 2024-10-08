@@ -171,7 +171,7 @@ const NewItem = (
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
 
     try {
-      if (previousFilePath) await deletePreviousFile(previousFilePath);
+      // if (previousFilePath) await deletePreviousFile(previousFilePath);
       await ReactS3Client.uploadFile(file, path);
       return path;
     } catch (error) {
