@@ -22,10 +22,10 @@ const Navbar = () => {
           <Navmenu menutitle="마이 페이지" link="/mypage" />
         </div>
         <div className="setting-menu absolute bottom-[5%] w-full">
-          <div className="w-full flex flex-col justify-center p-3">
+          {/* <div className="w-full flex flex-col justify-center p-3">
             <label className="text-xs text-white"> SHOP ID</label>
-            {/* <label className="text-xs text-white">{shop_id}</label> */}
-          </div>
+            <label className="text-xs text-white">{shop_id}</label>
+          </div> */}
           <div
             className="h-[55px] flex items-center text-md cursor-pointer transition-all duration-300 text-white w-full p-4"
             onClick={handleSignOut}

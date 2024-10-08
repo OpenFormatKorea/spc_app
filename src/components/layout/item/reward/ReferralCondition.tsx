@@ -126,11 +126,12 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
             className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_timing.type === PaymentTimingType.DEL ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"}`}
           >
             <div className="flex text-left text-sm w-[120px] text-gray-500 items-end">
-              <InputTextBox
+              <input
                 type="text"
                 id={`${target}_${trigger}_delay_days`}
                 placeholder=""
                 value={itemConditions.payment_timing.delay_days || ""}
+                className="input-class flex-grow text-sm py-2 w-full lg:max-w-[450px] border-b-[1px] pt-4 pb-0"
                 onChange={(e) => handleTimingChange("delay_days", Number(e.target.value))}
                 onKeyDown={handleKeyDown}
                 disabled={false}
@@ -174,7 +175,28 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
           >
             <div className="flex text-left text-sm w-[120px] text-gray-500 items-end">
               <div className="flex min-w-fit items-center mr-2">최대</div>
-              <InputTextBox
+              <style jsx>{`
+                /* Chrome, Safari, Edge, Opera */
+                input[type="number"]::-webkit-outer-spin-button,
+                input[type="number"]::-webkit-inner-spin-button {
+                  -webkit-appearance: none;
+                  margin: 0;
+                } /* Firefox */
+                input[type="number"] {
+                  -moz-appearance: textfield;
+                }
+              `}</style>
+              <input
+                type="number"
+                id={`${target}_${trigger}_repeat_count`}
+                placeholder=""
+                className="input-class flex-grow text-sm py-2 w-full lg:max-w-[450px] border-b-[1px] pt-4 pb-0"
+                value={itemConditions.payment_frequency.repeat_count || ""}
+                onChange={(e) => handleFrequencyChange("repeat_count", Number(e.target.value))}
+                onKeyDown={handleKeyDown}
+                disabled={false}
+              />
+              {/* <InputTextBox
                 type="number"
                 id={`${target}_${trigger}_repeat_count`}
                 placeholder=""
@@ -182,7 +204,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 onChange={(e) => handleFrequencyChange("repeat_count", Number(e.target.value))}
                 onKeyDown={handleKeyDown}
                 disabled={false}
-              />
+              /> */}
               <div className="flex items-center min-w-fit ml-2">번</div>
             </div>
           </div>

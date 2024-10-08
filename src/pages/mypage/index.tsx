@@ -8,6 +8,8 @@ import { GetServerSideProps } from "next";
 import router from "next/router";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await fetchGetUserInfo(context);
+  console.log("userInfo", data);
+
   return { props: { data } };
 };
 const DetailsMyPage = (data: UserInfoProps) => {
@@ -22,7 +24,7 @@ const DetailsMyPage = (data: UserInfoProps) => {
     <DashboardContainer>
       <div className="flex w-full justify-between items-center mb-3 h-[42px]">
         <div className="subject-container flex w-full">
-          <a className="text-2xl font-bold">마이 페이지</a>
+          <div className="text-2xl font-bold">마이 페이지</div>
         </div>
 
         <div className="button-container flex justify-end w-full">

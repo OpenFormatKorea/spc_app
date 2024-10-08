@@ -94,7 +94,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
         </div>
 
         <div className="contents-container w-full justify-between pb-4">
-          {reward_type === RewardType.CO && (
+          {reward_type === RewardType.CO && page_type == "NEW" && (
             <div className="flex flex-col w-full h-fit">
               <div className="flex flex-col w-full mb-2 text-left">
                 <label className={labelClass}>선택된 쿠폰</label>
