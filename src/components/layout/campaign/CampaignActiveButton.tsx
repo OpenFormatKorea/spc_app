@@ -15,6 +15,9 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
   context: GetServerSidePropsContext
 ) => {
   const campaign_id = campaign.id?.toString() ?? "0";
+  function refreshPage() {
+    window.location.reload();
+  }
 
   const handleActiveStatus = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -26,6 +29,7 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
       const result = await fetchModifyCampaign(campaign_id, updatedCampaign, context);
       if (result.status === 200) {
         toggleCampaignActiveStatus(campaign_id, newActiveStatus);
+        refreshPage();
       } else {
         alert(`캠페인 활성화 상태를 변경 실패 하였습니다. 상태 코드: ${result.status}`);
       }
