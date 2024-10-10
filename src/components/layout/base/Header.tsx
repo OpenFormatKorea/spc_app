@@ -3,8 +3,11 @@ import { FaBars, FaTimes } from "react-icons/fa"; // Importing icons for menu
 import Navmenu from "@/components/layout/base/Navmenu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { handleLogo, handleSignOut } from "@/lib/common";
+interface HeaderProps {
+  shop_id: any;
+}
 
-const Header = () => {
+const Header: React.FC<HeaderProps> = ({ shop_id }: { shop_id: any }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -48,12 +51,12 @@ const Header = () => {
               </div>
             </div>
           </div>
-          {/* <div className="w-full flex flex-col justify-center px-5">
-            <label className="text-xs text-white"> SHOP ID</label>
-            <label id="shop_id" className="flex text-xs text-white">
+          <div className="w-full flex flex-col justify-center px-5">
+            <span className="text-xs text-white"> SHOP ID</span>
+            <span id="shop_id" className="flex text-xs text-white">
               {shop_id}
-            </label>
-          </div> */}
+            </span>
+          </div>
         </div>
       )}
     </header>

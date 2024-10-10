@@ -8,7 +8,6 @@ import { GetServerSideProps } from "next";
 import router from "next/router";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await fetchGetUserInfo(context);
-
   return { props: { data } };
 };
 const DetailsMyPage = (data: UserInfoProps) => {

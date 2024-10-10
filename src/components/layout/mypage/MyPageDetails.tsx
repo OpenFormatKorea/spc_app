@@ -8,7 +8,6 @@ interface MyPageProps {
 
 const MyPageDetails: React.FC<MyPageProps> = ({ username, email }, context: GetServerSidePropsContext) => {
   const shop_id = getShopIdFromCookies(context);
-  console.log("shop_id", shop_id);
   return (
     <div className="contents-container w-full justify-center items-center">
       <div className="flex py-1">

@@ -90,7 +90,6 @@ export const getAxiosInstanceServer = async (context: GetServerSidePropsContext)
     console.error("Error creating axios instance:", err);
 
     if (typeof window !== "undefined") {
-      console.log("Redirecting to login due to error (client-side)...");
       window.location.replace(
         process.env.NODE_ENV === "development"
           ? "http://dev-fe.standalone.incento.kr/auth/login"
