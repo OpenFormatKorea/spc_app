@@ -91,10 +91,6 @@ const changepw = () => {
     }
   };
 
-  const handleButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    router.push("/auth/forgotpw");
-  };
-
   useEffect(() => {
     const isFormValid = new_password !== "" && newPasswordChk !== "" && passwordPattern.test(new_password);
     setInstantPWChk(new_password === newPasswordChk);
@@ -112,7 +108,6 @@ const changepw = () => {
       instantPWChk={instantPWChk}
       handleNewPasswordChkChange={handleNewPasswordChkChange}
       setShowPw={setShowPw}
-      handleButton={handleButton}
       handleSubmit={handleSubmit}
       buttonRef={buttonRef}
       handleKeyDown={handleKeyDown}

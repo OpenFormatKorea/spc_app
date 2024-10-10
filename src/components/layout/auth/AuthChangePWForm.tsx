@@ -15,7 +15,6 @@ interface AuthChangePWFormProps {
   handleNewPasswordChkChange: (e: ChangeEvent<HTMLInputElement>) => void;
   passwordError: string;
   newPasswordChk: string;
-  handleButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   buttonRef: React.RefObject<HTMLButtonElement>;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -30,7 +29,6 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
   handleNewPasswordChange,
   handleNewPasswordChkChange,
   setShowPw,
-  handleButton,
   handleSubmit,
   buttonRef,
   handleKeyDown,
@@ -52,7 +50,11 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           <div className="flex justify-between w-full text-xs text-left mt-2">
             <p className="text-gray-500">*비밀번호는 최소 8자, 대문자, 특수기호 포함</p>
             <div>
-              [<span style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>{passwordError}</span>]
+              [
+              <span style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>
+                {passwordError}
+              </span>
+              ]
             </div>
           </div>
           <div className="flex justify-between w-full items-end text-left">
