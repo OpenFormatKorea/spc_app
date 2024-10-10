@@ -16,6 +16,12 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
 ) => {
   const campaign_id = campaign.id?.toString() ?? "0";
 
+  function refreshPage() {
+    if (window.location.href.includes("/campaign/details")) {
+      window.location.reload();
+    }
+  }
+
   const handleActiveStatus = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     const newActiveStatus = !activeStatus;
@@ -26,6 +32,7 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
       const result = await fetchModifyCampaign(campaign_id, updatedCampaign, context);
       if (result.status === 200) {
         toggleCampaignActiveStatus(campaign_id, newActiveStatus);
+        refreshPage();
       } else {
         alert(`캠페인 활성화 상태를 변경 실패 하였습니다. 상태 코드: ${result.status}`);
       }
