@@ -15,8 +15,11 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
   context: GetServerSidePropsContext
 ) => {
   const campaign_id = campaign.id?.toString() ?? "0";
+
   function refreshPage() {
-    window.location.reload();
+    if (window.location.href.includes("/campaign/details")) {
+      window.location.reload();
+    }
   }
 
   const handleActiveStatus = async (e: React.ChangeEvent<HTMLInputElement>) => {
