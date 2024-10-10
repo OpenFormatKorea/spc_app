@@ -35,10 +35,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ label, value, onChange, disable
   const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
 
   return (
-    <div className="flex flex-col w-full pb-2 ">
-      <label className="text-xs py-2 text-gray-500">{label}</label>
-      <div className="flex-col gap-2 items-center">
-        <div className="flex gap-2 items-center pb-2">
+    <div className="flex flex-col w-fit pb-2 p-2 bg-gray-200 m-2 rounded-xl">
+      <label className="text-xs pb-2 text-gray-500">{label}</label>
+      <div className="flex-col  items-center p-2 bg-white rounded-md">
+        <div className="flex gap-2 items-center bg-white mb-2">
           <select
             value={year}
             onChange={(e) => setYear(e.target.value)}
@@ -79,7 +79,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ label, value, onChange, disable
           </select>
           일
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center bg-white ">
           <select
             value={hour}
             onChange={(e) => setHour(e.target.value)}

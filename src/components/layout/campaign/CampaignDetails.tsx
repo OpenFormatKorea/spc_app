@@ -121,9 +121,9 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
       </div>
-      <div className="inputForm flex flex-col text-left w-[50%] pb-2">
+      <div className="inputForm flex flex-col w-full text-left pb-2">
         <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
-        <div className="sm:items-center w-full gap-2">
+        <div className="flex  flex-wrap items-center justify-center w-full gap-2">
           <DatePicker label="캠페인 시작일" value={campaignArgs.start_date} onChange={setStart_date} disabled={false} />
           {period_type === PeriodType.L && (
             <DatePicker
