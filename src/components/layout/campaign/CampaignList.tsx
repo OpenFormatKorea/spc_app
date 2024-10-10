@@ -67,7 +67,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
               <th className={theadStyle}>캠페인 ID</th>
               <th className={theadStyle}>캠페인 명</th>
               <th className={theadStyle}>타입</th>
-              <th className={theadStyle}>캠페인 생성일</th>
+              <th className={theadStyle}>캠페인 기간</th>
               <th className={theadStyle}>활성화</th>
             </tr>
           </thead>

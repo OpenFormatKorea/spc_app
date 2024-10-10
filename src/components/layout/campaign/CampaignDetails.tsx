@@ -62,7 +62,6 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">
         <div className="w-full">
           <div className="text-lg font-bold text-black">
-            {" "}
             {page_type === "DETAILS" ? "캠페인 상세 정보" : "캠페인 옵션 추가"}
           </div>
         </div>
