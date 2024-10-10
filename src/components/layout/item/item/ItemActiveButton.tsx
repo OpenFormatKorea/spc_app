@@ -17,13 +17,8 @@ const ItemActiveButton: React.FC<ItemActiveButtonProps> = (
     const newActiveStatus = !activeStatus;
 
     if (confirm("아이템 활성화 상태를 변경하시겠어요?")) {
-      // Optimistic UI update
       toggleItemActiveStatus(item_id, newActiveStatus);
-
-      // Send activation request to the server
       const result = await fetchActivateItem(item_id, campaign_id, context);
-
-      // Roll back in case of failure
       if (result.status !== 200) {
         alert(`아이템 활성화 상태 변경 실패. 상태 코드: ${result.status}`);
         toggleItemActiveStatus(item_id, !newActiveStatus);
