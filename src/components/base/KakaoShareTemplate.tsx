@@ -57,7 +57,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
     <>
       <div className="contents-container w-full pt-4">
         <label className="pt-4 font-bold text-gray-500">카카오 메시지 설정</label>
-        <div className="block lg:flex lg:gap-4">
+        <div className="lg:flex lg:gap-4">
           <div className="bg-gray-200 lg:bg-transparent w-full lg:w-fit flex items-center lg:items-start justify-center lg:justify-start rounded-xl">
             <div className="relative my-4">
               <div className="hidden lg:block w-[200px] lg:w-[290px] mx-auto">
