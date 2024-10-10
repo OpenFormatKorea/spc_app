@@ -45,9 +45,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   }, [period_type, campaignArgs.end_date, setEnd_date]);
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => setPeriod_type(e.target.value as PeriodType);
-
   const handleActiveRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => setActive(e.target.value === "true");
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -148,7 +146,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
               value="true"
               checked={campaignArgs.active}
               onChange={handleActiveRadioChange}
-              disabled={false}
+              disabled={true}
             />
             <InputRadioBox
               label="비활성화"
@@ -156,9 +154,12 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
               value="false"
               checked={!campaignArgs.active}
               onChange={handleActiveRadioChange}
-              disabled={false}
+              disabled={true}
             />
           </div>
+          <label className="text-xs pt-4 pb-2 text-gray-400">
+            - 캠페인 생성 시에는 기본값이 비활성화로 지정됩니다.
+          </label>
         </div>
       )}
     </div>
