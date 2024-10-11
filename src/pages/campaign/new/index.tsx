@@ -26,7 +26,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   const [period_type, setPeriod_type] = useState(PeriodType.L);
   const [start_date, setStart_date] = useState(getFormattedDate);
   const [end_date, setEnd_date] = useState<string | null>(getFormattedDate);
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
 
   // Validate campaign information
   const isCampaignInfoValid = (info: CampaignArgs): boolean => {

@@ -35,73 +35,78 @@ const DatePicker: React.FC<DatePickerProps> = ({ label, value, onChange, disable
   const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
 
   return (
-    <div className="flex flex-col w-full pb-2 ">
-      <label className="text-xs py-2 text-gray-500">{label}</label>
-      <div className="flex gap-2 items-center">
-        <select
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-          disabled={disabled}
-          className="p-1 border border-gray-300 rounded-md"
-        >
-          {years.map((y) => (
-            <option key={y} value={y}>
-              {y}
-            </option>
-          ))}
-        </select>
-        년
-        <select
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-          disabled={disabled}
-          className="p-1 border border-gray-300 rounded-md"
-        >
-          {months.map((m) => (
-            <option key={m} value={m}>
-              {m}
-            </option>
-          ))}
-        </select>
-        월
-        <select
-          value={day}
-          onChange={(e) => setDay(e.target.value)}
-          disabled={disabled}
-          className="p-1 border border-gray-300 rounded-md"
-        >
-          {days.map((d) => (
-            <option key={d} value={d}>
-              {d}
-            </option>
-          ))}
-        </select>
-        일{" "}
-        <select
-          value={hour}
-          onChange={(e) => setHour(e.target.value)}
-          disabled={disabled}
-          className="p-1 border border-gray-300 rounded-md"
-        >
-          {hours.map((h) => (
-            <option key={h} value={h}>
-              {h}
-            </option>
-          ))}
-        </select>
-        :
-        <select
-          value={minute}
-          onChange={(e) => setMinute(e.target.value)}
-          disabled={disabled}
-          className="p-1 border border-gray-300 rounded-md"
-        >
-          {minutes.map((m) => (
-            <option key={m} value={m}>
-              {m}
-            </option>
-          ))}
-        </select>
+    <div className="flex flex-col w-fit pb-2 p-2 bg-gray-200 m-2 rounded-xl">
+      <label className="text-xs pb-2 text-gray-500">{label}</label>
+      <div className="flex-col  items-center p-2 bg-white rounded-md">
+        <div className="flex gap-2 items-center bg-white mb-2">
+          <select
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            disabled={disabled}
+            className="p-1 border border-gray-300 rounded-md"
+          >
+            {years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+          년
+          <select
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            disabled={disabled}
+            className="p-1 border border-gray-300 rounded-md"
+          >
+            {months.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+          월
+          <select
+            value={day}
+            onChange={(e) => setDay(e.target.value)}
+            disabled={disabled}
+            className="p-1 border border-gray-300 rounded-md"
+          >
+            {days.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+          일
+        </div>
+        <div className="flex gap-2 items-center bg-white ">
+          <select
+            value={hour}
+            onChange={(e) => setHour(e.target.value)}
+            disabled={disabled}
+            className="p-1 border border-gray-300 rounded-md"
+          >
+            {hours.map((h) => (
+              <option key={h} value={h}>
+                {h}
+              </option>
+            ))}
+          </select>
+          시
+          <select
+            value={minute}
+            onChange={(e) => setMinute(e.target.value)}
+            disabled={disabled}
+            className="p-1 border border-gray-300 rounded-md"
+          >
+            {minutes.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+          분
+        </div>
       </div>
     </div>
   );

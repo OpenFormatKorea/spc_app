@@ -45,9 +45,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   }, [period_type, campaignArgs.end_date, setEnd_date]);
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => setPeriod_type(e.target.value as PeriodType);
-
   const handleActiveRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => setActive(e.target.value === "true");
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -123,9 +121,9 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
       </div>
-      <div className="inputForm flex flex-col text-left w-[50%] pb-2">
+      <div className="inputForm flex flex-col w-full text-left pb-2">
         <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
-        <div className="sm:items-center w-full gap-2">
+        <div className="flex  flex-wrap items-center justify-center w-full gap-2">
           <DatePicker label="캠페인 시작일" value={campaignArgs.start_date} onChange={setStart_date} disabled={false} />
           {period_type === PeriodType.L && (
             <DatePicker
@@ -148,7 +146,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
               value="true"
               checked={campaignArgs.active}
               onChange={handleActiveRadioChange}
-              disabled={false}
+              disabled={true}
             />
             <InputRadioBox
               label="비활성화"
@@ -156,9 +154,12 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
               value="false"
               checked={!campaignArgs.active}
               onChange={handleActiveRadioChange}
-              disabled={false}
+              disabled={true}
             />
           </div>
+          <label className="text-xs pt-4 pb-2 text-gray-400">
+            - 캠페인 생성 시에는 기본값이 비활성화로 지정됩니다.
+          </label>
         </div>
       )}
     </div>
