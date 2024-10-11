@@ -130,7 +130,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 type="text"
                 id={`${target}_${trigger}_delay_days`}
                 placeholder=""
-                value={itemConditions.payment_timing.delay_days || ""}
+                value={itemConditions.payment_timing.delay_days ?? ""}
                 className="input-class flex-grow text-sm py-2 w-full lg:max-w-[450px] border-b-[1px] pt-4 pb-0"
                 onChange={(e) => handleTimingChange("delay_days", Number(e.target.value))}
                 onKeyDown={handleKeyDown}

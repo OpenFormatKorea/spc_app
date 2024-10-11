@@ -142,16 +142,16 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               </div>
             </div>
           )}
-          {(page_type === "NEW" || (couponInputs.length !== 0 && point_amount !== "0")) && (
+          {(page_type === "NEW" || (couponInputs.length !== 0 && point_amount !== "")) && (
             <button
               id="create_item_container"
               className={`border p-1 ${
-                couponInputs.length === 0 && point_amount === "0"
+                couponInputs.length === 0 && point_amount === ""
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-blue-500 cursor-pointer"
               } text-white rounded-lg min-w-[45px] text-center`}
               onClick={openRewardModal}
-              disabled={couponInputs.length === 0 && point_amount === "0"}
+              disabled={couponInputs.length === 0 && point_amount === ""}
             >
               리워드 추가
             </button>
