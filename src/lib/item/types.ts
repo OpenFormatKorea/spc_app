@@ -52,7 +52,7 @@ export interface CouponListArgs {
 export interface RewardsArgs {
   reward_type: RewardType;
   coupon_code?: string | undefined;
-  point_amount?: number | undefined;
+  point_amount?: string | undefined;
   referrer_conditions?: RewardPolicyArgs | null;
   referee_conditions?: RewardPolicyArgs | null;
 }

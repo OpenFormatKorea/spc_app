@@ -6,12 +6,14 @@ import { fetchSignUp } from "@/lib/auth/apis";
 import { AuthArgs } from "@/lib/auth/types";
 import { authenticateUser } from "@/lib/auth";
 import { GetServerSideProps } from "next";
+import LoadingSpinner from "@/components/base/LoadingSpinner";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return authenticateUser(context, "/auth/login");
 };
 
 const Signup: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const [showPW, setShowPw] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [username, setUsername] = useState("");
@@ -102,28 +104,35 @@ const Signup: React.FC = () => {
   }, [username, email, shopName, password, passwordChk, instantPWChk]);
 
   return (
-    <AuthContainer>
-      <AuthSignUpForm
-        username={username}
-        setUsername={setUsername}
-        email={email}
-        setEmail={setEmail}
-        shopName={shopName}
-        setShopName={setShopName}
-        showPW={showPW}
-        password={password}
-        handlePasswordChange={handlePasswordChange}
-        passwordError={passwordError}
-        passwordChk={passwordChk}
-        handlePasswordChkChange={handlePasswordChkChange}
-        instantPWChk={instantPWChk}
-        buttonDisabled={buttonDisabled}
-        setShowPw={setShowPw}
-        handleSubmit={handleSubmit}
-        buttonRef={buttonRef}
-        handleKeyDown={handleKeyDown}
-      ></AuthSignUpForm>
-    </AuthContainer>
+    <>
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+          <LoadingSpinner />
+        </div>
+      )}
+      <AuthContainer>
+        <AuthSignUpForm
+          username={username}
+          setUsername={setUsername}
+          email={email}
+          setEmail={setEmail}
+          shopName={shopName}
+          setShopName={setShopName}
+          showPW={showPW}
+          password={password}
+          handlePasswordChange={handlePasswordChange}
+          passwordError={passwordError}
+          passwordChk={passwordChk}
+          handlePasswordChkChange={handlePasswordChkChange}
+          instantPWChk={instantPWChk}
+          buttonDisabled={buttonDisabled}
+          setShowPw={setShowPw}
+          handleSubmit={handleSubmit}
+          buttonRef={buttonRef}
+          handleKeyDown={handleKeyDown}
+        ></AuthSignUpForm>
+      </AuthContainer>{" "}
+    </>
   );
 };
 export default Signup;

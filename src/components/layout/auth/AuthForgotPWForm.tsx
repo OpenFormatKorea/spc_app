@@ -26,7 +26,7 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
         <div className="text-xl font-semibold m-2 w-full text-left">비밀번호 찾기</div>
         <div className="flex flex-col w-full items-start justify-between">
           <AuthInputBox
-            label="아이디:"
+            label="아이디"
             type="text"
             id="username"
             placeholder="아이디를 입력하세요."
@@ -35,7 +35,12 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
             onKeyDown={handleKeyDown}
           />
         </div>
-        <AuthButton disabled={buttonDisabled} label="비밀번호 재설정하기" buttonRef={buttonRef} onClick={handleSubmit} />
+        <AuthButton
+          disabled={buttonDisabled}
+          label="비밀번호 재설정하기"
+          buttonRef={buttonRef}
+          onClick={handleSubmit}
+        />
         <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
           <div className="mr-2 ml-2 text-sm cursor-pointer">
             <button id="signup" onClick={handleButton}>

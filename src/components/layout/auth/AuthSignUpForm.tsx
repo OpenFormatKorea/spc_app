@@ -49,7 +49,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
       <div className="text-xl font-semibold m-2 w-full text-left">회원가입</div>
       <div className="flex flex-col w-full items-start justify-between">
         <AuthInputBox
-          label="아이디:"
+          label="아이디"
           type="text"
           id="username"
           placeholder="아이디를 입력하세요."

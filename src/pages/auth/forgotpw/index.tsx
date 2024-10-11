@@ -10,6 +10,7 @@ import { useEffect, useRef, useState, KeyboardEvent } from "react";
 // };
 
 const resetpw = () => {
+  const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [username, setUsername] = useState("");
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -27,14 +28,19 @@ const resetpw = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    if (infoCheck(resetPWInfo)) {
-      const result = await fetchResetPW(resetPWInfo);
-      alert(result.message);
-      if (result.success) {
-        router.push("/auth/login");
+    if (loading == false) {
+      setLoading(true);
+      if (infoCheck(resetPWInfo)) {
+        const result = await fetchResetPW(resetPWInfo);
+        setLoading(false);
+        alert(result.message);
+        if (result.success) {
+          router.push("/auth/login");
+        }
+      } else {
+        alert("비밀번호 설정이 실패하였습니다. 인센토 팀으로 문의를 남겨주세요.");
+        setLoading(false);
       }
-    } else {
-      alert("비밀번호 잴설정이 실패하였습니다. 인센토 팀으로 문의를 남겨주세요.");
     }
   };
 

@@ -5,6 +5,7 @@ import { ApiResponse } from "@/lib/types";
 import InputTextBox from "@/components/base/InputText";
 import CouponList from "@/components/layout/item/modal/CouponList";
 import RewardModal from "@/components/layout/item/reward/RewardModal";
+import InputNumberTextBox from "@/components/base/InputNumberText";
 
 interface RewardComponentProps {
   apiResponse?: ApiResponse;
@@ -36,7 +37,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
   const labelClass = "text-xs pt-4 text-gray-500";
-  const [point_amount, setPointAmount] = useState<number>(0);
+  const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
   const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,28 +130,28 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
             <div className="flex flex-col w-full h-fit">
               <div className={inputFormClass}>
                 <label className={labelClass}>포인트</label>
-                <InputTextBox
-                  type="number"
-                  id={`point_amount`}
+                <InputNumberTextBox
+                  type="text"
+                  id="point_amount"
                   placeholder="포인트를 입력해 주세요."
                   value={point_amount}
-                  onChange={(e) => setPointAmount(Number(e.target.value))}
+                  onChange={(e) => setPointAmount(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={disableInput}
                 />
               </div>
             </div>
           )}
-          {(page_type === "NEW" || (couponInputs.length !== 0 && point_amount !== 0)) && (
+          {(page_type === "NEW" || (couponInputs.length !== 0 && point_amount !== "0")) && (
             <button
               id="create_item_container"
               className={`border p-1 ${
-                couponInputs.length === 0 && point_amount === 0
+                couponInputs.length === 0 && point_amount === "0"
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-blue-500 cursor-pointer"
               } text-white rounded-lg min-w-[45px] text-center`}
               onClick={openRewardModal}
-              disabled={couponInputs.length === 0 && point_amount === 0}
+              disabled={couponInputs.length === 0 && point_amount === "0"}
             >
               리워드 추가
             </button>

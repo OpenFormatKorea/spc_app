@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import ReactS3Client from "@/lib/aws/ReactS3Client";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
+import LoadingSpinner from "@/components/base/LoadingSpinner";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -65,9 +66,9 @@ const NewItem = (
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
     shop_name: "",
     image:
-      "https://incento-standalone.s3.ap-northeast-2.amazonaws.com/standalone/images/kakao/kakaolink-no-logo-default.png ",
+      "https://incento-standalone.s3.ap-northeast-2.amazonaws.com/standalone/images/kakao/kakaolink-no-logo-default.png",
     shop_logo:
-      "https://incento-standalone.s3.ap-northeast-2.amazonaws.com/standalone/images/kakao/kakaolink-no-logo-default.png ",
+      "https://incento-standalone.s3.ap-northeast-2.amazonaws.com/standalone/images/kakao/kakaolink-no-logo-default.png",
     title: "",
     description: "",
     button_name: "",
@@ -80,6 +81,7 @@ const NewItem = (
   const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => (reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요."));
@@ -102,32 +104,26 @@ const NewItem = (
       return false;
     }
 
-    // Ensure that at least one of productInputs or promotionInputs is not empty
     if (productInputs.length === 0 && promotionInputs.length === 0) {
       alert("아이템 적용을 원하시는 상품 혹은 쿠폰을 추가해주세요.");
       return false;
     }
-
-    // Filter out products with empty product_model_code
     const validProductInputs = productInputs.filter(
       (product) => product.product_model_code && product.product_model_name
     );
 
     if (item_type === ItemType.PD) {
-      // If the item type is PD, ensure there is at least one valid product
       if (productInputs.length > 0 && validProductInputs.length === 0) {
         alert("유효한 상품 모델 코드를 입력해주세요.");
         return false;
       }
     } else {
-      // If not a product item (likely a promotion), check the first promotion for a description
       if (promotionInputs.length > 0 && !promotionInputs[0].description) {
         alert("프로모션 설명을 입력해주세요.");
         return false;
       }
     }
 
-    // Validate Kakao share arguments
     if (!kakaoShareArgs.shop_name) {
       alert("숍 이름을 입력해주세요.");
       return false;
@@ -145,7 +141,6 @@ const NewItem = (
       return false;
     }
 
-    // Check if rewards are missing and ask for confirmation
     if (
       !rewards.length &&
       !confirm("해당 아이템에 아직 리워드가 추가되지 않았어요, 그래도 아이템 생성을 원하시나요?")
@@ -213,38 +208,27 @@ const NewItem = (
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
-
     if (productInputs.length === 0) {
       setProductInputs([{ product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] }]);
     }
 
     if (id === "create_item" && infoCheck()) {
-      const result = await fetchCreateItem(itemArgs, campaign_id, context);
-      if (result.status === 200) {
-        alert(result.message);
-        if (result.success) router.push(`/campaign/details?campaign_id=${campaign_id}`);
-      } else {
-        alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
+      if (loading == false) {
+        setLoading(true);
+        const result = await fetchCreateItem(itemArgs, campaign_id, context);
+        if (result.status === 200) {
+          alert(result.message);
+          setLoading(false);
+          if (result.success) router.push(`/campaign/details?campaign_id=${campaign_id}`);
+        } else {
+          setLoading(false);
+          alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
+        }
       }
     } else if (id === "cancel_create_item") {
       router.push(`/campaign/details?campaign_id=${campaign_id}`);
     }
   };
-
-  // const handleSubmit = async (event: React.FormEvent) => {
-  //   const { id } = event.currentTarget;
-  //   if (id === "create_item" && infoCheck()) {
-  //     const result = await fetchCreateItem(itemArgs, campaign_id, context);
-  //     if (result.status === 200) {
-  //       alert(result.message);
-  //       if (result.success) router.push(`/campaign/details?campaign_id=${campaign_id}`);
-  //     } else {
-  //       alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
-  //     }
-  //   } else if (id === "cancel_create_item") {
-  //     router.push(`/campaign/details?campaign_id=${campaign_id}`);
-  //   }
-  // };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -259,90 +243,97 @@ const NewItem = (
   }, [description]);
 
   return (
-    <DashboardContainer>
-      <div className="flex w-full justify-between items-center mb-3 h-[42px]">
-        <div className="subject-container flex w-full">
-          <a className="text-2xl font-bold">아이템 추가</a>
+    <>
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+          <LoadingSpinner />
         </div>
-      </div>
-      <div className="flex flex-col lg:flex-row w-full justify-center lg:space-x-4">
-        <ContentsContainer variant="campaign">
-          <ItemDetails
-            page_type="NEW"
-            itemArgs={itemArgs}
-            kakaoShareArgs={kakaoShareArgs}
-            setItem_type={setItem_type}
-            setTitle={setTitle}
-            setKakaoShareArgs={setKakaoShareArgs}
-            setProductInputs={setProductInputs}
-            setPromotionInputs={setPromotionInputs}
-            handleKeyDown={handleKeyDown}
-            image={image}
-            shop_logo={shop_logo}
-            image_result={image_result}
-            shop_logo_result={shop_logo_result}
-            onChangeImage={onChangeImage}
-            disableInput={false}
-          />
-        </ContentsContainer>
-        <ContentsContainer variant="campaign">
-          <ItemTypeDetails
-            page_type="NEW"
-            item_type={item_type}
-            itemArgs={itemArgs}
-            selectedProductItems={selectedProductItems}
-            description={description}
-            setPromotionInputs={setPromotionInputs}
-            setDescription={setDescription}
-            setItem_type={setItem_type}
-            setProductInputs={setProductInputs}
-            openModal={openModal}
-            handleKeyDown={handleKeyDown}
-            disableInput={false}
-          />
-          <RewardComponent
-            page_type="NEW"
-            handleKeyDown={handleKeyDown}
-            reward_type={reward_type}
-            selectedCouponItems={selectedCouponItems}
-            couponInputs={couponInputs}
-            setRewardType={setReward_Type}
-            setRewards={setRewards}
-            disableInput={false}
-            apiResponse={couponResponse}
-            setSelectedCouponItems={setSelectedCouponItems}
-            setCouponInputs={setCouponInputs}
-          />
-          <RewardCard page_type="NEW" rewards={rewards} setRewards={setRewards} />
-        </ContentsContainer>
-      </div>
-      <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
-        <div className="flex space-x-2 w-full lg:w-fit">
-          <button
-            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
-            onClick={handleSubmit}
-            id="cancel_create_item"
-          >
-            취소하기
-          </button>
-          <button
-            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
-            onClick={handleSubmit}
-            id="create_item"
-          >
-            저장하기
-          </button>
+      )}
+      <DashboardContainer>
+        <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+          <div className="subject-container flex w-full">
+            <a className="text-2xl font-bold">아이템 추가</a>
+          </div>
         </div>
-      </div>
-      <ProductList
-        apiResponse={productResponse}
-        productInputs={productInputs}
-        setSelectedProductItems={setSelectedProductItems}
-        setProductInputs={setProductInputs}
-        onClose={closeModal}
-        isOpen={isModalOpen}
-      />
-    </DashboardContainer>
+        <div className="flex flex-col lg:flex-row w-full justify-center lg:space-x-4">
+          <ContentsContainer variant="campaign">
+            <ItemDetails
+              page_type="NEW"
+              itemArgs={itemArgs}
+              kakaoShareArgs={kakaoShareArgs}
+              setItem_type={setItem_type}
+              setTitle={setTitle}
+              setKakaoShareArgs={setKakaoShareArgs}
+              setProductInputs={setProductInputs}
+              setPromotionInputs={setPromotionInputs}
+              handleKeyDown={handleKeyDown}
+              image={image}
+              shop_logo={shop_logo}
+              image_result={image_result}
+              shop_logo_result={shop_logo_result}
+              onChangeImage={onChangeImage}
+              disableInput={false}
+            />
+          </ContentsContainer>
+          <ContentsContainer variant="campaign">
+            <ItemTypeDetails
+              page_type="NEW"
+              item_type={item_type}
+              itemArgs={itemArgs}
+              selectedProductItems={selectedProductItems}
+              description={description}
+              setPromotionInputs={setPromotionInputs}
+              setDescription={setDescription}
+              setItem_type={setItem_type}
+              setProductInputs={setProductInputs}
+              openModal={openModal}
+              handleKeyDown={handleKeyDown}
+              disableInput={false}
+            />
+            <RewardComponent
+              page_type="NEW"
+              handleKeyDown={handleKeyDown}
+              reward_type={reward_type}
+              selectedCouponItems={selectedCouponItems}
+              couponInputs={couponInputs}
+              setRewardType={setReward_Type}
+              setRewards={setRewards}
+              disableInput={false}
+              apiResponse={couponResponse}
+              setSelectedCouponItems={setSelectedCouponItems}
+              setCouponInputs={setCouponInputs}
+            />
+            <RewardCard page_type="NEW" rewards={rewards} setRewards={setRewards} />
+          </ContentsContainer>
+        </div>
+        <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
+          <div className="flex space-x-2 w-full lg:w-fit">
+            <button
+              className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
+              onClick={handleSubmit}
+              id="cancel_create_item"
+            >
+              취소하기
+            </button>
+            <button
+              className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+              onClick={handleSubmit}
+              id="create_item"
+            >
+              저장하기
+            </button>
+          </div>
+        </div>
+        <ProductList
+          apiResponse={productResponse}
+          productInputs={productInputs}
+          setSelectedProductItems={setSelectedProductItems}
+          setProductInputs={setProductInputs}
+          onClose={closeModal}
+          isOpen={isModalOpen}
+        />
+      </DashboardContainer>
+    </>
   );
 };
 

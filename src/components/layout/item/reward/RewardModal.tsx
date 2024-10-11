@@ -13,11 +13,11 @@ import Modal from "@/components/layout/base/Modal";
 
 interface RewardModalProps {
   reward_type: RewardType;
-  point_amount: number;
+  point_amount: string;
   couponInputs: CouponsArgs[];
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
-  setPointAmount: (value: number) => void;
+  setPointAmount: (value: string) => void;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -173,7 +173,7 @@ const RewardModal: React.FC<RewardModalProps> = ({
                           id={"point_amount"}
                           placeholder={"원하시는 지급 포인트 금액을 입력하세요."}
                           value={reward_type === RewardType.PO ? point_amount : couponInputs.toString}
-                          onChange={(e) => reward_type === RewardType.PO && setPointAmount(Number(e.target.value))}
+                          onChange={(e) => reward_type === RewardType.PO && setPointAmount(e.target.value)}
                           onKeyDown={handleKeyDown}
                           disabled={true}
                         />

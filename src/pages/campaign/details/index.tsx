@@ -59,7 +59,7 @@ const DetailsCampaign = (
   const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
   const [active, setActive] = useState(cDetailApiResponse.active);
-
+  const [loading, setLoading] = useState(true);
   const campaignArgs: CampaignArgs = {
     title,
     description,
@@ -136,6 +136,12 @@ const DetailsCampaign = (
       router.push(`/item/new?campaign_id=${campaign_id}`);
     }
   };
+
+  useEffect(() => {
+    if (itemListApiResponse) {
+      setLoading(false);
+    }
+  }, [itemListApiResponse]);
 
   return (
     <DashboardContainer>

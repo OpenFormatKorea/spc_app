@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/components/base/LoadingSpinner";
 import AuthContainer from "@/components/layout/auth/AuthContainer";
 import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 import { fetchLogIn } from "@/lib/auth/apis";
@@ -14,9 +15,11 @@ import { useRef, useState, KeyboardEvent } from "react";
 
 // src/pages/index.tsx
 const Login = (context: GetServerSidePropsContext) => {
+  const [loading, setLoading] = useState(false);
   const [showPW, setShowPw] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -44,8 +47,6 @@ const Login = (context: GetServerSidePropsContext) => {
 
   const postLogin = async (info: AuthArgs) => {
     const result = await fetchLogIn(info);
-    const data = result.data;
-    const access = data?.access;
     return result;
   };
 
@@ -62,44 +63,56 @@ const Login = (context: GetServerSidePropsContext) => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    if (infoCheck(loginInfo)) {
-      const result = await postLogin(loginInfo);
-      if (result.success) {
-        deleteCookies();
-        const access: string = result.data?.access || "";
-        const refresh: string = result.data?.refresh || "";
-        const shop_id: string = result.data?.shop_id || "";
+    if (loading == false) {
+      setLoading(true);
+      if (infoCheck(loginInfo)) {
+        const result = await postLogin(loginInfo);
+        if (result.success) {
+          deleteCookies();
+          const access: string = result.data?.access || "";
+          const refresh: string = result.data?.refresh || "";
+          const shop_id: string = result.data?.shop_id || "";
 
-        setAccessTokenToCookies(context, access);
-        setRefreshTokenToCookies(context, refresh);
-        setShopIdTokenToCookies(context, shop_id);
-        router.push("/dashboard");
+          setAccessTokenToCookies(context, access);
+          setRefreshTokenToCookies(context, refresh);
+          setShopIdTokenToCookies(context, shop_id);
+          router.push("/dashboard");
+        } else {
+          alert(result.message);
+          setLoading(false);
+        }
       } else {
-        alert(result.message);
+        alert("로그인에 실패하였습니다.");
+        setLoading(false);
       }
-    } else {
-      alert("로그인에 실패하였습니다.");
     }
   };
 
   return (
-    <AuthContainer>
-      <div className="flex justify-center items-center h-screen">
-        <AuthLogin
-          username={username}
-          setUsername={setUsername}
-          showPW={showPW}
-          password={password}
-          setPassword={setPassword}
-          buttonDisabled={false}
-          setShowPw={setShowPw}
-          handleButton={handleButton}
-          handleSubmit={handleSubmit}
-          buttonRef={buttonRef}
-          handleKeyDown={handleKeyDown}
-        />
-      </div>
-    </AuthContainer>
+    <>
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+          <LoadingSpinner />
+        </div>
+      )}
+      <AuthContainer>
+        <div className="flex justify-center items-center h-screen">
+          <AuthLogin
+            username={username}
+            setUsername={setUsername}
+            showPW={showPW}
+            password={password}
+            setPassword={setPassword}
+            buttonDisabled={false}
+            setShowPw={setShowPw}
+            handleButton={handleButton}
+            handleSubmit={handleSubmit}
+            buttonRef={buttonRef}
+            handleKeyDown={handleKeyDown}
+          />
+        </div>
+      </AuthContainer>
+    </>
   );
 };
 

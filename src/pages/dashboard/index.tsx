@@ -7,6 +7,8 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { AuthArgs } from "@/lib/auth/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
+import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const authResponse = authenticateUser(context, "/auth/login");
@@ -20,8 +22,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> = ({ apiResponse, authResponse }) => {
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-
   const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
@@ -32,28 +34,40 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse; authResponse: AuthArgs }> 
     }
   };
 
+  useEffect(() => {
+    if (apiResponse) {
+      setLoading(false);
+    }
+  }, [apiResponse]);
   return (
-    <DashboardContainer>
-      <div className="flex w-full justify-between items-center mb-3 h-[42px]">
-        <div className="subject-container flex w-full">
-          <a className="text-2xl font-bold">대시보드</a>
+    <>
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+          <LoadingSpinner />
         </div>
-      </div>
-      <div className="contents-container w-full justify-center ">
-        <ContentsContainer variant="dashboard">
-          <CampaignList
-            theadStyle={theadStyle}
-            tbodyStyle={tbodyStyle}
-            apiResponse={apiResponse}
-            handleButton={handleButton}
-          />
-        </ContentsContainer>
-        {/* <div className="flex space-x-4">
+      )}
+      <DashboardContainer>
+        <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+          <div className="subject-container flex w-full">
+            <a className="text-2xl font-bold">대시보드</a>
+          </div>
+        </div>
+        <div className="contents-container w-full justify-center ">
+          <ContentsContainer variant="dashboard">
+            <CampaignList
+              theadStyle={theadStyle}
+              tbodyStyle={tbodyStyle}
+              apiResponse={apiResponse}
+              handleButton={handleButton}
+            />
+          </ContentsContainer>
+          {/* <div className="flex space-x-4">
           <ContentsContainer variant="dashboard">children</ContentsContainer>
           <ContentsContainer variant="dashboard">children</ContentsContainer>
         </div>*/}
-      </div>
-    </DashboardContainer>
+        </div>
+      </DashboardContainer>
+    </>
   );
 };
 
