@@ -55,9 +55,6 @@ const NewItem = (
 ) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  // const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
-  //   { product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] },
-  // ]);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
   const [description, setDescription] = useState("");
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: description }]);

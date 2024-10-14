@@ -221,7 +221,6 @@ export async function fetchGetItemDetails(item_id: string, campaign_id: string, 
 
 export async function fetchGetProductCodeList(context: GetServerSidePropsContext) {
   const shop_id = getShopIdFromCookies(context);
-
   if (!shop_id) {
     return {
       redirect: {
