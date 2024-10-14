@@ -7,7 +7,7 @@ import RewardCard from "@/components/layout/item/reward/RewardCard";
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import { fetchGetItemDetails } from "@/lib/item/apis";
 import { GetServerSideProps } from "next";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import {
   ItemType,
   ItemArgs,
@@ -76,6 +76,7 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; campaign_
   };
 
   const handleSubmit = () => {
+    const router = useRouter();
     router.push(`/campaign/details?campaign_id=${campaign_id}`);
   };
 
