@@ -2,7 +2,6 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ItemList from "@/components/layout/item/item/ItemList";
-import { authenticateUser } from "@/lib/auth";
 import { fetchGetCampaignDetails, fetchModifyCampaign, fetchDeleteCampaign } from "@/lib/campaign/apis";
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
@@ -12,11 +11,11 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { withAuth } from "@/hoc/withAuth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
   const shop_id: any = getShopIdFromCookies(context);
-  const authResponse = authenticateUser(context, "/dashboard");
   const itemListApiResponse = await fetchGetItemList(campaign_id, context);
   const cDetailApiResponse = await fetchGetCampaignDetails(campaign_id, shop_id, context);
 
@@ -32,7 +31,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       itemListApiResponse,
-      authResponse,
       cDetailApiResponse,
       campaign_id,
     },
@@ -206,4 +204,4 @@ const DetailsCampaign = (
   );
 };
 
-export default DetailsCampaign;
+export default withAuth(DetailsCampaign);

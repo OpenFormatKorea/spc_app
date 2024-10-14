@@ -4,13 +4,8 @@ import AuthContainer from "@/components/layout/auth/AuthContainer";
 import AuthSignUpForm from "@/components/layout/auth/AuthSignUpForm";
 import { fetchSignUp } from "@/lib/auth/apis";
 import { AuthArgs } from "@/lib/auth/types";
-import { authenticateUser } from "@/lib/auth";
 import { GetServerSideProps } from "next";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return authenticateUser(context, "/auth/login");
-};
 
 const Signup: React.FC = () => {
   const [loading, setLoading] = useState(false);

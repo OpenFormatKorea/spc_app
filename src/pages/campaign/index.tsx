@@ -9,6 +9,7 @@ import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import AddIcon from "@mui/icons-material/Add";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { withAuth } from "@/hoc/withAuth";
 
 // Fetches campaign data during server-side rendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -96,4 +97,4 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   );
 };
 
-export default Campaign;
+export default withAuth(Campaign);

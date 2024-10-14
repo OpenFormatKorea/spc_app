@@ -13,20 +13,11 @@ const checkAuth = (context: GetServerSidePropsContext): boolean => {
   return true;
 };
 
-export const authenticateUser = (context: GetServerSidePropsContext, redirectTo: string): AuthResult => {
-  const { req } = context;
-  const currentPath = req.url || "";
-
+export const authenticateUserforLogin = (context: GetServerSidePropsContext): AuthResult => {
   if (checkAuth(context)) {
-    if (currentPath === redirectTo) {
-      return { props: {} };
-    }
-    return {
-      redirect: {
-        destination: redirectTo,
-        permanent: false,
-      },
-    };
+    return context.req.url === "/dashboard"
+      ? { props: {} }
+      : { redirect: { destination: "/dashboard", permanent: false } };
   }
   return { props: {} };
 };

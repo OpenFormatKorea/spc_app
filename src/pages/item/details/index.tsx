@@ -19,11 +19,11 @@ import {
   CouponsArgs,
 } from "@/lib/item/types";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { withAuth } from "@/hoc/withAuth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
   const IDetailApiResponse = await fetchGetItemDetails(item_id, campaign_id, context);
-
   if (!IDetailApiResponse) {
     return {
       redirect: {
@@ -32,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
+
   return {
     props: {
       apiResponse: IDetailApiResponse,
@@ -173,4 +174,4 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; campaign_
   );
 };
 
-export default DetailsItem;
+export default withAuth(DetailsItem);

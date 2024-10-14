@@ -5,10 +5,6 @@ import { AuthArgs } from "@/lib/auth/types";
 import router from "next/router";
 import { useEffect, useRef, useState, KeyboardEvent } from "react";
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   return authenticateUser(context, "/auth/login");
-// };
-
 const resetpw = () => {
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);

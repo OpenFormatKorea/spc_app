@@ -63,7 +63,7 @@ const Login = (context: GetServerSidePropsContext) => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    if (loading == false) {
+    if (!loading) {
       setLoading(true);
       if (infoCheck(loginInfo)) {
         const result = await postLogin(loginInfo);
@@ -83,9 +83,9 @@ const Login = (context: GetServerSidePropsContext) => {
         }
       } else {
         alert("로그인에 실패하였습니다.");
-        setLoading(false);
       }
     }
+    setLoading(false);
   };
 
   return (

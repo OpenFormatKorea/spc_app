@@ -23,6 +23,7 @@ import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import ReactS3Client from "@/lib/aws/ReactS3Client";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { withAuth } from "@/hoc/withAuth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -337,4 +338,4 @@ const NewItem = (
   );
 };
 
-export default NewItem;
+export default withAuth(NewItem);

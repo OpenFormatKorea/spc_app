@@ -8,6 +8,7 @@ import { useState } from "react";
 import { fetchCreateCampaign } from "@/lib/campaign/apis";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { withAuth } from "@/hoc/withAuth";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
@@ -48,7 +49,6 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
       alert("캠페인 종료 시간을 선택 해주세요.");
       return false;
     }
-    // Check if start_date is earlier than end_date
     const startDateTime = new Date(info.start_date).getTime();
     const endDateTime = new Date(info.end_date || "").getTime();
     if (info.period_type === PeriodType.L && startDateTime >= endDateTime) {
@@ -58,7 +58,6 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
     return true;
   };
 
-  // Campaign arguments
   const campaignArgs: CampaignArgs = {
     title,
     description,
@@ -68,7 +67,6 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
     active,
   };
 
-  // Handle form submission
   const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
     const { id } = event.currentTarget;
     if (id === "create_campaign") {
@@ -144,4 +142,4 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   );
 };
 
-export default NewCampaign;
+export default withAuth(NewCampaign);

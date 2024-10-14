@@ -1,6 +1,7 @@
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import MyPageDetails from "@/components/layout/mypage/MyPageDetails";
+import { withAuth } from "@/hoc/withAuth";
 import { fetchGetUserInfo } from "@/lib/mypage/apis";
 import { UserInfoProps } from "@/lib/mypage/types";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -44,4 +45,4 @@ const DetailsMyPage = (data: UserInfoProps) => {
     </DashboardContainer>
   );
 };
-export default DetailsMyPage;
+export default withAuth(DetailsMyPage);
