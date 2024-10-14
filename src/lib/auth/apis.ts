@@ -35,29 +35,28 @@ export async function fetchSignUp(info: AuthArgs) {
 //login
 export async function fetchLogIn(info: AuthArgs) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/account/login`;
-  const username = info.username;
-  const password = info.password;
+  const { username, password } = info;
+
   deleteCookies();
 
   try {
-    const {
-      data: { access, refresh, shop_id },
-    }: { data: { access: string; refresh: string; shop_id: string } } = await axios.post(apiUrl, {
-      username,
-      password,
-    });
-    const response = await axios.post(apiUrl, {
-      username,
-      password,
-    });
+    const response = await axios.post(apiUrl, { username, password });
+    const { access, refresh, shop_id } = response.data;
 
-    return { success: true, message: "로그인에 성공 하였습니다.", data: { access, refresh, shop_id } };
+    return {
+      success: true,
+      message: "로그인에 성공 하였습니다.",
+      data: { access, refresh, shop_id },
+    };
   } catch (error) {
-    return { success: false, message: "아이디와 비밀번호를 확인 해 주세요" };
+    console.error("Login error:", error);
+    return {
+      success: false,
+      message: "아이디와 비밀번호를 확인 해 주세요",
+    };
   }
 }
 
-// generate temp PW (deprecated in favor of fetchResetPW using django reset password library)
 export async function fetchGenerateTempPW(info: AuthArgs) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/account/generate-temp-password`;
   const username = info.username;

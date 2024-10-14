@@ -46,7 +46,7 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
         id={`${view}-campaign-activation-${campaign_id}`}
         className="peer sr-only opacity-0"
         name="active"
-        checked={activeStatus}
+        checked={activeStatus ?? false}
         onChange={handleActiveStatus}
       />
       <label

@@ -80,7 +80,7 @@ const DetailsCampaign = (
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget as HTMLButtonElement;
 
-    if (id === "modify_campaign" && isInfoValid(campaignArgs)) {
+    if (id === "modify_campaign" && isInfoValid(campaignArgs) && confirm("캠페인을 수정 하시겠습니까?")) {
       const result = await fetchModifyCampaign(campaign_id, campaignArgs, context);
       if (result.status === 200) {
         alert("캠페인을 수정 하였습니다.");
@@ -90,10 +90,10 @@ const DetailsCampaign = (
       }
     } else if (id === "cancel_modify_campaign") {
       router.push("/campaign");
-    } else if (id === "delete_campaign" && confirm("정말 삭제 하시겠습니까?")) {
+    } else if (id === "delete_campaign" && confirm("캠페인을 정말 삭제 하시겠습니까?")) {
       const result = await fetchDeleteCampaign(campaign_id, context);
       if (result.status === 200) {
-        alert("캠페인을 삭제 하였습니다.");
+        alert("캠페인 삭제를 완료 하였습니다.");
         router.push("/campaign");
       } else {
         alert(`캠페인 삭제를 실패 하였습니다. 상태 코드: ${result.status}`);
