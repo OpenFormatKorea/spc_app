@@ -21,8 +21,11 @@ const ProductList: React.FC<ProductListProps> = ({
   onClose,
 }) => {
   const products = useMemo(
-    () => (Array.isArray(apiResponse?.data.data.content) ? apiResponse.data.data.content : []),
-    [apiResponse]
+    () =>
+      Array.isArray(apiResponse?.data.data.content)
+        ? apiResponse.data.data.content
+        : [],
+    [apiResponse],
   );
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState<boolean>(false);
@@ -33,37 +36,50 @@ const ProductList: React.FC<ProductListProps> = ({
       const allProducts = products.map((product: ProductListArgs) => ({
         product_model_code: product.gid,
         product_model_name: product.name,
-        images: [{ posThumb: product.posThumb || "" }, { thumb: product.thumb || "" }],
+        images: [
+          { posThumb: product.posThumb || "" },
+          { thumb: product.thumb || "" },
+        ],
       }));
       setProductInputs(allProducts);
-      setSelectedItemList(products.map((product: ProductListArgs) => product.gid));
+      setSelectedItemList(
+        products.map((product: ProductListArgs) => product.gid),
+      );
     } else {
       setProductInputs([]);
       setSelectedItemList([]);
     }
   };
 
-  const handleCheckboxChange = (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    setSelectedItemList((prevSelected) => {
-      let updatedSelectedItems;
-      if (isChecked) {
-        updatedSelectedItems = [...prevSelected, productGid];
-      } else {
-        updatedSelectedItems = prevSelected.filter((gid) => gid !== productGid);
-      }
-      const updatedProducts = products
-        .filter((product: ProductListArgs) => updatedSelectedItems.includes(product.gid))
-        .map((product: ProductListArgs) => ({
-          product_model_code: product.gid,
-          product_model_name: product.name,
-          images: [{ posThumb: product.posThumb || "" }, { thumb: product.thumb || "" }],
-        }));
-      setProductInputs(updatedProducts);
-      setSelectAll(updatedSelectedItems.length === products.length);
-      return updatedSelectedItems;
-    });
-  };
+  const handleCheckboxChange =
+    (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const isChecked = e.target.checked;
+      setSelectedItemList((prevSelected) => {
+        let updatedSelectedItems;
+        if (isChecked) {
+          updatedSelectedItems = [...prevSelected, productGid];
+        } else {
+          updatedSelectedItems = prevSelected.filter(
+            (gid) => gid !== productGid,
+          );
+        }
+        const updatedProducts = products
+          .filter((product: ProductListArgs) =>
+            updatedSelectedItems.includes(product.gid),
+          )
+          .map((product: ProductListArgs) => ({
+            product_model_code: product.gid,
+            product_model_name: product.name,
+            images: [
+              { posThumb: product.posThumb || "" },
+              { thumb: product.thumb || "" },
+            ],
+          }));
+        setProductInputs(updatedProducts);
+        setSelectAll(updatedSelectedItems.length === products.length);
+        return updatedSelectedItems;
+      });
+    };
 
   const handleAction = async () => {
     if (confirm("해당 상품을 선택 하시겠어요?")) {
@@ -72,20 +88,24 @@ const ProductList: React.FC<ProductListProps> = ({
     }
   };
 
-  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle = "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
+  const theadStyle =
+    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+  const tbodyStyle =
+    "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
   const labelClass = "text-xs pt-4 text-gray-500";
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="w-full text-left text-xl font-bold pb-2">상품 선택</h1>
+        <h1 className="w-full pb-2 text-left text-xl font-bold">상품 선택</h1>
 
-        <div className="flex flex-col items-center max-w-[370px] lg:max-w-full max-h-[550px] overflow-y-scroll my-2">
-          <div className="flex flex-col bg-white p-3 rounded-lg">
-            <h1 className="w-full text-left text-md text-gray-500 font-semibold pb-2">상품을 선택해 주세요</h1>
+        <div className="my-2 flex max-h-[550px] max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
+          <div className="flex flex-col rounded-lg bg-white p-3">
+            <h1 className="text-md w-full pb-2 text-left font-semibold text-gray-500">
+              상품을 선택해 주세요
+            </h1>
 
-            <div className="w-full py-3 block">
-              <table className="w-full border border-gray-100 text-center table ">
+            <div className="block w-full py-3">
+              <table className="table w-full border border-gray-100 text-center">
                 <thead>
                   <tr className="bg-gray-100">
                     <th className={theadStyle}>
@@ -118,10 +138,13 @@ const ProductList: React.FC<ProductListProps> = ({
                       <td className={tbodyStyle}>{product.gid}</td>
 
                       <td className={tbodyStyle}>
-                        <div className="w-full flex justify-center items-center text-center">
+                        <div className="flex w-full items-center justify-center text-center">
                           <img
-                            src={product.thumb || "/images/kakao/kakaolink-no-logo-default.png"}
-                            className="w-[50px] h-[50px] lg:w-[70px] lg:h-[70px]"
+                            src={
+                              product.thumb ||
+                              "/images/kakao/kakaolink-no-logo-default.png"
+                            }
+                            className="h-[50px] w-[50px] lg:h-[70px] lg:w-[70px]"
                             alt="thumbnail"
                           />
                         </div>
@@ -142,20 +165,21 @@ const ProductList: React.FC<ProductListProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-col w-[350px] lg:w-[450px] h-fit">
-          <div className="flex flex-col w-full mb-2 text-left">
+        <div className="flex h-fit w-[350px] flex-col lg:w-[450px]">
+          <div className="mb-2 flex w-full flex-col text-left">
             <label className={labelClass}>선택된 상품</label>
-            <div className="w-[350px] lg:w-full h-[85px] text-sm mt-2 break-words flex flex-wrap justify-center bg-white rounded-xl p-2 pb-3 overflow-y-auto">
+            <div className="mt-2 flex h-[85px] w-[350px] flex-wrap justify-center overflow-y-auto break-words rounded-xl bg-white p-2 pb-3 text-sm lg:w-full">
               {productInputs.length !== 0 ? (
                 productInputs.map((inputProduct) => {
                   const product = products.find(
-                    (product: ProductListArgs) => product.gid === inputProduct.product_model_code
+                    (product: ProductListArgs) =>
+                      product.gid === inputProduct.product_model_code,
                   );
                   return (
                     product && (
                       <div
                         key={product.gid}
-                        className="mr-1 mt-1 p-1 w-fit h-fit text-sm text-white bg-blue-300 rounded-md"
+                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
                       >
                         {product.name}
                       </div>
@@ -163,7 +187,7 @@ const ProductList: React.FC<ProductListProps> = ({
                   );
                 })
               ) : (
-                <div className="flex items-center justify-center h-full w-full">
+                <div className="flex h-full w-full items-center justify-center">
                   <div className="text-center text-gray-600">
                     선택된 상품이 없습니다.
                     <br />
@@ -175,7 +199,10 @@ const ProductList: React.FC<ProductListProps> = ({
           </div>
         </div>
 
-        <button className="bg-blue-500 text-white rounded-lg p-2 w-full mt-4" onClick={handleAction}>
+        <button
+          className="mt-4 w-full rounded-lg bg-blue-500 p-2 text-white"
+          onClick={handleAction}
+        >
           상품 추가
         </button>
       </div>

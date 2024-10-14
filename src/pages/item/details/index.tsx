@@ -23,7 +23,11 @@ import { withAuth } from "@/hoc/withAuth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
-  const IDetailApiResponse = await fetchGetItemDetails(item_id, campaign_id, context);
+  const IDetailApiResponse = await fetchGetItemDetails(
+    item_id,
+    campaign_id,
+    context,
+  );
   if (!IDetailApiResponse) {
     return {
       redirect: {
@@ -41,7 +45,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; campaign_id: string }) => {
+const DetailsItem = ({
+  apiResponse,
+  campaign_id,
+}: {
+  apiResponse: any;
+  campaign_id: string;
+}) => {
   const [title, setTitle] = useState(apiResponse.title);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
     {
@@ -50,15 +60,27 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; campaign_
       images: [{ posThumb: "" }, { thumb: "" }],
     },
   ]);
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: "" }]);
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
+    { description: "" },
+  ]);
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
-  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
-  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(apiResponse.kakao_args);
-  const [rewards, setRewards] = useState<RewardsArgs[]>(apiResponse.rewards || []);
+  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>(
+    [],
+  );
+  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
+    apiResponse.kakao_args,
+  );
+  const [rewards, setRewards] = useState<RewardsArgs[]>(
+    apiResponse.rewards || [],
+  );
   const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
   const [active, setActive] = useState(apiResponse.active);
-  const [reward_type, setReward_Type] = useState<RewardType>(apiResponse.rewards[0]?.reward_type || RewardType.CO);
-  const [description, setDescription] = useState<string>(apiResponse.promotions?.description || "");
+  const [reward_type, setReward_Type] = useState<RewardType>(
+    apiResponse.rewards[0]?.reward_type || RewardType.CO,
+  );
+  const [description, setDescription] = useState<string>(
+    apiResponse.promotions?.description || "",
+  );
   const [loading, setLoading] = useState(true);
 
   const image = kakaoShareArgs.image;
@@ -98,17 +120,17 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; campaign_
   return (
     <>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
           <LoadingSpinner />
         </div>
       )}
       <DashboardContainer>
-        <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <a className="text-2xl font-bold">아이템 상세</a>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row w-full justify-center lg:space-x-4">
+        <div className="flex w-full flex-col justify-center lg:flex-row lg:space-x-4">
           <ContentsContainer variant="campaign">
             <ItemDetails
               page_type="DETAILS"
@@ -158,12 +180,16 @@ const DetailsItem = ({ apiResponse, campaign_id }: { apiResponse: any; campaign_
               setCouponInputs={setCouponInputs}
               setRewards={setRewards}
             />
-            <RewardCard rewards={rewards} setRewards={setRewards} page_type="DETAILS" />
+            <RewardCard
+              rewards={rewards}
+              setRewards={setRewards}
+              page_type="DETAILS"
+            />
           </ContentsContainer>
         </div>
-        <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
+        <div className="button-container flex w-full justify-between pt-4 lg:justify-end">
           <button
-            className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
+            className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white lg:w-fit"
             onClick={handleSubmit}
             id="cancel_create_item"
           >

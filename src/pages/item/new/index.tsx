@@ -1,4 +1,8 @@
-import { fetchGetProductCodeList, fetchGetCouponCodeList, fetchCreateItem } from "@/lib/item/apis";
+import {
+  fetchGetProductCodeList,
+  fetchGetCouponCodeList,
+  fetchCreateItem,
+} from "@/lib/item/apis";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import RewardComponent from "@/components/layout/item/reward/RewardComponent";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
@@ -51,16 +55,22 @@ const NewItem = (
     productResponse: ApiResponse;
     couponResponse: ApiResponse;
   },
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ) => {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
   const [description, setDescription] = useState("");
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([{ description: description }]);
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
+    { description: description },
+  ]);
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
-  const [selectedProductItems, setSelectedProductItems] = useState<ProductsArgs[]>([]);
-  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>([]);
+  const [selectedProductItems, setSelectedProductItems] = useState<
+    ProductsArgs[]
+  >([]);
+  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>(
+    [],
+  );
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
     shop_name: "",
     image:
@@ -82,7 +92,8 @@ const NewItem = (
   const [loading, setLoading] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
-  const openModal = () => (reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요."));
+  const openModal = () =>
+    reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
   const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
 
   const itemArgs: ItemArgs = {
@@ -107,7 +118,7 @@ const NewItem = (
       return false;
     }
     const validProductInputs = productInputs.filter(
-      (product) => product.product_model_code && product.product_model_name
+      (product) => product.product_model_code && product.product_model_name,
     );
 
     if (item_type === ItemType.PD) {
@@ -140,7 +151,9 @@ const NewItem = (
     }
     if (
       !rewards.length &&
-      !confirm("해당 아이템에 아직 리워드가 추가되지 않았어요, 그래도 아이템 생성을 원하시나요?")
+      !confirm(
+        "해당 아이템에 아직 리워드가 추가되지 않았어요, 그래도 아이템 생성을 원하시나요?",
+      )
     ) {
       return false;
     }
@@ -148,38 +161,49 @@ const NewItem = (
     return true;
   };
 
-  const onChangeImage = (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !file.type.startsWith("image/")) {
-      alert("Please upload a valid image file.");
-      return;
-    }
-
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    const reader = new FileReader();
-
-    reader.onload = async () => {
-      if (reader.result && typeof reader.result === "string") {
-        try {
-          const imgUrl = await uploadImage(file, imgType, imgType === "image" ? image : shop_logo);
-          const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
-
-          if (imgType === "image") {
-            setImage_result(reader.result);
-            setImage(full_imgUrl);
-            setKakaoShareArgs((prevArgs) => ({ ...prevArgs, image: full_imgUrl }));
-          } else {
-            setShop_logo_result(reader.result);
-            setShop_logo(full_imgUrl);
-            setKakaoShareArgs((prevArgs) => ({ ...prevArgs, shop_logo: full_imgUrl }));
-          }
-        } catch (error) {
-          console.error(`${imgType} upload failed:`, error);
-        }
+  const onChangeImage =
+    (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file || !file.type.startsWith("image/")) {
+        alert("Please upload a valid image file.");
+        return;
       }
+
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
+      const reader = new FileReader();
+
+      reader.onload = async () => {
+        if (reader.result && typeof reader.result === "string") {
+          try {
+            const imgUrl = await uploadImage(
+              file,
+              imgType,
+              imgType === "image" ? image : shop_logo,
+            );
+            const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
+
+            if (imgType === "image") {
+              setImage_result(reader.result);
+              setImage(full_imgUrl);
+              setKakaoShareArgs((prevArgs) => ({
+                ...prevArgs,
+                image: full_imgUrl,
+              }));
+            } else {
+              setShop_logo_result(reader.result);
+              setShop_logo(full_imgUrl);
+              setKakaoShareArgs((prevArgs) => ({
+                ...prevArgs,
+                shop_logo: full_imgUrl,
+              }));
+            }
+          } catch (error) {
+            console.error(`${imgType} upload failed:`, error);
+          }
+        }
+      };
+      reader.readAsDataURL(file);
     };
-    reader.readAsDataURL(file);
-  };
 
   const deletePreviousFile = async (previousFilePath: string) => {
     try {
@@ -189,7 +213,11 @@ const NewItem = (
     }
   };
 
-  const uploadImage = async (file: File, imgType: string, previousFilePath: string) => {
+  const uploadImage = async (
+    file: File,
+    imgType: string,
+    previousFilePath: string,
+  ) => {
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
     const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}`;
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
@@ -206,7 +234,13 @@ const NewItem = (
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
     if (productInputs.length === 0) {
-      setProductInputs([{ product_model_code: "", product_model_name: "", images: [{ posThumb: "" }, { thumb: "" }] }]);
+      setProductInputs([
+        {
+          product_model_code: "",
+          product_model_name: "",
+          images: [{ posThumb: "" }, { thumb: "" }],
+        },
+      ]);
     }
 
     if (id === "create_item" && infoCheck()) {
@@ -216,7 +250,8 @@ const NewItem = (
         if (result.status === 200) {
           alert(result.message);
           setLoading(false);
-          if (result.success) router.push(`/campaign/details?campaign_id=${campaign_id}`);
+          if (result.success)
+            router.push(`/campaign/details?campaign_id=${campaign_id}`);
         } else {
           setLoading(false);
           alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
@@ -242,17 +277,17 @@ const NewItem = (
   return (
     <>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
           <LoadingSpinner />
         </div>
       )}
       <DashboardContainer>
-        <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <a className="text-2xl font-bold">아이템 추가</a>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row w-full justify-center lg:space-x-4">
+        <div className="flex w-full flex-col justify-center lg:flex-row lg:space-x-4">
           <ContentsContainer variant="campaign">
             <ItemDetails
               page_type="NEW"
@@ -300,20 +335,24 @@ const NewItem = (
               setSelectedCouponItems={setSelectedCouponItems}
               setCouponInputs={setCouponInputs}
             />
-            <RewardCard page_type="NEW" rewards={rewards} setRewards={setRewards} />
+            <RewardCard
+              page_type="NEW"
+              rewards={rewards}
+              setRewards={setRewards}
+            />
           </ContentsContainer>
         </div>
-        <div className="button-container w-full pt-4 flex justify-between lg:justify-end">
-          <div className="flex space-x-2 w-full lg:w-fit">
+        <div className="button-container flex w-full justify-between pt-4 lg:justify-end">
+          <div className="flex w-full space-x-2 lg:w-fit">
             <button
-              className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-gray-400"
+              className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white lg:w-fit"
               onClick={handleSubmit}
               id="cancel_create_item"
             >
               취소하기
             </button>
             <button
-              className="border p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+              className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-blue-500 p-2 text-white lg:w-fit"
               onClick={handleSubmit}
               id="create_item"
             >

@@ -57,7 +57,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
     setRefereeConditions: React.Dispatch<React.SetStateAction<ItemConditions>>,
     setReferrerConditions: React.Dispatch<React.SetStateAction<ItemConditions>>,
     defaultConditions: ItemConditions,
-    defaultNullConditions: ItemConditions
+    defaultNullConditions: ItemConditions,
   ) => {
     setUsePolicy((prev) => {
       const newUsePolicy = !prev;
@@ -84,7 +84,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
       setRefereeConditions,
       setReferrerConditions,
       defaultConditions,
-      defaultNullConditions
+      defaultNullConditions,
     );
   };
 
@@ -96,7 +96,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
       setRefereeConditions,
       setReferrerConditions,
       defaultConditions,
-      defaultNullConditions
+      defaultNullConditions,
     );
   };
 
@@ -107,16 +107,22 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
   }, [useReffererCondition, useRefereeCondition, usePolicy, setUsePolicy]);
 
   return (
-    <div className="w-full min-w-[320px] p-4 bg-gray-100 mb-3 rounded-lg">
-      <div className="flex lg:flex-row pb-2 items-center border-b w-full ">
-        <label className="text-lg font-bold w-full text-left">{trigger === "SIGNUP" ? "회원가입" : "구매 후"}</label>
-        <div className="flex justify-end w-full mr-2">
+    <div className="mb-3 w-full min-w-[320px] rounded-lg bg-gray-100 p-4">
+      <div className="flex w-full items-center border-b pb-2 lg:flex-row">
+        <label className="w-full text-left text-lg font-bold">
+          {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
+        </label>
+        <div className="mr-2 flex w-full justify-end">
           <input
             type="checkbox"
             className="peer sr-only opacity-0"
             id={`usePolicy-${trigger}`}
             checked={usePolicy}
-            onChange={trigger === "SIGNUP" ? handleSignUpCheckboxChange : handlePurchaseCheckboxChange}
+            onChange={
+              trigger === "SIGNUP"
+                ? handleSignUpCheckboxChange
+                : handlePurchaseCheckboxChange
+            }
           />
           <label
             htmlFor={`usePolicy-${trigger}`}
@@ -128,10 +134,12 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
       </div>
       <div
         className={`transition-all duration-300 ease-in-out ${
-          usePolicy ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"
+          usePolicy
+            ? "max-h-screen opacity-100"
+            : "max-h-0 overflow-hidden opacity-0"
         }`}
       >
-        <div className="flex flex-col lg:flex-row pt-3 space-y-2 lg:space-y-0 lg:space-x-3">
+        <div className="flex flex-col space-y-2 pt-3 lg:flex-row lg:space-x-3 lg:space-y-0">
           <ReferralCondition
             trigger={trigger}
             target="referrer"

@@ -7,12 +7,17 @@ interface AuthButtonProps {
   buttonRef: React.RefObject<HTMLButtonElement>;
 }
 
-const AuthButton: React.FC<AuthButtonProps> = ({ disabled, label, onClick, buttonRef }) => (
-  <div className=" w-full flex justify-center my-5">
+const AuthButton: React.FC<AuthButtonProps> = ({
+  disabled,
+  label,
+  onClick,
+  buttonRef,
+}) => (
+  <div className="my-5 flex w-full justify-center">
     <button
       ref={buttonRef}
       disabled={disabled}
-      className={`p-2 rounded-lg w-full text-center cursor-pointer ${
+      className={`w-full cursor-pointer rounded-lg p-2 text-center ${
         disabled ? "bg-gray-300" : "bg-blue-500 text-white"
       }`}
       onClick={onClick}

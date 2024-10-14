@@ -12,7 +12,7 @@ interface CampaignActiveButtonProps {
 
 const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
   { view, campaign, activeStatus, toggleCampaignActiveStatus },
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ) => {
   const campaign_id = campaign.id?.toString() ?? "0";
 
@@ -29,18 +29,24 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
     if (confirm("캠페인 활성화 상태를 변경하시겠어요?")) {
       const updatedCampaign = { ...campaign, active: newActiveStatus };
 
-      const result = await fetchModifyCampaign(campaign_id, updatedCampaign, context);
+      const result = await fetchModifyCampaign(
+        campaign_id,
+        updatedCampaign,
+        context,
+      );
       if (result.status === 200) {
         toggleCampaignActiveStatus(campaign_id, newActiveStatus);
         refreshPage();
       } else {
-        alert(`캠페인 활성화 상태를 변경 실패 하였습니다. 상태 코드: ${result.status}`);
+        alert(
+          `캠페인 활성화 상태를 변경 실패 하였습니다. 상태 코드: ${result.status}`,
+        );
       }
     }
   };
 
   return (
-    <div className="flex w-full justify-center text-center z-0">
+    <div className="z-0 flex w-full justify-center text-center">
       <input
         type="checkbox"
         id={`${view}-campaign-activation-${campaign_id}`}

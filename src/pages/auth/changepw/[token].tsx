@@ -11,7 +11,8 @@ const changepw = () => {
   const [newPasswordChk, setNewPasswordChk] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [instantPWChk, setInstantPWChk] = useState(false);
-  const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
+  const passwordPattern =
+    /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const { token } = router.query;
@@ -53,7 +54,9 @@ const changepw = () => {
     }
   };
 
-  const handleNewPasswordChkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewPasswordChkChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const confirmPassword = e.target.value;
     setNewPasswordChk(confirmPassword);
 
@@ -92,7 +95,10 @@ const changepw = () => {
   };
 
   useEffect(() => {
-    const isFormValid = new_password !== "" && newPasswordChk !== "" && passwordPattern.test(new_password);
+    const isFormValid =
+      new_password !== "" &&
+      newPasswordChk !== "" &&
+      passwordPattern.test(new_password);
     setInstantPWChk(new_password === newPasswordChk);
     setButtonDisabled(!isFormValid || !checkPasswordsMatch());
   }, [new_password, newPasswordChk]);

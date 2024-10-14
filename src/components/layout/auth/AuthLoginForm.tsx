@@ -31,9 +31,9 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
 }) => {
   return (
     <AuthContainer>
-      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-gradient-to-b from-blue-200 to-blue-300 flex flex-col justify-center items-center text-center">
-        <div className="text-xl font-semibold m-2 w-full text-left">로그인</div>
-        <div className="flex flex-col w-full items-start justify-between">
+      <div className="flex min-h-[380px] min-w-[380px] flex-col items-center justify-center rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 p-6 text-center">
+        <div className="m-2 w-full text-left text-xl font-semibold">로그인</div>
+        <div className="flex w-full flex-col items-start justify-between">
           <AuthInputBox
             label="아이디"
             type="text"
@@ -43,7 +43,7 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <div className="flex items-end justify-center w-full">
+          <div className="flex w-full items-end justify-center">
             <AuthInputBox
               label="비밀번호"
               type={showPW ? "text" : "password"}
@@ -54,22 +54,31 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
               onKeyDown={handleKeyDown}
             />
             <button
-              className="text-xs border bg-white p-1 ml-2 mb-[5px] cursor-pointer"
+              className="mb-[5px] ml-2 cursor-pointer border bg-white p-1 text-xs"
               onClick={() => setShowPw(!showPW)}
             >
-              {showPW ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+              {showPW ? (
+                <VisibilityOffIcon fontSize="small" />
+              ) : (
+                <VisibilityIcon fontSize="small" />
+              )}
             </button>
           </div>
         </div>
-        <AuthButton disabled={buttonDisabled} label="로그인" buttonRef={buttonRef} onClick={handleSubmit} />
-        <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
-          <div className="mr-2 ml-2 text-sm cursor-pointer">
+        <AuthButton
+          disabled={buttonDisabled}
+          label="로그인"
+          buttonRef={buttonRef}
+          onClick={handleSubmit}
+        />
+        <div className="passwordDiv m-1 flex w-full items-center justify-center p-1 text-left">
+          <div className="ml-2 mr-2 cursor-pointer text-sm">
             <button id="signup" onClick={handleButton}>
               회원가입
             </button>
           </div>
           <div>|</div>
-          <div id="forgotpw" className="mr-2 ml-2 text-sm cursor-pointer">
+          <div id="forgotpw" className="ml-2 mr-2 cursor-pointer text-sm">
             <button id="forgotpw" onClick={handleButton}>
               비밀번호 찾기
             </button>

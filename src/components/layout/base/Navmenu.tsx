@@ -24,13 +24,19 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
   const isActive =
     router.pathname.includes("item") && link === "/campaign"
       ? true
-      : router.pathname.startsWith(link.split("/")[1] ? `/${link.split("/")[1]}` : link);
+      : router.pathname.startsWith(
+          link.split("/")[1] ? `/${link.split("/")[1]}` : link,
+        );
 
   // Choose icons based on menu title
   const renderIcon = () => {
     switch (menutitle) {
       case "대시보드":
-        return isActive ? <SpaceDashboardIcon fontSize="small" /> : <SpaceDashboardOutlinedIcon fontSize="small" />;
+        return isActive ? (
+          <SpaceDashboardIcon fontSize="small" />
+        ) : (
+          <SpaceDashboardOutlinedIcon fontSize="small" />
+        );
       case "캠페인":
         return isActive ? (
           <ConfirmationNumberIcon fontSize="small" />
@@ -38,7 +44,11 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
           <ConfirmationNumberOutlinedIcon fontSize="small" />
         );
       case "마이 페이지":
-        return isActive ? <ContactPageIcon fontSize="small" /> : <ContactPageOutlinedIcon fontSize="small" />;
+        return isActive ? (
+          <ContactPageIcon fontSize="small" />
+        ) : (
+          <ContactPageOutlinedIcon fontSize="small" />
+        );
       default:
         return null;
     }
@@ -46,19 +56,23 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle }) => {
 
   return (
     <div
-      className={`h-[55px] w-full flex items-center justify-center text-md cursor-pointer text-white mx-auto transition-all duration-300`}
+      className={`text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300`}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className={`p-2 flex items-center justify-center transition-all duration-300 rounded-xl ${
-          isActive ? "bg-gray-500 w-[95%]" : isHovered ? "w-[90%] opacity-85" : "p-4 h-[55px] w-[100%]"
+        className={`flex items-center justify-center rounded-xl p-2 transition-all duration-300 ${
+          isActive
+            ? "w-[95%] bg-gray-500"
+            : isHovered
+              ? "w-[90%] opacity-85"
+              : "h-[55px] w-[100%] p-4"
         }`}
       >
         {/* Icon */}
         {renderIcon()}
-        <div className="w-full text-left pl-3">
+        <div className="w-full pl-3 text-left">
           <span>{menutitle}</span>
         </div>
       </div>

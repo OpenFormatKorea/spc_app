@@ -21,14 +21,14 @@ const DetailsMyPage = (data: UserInfoProps) => {
   };
   return (
     <DashboardContainer>
-      <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+      <div className="mb-3 flex h-[42px] w-full items-center justify-between">
         <div className="subject-container flex w-full">
           <div className="text-2xl font-bold">마이 페이지</div>
         </div>
 
-        <div className="button-container flex justify-end w-full">
+        <div className="button-container flex w-full justify-end">
           <button
-            className="flex items-center justify-center bg-gray-400 text-white border p-2 rounded-lg cursor-pointer"
+            className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
             onClick={handleSubmit}
             id="back_dashboard"
           >
@@ -37,9 +37,12 @@ const DetailsMyPage = (data: UserInfoProps) => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row md:flex-row w-full justify-center md:space-x-4 lg:space-x-4">
+      <div className="flex w-full flex-col justify-center sm:flex-row md:flex-row md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="dashboard">
-          <MyPageDetails username={userInfo.username} email={userInfo.email}></MyPageDetails>
+          <MyPageDetails
+            username={userInfo.username}
+            email={userInfo.email}
+          ></MyPageDetails>
         </ContentsContainer>
       </div>
     </DashboardContainer>

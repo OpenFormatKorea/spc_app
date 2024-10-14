@@ -94,24 +94,24 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   return (
     <>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
           <LoadingSpinner />
         </div>
       )}
       <DashboardContainer>
-        <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <a className="text-2xl font-bold">새 캠페인 생성</a>
           </div>
 
-          <div className="button-container flex justify-end w-full">
+          <div className="button-container flex w-full justify-end">
             <button
-              className="flex items-center justify-center bg-gray-400 text-white border p-2 rounded-lg cursor-pointer"
+              className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
               onClick={handleSubmit}
               id="cancel_modify_campaign"
             >
               <ArrowBackIosIcon fontSize="small" />
-              <span className="hidden lg:block lg:ml-1">뒤로가기</span>
+              <span className="hidden lg:ml-1 lg:block">뒤로가기</span>
             </button>
           </div>
         </div>
@@ -127,9 +127,9 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
             setStart_date={setStart_date}
             setEnd_date={setEnd_date}
           />
-          <div className="button-container w-full pt-4 flex items-center justify-center">
+          <div className="button-container flex w-full items-center justify-center pt-4">
             <button
-              className="border p-2 w-full text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+              className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-blue-500 p-2 text-white"
               onClick={handleSubmit}
               id="create_campaign"
             >

@@ -22,7 +22,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Dashboard: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const theadStyle = "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+  const theadStyle =
+    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
 
@@ -42,17 +43,17 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   return (
     <>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
           <LoadingSpinner />
         </div>
       )}
       <DashboardContainer>
-        <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <a className="text-2xl font-bold">대시보드</a>
           </div>
         </div>
-        <div className="contents-container w-full justify-center ">
+        <div className="contents-container w-full justify-center">
           <ContentsContainer variant="dashboard">
             <CampaignList
               theadStyle={theadStyle}

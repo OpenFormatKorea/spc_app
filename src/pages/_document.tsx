@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <body className="font-sans text-foreground bg-backgroundStart">
+      <body className="text-foreground bg-backgroundStart font-sans">
         <Main />
         <NextScript />
       </body>

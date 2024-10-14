@@ -2,7 +2,11 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ItemList from "@/components/layout/item/item/ItemList";
-import { fetchGetCampaignDetails, fetchModifyCampaign, fetchDeleteCampaign } from "@/lib/campaign/apis";
+import {
+  fetchGetCampaignDetails,
+  fetchModifyCampaign,
+  fetchDeleteCampaign,
+} from "@/lib/campaign/apis";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
@@ -17,7 +21,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
   const shop_id: any = getShopIdFromCookies(context);
   const itemListApiResponse = await fetchGetItemList(campaign_id, context);
-  const cDetailApiResponse = await fetchGetCampaignDetails(campaign_id, shop_id, context);
+  const cDetailApiResponse = await fetchGetCampaignDetails(
+    campaign_id,
+    shop_id,
+    context,
+  );
 
   if (!cDetailApiResponse || cDetailApiResponse.shop_id !== shop_id) {
     return {
@@ -47,13 +55,17 @@ const DetailsCampaign = (
     itemListApiResponse: ApiResponse;
     cDetailApiResponse: CampaignArgs;
   },
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ) => {
   const router = useRouter();
 
   const [title, setTitle] = useState(cDetailApiResponse.title);
-  const [description, setDescription] = useState(cDetailApiResponse.description);
-  const [period_type, setPeriod_type] = useState(cDetailApiResponse.period_type);
+  const [description, setDescription] = useState(
+    cDetailApiResponse.description,
+  );
+  const [period_type, setPeriod_type] = useState(
+    cDetailApiResponse.period_type,
+  );
   const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
   const [active, setActive] = useState(cDetailApiResponse.active);
@@ -78,8 +90,16 @@ const DetailsCampaign = (
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget as HTMLButtonElement;
 
-    if (id === "modify_campaign" && isInfoValid(campaignArgs) && confirm("캠페인을 수정 하시겠습니까?")) {
-      const result = await fetchModifyCampaign(campaign_id, campaignArgs, context);
+    if (
+      id === "modify_campaign" &&
+      isInfoValid(campaignArgs) &&
+      confirm("캠페인을 수정 하시겠습니까?")
+    ) {
+      const result = await fetchModifyCampaign(
+        campaign_id,
+        campaignArgs,
+        context,
+      );
       if (result.status === 200) {
         alert("캠페인을 수정 하였습니다.");
         router.push(`/campaign/details?campaign_id=${campaign_id}`);
@@ -88,7 +108,10 @@ const DetailsCampaign = (
       }
     } else if (id === "cancel_modify_campaign") {
       router.push("/campaign");
-    } else if (id === "delete_campaign" && confirm("캠페인을 정말 삭제 하시겠습니까?")) {
+    } else if (
+      id === "delete_campaign" &&
+      confirm("캠페인을 정말 삭제 하시겠습니까?")
+    ) {
       const result = await fetchDeleteCampaign(campaign_id, context);
       if (result.status === 200) {
         alert("캠페인 삭제를 완료 하였습니다.");
@@ -143,14 +166,14 @@ const DetailsCampaign = (
 
   return (
     <DashboardContainer>
-      <div className="flex w-full justify-between items-center mb-3 h-[42px]">
+      <div className="mb-3 flex h-[42px] w-full items-center justify-between">
         <div className="subject-container flex w-full">
           <a className="text-2xl font-bold">캠페인 상세 정보</a>
         </div>
 
-        <div className="button-container flex justify-end w-full">
+        <div className="button-container flex w-full justify-end">
           <button
-            className="flex items-center justify-center bg-gray-400 text-white border p-2 rounded-lg cursor-pointer"
+            className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
             onClick={handleSubmit}
             id="cancel_modify_campaign"
           >
@@ -159,7 +182,7 @@ const DetailsCampaign = (
           </button>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row w-full md:space-x-4 lg:space-x-4 ">
+      <div className="flex w-full flex-col md:flex-row md:space-x-4 lg:space-x-4">
         <ContentsContainer variant="campaign">
           <CampaignDetails
             page_type="DETAILS"
@@ -184,17 +207,17 @@ const DetailsCampaign = (
           />
         </ContentsContainer>
       </div>
-      <div className="flex items-center justify-end mt-6 gap-x-2 gap-y-2">
+      <div className="mt-6 flex items-center justify-end gap-x-2 gap-y-2">
         <button
           id="delete_campaign"
-          className="border p-2 bg-red-500 text-white rounded-lg cursor-pointer w-full lg:w-fit"
+          className="w-full cursor-pointer rounded-lg border bg-red-500 p-2 text-white lg:w-fit"
           onClick={handleSubmit}
         >
           삭제하기
         </button>
         <button
           id="modify_campaign"
-          className="border p-2 bg-blue-500 text-white rounded-lg cursor-pointer w-full lg:w-fit"
+          className="w-full cursor-pointer rounded-lg border bg-blue-500 p-2 text-white lg:w-fit"
           onClick={handleSubmit}
         >
           수정하기

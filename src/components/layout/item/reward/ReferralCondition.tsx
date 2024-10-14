@@ -1,5 +1,10 @@
 import React, { KeyboardEvent } from "react";
-import { PaymentFrequencyType, PaymentTimingType, RewardType, ItemConditions } from "@/lib/item/types";
+import {
+  PaymentFrequencyType,
+  PaymentTimingType,
+  RewardType,
+  ItemConditions,
+} from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 
@@ -31,7 +36,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   const isSignupAndReferee = target === "referee" && trigger === "SIGNUP";
   const handleTimingChange = (
     key: keyof ItemConditions["payment_timing"],
-    value: PaymentTimingType | number | null
+    value: PaymentTimingType | number | null,
   ) => {
     setItemConditions((prevState) => ({
       ...prevState,
@@ -44,7 +49,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
 
   const handleFrequencyChange = (
     key: keyof ItemConditions["payment_frequency"],
-    value: PaymentFrequencyType | number | null
+    value: PaymentFrequencyType | number | null,
   ) => {
     setItemConditions((prevState) => ({
       ...prevState,
@@ -74,9 +79,9 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   };
 
   return (
-    <div className="p-3 w-full bg-white rounded-xl shadow-sm">
-      <div className="flex items-center border-b-[1px] pb-2 mb-1">
-        <label className="font-gray-600 text-md font-bold text-left w-full flex">
+    <div className="w-full rounded-xl bg-white p-3 shadow-sm">
+      <div className="mb-1 flex items-center border-b-[1px] pb-2">
+        <label className="font-gray-600 text-md flex w-full text-left font-bold">
           {target === "referrer" ? "추천인" : "피추천인"}
         </label>
         <div className="flex items-center">
@@ -98,83 +103,114 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
 
       <div
         className={`transition-all duration-300 ease-in-out ${
-          useCondition ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"
+          useCondition
+            ? "max-h-screen opacity-100"
+            : "max-h-0 overflow-hidden opacity-0"
         }`}
       >
         <div className={inputFormClass}>
-          <label className={labelClass}>{rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 시점</label>
-          <div className="flex justify-between w-full text-sm mt-2">
+          <label className={labelClass}>
+            {rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 시점
+          </label>
+          <div className="mt-2 flex w-full justify-between text-sm">
             <InputRadioBox
               label="즉시 지급"
               name={`${target}_${trigger}_payment_timing_type`}
               value={PaymentTimingType.IMM}
-              checked={itemConditions.payment_timing.type === PaymentTimingType.IMM}
-              onChange={(e) => handleTimingChange("type", PaymentTimingType.IMM)}
+              checked={
+                itemConditions.payment_timing.type === PaymentTimingType.IMM
+              }
+              onChange={(e) =>
+                handleTimingChange("type", PaymentTimingType.IMM)
+              }
               disabled={false}
             />
             <InputRadioBox
               label="추후 지급"
               name={`${target}_${trigger}_payment_timing_type`}
               value={PaymentTimingType.DEL}
-              checked={itemConditions.payment_timing.type === PaymentTimingType.DEL}
-              onChange={(e) => handleTimingChange("type", PaymentTimingType.DEL)}
+              checked={
+                itemConditions.payment_timing.type === PaymentTimingType.DEL
+              }
+              onChange={(e) =>
+                handleTimingChange("type", PaymentTimingType.DEL)
+              }
               disabled={false}
             />
           </div>
 
           <div
-            className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_timing.type === PaymentTimingType.DEL ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"}`}
+            className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_timing.type === PaymentTimingType.DEL ? "max-h-screen opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
           >
-            <div className="flex text-left text-sm w-[120px] text-gray-500 items-end">
+            <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
               <input
                 type="text"
                 id={`${target}_${trigger}_delay_days`}
                 placeholder=""
                 value={itemConditions.payment_timing.delay_days ?? ""}
-                className="input-class flex-grow text-sm py-2 w-full lg:max-w-[450px] border-b-[1px] pt-4 pb-0"
-                onChange={(e) => handleTimingChange("delay_days", Number(e.target.value))}
+                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-sm lg:max-w-[450px]"
+                onChange={(e) =>
+                  handleTimingChange("delay_days", Number(e.target.value))
+                }
                 onKeyDown={handleKeyDown}
                 disabled={false}
               />
-              <div className="flex items-center min-w-fit ml-2">일 후 지급</div>
+              <div className="ml-2 flex min-w-fit items-center">일 후 지급</div>
             </div>
           </div>
         </div>
 
         <div className={inputFormClass}>
-          <label className={labelClass}>{rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 횟수</label>
-          <div className="flex justify-between w-full text-sm mt-2">
+          <label className={labelClass}>
+            {rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 횟수
+          </label>
+          <div className="mt-2 flex w-full justify-between text-sm">
             <InputRadioBox
               label="한번만"
               name={`${target}_${trigger}_payment_frequency_type`}
               value={PaymentFrequencyType.ONCE}
-              checked={itemConditions.payment_frequency.type === PaymentFrequencyType.ONCE || isSignupAndReferee}
-              onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.ONCE)}
+              checked={
+                itemConditions.payment_frequency.type ===
+                  PaymentFrequencyType.ONCE || isSignupAndReferee
+              }
+              onChange={(e) =>
+                handleFrequencyChange("type", PaymentFrequencyType.ONCE)
+              }
               disabled={isSignupAndReferee} // Disable when it's "signup" and "referee"
             />
             <InputRadioBox
               label="반복"
               name={`${target}_${trigger}_payment_frequency_type`}
               value={PaymentFrequencyType.REP}
-              checked={itemConditions.payment_frequency.type === PaymentFrequencyType.REP}
-              onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.REP)}
+              checked={
+                itemConditions.payment_frequency.type ===
+                PaymentFrequencyType.REP
+              }
+              onChange={(e) =>
+                handleFrequencyChange("type", PaymentFrequencyType.REP)
+              }
               disabled={isSignupAndReferee} // Disable when it's "signup" and "referee"
             />
             <InputRadioBox
               label="무제한"
               name={`${target}_${trigger}_payment_frequency_type`}
               value={PaymentFrequencyType.UNL}
-              checked={itemConditions.payment_frequency.type === PaymentFrequencyType.UNL}
-              onChange={(e) => handleFrequencyChange("type", PaymentFrequencyType.UNL)}
+              checked={
+                itemConditions.payment_frequency.type ===
+                PaymentFrequencyType.UNL
+              }
+              onChange={(e) =>
+                handleFrequencyChange("type", PaymentFrequencyType.UNL)
+              }
               disabled={isSignupAndReferee} // Disable when it's "signup" and "referee"
             />
           </div>
 
           <div
-            className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_frequency.type === PaymentFrequencyType.REP ? "opacity-100 max-h-screen" : "opacity-0 max-h-0 overflow-hidden"}`}
+            className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_frequency.type === PaymentFrequencyType.REP ? "max-h-screen opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
           >
-            <div className="flex text-left text-sm w-[120px] text-gray-500 items-end">
-              <div className="flex min-w-fit items-center mr-2">최대</div>
+            <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
+              <div className="mr-2 flex min-w-fit items-center">최대</div>
               <style jsx>{`
                 /* Chrome, Safari, Edge, Opera */
                 input[type="number"]::-webkit-outer-spin-button,
@@ -190,9 +226,11 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 type="number"
                 id={`${target}_${trigger}_repeat_count`}
                 placeholder=""
-                className="input-class flex-grow text-sm py-2 w-full lg:max-w-[450px] border-b-[1px] pt-4 pb-0"
+                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-sm lg:max-w-[450px]"
                 value={itemConditions.payment_frequency.repeat_count || ""}
-                onChange={(e) => handleFrequencyChange("repeat_count", Number(e.target.value))}
+                onChange={(e) =>
+                  handleFrequencyChange("repeat_count", Number(e.target.value))
+                }
                 onKeyDown={handleKeyDown}
                 disabled={false}
               />
@@ -205,7 +243,7 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 onKeyDown={handleKeyDown}
                 disabled={false}
               /> */}
-              <div className="flex items-center min-w-fit ml-2">번</div>
+              <div className="ml-2 flex min-w-fit items-center">번</div>
             </div>
           </div>
         </div>

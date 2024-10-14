@@ -10,10 +10,17 @@ interface CampaignListProps {
   handleButton: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, apiResponse, handleButton }) => {
+const CampaignList: React.FC<CampaignListProps> = ({
+  theadStyle,
+  tbodyStyle,
+  apiResponse,
+  handleButton,
+}) => {
   const router = useRouter();
   const [isCampaignPage, setIsCampaignPage] = useState(false);
-  const [activeStatusMap, setActiveStatusMap] = useState<{ [key: string]: boolean }>({});
+  const [activeStatusMap, setActiveStatusMap] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
@@ -21,7 +28,7 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
     if (Array.isArray(apiResponse)) {
       const initialStatus = apiResponse.reduce(
         (acc, campaign) => ({ ...acc, [campaign.id]: campaign.active }),
-        {} as { [key: string]: boolean }
+        {} as { [key: string]: boolean },
       );
       setActiveStatusMap(initialStatus);
     }
@@ -29,10 +36,16 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
 
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
-    router.replace(`/campaign/details?campaign_id=${id}`, undefined, { shallow: true, scroll: false });
+    router.replace(`/campaign/details?campaign_id=${id}`, undefined, {
+      shallow: true,
+      scroll: false,
+    });
   };
 
-  const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) => {
+  const toggleCampaignActiveStatus = (
+    campaignId: string,
+    newStatus: boolean,
+  ) => {
     setActiveStatusMap((prevState) => ({
       ...prevState,
       [campaignId]: newStatus,
@@ -43,16 +56,18 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
 
   return (
     <>
-      <div className="w-full pb-2 mb-2">
-        <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">
+      <div className="mb-2 w-full pb-2">
+        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
-            <div className="font-bold text-lg">캠페인</div>
-            <div className="font-normal text-sm text-gray-500">현재 사용중인 캠페인 목록이에요.</div>
+            <div className="text-lg font-bold">캠페인</div>
+            <div className="text-sm font-normal text-gray-500">
+              현재 사용중인 캠페인 목록이에요.
+            </div>
           </div>
           {!isCampaignPage && (
             <div
               id="more_campaign"
-              className="w-[20%] text-right text-sm pr-1 justify-center cursor-pointer text-blue-400"
+              className="w-[20%] cursor-pointer justify-center pr-1 text-right text-sm text-blue-400"
               onClick={handleButton}
             >
               더보기
@@ -60,8 +75,8 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
           )}
         </div>
       </div>
-      <div className="py-2 w-full">
-        <table className="w-full border border-gray-100 text-center hidden lg:table">
+      <div className="w-full py-2">
+        <table className="hidden w-full border border-gray-100 text-center lg:table">
           <thead>
             <tr className="bg-gray-100">
               <th className={theadStyle}>캠페인 ID</th>
@@ -74,19 +89,26 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
           <tbody>
             {campaigns.length > 0 ? (
               campaigns.map((campaign) => (
-                <tr className="cursor-pointer" key={campaign.id} id={campaign.id} onClick={handleCampaignClick}>
+                <tr
+                  className="cursor-pointer"
+                  key={campaign.id}
+                  id={campaign.id}
+                  onClick={handleCampaignClick}
+                >
                   <td className={tbodyStyle}>{campaign.id}</td>
                   <td className={tbodyStyle}>{campaign.title}</td>
                   <td className={tbodyStyle}>
-                    <div className="w-full flex justify-center">
+                    <div className="flex w-full justify-center">
                       <div
                         className={`${
                           campaign.period_type === "LIMITED"
                             ? "bg-yellow-200 text-yellow-600"
                             : "bg-green-200 text-green-600"
-                        } w-fit px-2 py-1 rounded-md font-semibold text-sm`}
+                        } w-fit rounded-md px-2 py-1 text-sm font-semibold`}
                       >
-                        {campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}
+                        {campaign.period_type === "LIMITED"
+                          ? "기간 제한"
+                          : "무기한"}
                       </div>
                     </div>
                   </td>
@@ -98,14 +120,20 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                     })}{" "}
                     ~{" "}
                     {campaign.end_date
-                      ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
+                      ? new Date(campaign.end_date).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )
                       : ""}
                   </td>
-                  <td className="px-2 py-2 text-sm border-b border-gray-200" onClick={(e) => e.stopPropagation()}>
+                  <td
+                    className="border-b border-gray-200 px-2 py-2 text-sm"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <CampaignActiveButton
                       view="PC"
                       campaign={campaign}
@@ -133,11 +161,11 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
             campaigns.map((campaign) => (
               <div
                 key={campaign.id}
-                className="shadow-sm bg-gray-100 p-4 mb-4 rounded-xl text-gray-600 space-y-1 cursor-pointer"
+                className="mb-4 cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600 shadow-sm"
                 id={campaign.id}
                 onClick={handleCampaignClick}
               >
-                <div className="font-bold mb-2 text-black w-full pb-1 border-b flex justify-between">
+                <div className="mb-2 flex w-full justify-between border-b pb-1 font-bold text-black">
                   <div>{campaign.title}</div>
                   <div onClick={(e) => e.stopPropagation()}>
                     <CampaignActiveButton
@@ -148,11 +176,11 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                     />
                   </div>
                 </div>
-                <div className="text-sm flex pr-2">
+                <div className="flex pr-2 text-sm">
                   <div className="w-[100px] font-semibold">타입:</div>
                   {campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}
                 </div>
-                <div className="text-sm flex pr-2">
+                <div className="flex pr-2 text-sm">
                   <div className="w-[100px] font-semibold">활성 기간:</div>
                   <div>
                     {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
@@ -162,18 +190,23 @@ const CampaignList: React.FC<CampaignListProps> = ({ theadStyle, tbodyStyle, api
                     })}
                     {" ~ "}
                     {campaign.end_date
-                      ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
+                      ? new Date(campaign.end_date).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )
                       : ""}
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-center text-gray-500">사용중인 캠페인이 없습니다. 새로운 캠페인을 생성해보세요.</div>
+            <div className="text-center text-gray-500">
+              사용중인 캠페인이 없습니다. 새로운 캠페인을 생성해보세요.
+            </div>
           )}
         </div>
       </div>

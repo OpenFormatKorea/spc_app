@@ -13,12 +13,19 @@ const ErrorPage = ({ statusCode, message }: ErrorPageProps) => {
       : "예상치 못한 오류가 발생했습니다.";
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-200 to-gray-300 text-gray-700">
-      <main className="text-center bg-gradient-to-b from-blue-200 to-blue-300 p-10 rounded-xl shadow-md">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-gray-200 to-gray-300 text-gray-700">
+      <main className="rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 p-10 text-center shadow-md">
         <h1 className="text-6xl font-bold">{statusCode || "오류"}</h1>
-        <p className="mt-4 text-xl text-gray-600">{message || defaultMessage}</p>
-        <p className="mt-4 text-lg">{statusCode ? `오류 코드: ${statusCode}` : "알 수 없는 오류"}</p>
-        <a href="/" className="mt-8 inline-block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+        <p className="mt-4 text-xl text-gray-600">
+          {message || defaultMessage}
+        </p>
+        <p className="mt-4 text-lg">
+          {statusCode ? `오류 코드: ${statusCode}` : "알 수 없는 오류"}
+        </p>
+        <a
+          href="/"
+          className="mt-8 inline-block rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
           홈으로 돌아가기
         </a>
       </main>

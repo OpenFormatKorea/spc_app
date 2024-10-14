@@ -14,44 +14,51 @@ const Header: React.FC<HeaderProps> = ({ shop_id }: { shop_id: any }) => {
   };
 
   return (
-    <header className=" fixed top-0 w-full lg:hidden z-10 opacity-95">
-      <div className=" bg-gray-400  flex items-center h-[60px] px-6 w-full">
+    <header className="fixed top-0 z-10 w-full opacity-95 lg:hidden">
+      <div className="flex h-[60px] w-full items-center bg-gray-400 px-6">
         <div className="flex items-center lg:hidden">
           <a onClick={handleLogo}>
-            <img src="/images/incento_logo.png" alt="Incento Logo" className="h-[25px] cursor-pointer mr-4" />
+            <img
+              src="/images/incento_logo.png"
+              alt="Incento Logo"
+              className="mr-4 h-[25px] cursor-pointer"
+            />
           </a>
         </div>
 
-        <div className="lg:hidden flex items-center mr-0 ml-auto">
-          <button onClick={toggleMenu} className="text-white focus:outline-none">
+        <div className="ml-auto mr-0 flex items-center lg:hidden">
+          <button
+            onClick={toggleMenu}
+            className="text-white focus:outline-none"
+          >
             {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </div>
       </div>
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="bg-gray-400 text-white lg:hidden flex flex-col items-start p-4">
+        <div className="flex flex-col items-start bg-gray-400 p-4 text-white lg:hidden">
           <Navmenu menutitle="대시보드" link="/dashboard" />
           <Navmenu menutitle="캠페인" link="/campaign" />
-          <div className="border-t border-white my-2 w-full"></div>
+          <div className="my-2 w-full border-t border-white"></div>
           <Navmenu menutitle="마이 페이지" link="/mypage" />
           <div
-            className={`h-[55px] w-full flex items-center justify-center text-md cursor-pointer text-white mx-auto transition-all duration-300`}
+            className={`text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300`}
           >
             <div
-              className="p-2 flex items-center justify-center transition-all duration-300 rounded-xl w-[95%]"
+              className="flex w-[95%] items-center justify-center rounded-xl p-2 transition-all duration-300"
               onClick={(event) => {
                 handleSignOut(event);
                 toggleMenu();
               }}
             >
               <LogoutIcon fontSize="small" />
-              <div className="w-full text-left pl-3">
+              <div className="w-full pl-3 text-left">
                 <a>로그아웃</a>
               </div>
             </div>
           </div>
-          <div className="w-full flex flex-col justify-center px-5">
+          <div className="flex w-full flex-col justify-center px-5">
             <span className="text-xs text-white"> SHOP ID</span>
             <span id="shop_id" className="flex text-xs text-white">
               {shop_id}

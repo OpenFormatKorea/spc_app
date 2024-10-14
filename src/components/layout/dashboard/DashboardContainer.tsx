@@ -8,7 +8,10 @@ interface DashboardContainerProps {
   children: React.ReactNode;
 }
 
-const DashboardContainer: React.FC<DashboardContainerProps> = ({ children }, context: GetServerSidePropsContext) => {
+const DashboardContainer: React.FC<DashboardContainerProps> = (
+  { children },
+  context: GetServerSidePropsContext,
+) => {
   const [shop_id, setShopId] = useState<string>("");
   const [isHydrated, setIsHydrated] = useState(false);
 

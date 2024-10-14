@@ -17,11 +17,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20"
       onClick={handleBackgroundClick}
     >
-      <div className="rounded-xl p-4 text-center sm:max-w-[380px] lg:max-w-[720px] relative shadow-lg bg-gray-100">
-        <button className="absolute top-2 right-5 text-gray-400 hover:text-gray-700 text-3xl" onClick={onClose}>
+      <div className="relative rounded-xl bg-gray-100 p-4 text-center shadow-lg sm:max-w-[380px] lg:max-w-[720px]">
+        <button
+          className="absolute right-5 top-2 text-3xl text-gray-400 hover:text-gray-700"
+          onClick={onClose}
+        >
           &times;
         </button>
         {children}

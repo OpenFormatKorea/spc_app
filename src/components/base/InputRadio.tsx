@@ -7,8 +7,15 @@ interface InputRadioBoxProps {
   checked: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
-const InputRadioBox: React.FC<InputRadioBoxProps> = ({ disabled, label, value, name, checked, onChange }) => (
-  <div className="flex space-x-2 justify-center items-center text-gray-500 mr-5 cursor-pointer">
+const InputRadioBox: React.FC<InputRadioBoxProps> = ({
+  disabled,
+  label,
+  value,
+  name,
+  checked,
+  onChange,
+}) => (
+  <div className="mr-5 flex cursor-pointer items-center justify-center space-x-2 text-gray-500">
     <input
       type="radio"
       name={name}

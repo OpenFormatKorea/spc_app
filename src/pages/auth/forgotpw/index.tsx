@@ -34,7 +34,9 @@ const resetpw = () => {
           router.push("/auth/login");
         }
       } else {
-        alert("비밀번호 설정이 실패하였습니다. 인센토 팀으로 문의를 남겨주세요.");
+        alert(
+          "비밀번호 설정이 실패하였습니다. 인센토 팀으로 문의를 남겨주세요.",
+        );
         setLoading(false);
       }
     }

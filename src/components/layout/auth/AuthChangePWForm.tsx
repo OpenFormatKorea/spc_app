@@ -35,9 +35,11 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
 }) => {
   return (
     <AuthContainer>
-      <div className="min-w-[380px] min-h-[380px] rounded-xl p-6 bg-gradient-to-b from-blue-200 to-blue-300 flex flex-col justify-center items-center text-center">
-        <div className="text-xl font-semibold m-2 w-full text-left">비밀번호 변경</div>
-        <div className="flex flex-col w-full items-start justify-between">
+      <div className="flex min-h-[380px] min-w-[380px] flex-col items-center justify-center rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 p-6 text-center">
+        <div className="m-2 w-full text-left text-xl font-semibold">
+          비밀번호 변경
+        </div>
+        <div className="flex w-full flex-col items-start justify-between">
           <AuthInputBox
             label="신규 비밀번호:"
             type={showPW ? "text" : "password"}
@@ -47,17 +49,25 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
             onChange={handleNewPasswordChange}
             onKeyDown={handleKeyDown}
           />
-          <div className="flex justify-between w-full text-xs text-left mt-2">
-            <p className="text-gray-500">*비밀번호는 최소 8자, 대문자, 특수기호 포함</p>
+          <div className="mt-2 flex w-full justify-between text-left text-xs">
+            <p className="text-gray-500">
+              *비밀번호는 최소 8자, 대문자, 특수기호 포함
+            </p>
             <div>
               [
-              <span style={passwordError === "사용 불가능" ? { color: "red" } : { color: "green" }}>
+              <span
+                style={
+                  passwordError === "사용 불가능"
+                    ? { color: "red" }
+                    : { color: "green" }
+                }
+              >
                 {passwordError}
               </span>
               ]
             </div>
           </div>
-          <div className="flex justify-between w-full items-end text-left">
+          <div className="flex w-full items-end justify-between text-left">
             <AuthInputBox
               label="신규 비밀번호 확인:"
               type={showPW ? "text" : "password"}
@@ -67,18 +77,26 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
               onChange={handleNewPasswordChkChange}
               onKeyDown={handleKeyDown}
             />
-            <div className="inline-block  text-xs text-right ml-2">
+            <div className="ml-2 inline-block text-right text-xs">
               <button
-                className="text-xs border bg-white p-1 mb-[5px] cursor-pointer"
+                className="mb-[5px] cursor-pointer border bg-white p-1 text-xs"
                 onClick={() => setShowPw(!showPW)}
               >
-                {showPW ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+                {showPW ? (
+                  <VisibilityOffIcon fontSize="small" />
+                ) : (
+                  <VisibilityIcon fontSize="small" />
+                )}
               </button>
             </div>
           </div>
-          <div className="w-full text-xs text-right pt-2">
+          <div className="w-full pt-2 text-right text-xs">
             <div>
-              [<span style={{ color: instantPWChk ? "green" : "red" }}>{instantPWChk ? "일치" : "불일치"}</span>]
+              [
+              <span style={{ color: instantPWChk ? "green" : "red" }}>
+                {instantPWChk ? "일치" : "불일치"}
+              </span>
+              ]
             </div>
           </div>
         </div>

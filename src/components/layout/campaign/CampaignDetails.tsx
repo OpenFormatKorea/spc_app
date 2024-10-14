@@ -30,8 +30,12 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   setStart_date,
   setEnd_date,
 }) => {
-  const [activeStatus, setActiveStatus] = useState<boolean>(campaignArgs.active);
-  const [endDateActiveStatus, setEndDateActiveStatus] = useState<boolean>(period_type !== PeriodType.UL);
+  const [activeStatus, setActiveStatus] = useState<boolean>(
+    campaignArgs.active,
+  );
+  const [endDateActiveStatus, setEndDateActiveStatus] = useState<boolean>(
+    period_type !== PeriodType.UL,
+  );
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -44,8 +48,10 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
     }
   }, [period_type, campaignArgs.end_date, setEnd_date]);
 
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => setPeriod_type(e.target.value as PeriodType);
-  const handleActiveRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => setActive(e.target.value === "true");
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setPeriod_type(e.target.value as PeriodType);
+  const handleActiveRadioChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setActive(e.target.value === "true");
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -53,11 +59,12 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
     }
   };
 
-  const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) => setActiveStatus(newStatus);
+  const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) =>
+    setActiveStatus(newStatus);
 
   return (
-    <div className="w-full pb-2 mb-2">
-      <div className="flex w-full pb-2 border-b-[1px] mb-2 items-center">
+    <div className="mb-2 w-full pb-2">
+      <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
         <div className="w-full">
           <div className="text-lg font-bold text-black">
             {page_type === "DETAILS" ? "캠페인 상세 정보" : "캠페인 옵션 추가"}
@@ -74,8 +81,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           </div>
         )}
       </div>
-      <div className="inputForm flex flex-col text-left w-full pb-2">
-        <label className="text-xs pt-2 text-gray-500">캠페인 명</label>
+      <div className="inputForm flex w-full flex-col pb-2 text-left">
+        <label className="pt-2 text-xs text-gray-500">캠페인 명</label>
         <InputTextBox
           type="text"
           id="title"
@@ -87,8 +94,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         />
       </div>
 
-      <div className="inputForm flex flex-col text-left w-full pb-2">
-        <label className="text-xs pt-4 text-gray-500">캠페인 설명</label>
+      <div className="inputForm flex w-full flex-col pb-2 text-left">
+        <label className="pt-4 text-xs text-gray-500">캠페인 설명</label>
         <InputTextBox
           type="text"
           id="description"
@@ -100,9 +107,9 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         />
       </div>
 
-      <div className="inputForm flex flex-col text-left w-full pb-2">
-        <label className="text-xs pt-4 pb-2 text-gray-500">기간 종류</label>
-        <div className="flex justify-between w-full md:w-[300px] lg:w-[300px]">
+      <div className="inputForm flex w-full flex-col pb-2 text-left">
+        <label className="pb-2 pt-4 text-xs text-gray-500">기간 종류</label>
+        <div className="flex w-full justify-between md:w-[300px] lg:w-[300px]">
           <InputRadioBox
             label="기간 제한"
             name="period_type"
@@ -121,14 +128,21 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
       </div>
-      <div className="inputForm flex flex-col w-full text-left pb-2">
-        <label className="text-xs pt-4 text-gray-500">캠페인 기간</label>
-        <div className="flex  flex-wrap items-center justify-center w-full gap-2">
-          <DatePicker label="캠페인 시작일" value={campaignArgs.start_date} onChange={setStart_date} disabled={false} />
+      <div className="inputForm flex w-full flex-col pb-2 text-left">
+        <label className="pt-4 text-xs text-gray-500">캠페인 기간</label>
+        <div className="flex w-full flex-wrap items-center justify-center gap-2">
+          <DatePicker
+            label="캠페인 시작일"
+            value={campaignArgs.start_date}
+            onChange={setStart_date}
+            disabled={false}
+          />
           {period_type === PeriodType.L && (
             <DatePicker
               label="캠페인 종료일"
-              value={period_type === PeriodType.L ? campaignArgs.end_date : null}
+              value={
+                period_type === PeriodType.L ? campaignArgs.end_date : null
+              }
               onChange={setEnd_date}
               disabled={endDateActiveStatus}
             />
@@ -137,9 +151,11 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       </div>
 
       {page_type === "NEW" && (
-        <div className="inputForm flex flex-col text-left w-full pb-2">
-          <label className="text-xs pt-4 pb-2 text-gray-500">캠페인 활성화</label>
-          <div className="flex justify-between w-[250px] lg:w-[300px]">
+        <div className="inputForm flex w-full flex-col pb-2 text-left">
+          <label className="pb-2 pt-4 text-xs text-gray-500">
+            캠페인 활성화
+          </label>
+          <div className="flex w-[250px] justify-between lg:w-[300px]">
             <InputRadioBox
               label="활성화"
               name="active"
@@ -157,7 +173,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
               disabled={true}
             />
           </div>
-          <label className="text-xs pt-4 pb-2 text-gray-400">
+          <label className="pb-2 pt-4 text-xs text-gray-400">
             - 캠페인 생성 시에는 기본값이 비활성화로 지정됩니다.
           </label>
         </div>

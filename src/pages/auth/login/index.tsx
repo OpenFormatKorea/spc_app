@@ -91,12 +91,12 @@ const Login = (context: GetServerSidePropsContext) => {
   return (
     <>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
           <LoadingSpinner />
         </div>
       )}
       <AuthContainer>
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex h-screen items-center justify-center">
           <AuthLogin
             username={username}
             setUsername={setUsername}

@@ -40,11 +40,14 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
-  const handleRewardTypeRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRewardTypeRadioChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setRewardType(e.target.value as RewardType);
   };
   const closeModal = () => setIsModalOpen(false);
-  const openModal = () => (reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요."));
+  const openModal = () =>
+    reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
   let isDisabled = false;
@@ -58,11 +61,11 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   }, [couponInputs.length]);
   return (
     <>
-      <h1 className="font-bold text-xl pb-2 border-b-[1px]">리워드</h1>
+      <h1 className="border-b-[1px] pb-2 text-xl font-bold">리워드</h1>
       <div className={inputFormClass}>
         <label className={radioButtonLabelClass}>리워드 종류</label>
-        <div className="flex h-[42px] items-center w-full ">
-          <div className="flex space-x-20 text-left w-full lg:max-w-[458px]">
+        <div className="flex h-[42px] w-full items-center">
+          <div className="flex w-full space-x-20 text-left lg:max-w-[458px]">
             <InputRadioBox
               label="쿠폰"
               name="reward_type"
@@ -84,8 +87,10 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
             <button
               id="create_item_container"
               className={`border p-1 ${
-                disableInput ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 cursor-pointer"
-              }  text-white rounded-lg min-w-[45px] text-center `}
+                disableInput
+                  ? "cursor-not-allowed bg-gray-400"
+                  : "cursor-pointer bg-blue-500"
+              } min-w-[45px] rounded-lg text-center text-white`}
               onClick={openModal}
               disabled={disableInput}
             >
@@ -96,17 +101,17 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
 
         <div className="contents-container w-full justify-between pb-4">
           {reward_type === RewardType.CO && page_type == "NEW" && (
-            <div className="flex flex-col w-full h-fit">
-              <div className="flex flex-col w-full mb-2 text-left">
+            <div className="flex h-fit w-full flex-col">
+              <div className="mb-2 flex w-full flex-col text-left">
                 <label className={labelClass}>선택된 쿠폰</label>
-                <div className="w-full h-fit text-sm justify-center mt-2 break-words flex flex-wrap bg-gray-100 rounded-xl p-2 pb-3">
+                <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-sm">
                   {selectedCouponItems.length !== 0 ? (
                     couponInputs.map((inputCoupon) => {
                       return (
                         inputCoupon && (
                           <div
                             key={inputCoupon.coupon_code}
-                            className="mr-1 mt-1 p-1 w-fit h-fit text-sm text-white bg-blue-300 rounded-md"
+                            className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
                           >
                             {inputCoupon.coupon_name}
                           </div>
@@ -114,7 +119,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
                       );
                     })
                   ) : (
-                    <div className="flex items-center justify-center h-full w-full">
+                    <div className="flex h-full w-full items-center justify-center">
                       <div className="text-center text-gray-600">
                         선택된 쿠폰이 없습니다.
                         <br />
@@ -127,7 +132,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
             </div>
           )}
           {reward_type === RewardType.PO && page_type === "NEW" && (
-            <div className="flex flex-col w-full h-fit">
+            <div className="flex h-fit w-full flex-col">
               <div className={inputFormClass}>
                 <label className={labelClass}>포인트</label>
                 <InputNumberTextBox
@@ -142,14 +147,15 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               </div>
             </div>
           )}
-          {(page_type === "NEW" || (couponInputs.length !== 0 && point_amount !== "")) && (
+          {(page_type === "NEW" ||
+            (couponInputs.length !== 0 && point_amount !== "")) && (
             <button
               id="create_item_container"
               className={`border p-1 ${
                 couponInputs.length === 0 && point_amount === ""
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 cursor-pointer"
-              } text-white rounded-lg min-w-[45px] text-center`}
+                  ? "cursor-not-allowed bg-gray-400"
+                  : "cursor-pointer bg-blue-500"
+              } min-w-[45px] rounded-lg text-center text-white`}
               onClick={openRewardModal}
               disabled={couponInputs.length === 0 && point_amount === ""}
             >

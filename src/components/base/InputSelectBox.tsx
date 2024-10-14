@@ -5,12 +5,17 @@ interface InputSelectBoxArgs {
   options: string[]; // Add options as a prop to list dropdown options
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
-const InputSelectBox: React.FC<InputSelectBoxArgs> = ({ id, value, options, onChange }) => {
+const InputSelectBox: React.FC<InputSelectBoxArgs> = ({
+  id,
+  value,
+  options,
+  onChange,
+}) => {
   return (
     <select
       id={id}
       value={value}
-      className="input-class ml-2 text-xs p-3 rounded-md w-[200px] border"
+      className="input-class ml-2 w-[200px] rounded-md border p-3 text-xs"
       onChange={onChange}
     >
       <option key="1" value="1">

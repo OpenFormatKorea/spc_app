@@ -16,21 +16,25 @@ const HomePage = () => {
 
   return (
     <AuthContainer>
-      <div className="LoginBox min-w-[380px] min-h-[380px] rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 flex flex-col justify-center items-center">
+      <div className="LoginBox flex min-h-[380px] min-w-[380px] flex-col items-center justify-center rounded-xl bg-gradient-to-b from-blue-200 to-blue-300">
         <div className="m-10 flex justify-center">
-          <img src="/images/incento_logo.png" alt="Incento Logo" className="w-[180px]" />
+          <img
+            src="/images/incento_logo.png"
+            alt="Incento Logo"
+            className="w-[180px]"
+          />
         </div>
-        <div className="flex w-[50%] items-center justify-center my-10 space-x-6">
+        <div className="my-10 flex w-[50%] items-center justify-center space-x-6">
           <button
             id="login"
-            className=" p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+            className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-blue-500 p-2 text-white lg:w-fit"
             onClick={handleButton}
           >
             로그인
           </button>
           <button
             id="signup"
-            className=" p-2 w-full lg:w-fit text-white rounded-lg cursor-pointer flex items-center justify-center bg-blue-500"
+            className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-blue-500 p-2 text-white lg:w-fit"
             onClick={handleButton}
           >
             회원가입

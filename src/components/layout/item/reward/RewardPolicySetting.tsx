@@ -39,15 +39,23 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
   };
   // Separate state for sign up and purchase
 
-  const [useSignUpReffererCondition, setUseSignUpReffererCondition] = useState(true);
-  const [signUpReferrerConditions, setSignUpReferrerConditions] = useState<ItemConditions>(defaultConditions);
-  const [useSignUpRefereeCondition, setUseSignUpRefereeCondition] = useState(true);
-  const [signUpRefereeConditions, setSignUpRefereeConditions] = useState<ItemConditions>(defaultConditions);
+  const [useSignUpReffererCondition, setUseSignUpReffererCondition] =
+    useState(true);
+  const [signUpReferrerConditions, setSignUpReferrerConditions] =
+    useState<ItemConditions>(defaultConditions);
+  const [useSignUpRefereeCondition, setUseSignUpRefereeCondition] =
+    useState(true);
+  const [signUpRefereeConditions, setSignUpRefereeConditions] =
+    useState<ItemConditions>(defaultConditions);
 
-  const [usePurchaseReffererCondition, setUsePurchaseReffererCondition] = useState(true);
-  const [purchaseReferrerConditions, setPurchaseReferrerConditions] = useState<ItemConditions>(defaultConditions);
-  const [usePurchaseRefereeCondition, setUsePurchaseRefereeCondition] = useState(true);
-  const [purchaseRefereeConditions, setPurchaseRefereeConditions] = useState<ItemConditions>(defaultConditions);
+  const [usePurchaseReffererCondition, setUsePurchaseReffererCondition] =
+    useState(true);
+  const [purchaseReferrerConditions, setPurchaseReferrerConditions] =
+    useState<ItemConditions>(defaultConditions);
+  const [usePurchaseRefereeCondition, setUsePurchaseRefereeCondition] =
+    useState(true);
+  const [purchaseRefereeConditions, setPurchaseRefereeConditions] =
+    useState<ItemConditions>(defaultConditions);
 
   useEffect(() => {
     setReferrerState({
@@ -64,8 +72,8 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
   }, [signUpRefereeConditions, purchaseRefereeConditions]);
 
   return (
-    <div className="flex flex-col items-center  mb-3">
-      <div className="flex flex-col rounded-lg ">
+    <div className="mb-3 flex flex-col items-center">
+      <div className="flex flex-col rounded-lg">
         <RewardPolicy
           defaultConditions={defaultConditions}
           trigger="SIGNUP"

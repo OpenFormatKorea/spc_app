@@ -1,7 +1,13 @@
 import InputTextBox from "@/components/base/InputText";
 import KakaoShareTemplate from "@/components/base/KakaoShareTemplate";
 import { fetchActivateItem } from "@/lib/item/apis";
-import { ItemType, ItemArgs, ProductsArgs, PromotionsArgs, KakaoShareArgs } from "@/lib/item/types";
+import {
+  ItemType,
+  ItemArgs,
+  ProductsArgs,
+  PromotionsArgs,
+  KakaoShareArgs,
+} from "@/lib/item/types";
 import { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
 
@@ -21,7 +27,9 @@ interface ItemDetailsProps {
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>;
   setActive?: (value: boolean) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onChangeImage?: (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeImage?: (
+    imgType: string,
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   campaign_id?: string;
 }
 
@@ -44,23 +52,36 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     onChangeImage,
     campaign_id,
   },
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ) => {
   useEffect(() => {
     if (page_type === "DETAILS") {
       setProductInputs(itemArgs.products);
       setPromotionInputs(itemArgs.promotions);
     }
-  }, [page_type, itemArgs.products, itemArgs.promotions, setProductInputs, setPromotionInputs]);
+  }, [
+    page_type,
+    itemArgs.products,
+    itemArgs.promotions,
+    setProductInputs,
+    setPromotionInputs,
+  ]);
 
   const handleActiveStatus = async () => {
     if (page_type === "DETAILS" && setActive && campaign_id && itemArgs.id) {
       const newActiveStatus = !itemArgs.active;
       if (confirm("아이템 활성화 상태를 변경하시겠어요?")) {
         setActive(newActiveStatus);
-        const result = await fetchActivateItem(itemArgs.id, campaign_id, context);
+        const result = await fetchActivateItem(
+          itemArgs.id,
+          campaign_id,
+          context,
+        );
         if (result.status !== 200) {
-          alert("아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " + result.status);
+          alert(
+            "아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " +
+              result.status,
+          );
           setActive(!newActiveStatus);
         }
       }
@@ -69,8 +90,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
 
   return (
     <>
-      <div className="contents-container w-full justify-center items-center">
-        <h1 className="font-bold text-xl pb-2 border-b-[1px] flex items-center justify-between">
+      <div className="contents-container w-full items-center justify-center">
+        <h1 className="flex items-center justify-between border-b-[1px] pb-2 text-xl font-bold">
           <div>아이템 옵션</div>
           {page_type === "DETAILS" && (
             <div>
@@ -91,8 +112,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
             </div>
           )}
         </h1>
-        <div className="inputForm flex flex-col text-left w-full pb-2">
-          <label className="text-xs pt-4 text-gray-500">아이템 명</label>
+        <div className="inputForm flex w-full flex-col pb-2 text-left">
+          <label className="pt-4 text-xs text-gray-500">아이템 명</label>
           <InputTextBox
             type="text"
             id="title"

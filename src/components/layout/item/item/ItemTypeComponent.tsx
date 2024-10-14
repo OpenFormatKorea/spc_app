@@ -30,12 +30,12 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   return (
     <div className="contents-container w-full justify-between pb-4">
       {item_type === ItemType.PD && (
-        <div className="flex flex-col w-full h-fit">
-          <div className="flex flex-col w-full mb-2 text-left">
+        <div className="flex h-fit w-full flex-col">
+          <div className="mb-2 flex w-full flex-col text-left">
             <label className={labelClass}>상품 모델 코드</label>
-            <div className="w-full h-fit text-sm justify-center mt-2 break-words flex flex-wrap bg-gray-100 rounded-xl p-2 pb-3">
+            <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-sm">
               {!selectedProductItems.length ? (
-                <div className="flex items-center justify-center h-full w-full text-center text-gray-600">
+                <div className="flex h-full w-full items-center justify-center text-center text-gray-600">
                   선택된 상품이 없습니다.
                   <br />
                   상품을 선택해주세요.
@@ -44,7 +44,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
                 selectedProductItems.map((inputProduct) => (
                   <div
                     key={inputProduct.product_model_code}
-                    className="mr-1 mt-1 p-1 w-fit h-fit text-sm text-white bg-blue-300 rounded-md"
+                    className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
                   >
                     {inputProduct.product_model_name}
                   </div>
@@ -56,7 +56,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
       )}
 
       {item_type === ItemType.PM && (
-        <div className="flex flex-col w-full h-fit">
+        <div className="flex h-fit w-full flex-col">
           <div className={inputFormClass}>
             <label className={labelClass}>프로모션 코드</label>
             <InputTextBox

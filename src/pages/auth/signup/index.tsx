@@ -19,7 +19,8 @@ const Signup: React.FC = () => {
   const [passwordError, setPasswordError] = useState("사용불가능");
   const [instantPWChk, setInstantPWChk] = useState(false);
   const emailRegEx = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-  const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
+  const passwordPattern =
+    /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const signupInfo: AuthArgs = {
@@ -32,7 +33,9 @@ const Signup: React.FC = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     setInstantPWChk(e.target.value === passwordChk);
-    setPasswordError(passwordPattern.test(e.target.value) ? "사용가능" : "사용불가능");
+    setPasswordError(
+      passwordPattern.test(e.target.value) ? "사용가능" : "사용불가능",
+    );
   };
 
   const handlePasswordChkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,14 +97,19 @@ const Signup: React.FC = () => {
 
   useEffect(() => {
     const isFormValid =
-      username !== "" && email !== "" && shopName !== "" && password !== "" && passwordChk !== "" && instantPWChk;
+      username !== "" &&
+      email !== "" &&
+      shopName !== "" &&
+      password !== "" &&
+      passwordChk !== "" &&
+      instantPWChk;
     setButtonDisabled(!isFormValid);
   }, [username, email, shopName, password, passwordChk, instantPWChk]);
 
   return (
     <>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
           <LoadingSpinner />
         </div>
       )}
