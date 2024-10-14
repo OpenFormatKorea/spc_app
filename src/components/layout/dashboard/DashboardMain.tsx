@@ -1,11 +1,7 @@
 interface MainProps {
-  //title: string;
   children: React.ReactNode;
 }
-const DashboardMain: React.FC<MainProps> = ({
-  //title,
-  children,
-}) => {
+const DashboardMain: React.FC<MainProps> = ({ children }) => {
   return (
     <div className="flex flex-col pt-[60px] lg:pt-0 lg:pl-[245px] pl-0 min-h-screen min-w-full">
       <div className="w-full p-4 flex-grow flex">

@@ -1,14 +1,14 @@
 // src/pages/dashboard.tsx
-import CampaignList from "@/components/layout/campaign/CampaignList";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
+import CampaignList from "@/components/layout/campaign/CampaignList";
+import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { fetchGetCampaignList } from "@/lib/campaign/apis";
+import { useEffect, useState } from "react";
+import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { fetchGetCampaignList } from "@/lib/campaign/apis";
-import LoadingSpinner from "@/components/base/LoadingSpinner";
-import { useEffect, useState } from "react";
-import { withAuth } from "@/hoc/withAuth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaignResponse = await fetchGetCampaignList(context);

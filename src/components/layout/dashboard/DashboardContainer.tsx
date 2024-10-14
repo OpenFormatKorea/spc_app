@@ -10,15 +10,14 @@ interface DashboardContainerProps {
 
 const DashboardContainer: React.FC<DashboardContainerProps> = ({ children }, context: GetServerSidePropsContext) => {
   const [shop_id, setShopId] = useState<string>("");
-  const [isHydrated, setIsHydrated] = useState(false); // Track if hydration is complete
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    const shop_id = getShopIdFromCookies(context) || ""; // Fetch shop_id from cookies
+    const shop_id = getShopIdFromCookies(context) || "";
     setShopId(shop_id);
-    setIsHydrated(true); // Mark hydration as complete
+    setIsHydrated(true);
   }, []);
 
-  // Return null or a loading indicator during hydration to avoid mismatch
   if (!isHydrated) return null;
 
   return (
