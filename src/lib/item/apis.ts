@@ -2,7 +2,6 @@ import { ItemArgs, RewardPolicyArgs } from "@/lib/item/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
 import { fetchAPI } from "@/lib/api";
-import router, { useRouter } from "next/router";
 
 // 리퍼럴 아이템
 
@@ -13,7 +12,6 @@ export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, c
 
     const cleanedConditions: RewardPolicyArgs = {};
 
-    // Check for each condition (SIGNUP, PURCHASE) and clean it if necessary
     if (conditions.SIGNUP) {
       const isSignupEmpty =
         conditions.SIGNUP.payment_timing?.type === null &&
@@ -38,7 +36,6 @@ export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, c
       }
     }
 
-    // If all are empty, return {}, otherwise return cleanedConditions
     return Object.keys(cleanedConditions).length > 0 ? cleanedConditions : {};
   };
 
