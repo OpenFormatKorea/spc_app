@@ -1,11 +1,19 @@
-import ContentsContainer from "@/components/layout/base/ContentsContainer";
+import { fetchGetProductCodeList, fetchGetCouponCodeList, fetchCreateItem } from "@/lib/item/apis";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import RewardComponent from "@/components/layout/item/reward/RewardComponent";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
+import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ProductList from "@/components/layout/item/modal/ProductList";
 import RewardCard from "@/components/layout/item/reward/RewardCard";
-import RewardComponent from "@/components/layout/item/reward/RewardComponent";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import ItemDetails from "@/components/layout/item/item/ItemDetails";
+import { useState, useRef, useEffect, KeyboardEvent } from "react";
+import LoadingSpinner from "@/components/base/LoadingSpinner";
+import ReactS3Client from "@/lib/aws/ReactS3Client";
 import { getShopIdFromCookies } from "@/lib/helper";
-import { fetchGetProductCodeList, fetchGetCouponCodeList, fetchCreateItem } from "@/lib/item/apis";
+import { withAuth } from "@/hoc/withAuth";
+import { ApiResponse } from "@/lib/types";
+import { useRouter } from "next/router";
 import {
   ProductsArgs,
   PromotionsArgs,
@@ -16,14 +24,6 @@ import {
   RewardType,
   ItemArgs,
 } from "@/lib/item/types";
-import { ApiResponse } from "@/lib/types";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
-import { useState, useRef, useEffect, KeyboardEvent } from "react";
-import ReactS3Client from "@/lib/aws/ReactS3Client";
-import ItemDetails from "@/components/layout/item/item/ItemDetails";
-import LoadingSpinner from "@/components/base/LoadingSpinner";
-import { withAuth } from "@/hoc/withAuth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -138,7 +138,6 @@ const NewItem = (
       alert("카카오 공유 버튼 이름을 입력해주세요.");
       return false;
     }
-
     if (
       !rewards.length &&
       !confirm("해당 아이템에 아직 리워드가 추가되지 않았어요, 그래도 아이템 생성을 원하시나요?")

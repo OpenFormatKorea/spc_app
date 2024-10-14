@@ -52,6 +52,8 @@ const DatePicker: React.FC<DatePickerProps> = ({ label, value, onChange, disable
             ))}
           </select>
           년
+        </div>
+        <div className="flex gap-2 items-center bg-white mb-2">
           <select
             value={month}
             onChange={(e) => setMonth(e.target.value)}
