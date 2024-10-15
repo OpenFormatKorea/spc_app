@@ -16,6 +16,7 @@ import { ApiResponse } from "@/lib/types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
+import LoadingSpinner from "@/components/base/LoadingSpinner";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
@@ -86,6 +87,17 @@ const DetailsCampaign = (
       setEnd_date(cDetailApiResponse.end_date || null);
     }
   }, [period_type, cDetailApiResponse.end_date]);
+
+  useEffect(() => {
+    if (itemListApiResponse) {
+      setLoading(false);
+    } else {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [itemListApiResponse]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget as HTMLButtonElement;
@@ -165,65 +177,72 @@ const DetailsCampaign = (
   }, [itemListApiResponse]);
 
   return (
-    <DashboardContainer>
-      <div className="mb-3 flex h-[42px] w-full items-center justify-between">
-        <div className="subject-container flex w-full">
-          <a className="text-2xl font-bold">캠페인 상세 정보</a>
+    <>
+      {loading && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
+          <LoadingSpinner />
         </div>
+      )}
+      <DashboardContainer>
+        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
+          <div className="subject-container flex w-full">
+            <a className="text-2xl font-bold">캠페인 상세 정보</a>
+          </div>
 
-        <div className="button-container flex w-full justify-end">
+          <div className="button-container flex w-full justify-end">
+            <button
+              className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
+              onClick={handleSubmit}
+              id="cancel_modify_campaign"
+            >
+              <ArrowBackIosIcon fontSize="small" />
+              <span className="ml-1 sm:hidden">뒤로가기</span>
+            </button>
+          </div>
+        </div>
+        <div className="flex w-full flex-col md:flex-row md:space-x-4 lg:space-x-4">
+          <ContentsContainer variant="campaign">
+            <CampaignDetails
+              page_type="DETAILS"
+              period_type={period_type}
+              campaign_id={campaign_id}
+              campaignArgs={campaignArgs}
+              setPeriod_type={setPeriod_type}
+              setDescription={setDescription}
+              setActive={setActive}
+              setTitle={setTitle}
+              setStart_date={setStart_date}
+              setEnd_date={setEnd_date}
+            />
+          </ContentsContainer>
+          <ContentsContainer variant="campaign">
+            <ItemList
+              theadStyle="px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center"
+              tbodyStyle="px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center"
+              apiResponse={itemListApiResponse}
+              handleButton={handleButton}
+              campaign_id={campaign_id}
+            />
+          </ContentsContainer>
+        </div>
+        <div className="mt-6 flex items-center justify-end gap-x-2 gap-y-2">
           <button
-            className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
+            id="delete_campaign"
+            className="w-full cursor-pointer rounded-lg border bg-red-500 p-2 text-white lg:w-fit"
             onClick={handleSubmit}
-            id="cancel_modify_campaign"
           >
-            <ArrowBackIosIcon fontSize="small" />
-            <span className="ml-1 sm:hidden">뒤로가기</span>
+            삭제하기
+          </button>
+          <button
+            id="modify_campaign"
+            className="w-full cursor-pointer rounded-lg border bg-blue-500 p-2 text-white lg:w-fit"
+            onClick={handleSubmit}
+          >
+            수정하기
           </button>
         </div>
-      </div>
-      <div className="flex w-full flex-col md:flex-row md:space-x-4 lg:space-x-4">
-        <ContentsContainer variant="campaign">
-          <CampaignDetails
-            page_type="DETAILS"
-            period_type={period_type}
-            campaign_id={campaign_id}
-            campaignArgs={campaignArgs}
-            setPeriod_type={setPeriod_type}
-            setDescription={setDescription}
-            setActive={setActive}
-            setTitle={setTitle}
-            setStart_date={setStart_date}
-            setEnd_date={setEnd_date}
-          />
-        </ContentsContainer>
-        <ContentsContainer variant="campaign">
-          <ItemList
-            theadStyle="px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center"
-            tbodyStyle="px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center"
-            apiResponse={itemListApiResponse}
-            handleButton={handleButton}
-            campaign_id={campaign_id}
-          />
-        </ContentsContainer>
-      </div>
-      <div className="mt-6 flex items-center justify-end gap-x-2 gap-y-2">
-        <button
-          id="delete_campaign"
-          className="w-full cursor-pointer rounded-lg border bg-red-500 p-2 text-white lg:w-fit"
-          onClick={handleSubmit}
-        >
-          삭제하기
-        </button>
-        <button
-          id="modify_campaign"
-          className="w-full cursor-pointer rounded-lg border bg-blue-500 p-2 text-white lg:w-fit"
-          onClick={handleSubmit}
-        >
-          수정하기
-        </button>
-      </div>
-    </DashboardContainer>
+      </DashboardContainer>
+    </>
   );
 };
 

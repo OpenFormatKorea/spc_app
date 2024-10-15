@@ -41,7 +41,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
         </div>
         <div className="flex w-full flex-col items-start justify-between">
           <AuthInputBox
-            label="신규 비밀번호:"
+            label="신규 비밀번호"
             type={showPW ? "text" : "password"}
             id="new_password"
             placeholder="신규 비밀번호를 입력하세요."
@@ -57,7 +57,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
               [
               <span
                 style={
-                  passwordError === "사용 불가능"
+                  passwordError === "사용불가능"
                     ? { color: "red" }
                     : { color: "green" }
                 }
@@ -69,7 +69,7 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           </div>
           <div className="flex w-full items-end justify-between text-left">
             <AuthInputBox
-              label="신규 비밀번호 확인:"
+              label="신규 비밀번호 확인"
               type={showPW ? "text" : "password"}
               id="newPasswordChk"
               placeholder="비밀번호 확인"
@@ -90,14 +90,14 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
               </button>
             </div>
           </div>
-          <div className="w-full pt-2 text-right text-xs">
-            <div>
+          <div className="mt-2 flex w-full justify-between text-left text-xs">
+            <p className="w-full text-right">
               [
-              <span style={{ color: instantPWChk ? "green" : "red" }}>
+              <a style={{ color: instantPWChk ? "green" : "red" }}>
                 {instantPWChk ? "일치" : "불일치"}
-              </span>
+              </a>
               ]
-            </div>
+            </p>
           </div>
         </div>
 

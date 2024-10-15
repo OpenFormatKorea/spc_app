@@ -1,8 +1,3 @@
-import {
-  fetchGetProductCodeList,
-  fetchGetCouponCodeList,
-  fetchCreateItem,
-} from "@/lib/item/apis";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import RewardComponent from "@/components/layout/item/reward/RewardComponent";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
@@ -18,6 +13,11 @@ import { getShopIdFromCookies } from "@/lib/helper";
 import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse } from "@/lib/types";
 import { useRouter } from "next/router";
+import {
+  fetchGetProductCodeList,
+  fetchGetCouponCodeList,
+  fetchCreateItem,
+} from "@/lib/item/apis";
 import {
   ProductsArgs,
   PromotionsArgs,

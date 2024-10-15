@@ -1,6 +1,7 @@
 import AuthChangePWForm from "@/components/layout/auth/AuthChangePWForm";
 import { fetchChangePW } from "@/lib/auth/apis";
 import { ChangePWArgs } from "@/lib/auth/types";
+import { SHA256 } from "crypto-js";
 import { useRouter } from "next/router";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
@@ -9,7 +10,7 @@ const changepw = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [new_password, setNewPW] = useState("");
   const [newPasswordChk, setNewPasswordChk] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [passwordError, setPasswordError] = useState("사용불가능");
   const [instantPWChk, setInstantPWChk] = useState(false);
   const passwordPattern =
     /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -18,7 +19,7 @@ const changepw = () => {
   const { token } = router.query;
 
   const changePWInfo: ChangePWArgs = {
-    new_password: new_password,
+    new_password: SHA256(new_password).toString(),
     token: token as string,
   };
 
@@ -41,14 +42,9 @@ const changepw = () => {
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setNewPW(newPassword);
-
-    if (!passwordPattern.test(newPassword)) {
-      setPasswordError("사용 불가능");
-    } else {
-      setPasswordError("사용 가능");
-    }
-
-    // Check if new password matches confirm password
+    setPasswordError(
+      passwordPattern.test(e.target.value) ? "사용가능" : "사용불가능",
+    );
     if (newPasswordChk) {
       setButtonDisabled(!checkPasswordsMatch());
     }
@@ -59,11 +55,7 @@ const changepw = () => {
   ) => {
     const confirmPassword = e.target.value;
     setNewPasswordChk(confirmPassword);
-
-    // Update instantPWChk state
     setInstantPWChk(new_password === confirmPassword);
-
-    // Check if the confirm password matches the new password
     setButtonDisabled(!checkPasswordsMatch());
   };
 

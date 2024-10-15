@@ -37,6 +37,11 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
   useEffect(() => {
     if (apiResponse) {
       setLoading(false);
+    } else {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
     }
   }, [apiResponse]);
 

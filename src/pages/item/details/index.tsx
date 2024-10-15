@@ -98,7 +98,7 @@ const DetailsItem = ({
   };
 
   const handleSubmit = () => {
-    const router = useRouter();
+    // const router = useRouter();
     router.push(`/campaign/details?campaign_id=${campaign_id}`);
   };
 
@@ -125,7 +125,7 @@ const DetailsItem = ({
         </div>
       )}
       <DashboardContainer>
-        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
+        <div className="flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <a className="text-2xl font-bold">아이템 상세</a>
           </div>

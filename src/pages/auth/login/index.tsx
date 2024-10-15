@@ -9,6 +9,7 @@ import {
   setRefreshTokenToCookies,
   setShopIdTokenToCookies,
 } from "@/lib/helper";
+import { SHA256 } from "crypto-js";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useRef, useState, KeyboardEvent } from "react";
@@ -33,7 +34,7 @@ const Login = (context: GetServerSidePropsContext) => {
 
   const loginInfo: AuthArgs = {
     username: username,
-    password: password,
+    password: SHA256(password).toString(),
   };
 
   const handleButton = (event: React.MouseEvent<HTMLButtonElement>) => {

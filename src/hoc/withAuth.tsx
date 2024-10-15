@@ -6,7 +6,6 @@ import { useEffect } from "react";
 export const withAuth = <P extends object>(WrappedComponent: React.FC<P>) => {
   const Wrapper: React.FC<P> = (props) => {
     const router = useRouter();
-
     useEffect(() => {
       const token = getCookie("access_standalone");
 

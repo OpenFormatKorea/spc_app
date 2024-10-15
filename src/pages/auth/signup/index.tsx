@@ -4,8 +4,8 @@ import AuthContainer from "@/components/layout/auth/AuthContainer";
 import AuthSignUpForm from "@/components/layout/auth/AuthSignUpForm";
 import { fetchSignUp } from "@/lib/auth/apis";
 import { AuthArgs } from "@/lib/auth/types";
-import { GetServerSideProps } from "next";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { SHA256 } from "crypto-js";
 
 const Signup: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const Signup: React.FC = () => {
     username: username,
     shop_name: shopName,
     email: email,
-    password: password,
+    password: SHA256(password).toString(),
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +75,7 @@ const Signup: React.FC = () => {
   };
 
   const infoCheck = (info: AuthArgs) => {
-    if (info.password !== passwordChk) {
+    if (info.password !== SHA256(passwordChk).toString()) {
       alert("비밀번호를 다시 확인 해 주세요.");
       return false;
     } else if (!info.username) {
@@ -133,8 +133,8 @@ const Signup: React.FC = () => {
           handleSubmit={handleSubmit}
           buttonRef={buttonRef}
           handleKeyDown={handleKeyDown}
-        ></AuthSignUpForm>
-      </AuthContainer>{" "}
+        />
+      </AuthContainer>
     </>
   );
 };

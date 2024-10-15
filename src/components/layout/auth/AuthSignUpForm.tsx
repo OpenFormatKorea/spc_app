@@ -112,7 +112,6 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
             onChange={handlePasswordChkChange}
             onKeyDown={handleKeyDown}
           />
-
           <button
             className="mb-[5px] ml-2 cursor-pointer border bg-white p-1 text-xs"
             onClick={() => setShowPw(!showPW)}
@@ -126,7 +125,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
         </div>
       </div>
       <div className="mt-2 flex w-full justify-between text-left text-xs">
-        <p>
+        <p className="w-full text-right">
           [
           <a style={{ color: instantPWChk ? "green" : "red" }}>
             {instantPWChk ? "일치" : "불일치"}
