@@ -98,10 +98,11 @@ const DetailsItem = ({
   };
 
   const handleSubmit = () => {
-    // const router = useRouter();
     router.push(`/campaign/details?campaign_id=${campaign_id}`);
   };
-
+  const handleChangeModify = () => {
+    router.push(`/campaign/details?campaign_id=${campaign_id}`);
+  };
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -127,7 +128,7 @@ const DetailsItem = ({
       <DashboardContainer>
         <div className="flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <a className="text-2xl font-bold">아이템 상세</a>
+            <span className="text-2xl font-bold">아이템 상세</span>
           </div>
         </div>
         <div className="flex w-full flex-col justify-center lg:flex-row lg:space-x-4">
@@ -187,13 +188,19 @@ const DetailsItem = ({
             />
           </ContentsContainer>
         </div>
-        <div className="button-container flex w-full justify-between pt-4 lg:justify-end">
+        <div className="button-container flex w-full justify-between gap-2 pt-4 lg:justify-end">
           <button
             className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white lg:w-fit"
             onClick={handleSubmit}
             id="cancel_create_item"
           >
             뒤로가기
+          </button>
+          <button
+            className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-blue-400 p-2 text-white lg:w-fit"
+            id="modify_item"
+          >
+            수정하기
           </button>
         </div>
       </DashboardContainer>

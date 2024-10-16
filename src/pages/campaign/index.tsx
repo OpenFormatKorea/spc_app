@@ -66,7 +66,7 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
       <DashboardContainer>
         <div className="mb-3 flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <a className="text-2xl font-bold">캠페인</a>
+            <span className="text-2xl font-bold">캠페인</span>
           </div>
         </div>
         <div className="wrapper-container">

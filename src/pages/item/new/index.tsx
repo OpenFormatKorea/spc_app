@@ -284,7 +284,7 @@ const NewItem = (
       <DashboardContainer>
         <div className="mb-3 flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <a className="text-2xl font-bold">아이템 추가</a>
+            <span className="text-2xl font-bold">아이템 추가</span>
           </div>
         </div>
         <div className="flex w-full flex-col justify-center lg:flex-row lg:space-x-4">

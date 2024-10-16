@@ -93,9 +93,9 @@ const AuthChangePWForm: React.FC<AuthChangePWFormProps> = ({
           <div className="mt-2 flex w-full justify-between text-left text-xs">
             <p className="w-full text-right">
               [
-              <a style={{ color: instantPWChk ? "green" : "red" }}>
+              <span style={{ color: instantPWChk ? "green" : "red" }}>
                 {instantPWChk ? "일치" : "불일치"}
-              </a>
+              </span>
               ]
             </p>
           </div>

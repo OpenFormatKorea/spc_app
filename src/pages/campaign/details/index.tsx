@@ -186,7 +186,7 @@ const DetailsCampaign = (
       <DashboardContainer>
         <div className="mb-3 flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <a className="text-2xl font-bold">캠페인 상세 정보</a>
+            <span className="text-2xl font-bold">캠페인 상세 정보</span>
           </div>
 
           <div className="button-container flex w-full justify-end">
