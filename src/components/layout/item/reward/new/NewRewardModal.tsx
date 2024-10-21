@@ -1,6 +1,5 @@
 import React, { useState, KeyboardEvent, Dispatch, useEffect } from "react";
 import InputTextBox from "@/components/base/InputText";
-import RewardPolicySetting from "@/components/layout/item/reward/RewardPolicySetting";
 import {
   RewardType,
   RewardsArgs,
@@ -10,8 +9,9 @@ import {
   CouponsArgs,
 } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
+import NewRewardPolicySetting from "@/components/layout/item/reward/new/NewRewardPolicySetting";
 
-interface RewardModalProps {
+interface NewRewardModalProps {
   reward_type: RewardType;
   point_amount: string;
   couponInputs: CouponsArgs[];
@@ -22,7 +22,7 @@ interface RewardModalProps {
   onClose: () => void;
 }
 
-const RewardModal: React.FC<RewardModalProps> = ({
+const NewRewardModal: React.FC<NewRewardModalProps> = ({
   reward_type,
   handleKeyDown,
   setRewards,
@@ -235,7 +235,7 @@ const RewardModal: React.FC<RewardModalProps> = ({
                   </div>
                 </div>
               </div>
-              <RewardPolicySetting
+              <NewRewardPolicySetting
                 inputformClass={inputFormClass}
                 labelClass={labelClass}
                 reward_type={reward_type}
@@ -262,4 +262,4 @@ const RewardModal: React.FC<RewardModalProps> = ({
   );
 };
 
-export default RewardModal;
+export default NewRewardModal;

@@ -2,12 +2,15 @@ import DashboardContainer from "@/components/layout/dashboard/DashboardContainer
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
-import RewardComponent from "@/components/layout/item/reward/RewardComponent";
-import RewardCard from "@/components/layout/item/reward/RewardCard";
+
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
-import { fetchGetItemDetails } from "@/lib/item/apis";
+import {
+  fetchGetCouponCodeList,
+  fetchGetItemDetails,
+  fetchGetProductCodeList,
+} from "@/lib/item/apis";
 import { GetServerSideProps } from "next";
-import router, { useRouter } from "next/router";
+import router from "next/router";
 import {
   ItemType,
   ItemArgs,
@@ -20,9 +23,15 @@ import {
 } from "@/lib/item/types";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
+import { ApiResponse } from "@/lib/types";
+import ProductList from "@/components/layout/item/modal/ProductList";
+import RewardComponentDetails from "@/components/layout/item/reward/details/RewardComponentDetails";
+import RewardCardDetails from "@/components/layout/item/reward/details/RewardNewCardDetails";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
+  const productResponse = await fetchGetProductCodeList(context);
+  const couponResponse = await fetchGetCouponCodeList(context);
   const IDetailApiResponse = await fetchGetItemDetails(
     item_id,
     campaign_id,
@@ -41,6 +50,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       apiResponse: IDetailApiResponse,
       campaign_id,
+      productResponse,
+      couponResponse,
     },
   };
 };
@@ -48,10 +59,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const DetailsItem = ({
   apiResponse,
   campaign_id,
+  productResponse,
+  couponResponse,
 }: {
   apiResponse: any;
   campaign_id: string;
+  productResponse: ApiResponse;
+  couponResponse: ApiResponse;
 }) => {
+  console.log("productResponse", productResponse);
+  console.log("couponResponse", couponResponse);
   const [title, setTitle] = useState(apiResponse.title);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
     {
@@ -70,6 +87,7 @@ const DetailsItem = ({
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
     apiResponse.kakao_args,
   );
+  const [newRewards, setNewRewards] = useState<RewardsArgs[]>([]);
   const [rewards, setRewards] = useState<RewardsArgs[]>(
     apiResponse.rewards || [],
   );
@@ -110,7 +128,13 @@ const DetailsItem = ({
       buttonRef.current?.click();
     }
   };
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProductItems, setSelectedProductItems] = useState<
+    ProductsArgs[]
+  >([]);
+  const closeModal = () => setIsModalOpen(false);
+  const openModal = () =>
+    reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
   const disableInput = true;
 
   useEffect(() => {
@@ -150,6 +174,7 @@ const DetailsItem = ({
               disableInput={disableInput}
             />
           </ContentsContainer>
+
           <ContentsContainer variant="campaign">
             <ItemTypeDetails
               page_type="DETAILS"
@@ -169,7 +194,8 @@ const DetailsItem = ({
               handleKeyDown={handleKeyDown}
               disableInput={disableInput}
             />
-            <RewardComponent
+
+            <RewardComponentDetails
               page_type="DETAILS"
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
@@ -179,9 +205,14 @@ const DetailsItem = ({
               disableInput={disableInput}
               setSelectedCouponItems={setSelectedCouponItems}
               setCouponInputs={setCouponInputs}
-              setRewards={setRewards}
+              setRewards={setNewRewards}
             />
-            <RewardCard
+            <RewardCardDetails
+              rewards={newRewards}
+              setRewards={setNewRewards}
+              page_type="DETAILS"
+            />
+            <RewardCardDetails
               rewards={rewards}
               setRewards={setRewards}
               page_type="DETAILS"
@@ -197,12 +228,20 @@ const DetailsItem = ({
             뒤로가기
           </button>
           <button
-            className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-blue-400 p-2 text-white lg:w-fit"
+            className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-blue-500 p-2 text-white lg:w-fit"
             id="modify_item"
           >
             수정하기
           </button>
         </div>
+        <ProductList
+          apiResponse={productResponse}
+          productInputs={productInputs}
+          setSelectedProductItems={setSelectedProductItems}
+          setProductInputs={setProductInputs}
+          onClose={closeModal}
+          isOpen={isModalOpen}
+        />
       </DashboardContainer>
     </>
   );

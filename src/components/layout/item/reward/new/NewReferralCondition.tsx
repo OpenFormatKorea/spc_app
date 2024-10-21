@@ -6,9 +6,8 @@ import {
   ItemConditions,
 } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
-import InputTextBox from "@/components/base/InputText";
 
-interface ReferralConditionProps {
+interface NewReferralConditionProps {
   trigger: string;
   target: string;
   inputFormClass: string;
@@ -21,7 +20,7 @@ interface ReferralConditionProps {
   setUseCondition: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ReferralCondition: React.FC<ReferralConditionProps> = ({
+const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
   trigger,
   target,
   inputFormClass,
@@ -211,17 +210,6 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
           >
             <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
               <div className="mr-2 flex min-w-fit items-center">최대</div>
-              <style jsx>{`
-                /* Chrome, Safari, Edge, Opera */
-                input[type="number"]::-webkit-outer-spin-button,
-                input[type="number"]::-webkit-inner-spin-button {
-                  -webkit-appearance: none;
-                  margin: 0;
-                } /* Firefox */
-                input[type="number"] {
-                  -moz-appearance: textfield;
-                }
-              `}</style>
               <input
                 type="number"
                 id={`${target}_${trigger}_repeat_count`}
@@ -234,15 +222,6 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
                 onKeyDown={handleKeyDown}
                 disabled={false}
               />
-              {/* <InputTextBox
-                type="number"
-                id={`${target}_${trigger}_repeat_count`}
-                placeholder=""
-                value={itemConditions.payment_frequency.repeat_count || ""}
-                onChange={(e) => handleFrequencyChange("repeat_count", Number(e.target.value))}
-                onKeyDown={handleKeyDown}
-                disabled={false}
-              /> */}
               <div className="ml-2 flex min-w-fit items-center">번</div>
             </div>
           </div>
@@ -252,4 +231,4 @@ const ReferralCondition: React.FC<ReferralConditionProps> = ({
   );
 };
 
-export default ReferralCondition;
+export default NewReferralCondition;

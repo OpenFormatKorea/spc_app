@@ -2,14 +2,12 @@ import React, { useState, KeyboardEvent, useEffect } from "react";
 import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import { ApiResponse } from "@/lib/types";
-import InputTextBox from "@/components/base/InputText";
 import CouponList from "@/components/layout/item/modal/CouponList";
-import RewardModal from "@/components/layout/item/reward/RewardModal";
 import InputNumberTextBox from "@/components/base/InputNumberText";
+import NewRewardModal from "@/components/layout/item/reward/new/NewRewardModal";
 
-interface RewardComponentProps {
+interface NewRewardComponentProps {
   apiResponse?: ApiResponse;
-  page_type: string;
   selectedCouponItems: CouponsArgs[];
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   couponInputs: CouponsArgs[];
@@ -21,9 +19,8 @@ interface RewardComponentProps {
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const RewardComponent: React.FC<RewardComponentProps> = ({
+const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   apiResponse,
-  page_type,
   setSelectedCouponItems,
   selectedCouponItems,
   couponInputs,
@@ -72,7 +69,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               value={RewardType.CO}
               checked={reward_type === RewardType.CO}
               onChange={handleRewardTypeRadioChange}
-              disabled={disableInput}
+              disabled={false}
             />
             <InputRadioBox
               label="포인트"
@@ -80,19 +77,16 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               value={RewardType.PO}
               checked={reward_type === RewardType.PO}
               onChange={handleRewardTypeRadioChange}
-              disabled={disableInput}
+              disabled={false}
             />
           </div>
           {reward_type === RewardType.CO && (
             <button
               id="create_item_container"
-              className={`border p-1 ${
-                disableInput
-                  ? "cursor-not-allowed bg-gray-400"
-                  : "cursor-pointer bg-blue-500"
-              } min-w-[45px] rounded-lg text-center text-white`}
+              className={
+                "min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 p-1 text-center text-white"
+              }
               onClick={openModal}
-              disabled={disableInput}
             >
               추가
             </button>
@@ -100,7 +94,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
         </div>
 
         <div className="contents-container w-full justify-between pb-4">
-          {reward_type === RewardType.CO && page_type == "NEW" && (
+          {reward_type === RewardType.CO && (
             <div className="flex h-fit w-full flex-col">
               <div className="mb-2 flex w-full flex-col text-left">
                 <label className={labelClass}>선택된 쿠폰</label>
@@ -131,7 +125,7 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
               </div>
             </div>
           )}
-          {reward_type === RewardType.PO && page_type === "NEW" && (
+          {reward_type === RewardType.PO && (
             <div className="flex h-fit w-full flex-col">
               <div className={inputFormClass}>
                 <label className={labelClass}>포인트</label>
@@ -142,20 +136,19 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
                   value={point_amount}
                   onChange={(e) => setPointAmount(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  disabled={disableInput}
+                  disabled={false}
                 />
               </div>
             </div>
           )}
-          {(page_type === "NEW" ||
-            (couponInputs.length !== 0 && point_amount !== "")) && (
+          {(couponInputs.length !== 0 || point_amount !== "") && (
             <button
               id="create_item_container"
-              className={`border p-1 ${
+              className={`flex border p-1 ${
                 couponInputs.length === 0 && point_amount === ""
                   ? "cursor-not-allowed bg-gray-400"
                   : "cursor-pointer bg-blue-500"
-              } min-w-[45px] rounded-lg text-center text-white`}
+              } min-w-[45px] items-center justify-center rounded-lg text-center text-white`}
               onClick={openRewardModal}
               disabled={couponInputs.length === 0 && point_amount === ""}
             >
@@ -164,17 +157,17 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
           )}
         </div>
       </div>
+      <CouponList
+        apiResponse={apiResponse}
+        setSelectedCouponItems={setSelectedCouponItems}
+        setCouponInputs={setCouponInputs}
+        couponInputs={couponInputs}
+        onClose={closeModal}
+        isOpen={isModalOpen}
+      />
       {disableInput === false && (
         <>
-          <CouponList
-            apiResponse={apiResponse}
-            setSelectedCouponItems={setSelectedCouponItems}
-            setCouponInputs={setCouponInputs}
-            couponInputs={couponInputs}
-            onClose={closeModal}
-            isOpen={isModalOpen}
-          />
-          <RewardModal
+          <NewRewardModal
             reward_type={reward_type}
             handleKeyDown={handleKeyDown}
             setRewards={setRewards}
@@ -190,4 +183,4 @@ const RewardComponent: React.FC<RewardComponentProps> = ({
   );
 };
 
-export default RewardComponent;
+export default NewRewardComponent;

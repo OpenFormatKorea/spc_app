@@ -1,8 +1,8 @@
 import React, { KeyboardEvent, useEffect } from "react";
 import { ItemConditions, RewardType } from "@/lib/item/types";
-import ReferralCondition from "@/components/layout/item/reward/ReferralCondition";
+import ReferralConditionDetails from "@/components/layout/item/reward/details/ReferralConditionDetails";
 
-interface RewardPolicyProps {
+interface RewardPolicyDetailsProps {
   trigger: string;
   inputformClass: string;
   labelClass: string;
@@ -21,7 +21,7 @@ interface RewardPolicyProps {
   defaultConditions: ItemConditions;
 }
 
-const RewardPolicy: React.FC<RewardPolicyProps> = ({
+const RewardPolicyDetails: React.FC<RewardPolicyDetailsProps> = ({
   defaultConditions,
   trigger,
   inputformClass,
@@ -140,7 +140,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
         }`}
       >
         <div className="flex flex-col space-y-2 pt-3 lg:flex-row lg:space-x-3 lg:space-y-0">
-          <ReferralCondition
+          <ReferralConditionDetails
             trigger={trigger}
             target="referrer"
             inputFormClass={inputformClass}
@@ -152,7 +152,7 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
             useCondition={useReffererCondition}
             setUseCondition={setUseReffererCondition}
           />
-          <ReferralCondition
+          <ReferralConditionDetails
             trigger={trigger}
             target="referee"
             inputFormClass={inputformClass}
@@ -170,4 +170,4 @@ const RewardPolicy: React.FC<RewardPolicyProps> = ({
   );
 };
 
-export default RewardPolicy;
+export default RewardPolicyDetails;

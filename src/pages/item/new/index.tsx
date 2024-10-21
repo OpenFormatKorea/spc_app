@@ -1,9 +1,7 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
-import RewardComponent from "@/components/layout/item/reward/RewardComponent";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ProductList from "@/components/layout/item/modal/ProductList";
-import RewardCard from "@/components/layout/item/reward/RewardCard";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
@@ -28,6 +26,8 @@ import {
   RewardType,
   ItemArgs,
 } from "@/lib/item/types";
+import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
+import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -322,8 +322,7 @@ const NewItem = (
               handleKeyDown={handleKeyDown}
               disableInput={false}
             />
-            <RewardComponent
-              page_type="NEW"
+            <NewRewardComponent
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
               selectedCouponItems={selectedCouponItems}
@@ -335,11 +334,7 @@ const NewItem = (
               setSelectedCouponItems={setSelectedCouponItems}
               setCouponInputs={setCouponInputs}
             />
-            <RewardCard
-              page_type="NEW"
-              rewards={rewards}
-              setRewards={setRewards}
-            />
+            <NewRewardCard rewards={rewards} setRewards={setRewards} />
           </ContentsContainer>
         </div>
         <div className="button-container flex w-full justify-between pt-4 lg:justify-end">

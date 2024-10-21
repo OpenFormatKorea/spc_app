@@ -5,14 +5,12 @@ import {
   RewardsArgs,
 } from "@/lib/item/types";
 
-interface RewardCardProps {
-  page_type: "DETAILS" | "NEW";
+interface NewRewardCardProps {
   rewards: RewardsArgs[];
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
-const RewardCard: React.FC<RewardCardProps> = ({
-  page_type,
+const NewRewardCard: React.FC<NewRewardCardProps> = ({
   rewards,
   setRewards,
 }) => {
@@ -133,20 +131,18 @@ const RewardCard: React.FC<RewardCardProps> = ({
               </div>
             ))}
           </div>
-          {page_type === "NEW" && (
-            <div className="flex justify-end">
-              <button
-                className="mt-2 min-w-[45px] cursor-pointer rounded-lg bg-red-500 p-1 text-white"
-                onClick={() => handleDeleteRewards(index)}
-              >
-                삭제
-              </button>
-            </div>
-          )}
+          <div className="flex justify-end">
+            <button
+              className="mt-2 min-w-[45px] cursor-pointer rounded-lg bg-red-500 p-1 text-white"
+              onClick={() => handleDeleteRewards(index)}
+            >
+              삭제
+            </button>
+          </div>
         </div>
       ))}
     </>
   );
 };
 
-export default RewardCard;
+export default NewRewardCard;

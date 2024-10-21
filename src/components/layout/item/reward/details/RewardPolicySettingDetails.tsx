@@ -6,9 +6,9 @@ import {
   RewardPolicyArgs,
   RewardType,
 } from "@/lib/item/types";
-import RewardPolicy from "@/components/layout/item/reward/RewardPolicy";
+import RewardPolicyDetails from "@/components/layout/item/reward/details/RewardPolicyDetails";
 
-interface RewardPolicySettingProps {
+interface RewardPolicySettingDetailsProps {
   inputformClass: string;
   labelClass: string;
   reward_type: RewardType;
@@ -17,7 +17,7 @@ interface RewardPolicySettingProps {
   setRefereeState: React.Dispatch<React.SetStateAction<RewardPolicyArgs>>;
 }
 
-const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
+const RewardPolicySettingDetails: React.FC<RewardPolicySettingDetailsProps> = ({
   inputformClass,
   labelClass,
   reward_type,
@@ -74,7 +74,7 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
   return (
     <div className="mb-3 flex flex-col items-center">
       <div className="flex flex-col rounded-lg">
-        <RewardPolicy
+        <RewardPolicyDetails
           defaultConditions={defaultConditions}
           trigger="SIGNUP"
           inputformClass={inputformClass}
@@ -94,7 +94,7 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
         />
       </div>
       <div className="flex flex-col rounded-lg">
-        <RewardPolicy
+        <RewardPolicyDetails
           defaultConditions={defaultConditions}
           trigger="PURCHASE"
           inputformClass={inputformClass}
@@ -117,4 +117,4 @@ const RewardPolicySetting: React.FC<RewardPolicySettingProps> = ({
   );
 };
 
-export default RewardPolicySetting;
+export default RewardPolicySettingDetails;
