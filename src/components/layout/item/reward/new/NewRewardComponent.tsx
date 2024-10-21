@@ -47,15 +47,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
-  let isDisabled = false;
 
-  useEffect(() => {
-    if (disableInput) {
-      isDisabled = true;
-    } else if (couponInputs.length === 0) {
-      isDisabled = true;
-    }
-  }, [couponInputs.length]);
   return (
     <>
       <h1 className="border-b-[1px] pb-2 text-xl font-bold">리워드</h1>
@@ -144,7 +136,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
           {(couponInputs.length !== 0 || point_amount !== "") && (
             <button
               id="create_item_container"
-              className={`flex border p-1 ${
+              className={`border p-1 ${
                 couponInputs.length === 0 && point_amount === ""
                   ? "cursor-not-allowed bg-gray-400"
                   : "cursor-pointer bg-blue-500"

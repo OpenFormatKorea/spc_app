@@ -4,16 +4,13 @@ import {
   PaymentTimingType,
   RewardsArgs,
 } from "@/lib/item/types";
-import CurrentRewardCard from "@/components/layout/item/reward/RewardCurrentCard";
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 interface CurrentRewardDetailsCardProps {
-  page_type: "DETAILS" | "NEW";
   rewards: RewardsArgs[];
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
 const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
-  page_type,
   rewards,
   setRewards,
 }) => {
@@ -23,9 +20,12 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
     "labelClass flex items-center text-sm text-left text-gray-500 w-[100px]";
   const inputFormClass = "inputForm flex items-center text-sm";
   const [visibleRewards, setVisibleRewards] = useState(
-    Array(rewards.length).fill(false), // Initially, all details are visible
+    Array(rewards.length).fill(false),
   );
-
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedRewards, setSelectedRewards] = useState<{
+    [key: string]: boolean;
+  }>({});
   const toggleRewardDetails = (index: number) => {
     setVisibleRewards((prev) =>
       prev.map((visible, i) => (i === index ? !visible : visible)),
@@ -39,16 +39,16 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
       );
     }
   };
+
   const handleDeleteAll = () => {
     if (confirm("모든 리워드를 삭제하시겠습니까?")) {
-      setRewards([]); // Clear the rewards list
+      setRewards([]);
     }
   };
   const renderPaymentTiming = (type: PaymentTimingType | null | undefined) => {
     if (!type) return null;
     return type === PaymentTimingType.IMM ? "즉시 지급" : "추후 지급";
   };
-
   const renderPaymentFrequency = (
     type: PaymentFrequencyType | null | undefined,
   ) => {
@@ -64,14 +64,38 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
         return null;
     }
   };
+  const handleSelectAll = () => {
+    const isChecked = !selectAll; // Toggle the select all state
+    setSelectAll(isChecked);
+
+    const updatedSelectedRewards = rewards.reduce(
+      (acc, reward) => ({ ...acc, [reward.id]: isChecked }),
+      {} as { [key: string]: boolean },
+    );
+    setSelectedRewards(updatedSelectedRewards);
+  };
+
+  const handleCheckboxChange =
+    (rewardId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const isChecked = e.target.checked;
+      setSelectedRewards((prev) => {
+        const updatedRewards = { ...prev, [rewardId]: isChecked };
+        const allSelected = rewards.every(
+          (reward) => updatedRewards[reward.id],
+        );
+        setSelectAll(allSelected); // Update the "Select All" state
+        return updatedRewards;
+      });
+    };
 
   return (
     <>
-      <div className="rounded-xl border-[1px] border-gray-200 p-4">
+      <div className="mt-4 rounded-xl border-[1px] border-blue-200 bg-blue-200 p-4">
         <div className="flex items-center justify-between px-2 pb-4">
-          <span className="items-center text-lg font-bold text-black">
+          <span className="items-center text-lg font-bold text-gray-600">
             현재 세팅 된 리워드
           </span>
+
           <button
             className="mt-2 min-w-[45px] cursor-pointer rounded-lg bg-red-500 p-2 text-white"
             onClick={() => handleDeleteAll()}
@@ -79,26 +103,53 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
             전체삭제
           </button>
         </div>
+        <div className="mb-4 flex w-fit items-start rounded-md px-1 py-1 text-sm">
+          <div className="flex items-center gap-1">
+            <div className="items-center">
+              <input
+                type="checkbox"
+                id="reward_all"
+                name="reward_all"
+                checked={selectAll}
+                onChange={handleSelectAll}
+              />
+            </div>
+            <div className="items-center text-xs font-bold">
+              리워드 전체 선택
+            </div>
+          </div>
+        </div>
         {rewards.map((reward, index) => (
           <div
             className="mb-4 rounded-xl bg-gray-100 p-4 text-sm"
             key={index}
             id={`rewards_${index}`}
           >
-            <h1 className="flex w-full items-center justify-between">
-              <div className="text-base font-semibold">
-                {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
-                {reward.reward_type === "COUPON"
-                  ? reward.coupon_code
-                  : `${reward.point_amount} 포인트`}
+            <div className="items-left flex justify-between">
+              <div className="items-left flex justify-start gap-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`reward_${reward.id}`}
+                    name={`reward_${reward.id}`}
+                    checked={selectedRewards[reward.id] || false}
+                    onChange={handleCheckboxChange(reward.id)}
+                  />
+                </div>
+                <div className="text-center text-base font-semibold">
+                  {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
+                  {reward.reward_type === "COUPON"
+                    ? reward.coupon_code
+                    : `${reward.point_amount} 포인트`}
+                </div>
               </div>
               <div
                 className="cursor-pointer text-blue-500"
                 onClick={() => toggleRewardDetails(index)}
               >
-                아 닫아봐
+                {<KeyboardArrowDownIcon />}
               </div>
-            </h1>
+            </div>
             {visibleRewards[index] && (
               <div
                 className="flex w-full flex-col rounded-xl bg-white lg:flex-row"

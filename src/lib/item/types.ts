@@ -50,6 +50,7 @@ export interface CouponListArgs {
 
 //리워드 관련
 export interface RewardsArgs {
+  id: string;
   reward_type: RewardType;
   coupon_code?: string | undefined;
   point_amount?: string | undefined;

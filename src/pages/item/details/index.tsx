@@ -26,7 +26,8 @@ import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse } from "@/lib/types";
 import ProductList from "@/components/layout/item/modal/ProductList";
 import RewardComponentDetails from "@/components/layout/item/reward/details/RewardComponentDetails";
-import RewardCardDetails from "@/components/layout/item/reward/details/RewardNewCardDetails";
+import RewardCurrentCardDetails from "@/components/layout/item/reward/details/RewardCurrentCardDetails";
+import RewardNewCardDetails from "@/components/layout/item/reward/details/RewardNewCardDetails";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
@@ -60,15 +61,11 @@ const DetailsItem = ({
   apiResponse,
   campaign_id,
   productResponse,
-  couponResponse,
 }: {
   apiResponse: any;
   campaign_id: string;
   productResponse: ApiResponse;
-  couponResponse: ApiResponse;
 }) => {
-  console.log("productResponse", productResponse);
-  console.log("couponResponse", couponResponse);
   const [title, setTitle] = useState(apiResponse.title);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
     {
@@ -135,7 +132,7 @@ const DetailsItem = ({
   const closeModal = () => setIsModalOpen(false);
   const openModal = () =>
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
-  const disableInput = true;
+  const disableInput = false;
 
   useEffect(() => {
     if (apiResponse) {
@@ -174,7 +171,6 @@ const DetailsItem = ({
               disableInput={disableInput}
             />
           </ContentsContainer>
-
           <ContentsContainer variant="campaign">
             <ItemTypeDetails
               page_type="DETAILS"
@@ -192,11 +188,10 @@ const DetailsItem = ({
               setItem_type={setItem_type}
               setProductInputs={setProductInputs}
               handleKeyDown={handleKeyDown}
-              disableInput={disableInput}
+              disableInput={true}
             />
 
             <RewardComponentDetails
-              page_type="DETAILS"
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
               selectedCouponItems={selectedCouponItems}
@@ -206,16 +201,12 @@ const DetailsItem = ({
               setSelectedCouponItems={setSelectedCouponItems}
               setCouponInputs={setCouponInputs}
               setRewards={setNewRewards}
+              rewards={rewards}
             />
-            <RewardCardDetails
+
+            <RewardNewCardDetails
               rewards={newRewards}
               setRewards={setNewRewards}
-              page_type="DETAILS"
-            />
-            <RewardCardDetails
-              rewards={rewards}
-              setRewards={setRewards}
-              page_type="DETAILS"
             />
           </ContentsContainer>
         </div>

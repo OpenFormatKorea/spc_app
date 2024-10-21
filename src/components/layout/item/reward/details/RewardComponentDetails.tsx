@@ -5,10 +5,10 @@ import { ApiResponse } from "@/lib/types";
 import CouponList from "@/components/layout/item/modal/CouponList";
 import InputNumberTextBox from "@/components/base/InputNumberText";
 import RewardModalDetails from "@/components/layout/item/reward/details/RewardModalDetails";
+import RewardCurrentCardDetails from "@/components/layout/item/reward/details/RewardCurrentCardDetails";
 
 interface RewardComponentDetailsProps {
   apiResponse?: ApiResponse;
-  page_type: string;
   selectedCouponItems: CouponsArgs[];
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   couponInputs: CouponsArgs[];
@@ -18,11 +18,11 @@ interface RewardComponentDetailsProps {
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
   disableInput: boolean;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+  rewards: RewardsArgs[];
 }
 
 const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   apiResponse,
-  page_type,
   setSelectedCouponItems,
   selectedCouponItems,
   couponInputs,
@@ -30,8 +30,8 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   reward_type,
   setRewards,
   setRewardType,
-  disableInput,
   handleKeyDown,
+  rewards,
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
@@ -49,19 +49,12 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
-  let isDisabled = false;
 
-  useEffect(() => {
-    if (disableInput) {
-      isDisabled = true;
-    } else if (couponInputs.length === 0) {
-      isDisabled = true;
-    }
-  }, [couponInputs.length]);
   return (
     <>
       <h1 className="border-b-[1px] pb-2 text-xl font-bold">리워드</h1>
       <div className={inputFormClass}>
+        <RewardCurrentCardDetails rewards={rewards} setRewards={setRewards} />
         <label className={radioButtonLabelClass}>리워드 종류</label>
         <div className="flex h-[42px] w-full items-center">
           <div className="flex w-full space-x-20 text-left lg:max-w-[458px]">
@@ -94,7 +87,6 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
             </button>
           )}
         </div>
-
         <div className="contents-container w-full justify-between pb-4">
           {reward_type === RewardType.CO && (
             <div className="flex h-fit w-full flex-col">
@@ -143,20 +135,19 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
               </div>
             </div>
           )}
-          {(couponInputs.length !== 0 || point_amount !== "") && (
-            <button
-              id="create_item_container"
-              className={`flex border p-1 ${
-                couponInputs.length === 0 && point_amount === ""
-                  ? "cursor-not-allowed bg-gray-400"
-                  : "cursor-pointer bg-blue-500"
-              } min-w-[45px] items-center justify-center rounded-lg text-center text-white`}
-              onClick={openRewardModal}
-              disabled={couponInputs.length === 0 && point_amount === ""}
-            >
-              리워드 추가
-            </button>
-          )}
+
+          <button
+            id="create_item_container"
+            className={`my-2 flex w-full border p-2 ${
+              couponInputs.length === 0 && point_amount === ""
+                ? "cursor-not-allowed bg-gray-400"
+                : "cursor-pointer bg-blue-500"
+            } min-w-[45px] items-center justify-center rounded-lg text-center text-white`}
+            onClick={openRewardModal}
+            disabled={couponInputs.length === 0 && point_amount === ""}
+          >
+            리워드 추가
+          </button>
         </div>
       </div>
       <CouponList
@@ -167,20 +158,18 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
         onClose={closeModal}
         isOpen={isModalOpen}
       />
-      {disableInput === false && (
-        <>
-          <RewardModalDetails
-            reward_type={reward_type}
-            handleKeyDown={handleKeyDown}
-            setRewards={setRewards}
-            point_amount={point_amount}
-            couponInputs={couponInputs}
-            setPointAmount={setPointAmount}
-            isOpen={isRewardModalOpen}
-            onClose={closeRewardModal}
-          />
-        </>
-      )}
+      <>
+        <RewardModalDetails
+          reward_type={reward_type}
+          handleKeyDown={handleKeyDown}
+          setRewards={setRewards}
+          point_amount={point_amount}
+          couponInputs={couponInputs}
+          setPointAmount={setPointAmount}
+          isOpen={isRewardModalOpen}
+          onClose={closeRewardModal}
+        />
+      </>
     </>
   );
 };

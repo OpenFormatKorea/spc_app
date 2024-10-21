@@ -6,13 +6,11 @@ import {
 } from "@/lib/item/types";
 
 interface RewardCardDetailsProps {
-  page_type: "DETAILS" | "NEW";
   rewards: RewardsArgs[];
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
 const RewardCardDetails: React.FC<RewardCardDetailsProps> = ({
-  page_type,
   rewards,
   setRewards,
 }) => {
@@ -133,16 +131,14 @@ const RewardCardDetails: React.FC<RewardCardDetailsProps> = ({
               </div>
             ))}
           </div>
-          {page_type === "NEW" && (
-            <div className="flex justify-end">
-              <button
-                className="mt-2 min-w-[45px] cursor-pointer rounded-lg bg-red-500 p-1 text-white"
-                onClick={() => handleDeleteRewards(index)}
-              >
-                삭제
-              </button>
-            </div>
-          )}
+          <div className="flex justify-end">
+            <button
+              className="mt-2 min-w-[45px] cursor-pointer rounded-lg bg-red-500 p-1 text-white"
+              onClick={() => handleDeleteRewards(index)}
+            >
+              삭제
+            </button>
+          </div>
         </div>
       ))}
     </>
