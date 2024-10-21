@@ -91,19 +91,12 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
   return (
     <>
       <div className="mt-4 rounded-xl border-[1px] border-blue-200 bg-blue-200 p-4">
-        <div className="flex items-center justify-between px-2 pb-4">
+        <div className="flex items-center justify-between px-2 pb-2">
           <span className="items-center text-lg font-bold text-gray-600">
             현재 세팅 된 리워드
           </span>
-
-          <button
-            className="mt-2 min-w-[45px] cursor-pointer rounded-lg bg-red-500 p-2 text-white"
-            onClick={() => handleDeleteAll()}
-          >
-            전체삭제
-          </button>
         </div>
-        <div className="mb-4 flex w-fit items-start rounded-md px-1 py-1 text-sm">
+        <div className="mb-2 flex w-fit items-start rounded-md px-1 py-1 text-sm">
           <div className="flex items-center gap-1">
             <div className="items-center">
               <input
@@ -230,6 +223,12 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
             )}
           </div>
         ))}
+        <button
+          className="min-w-[45px] cursor-pointer rounded-md bg-red-500 p-1 text-sm text-white"
+          onClick={() => handleDeleteAll()}
+        >
+          선택삭제
+        </button>
       </div>
     </>
   );
