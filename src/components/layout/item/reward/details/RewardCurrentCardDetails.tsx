@@ -65,13 +65,15 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
     }
   };
   const handleSelectAll = () => {
-    const isChecked = !selectAll; // Toggle the select all state
+    const isChecked = !selectAll;
     setSelectAll(isChecked);
 
-    const updatedSelectedRewards = rewards.reduce(
-      (acc, reward) => ({ ...acc, [reward.id]: isChecked }),
-      {} as { [key: string]: boolean },
-    );
+    const updatedSelectedRewards = isChecked
+      ? rewards.reduce(
+          (acc, reward) => ({ ...acc, [reward.id]: isChecked }),
+          {} as { [key: string]: boolean },
+        )
+      : {};
     setSelectedRewards(updatedSelectedRewards);
   };
 
@@ -79,15 +81,21 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
     (rewardId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = e.target.checked;
       setSelectedRewards((prev) => {
-        const updatedRewards = { ...prev, [rewardId]: isChecked };
+        let updatedRewards = { ...prev };
+
+        if (isChecked) {
+          updatedRewards[rewardId] = true;
+        } else {
+          delete updatedRewards[rewardId];
+        }
+
         const allSelected = rewards.every(
           (reward) => updatedRewards[reward.id],
         );
-        setSelectAll(allSelected); // Update the "Select All" state
+        setSelectAll(allSelected);
         return updatedRewards;
       });
     };
-
   return (
     <>
       <div className="mt-4 rounded-xl border-[1px] border-blue-200 bg-blue-200 p-4">
@@ -224,8 +232,9 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
           </div>
         ))}
         <button
-          className="min-w-[45px] cursor-pointer rounded-md bg-red-500 p-1 text-sm text-white"
+          className={`min-w-[45px] cursor-pointer rounded-md p-1 text-sm text-white ${Object.keys(selectedRewards).length !== 0 ? "bg-red-500" : "cursor-not-allowed bg-gray-300"}`}
           onClick={() => handleDeleteAll()}
+          disabled={Object.keys(selectedRewards).length === 0}
         >
           선택삭제
         </button>

@@ -23,15 +23,12 @@ import {
 } from "@/lib/item/types";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
-import { ApiResponse } from "@/lib/types";
-import ProductList from "@/components/layout/item/modal/ProductList";
 import RewardComponentDetails from "@/components/layout/item/reward/details/RewardComponentDetails";
-import RewardCurrentCardDetails from "@/components/layout/item/reward/details/RewardCurrentCardDetails";
 import RewardNewCardDetails from "@/components/layout/item/reward/details/RewardNewCardDetails";
+import { ApiResponse } from "@/lib/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
-  const productResponse = await fetchGetProductCodeList(context);
   const couponResponse = await fetchGetCouponCodeList(context);
   const IDetailApiResponse = await fetchGetItemDetails(
     item_id,
@@ -51,8 +48,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       apiResponse: IDetailApiResponse,
       campaign_id,
-      productResponse,
-      couponResponse,
+      couponResponse: couponResponse,
     },
   };
 };
@@ -60,11 +56,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const DetailsItem = ({
   apiResponse,
   campaign_id,
-  productResponse,
+  couponResponse,
 }: {
   apiResponse: any;
   campaign_id: string;
-  productResponse: ApiResponse;
+  couponResponse: ApiResponse;
 }) => {
   const [title, setTitle] = useState(apiResponse.title);
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
@@ -74,6 +70,8 @@ const DetailsItem = ({
       images: [{ posThumb: "" }, { thumb: "" }],
     },
   ]);
+  const rewards = apiResponse.rewards || [];
+
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
     { description: "" },
   ]);
@@ -85,9 +83,6 @@ const DetailsItem = ({
     apiResponse.kakao_args,
   );
   const [newRewards, setNewRewards] = useState<RewardsArgs[]>([]);
-  const [rewards, setRewards] = useState<RewardsArgs[]>(
-    apiResponse.rewards || [],
-  );
   const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
   const [active, setActive] = useState(apiResponse.active);
   const [reward_type, setReward_Type] = useState<RewardType>(
@@ -126,9 +121,9 @@ const DetailsItem = ({
     }
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProductItems, setSelectedProductItems] = useState<
-    ProductsArgs[]
-  >([]);
+  // const [selectedProductItems, setSelectedProductItems] = useState<
+  //   ProductsArgs[]
+  // >([]);
   const closeModal = () => setIsModalOpen(false);
   const openModal = () =>
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
@@ -192,6 +187,7 @@ const DetailsItem = ({
             />
 
             <RewardComponentDetails
+              apiResponse={couponResponse}
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
               selectedCouponItems={selectedCouponItems}
@@ -225,14 +221,6 @@ const DetailsItem = ({
             수정하기
           </button>
         </div>
-        <ProductList
-          apiResponse={productResponse}
-          productInputs={productInputs}
-          setSelectedProductItems={setSelectedProductItems}
-          setProductInputs={setProductInputs}
-          onClose={closeModal}
-          isOpen={isModalOpen}
-        />
       </DashboardContainer>
     </>
   );
