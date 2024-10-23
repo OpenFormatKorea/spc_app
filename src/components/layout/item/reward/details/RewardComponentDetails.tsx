@@ -45,7 +45,6 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
-
   const handleRewardTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -59,7 +58,10 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   return (
     <>
       <h1 className="pb-2 text-xl font-bold">리워드</h1>
-      <span className="border-b-[1px] pb-2 text-xs">리워드</span>
+      <span className="border-b-[1px] pb-2 text-xs text-gray-500">
+        * 이전에 세팅된 리워드의 경우, 수정시 체크박스로 선택한 리워드만
+        저장됩니다.
+      </span>
       <div className={inputFormClass}>
         <RewardCurrentCardDetails
           rewards={rewards}

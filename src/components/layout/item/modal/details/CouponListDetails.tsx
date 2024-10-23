@@ -22,13 +22,23 @@ const CouponList: React.FC<CouponListProps> = ({
   onClose,
   rewards,
 }) => {
-  const coupons = useMemo(
-    () =>
-      Array.isArray(apiResponse?.data.data.content)
-        ? apiResponse.data.data.content
-        : [],
-    [apiResponse],
-  );
+  const coupons = useMemo(() => {
+    try {
+      if (Array.isArray(apiResponse?.data.data.content)) {
+        return apiResponse.data.data.content.filter(
+          (coupon: CouponListArgs) =>
+            !rewards.some(
+              (reward: RewardsArgs) =>
+                reward.coupon_code === coupon.cpnId.toString(),
+            ),
+        );
+      }
+      return [];
+    } catch (error) {
+      console.error("Error filtering coupons:", error);
+      return [];
+    }
+  }, [apiResponse, rewards]);
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -123,7 +133,9 @@ const CouponList: React.FC<CouponListProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="w-full pb-2 text-left text-xl font-bold">쿠폰 선택</h1>
+        <h1 className="w-full pb-2 text-left text-xl font-bold">
+          현재 추가 가능한 쿠폰 선택
+        </h1>
 
         <div className="my-2 flex max-h-[550px] max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
           <div className="flex flex-col rounded-lg bg-white p-3">

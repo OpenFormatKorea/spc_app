@@ -59,11 +59,7 @@ const DetailsItem = (
     apiResponse,
     campaign_id,
     couponResponse,
-  }: {
-    apiResponse: any;
-    campaign_id: string;
-    couponResponse: ApiResponse;
-  },
+  }: { apiResponse: any; campaign_id: string; couponResponse: ApiResponse },
   context: GetServerSidePropsContext,
 ) => {
   const [title, setTitle] = useState(apiResponse.title);
@@ -101,7 +97,6 @@ const DetailsItem = (
   const [loading, setLoading] = useState(true);
   const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]);
   const [newAddedRewards, setNewAddedRewards] = useState<RewardsArgs[]>([]);
-
   const itemArgs: ItemArgs = {
     id: apiResponse.id || "",
     title,
@@ -119,7 +114,7 @@ const DetailsItem = (
     title,
     item_type,
     kakao_args: kakaoShareArgs,
-    product: productInputs[0],
+    product: productInputs,
     promotion: promotionInputs,
     new_rewards: newAddedRewards,
     current_rewards: selectedRewards,
@@ -133,11 +128,14 @@ const DetailsItem = (
       router.push(`/campaign/details?campaign_id=${campaign_id}`);
     } else if (id === "modify_item" && !loading) {
       setLoading(true);
+      console.log("final itemModifyArgs", itemModifyArgs);
+
       const result = await fetchModifyItem(
         itemModifyArgs,
         campaign_id,
         context,
       );
+
       setLoading(false);
       if (result.status === 200) {
         alert(result.message);
@@ -204,10 +202,17 @@ const DetailsItem = (
               description={description}
               selectedProductItems={[
                 {
-                  product_model_code: apiResponse.products?.model_code || "",
-                  product_model_name: apiResponse.products?.model_name || "",
+                  product_model_code:
+                    apiResponse.products?.product_model_code ||
+                    apiResponse.products?.model_name ||
+                    "",
+                  product_model_name:
+                    apiResponse.products?.product_model_name ||
+                    apiResponse.products?.model_name ||
+                    "",
                 },
               ]}
+              // selectedProductItems={productInputs}
               setPromotionInputs={setPromotionInputs}
               setDescription={setDescription}
               setItem_type={setItem_type}

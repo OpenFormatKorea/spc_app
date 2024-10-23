@@ -188,7 +188,7 @@ export async function fetchModifyItem(
       return {
         status: response.status || 400,
         success: false,
-        message: "Please check the input and try again.",
+        message: "내용을 확인 후 다시 시도해주세요.",
       };
     }
   } catch (error) {
@@ -196,7 +196,7 @@ export async function fetchModifyItem(
     return {
       status: 500,
       success: false,
-      message: "An error occurred. Please check the input and try again.",
+      message: "수정 중 문제가 생겼습니다. 내용 확인 후 다시 시도해주세요.",
       error: error,
     };
   }

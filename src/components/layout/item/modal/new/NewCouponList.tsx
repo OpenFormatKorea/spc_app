@@ -27,7 +27,6 @@ const CouponList: React.FC<CouponListProps> = ({
         : [],
     [apiResponse],
   );
-  console.log("coupons", coupons);
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   useEffect(() => {
