@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       apiResponse: IDetailApiResponse,
       campaign_id,
-      couponResponse: couponResponse,
+      couponResponse,
     },
   };
 };
@@ -67,7 +67,6 @@ const DetailsItem = (
   context: GetServerSidePropsContext,
 ) => {
   const [title, setTitle] = useState(apiResponse.title);
-
   const rewards = apiResponse.rewards || [];
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
     apiResponse.kakao_args,
@@ -84,7 +83,6 @@ const DetailsItem = (
       },
     ],
   );
-
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
     apiResponse.promotions || [{ id: "", description: "" }],
   );
@@ -101,9 +99,9 @@ const DetailsItem = (
     apiResponse.promotions?.description || "",
   );
   const [loading, setLoading] = useState(true);
+  const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]);
+  const [newAddedRewards, setNewAddedRewards] = useState<RewardsArgs[]>([]);
 
-  const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]); // previous ones ( only deleting is avaiable [by unchecking checkboxes])
-  const [newAddedRewards, setNewAddedRewards] = useState<RewardsArgs[]>([]); // only for the newly added item display
   const itemArgs: ItemArgs = {
     id: apiResponse.id || "",
     title,
@@ -131,26 +129,23 @@ const DetailsItem = (
 
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
-    if (id == "cancel_create_item") {
+    if (id === "cancel_create_item") {
       router.push(`/campaign/details?campaign_id=${campaign_id}`);
-    } else if (id === "modify_item") {
-      if (!loading) {
-        setLoading(true);
-        console.log("itemModifyArgs", itemModifyArgs);
-        const result = await fetchModifyItem(
-          itemModifyArgs,
-          campaign_id,
-          context,
-        );
-        if (result.status === 200) {
-          alert(result.message);
-          setLoading(false);
-          if (result.success)
-            router.push(`/campaign/details?campaign_id=${campaign_id}`);
-        } else {
-          setLoading(false);
-          alert(`리퍼럴 수정을 실패하였습니다. 상태 코드: ${result.status}`);
+    } else if (id === "modify_item" && !loading) {
+      setLoading(true);
+      const result = await fetchModifyItem(
+        itemModifyArgs,
+        campaign_id,
+        context,
+      );
+      setLoading(false);
+      if (result.status === 200) {
+        alert(result.message);
+        if (result.success) {
+          router.push(`/campaign/details?campaign_id=${campaign_id}`);
         }
+      } else {
+        alert(`리퍼럴 수정을 실패하였습니다. 상태 코드: ${result.status}`);
       }
     }
   };
@@ -218,7 +213,7 @@ const DetailsItem = (
               setItem_type={setItem_type}
               setProductInputs={setProductInputs}
               handleKeyDown={handleKeyDown}
-              disableInput={true}
+              disableInput
             />
 
             <RewardComponentDetails
