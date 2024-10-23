@@ -2,14 +2,13 @@ import DashboardContainer from "@/components/layout/dashboard/DashboardContainer
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
-
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import {
   fetchGetCouponCodeList,
   fetchGetItemDetails,
-  fetchGetProductCodeList,
+  fetchModifyItem,
 } from "@/lib/item/apis";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import router from "next/router";
 import {
   ItemType,
@@ -20,6 +19,7 @@ import {
   RewardsArgs,
   KakaoShareArgs,
   CouponsArgs,
+  ItemModifyArgs,
 } from "@/lib/item/types";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
@@ -35,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     campaign_id,
     context,
   );
+
   if (!IDetailApiResponse) {
     return {
       redirect: {
@@ -53,36 +54,44 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const DetailsItem = ({
-  apiResponse,
-  campaign_id,
-  couponResponse,
-}: {
-  apiResponse: any;
-  campaign_id: string;
-  couponResponse: ApiResponse;
-}) => {
+const DetailsItem = (
+  {
+    apiResponse,
+    campaign_id,
+    couponResponse,
+  }: {
+    apiResponse: any;
+    campaign_id: string;
+    couponResponse: ApiResponse;
+  },
+  context: GetServerSidePropsContext,
+) => {
   const [title, setTitle] = useState(apiResponse.title);
-  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([
-    {
-      product_model_code: "",
-      product_model_name: "",
-      images: [{ posThumb: "" }, { thumb: "" }],
-    },
-  ]);
-  const rewards = apiResponse.rewards || [];
 
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
-    { description: "" },
-  ]);
+  const rewards = apiResponse.rewards || [];
+  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
+    apiResponse.kakao_args,
+  );
+  const image = kakaoShareArgs.image;
+  const shop_logo = kakaoShareArgs.shop_logo;
+  const disableInput = false;
+  const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
+    apiResponse.products || [
+      {
+        product_model_code: "",
+        product_model_name: "",
+        images: [{ posThumb: "" }, { thumb: "" }],
+      },
+    ],
+  );
+
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
+    apiResponse.promotions || [{ id: "", description: "" }],
+  );
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
   const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>(
     [],
   );
-  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
-    apiResponse.kakao_args,
-  );
-  const [newRewards, setNewRewards] = useState<RewardsArgs[]>([]);
   const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
   const [active, setActive] = useState(apiResponse.active);
   const [reward_type, setReward_Type] = useState<RewardType>(
@@ -93,8 +102,8 @@ const DetailsItem = ({
   );
   const [loading, setLoading] = useState(true);
 
-  const image = kakaoShareArgs.image;
-  const shop_logo = kakaoShareArgs.shop_logo;
+  const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]); // previous ones ( only deleting is avaiable [by unchecking checkboxes])
+  const [newAddedRewards, setNewAddedRewards] = useState<RewardsArgs[]>([]); // only for the newly added item display
   const itemArgs: ItemArgs = {
     id: apiResponse.id || "",
     title,
@@ -107,12 +116,45 @@ const DetailsItem = ({
     campaign_id,
   };
 
-  const handleSubmit = () => {
-    router.push(`/campaign/details?campaign_id=${campaign_id}`);
+  const itemModifyArgs: ItemModifyArgs = {
+    id: apiResponse.id || "",
+    title,
+    item_type,
+    kakao_args: kakaoShareArgs,
+    product: productInputs[0],
+    promotion: promotionInputs,
+    new_rewards: newAddedRewards,
+    current_rewards: selectedRewards,
+    active,
+    campaign_id,
   };
-  const handleChangeModify = () => {
-    router.push(`/campaign/details?campaign_id=${campaign_id}`);
+
+  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
+    const { id } = event.currentTarget;
+    if (id == "cancel_create_item") {
+      router.push(`/campaign/details?campaign_id=${campaign_id}`);
+    } else if (id === "modify_item") {
+      if (!loading) {
+        setLoading(true);
+        console.log("itemModifyArgs", itemModifyArgs);
+        const result = await fetchModifyItem(
+          itemModifyArgs,
+          campaign_id,
+          context,
+        );
+        if (result.status === 200) {
+          alert(result.message);
+          setLoading(false);
+          if (result.success)
+            router.push(`/campaign/details?campaign_id=${campaign_id}`);
+        } else {
+          setLoading(false);
+          alert(`리퍼럴 수정을 실패하였습니다. 상태 코드: ${result.status}`);
+        }
+      }
+    }
   };
+
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -120,20 +162,13 @@ const DetailsItem = ({
       buttonRef.current?.click();
     }
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [selectedProductItems, setSelectedProductItems] = useState<
-  //   ProductsArgs[]
-  // >([]);
-  const closeModal = () => setIsModalOpen(false);
-  const openModal = () =>
-    reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
-  const disableInput = false;
 
   useEffect(() => {
     if (apiResponse) {
       setLoading(false);
     }
   }, [apiResponse]);
+
   return (
     <>
       {loading && (
@@ -196,13 +231,17 @@ const DetailsItem = ({
               disableInput={disableInput}
               setSelectedCouponItems={setSelectedCouponItems}
               setCouponInputs={setCouponInputs}
-              setRewards={setNewRewards}
+              selectedRewards={selectedRewards}
+              setSelectedRewards={setSelectedRewards}
+              newAddedRewards={newAddedRewards}
+              setNewAddedRewards={setNewAddedRewards}
               rewards={rewards}
             />
 
             <RewardNewCardDetails
-              rewards={newRewards}
-              setRewards={setNewRewards}
+              setRewards={setSelectedRewards}
+              newAddedRewards={newAddedRewards}
+              setNewAddedRewards={setNewAddedRewards}
             />
           </ContentsContainer>
         </div>
@@ -216,6 +255,7 @@ const DetailsItem = ({
           </button>
           <button
             className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-blue-500 p-2 text-white lg:w-fit"
+            onClick={handleSubmit}
             id="modify_item"
           >
             수정하기

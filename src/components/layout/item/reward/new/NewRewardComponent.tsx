@@ -2,9 +2,9 @@ import React, { useState, KeyboardEvent, useEffect } from "react";
 import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import { ApiResponse } from "@/lib/types";
-import CouponList from "@/components/layout/item/modal/CouponList";
 import InputNumberTextBox from "@/components/base/InputNumberText";
 import NewRewardModal from "@/components/layout/item/reward/new/NewRewardModal";
+import NewCouponList from "@/components/layout/item/modal/new/NewCouponList";
 
 interface NewRewardComponentProps {
   apiResponse?: ApiResponse;
@@ -149,7 +149,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
           )}
         </div>
       </div>
-      <CouponList
+      <NewCouponList
         apiResponse={apiResponse}
         setSelectedCouponItems={setSelectedCouponItems}
         setCouponInputs={setCouponInputs}

@@ -10,6 +10,20 @@ export interface ItemArgs {
   rewards: RewardsArgs[];
   active: boolean;
 }
+
+export interface ItemModifyArgs {
+  id?: string;
+  campaign_id: string;
+  title: string;
+  item_type: ItemType;
+  kakao_args: KakaoShareArgs;
+  product?: ProductsArgs;
+  promotion?: any;
+  new_rewards: RewardsArgs[];
+  current_rewards: RewardsArgs[];
+  active: boolean;
+}
+
 export enum ItemType {
   PM = "PROMOTION",
   PD = "PRODUCT",
@@ -50,7 +64,7 @@ export interface CouponListArgs {
 
 //리워드 관련
 export interface RewardsArgs {
-  id: string;
+  id?: string;
   reward_type: RewardType;
   coupon_code?: string | undefined;
   point_amount?: string | undefined;

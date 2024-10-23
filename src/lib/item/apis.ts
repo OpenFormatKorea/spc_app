@@ -1,13 +1,24 @@
-import { ItemArgs, RewardPolicyArgs } from "@/lib/item/types";
+import {
+  ItemArgs,
+  ItemModifyArgs,
+  ProductsArgs,
+  RewardPolicyArgs,
+  RewardsArgs,
+} from "@/lib/item/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
 import { fetchAPI } from "@/lib/api";
 
 // 리퍼럴 아이템
-
-export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, context: GetServerSidePropsContext) {
+export async function fetchCreateItem(
+  itemArgs: ItemArgs,
+  campaign_id: string,
+  context: GetServerSidePropsContext,
+) {
   const shop_id = getShopIdFromCookies(context);
-  const cleanConditions = (conditions: RewardPolicyArgs | null): RewardPolicyArgs | {} => {
+  const cleanConditions = (
+    conditions: RewardPolicyArgs | null,
+  ): RewardPolicyArgs | {} => {
     if (!conditions) return {};
 
     const cleanedConditions: RewardPolicyArgs = {};
@@ -78,51 +89,127 @@ export async function fetchCreateItem(itemArgs: ItemArgs, campaign_id: string, c
     };
   }
 }
-
 export async function fetchModifyItem(
-  item_id: string,
+  itemModifyArgs: ItemModifyArgs,
   campaign_id: string,
-  info: ItemArgs,
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ) {
   const apiUrl =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify/` + item_id + "?campaign_id=" + campaign_id;
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify/` +
+    itemModifyArgs.id;
   const shop_id = getShopIdFromCookies(context);
-  const dataObj = {
-    shop_id: shop_id,
-    title: info.title,
-    item_type: info.item_type,
+
+  const cleanConditions = (
+    conditions: RewardPolicyArgs | null,
+  ): RewardPolicyArgs | {} => {
+    if (!conditions) return {};
+
+    const cleanedConditions: RewardPolicyArgs = {};
+
+    if (conditions.SIGNUP) {
+      const isSignupEmpty =
+        conditions.SIGNUP.payment_timing?.type === null &&
+        conditions.SIGNUP.payment_timing?.delay_days === null &&
+        conditions.SIGNUP.payment_frequency?.type === null &&
+        conditions.SIGNUP.payment_frequency?.repeat_count === null;
+
+      if (!isSignupEmpty) {
+        cleanedConditions.SIGNUP = conditions.SIGNUP;
+      }
+    }
+
+    if (conditions.PURCHASE) {
+      const isPurchaseEmpty =
+        conditions.PURCHASE.payment_timing?.type === null &&
+        conditions.PURCHASE.payment_timing?.delay_days === null &&
+        conditions.PURCHASE.payment_frequency?.type === null &&
+        conditions.PURCHASE.payment_frequency?.repeat_count === null;
+
+      if (!isPurchaseEmpty) {
+        cleanedConditions.PURCHASE = conditions.PURCHASE;
+      }
+    }
+
+    return Object.keys(cleanedConditions).length > 0 ? cleanedConditions : {};
   };
+
+  const cleanRewards = (rewards: RewardsArgs[] = [], filterById = true) => {
+    return rewards
+      .filter((reward) => !filterById || reward.id)
+      .map((reward) => ({
+        ...reward,
+        referrer_conditions: cleanConditions(reward.referrer_conditions || {}),
+        referee_conditions: cleanConditions(reward.referee_conditions || {}),
+      }));
+  };
+
+  let dataObj: any = {
+    ...itemModifyArgs,
+    current_rewards: cleanRewards(itemModifyArgs.current_rewards, true),
+    new_rewards: cleanRewards(itemModifyArgs.new_rewards, false),
+    shop_id: shop_id,
+    campaign_id: campaign_id,
+  };
+
+  const hasProduct =
+    itemModifyArgs.product && itemModifyArgs.product.product_model_code !== ""; // Assuming product is an array
+
+  const hasPromotion =
+    itemModifyArgs.promotion && itemModifyArgs.promotion.description;
+  if (hasProduct) {
+    dataObj.product = itemModifyArgs.product;
+    delete dataObj.promotion;
+  }
+
+  if (hasPromotion) {
+    dataObj.promotion = itemModifyArgs.promotion;
+    delete dataObj.product;
+  }
+
+  if (!hasProduct && !hasPromotion) {
+    return {
+      status: 400,
+      success: false,
+      message: "Either product or promotion must be provided.",
+    };
+  }
+  console.log("final dataObj", dataObj);
+
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
-    if (response.status === "200") {
+    if (response.status === "200" && response.message === "success") {
       return {
         status: 200,
         success: true,
-        message: "리퍼럴을 수정하였습니다.",
+        message: "Successfully updated the referral.",
         data: response.data,
       };
     } else {
       return {
         status: response.status || 400,
         success: false,
-        message: "수정 내용을 다시 확인 해 주세요",
+        message: "Please check the input and try again.",
       };
     }
   } catch (error) {
-    console.error("Error: ", error);
+    console.error("Error:", error);
     return {
       status: 500,
       success: false,
-      message: "수정 내용을 다시 확인 해 주세요",
+      message: "An error occurred. Please check the input and try again.",
       error: error,
     };
   }
 }
 
-export async function fetchDeleteItem(item_id: string, campaign_id: string, context: GetServerSidePropsContext) {
+export async function fetchDeleteItem(
+  item_id: string,
+  campaign_id: string,
+  context: GetServerSidePropsContext,
+) {
   const shop_id = getShopIdFromCookies(context);
-  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/item/item-delete/` + item_id;
+  const apiUrl =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/item/item-delete/` + item_id;
   const dataObj = {
     shop_id: shop_id,
     campaign_id: campaign_id,
@@ -131,18 +218,35 @@ export async function fetchDeleteItem(item_id: string, campaign_id: string, cont
     const response = await fetchAPI(context, apiUrl, "DELETE", {});
 
     if (response.status === "200" && response.message === "success") {
-      return { status: 200, success: true, message: "리퍼럴을 삭제하였습니다." };
+      return {
+        status: 200,
+        success: true,
+        message: "리퍼럴을 삭제하였습니다.",
+      };
     } else {
       console.error("error", "status: ", response.status);
-      return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
+      return {
+        status: response.status || 400,
+        success: false,
+        message: "삭제를 실패하였습니다.",
+      };
     }
   } catch (error) {
     console.error("error", error);
-    return { status: 500, success: false, message: "삭제를 실패하였습니다.", error: error };
+    return {
+      status: 500,
+      success: false,
+      message: "삭제를 실패하였습니다.",
+      error: error,
+    };
   }
 }
 
-export async function fetchDeleteItems(item_ids: string[], campaign_id: string, context: GetServerSidePropsContext) {
+export async function fetchDeleteItems(
+  item_ids: string[],
+  campaign_id: string,
+  context: GetServerSidePropsContext,
+) {
   const shop_id = getShopIdFromCookies(context);
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items-delete`;
   const dataObj = {
@@ -154,20 +258,39 @@ export async function fetchDeleteItems(item_ids: string[], campaign_id: string, 
     const response = await fetchAPI(context, apiUrl, "DELETE", dataObj);
 
     if (response.status === "200" && response.message === "success") {
-      return { status: 200, success: true, message: "아이템들을 삭제하였습니다." };
+      return {
+        status: 200,
+        success: true,
+        message: "아이템들을 삭제하였습니다.",
+      };
     } else {
       console.error("error", "status: ", response.status);
-      return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
+      return {
+        status: response.status || 400,
+        success: false,
+        message: "삭제를 실패하였습니다.",
+      };
     }
   } catch (error) {
     console.error("error", error);
-    return { status: 500, success: false, message: "삭제를 실패하였습니다.", error: error };
+    return {
+      status: 500,
+      success: false,
+      message: "삭제를 실패하였습니다.",
+      error: error,
+    };
   }
 }
 
-export async function fetchActivateItem(item_id: string, campaign_id: string, context: GetServerSidePropsContext) {
+export async function fetchActivateItem(
+  item_id: string,
+  campaign_id: string,
+  context: GetServerSidePropsContext,
+) {
   const shop_id = getShopIdFromCookies(context);
-  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify-active/` + item_id;
+  const apiUrl =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-modify-active/` +
+    item_id;
   const dataObj = {
     campaign_id: campaign_id,
     shop_id: shop_id,
@@ -176,21 +299,40 @@ export async function fetchActivateItem(item_id: string, campaign_id: string, co
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
 
     if (response.status === "200" && response.message === "success") {
-      return { status: 200, success: true, message: "아이템들을 삭제하였습니다." };
+      return {
+        status: 200,
+        success: true,
+        message: "아이템들을 삭제하였습니다.",
+      };
     } else {
-      return { status: response.status || 400, success: false, message: "삭제를 실패하였습니다." };
+      return {
+        status: response.status || 400,
+        success: false,
+        message: "삭제를 실패하였습니다.",
+      };
     }
   } catch (error) {
     console.error("error", error);
 
-    return { status: 500, success: false, message: "삭제를 실패하였습니다.", error: error };
+    return {
+      status: 500,
+      success: false,
+      message: "삭제를 실패하였습니다.",
+      error: error,
+    };
   }
 }
 
-export async function fetchGetItemList(campaign_id: string, context: GetServerSidePropsContext) {
+export async function fetchGetItemList(
+  campaign_id: string,
+  context: GetServerSidePropsContext,
+) {
   const shop_id = getShopIdFromCookies(context);
   const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items?campaign_id=` + campaign_id + "&shop_id=" + shop_id;
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/items?campaign_id=` +
+    campaign_id +
+    "&shop_id=" +
+    shop_id;
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
@@ -200,7 +342,11 @@ export async function fetchGetItemList(campaign_id: string, context: GetServerSi
     return null;
   }
 }
-export async function fetchGetItemDetails(item_id: string, campaign_id: string, context: GetServerSidePropsContext) {
+export async function fetchGetItemDetails(
+  item_id: string,
+  campaign_id: string,
+  context: GetServerSidePropsContext,
+) {
   const shop_id = getShopIdFromCookies(context);
   const final_url =
     `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item/` +
@@ -219,7 +365,9 @@ export async function fetchGetItemDetails(item_id: string, campaign_id: string, 
   }
 }
 
-export async function fetchGetProductCodeList(context: GetServerSidePropsContext) {
+export async function fetchGetProductCodeList(
+  context: GetServerSidePropsContext,
+) {
   const shop_id = getShopIdFromCookies(context);
   if (!shop_id) {
     return {
@@ -269,7 +417,9 @@ export async function fetchGetProductCodeList(context: GetServerSidePropsContext
   }
 }
 
-export async function fetchGetCouponCodeList(context: GetServerSidePropsContext) {
+export async function fetchGetCouponCodeList(
+  context: GetServerSidePropsContext,
+) {
   const shop_id = getShopIdFromCookies(context);
 
   if (!shop_id) {
@@ -284,7 +434,12 @@ export async function fetchGetCouponCodeList(context: GetServerSidePropsContext)
   const page = 1;
   const size = 10;
   const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` + page + "&size=" + size + "&shop_id=" + shop_id;
+    `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` +
+    page +
+    "&size=" +
+    size +
+    "&shop_id=" +
+    shop_id;
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});

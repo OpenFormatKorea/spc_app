@@ -2,10 +2,10 @@ import React, { useState, KeyboardEvent, useEffect } from "react";
 import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import { ApiResponse } from "@/lib/types";
-import CouponList from "@/components/layout/item/modal/CouponList";
 import InputNumberTextBox from "@/components/base/InputNumberText";
 import RewardModalDetails from "@/components/layout/item/reward/details/RewardModalDetails";
 import RewardCurrentCardDetails from "@/components/layout/item/reward/details/RewardCurrentCardDetails";
+import CouponListDetails from "@/components/layout/item/modal/details/CouponListDetails";
 
 interface RewardComponentDetailsProps {
   apiResponse?: ApiResponse;
@@ -15,10 +15,13 @@ interface RewardComponentDetailsProps {
   setCouponInputs: (value: CouponsArgs[]) => void;
   reward_type: RewardType;
   setRewardType: (value: RewardType) => void;
-  setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
   disableInput: boolean;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   rewards: RewardsArgs[];
+  selectedRewards: RewardsArgs[];
+  setSelectedRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
+  newAddedRewards: RewardsArgs[];
+  setNewAddedRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
 const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
@@ -28,10 +31,13 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   couponInputs,
   setCouponInputs,
   reward_type,
-  setRewards,
   setRewardType,
   handleKeyDown,
   rewards,
+  selectedRewards,
+  setSelectedRewards,
+  newAddedRewards,
+  setNewAddedRewards,
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
@@ -39,6 +45,7 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
+
   const handleRewardTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -49,12 +56,16 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
-
   return (
     <>
-      <h1 className="border-b-[1px] pb-2 text-xl font-bold">리워드</h1>
+      <h1 className="pb-2 text-xl font-bold">리워드</h1>
+      <span className="border-b-[1px] pb-2 text-xs">리워드</span>
       <div className={inputFormClass}>
-        <RewardCurrentCardDetails rewards={rewards} setRewards={setRewards} />
+        <RewardCurrentCardDetails
+          rewards={rewards}
+          selectedRewards={selectedRewards}
+          setSelectedRewards={setSelectedRewards}
+        />
         <label className={radioButtonLabelClass}>리워드 종류</label>
         <div className="flex h-[42px] w-full items-center">
           <div className="flex w-full space-x-20 text-left lg:max-w-[458px]">
@@ -150,24 +161,27 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
           </button>
         </div>
       </div>
-      <CouponList
+      <CouponListDetails
         apiResponse={apiResponse}
         setSelectedCouponItems={setSelectedCouponItems}
         setCouponInputs={setCouponInputs}
         couponInputs={couponInputs}
         onClose={closeModal}
         isOpen={isModalOpen}
+        rewards={rewards}
       />
       <>
         <RewardModalDetails
           reward_type={reward_type}
           handleKeyDown={handleKeyDown}
-          setRewards={setRewards}
+          setRewards={setSelectedRewards}
           point_amount={point_amount}
           couponInputs={couponInputs}
           setPointAmount={setPointAmount}
           isOpen={isRewardModalOpen}
           onClose={closeRewardModal}
+          newAddedRewards={newAddedRewards}
+          setNewAddedRewards={setNewAddedRewards}
         />
       </>
     </>

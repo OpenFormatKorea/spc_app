@@ -1,7 +1,6 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import ProductList from "@/components/layout/item/modal/ProductList";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
@@ -28,6 +27,7 @@ import {
 } from "@/lib/item/types";
 import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
 import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
+import ProductList from "@/components/layout/item/modal/ProductList";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);

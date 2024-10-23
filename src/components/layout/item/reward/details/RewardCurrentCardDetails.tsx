@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   PaymentFrequencyType,
   PaymentTimingType,
   RewardsArgs,
 } from "@/lib/item/types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-interface CurrentRewardDetailsCardProps {
+
+interface RewardCurrentCardDetailsdProps {
   rewards: RewardsArgs[];
-  setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
+  selectedRewards: RewardsArgs[];
+  setSelectedRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
-const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
+const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsdProps> = ({
   rewards,
-  setRewards,
+  selectedRewards,
+  setSelectedRewards,
 }) => {
   const triggerTypes = ["SIGNUP", "PURCHASE"] as const;
   const conditionTypes = ["referrer_conditions", "referee_conditions"] as const;
@@ -22,29 +25,15 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
   const [visibleRewards, setVisibleRewards] = useState(
     Array(rewards.length).fill(false),
   );
-  const [selectAll, setSelectAll] = useState(false);
-  const [selectedRewards, setSelectedRewards] = useState<{
-    [key: string]: boolean;
-  }>({});
+
+  const [selectAll, setSelectAll] = useState(true);
+
   const toggleRewardDetails = (index: number) => {
     setVisibleRewards((prev) =>
       prev.map((visible, i) => (i === index ? !visible : visible)),
     );
   };
 
-  const handleDeleteRewards = (indexToDelete: number) => {
-    if (confirm("리워드를 삭제하시겠습니까?")) {
-      setRewards((prevRewards) =>
-        prevRewards.filter((_, index) => index !== indexToDelete),
-      );
-    }
-  };
-
-  const handleDeleteAll = () => {
-    if (confirm("모든 리워드를 삭제하시겠습니까?")) {
-      setRewards([]);
-    }
-  };
   const renderPaymentTiming = (type: PaymentTimingType | null | undefined) => {
     if (!type) return null;
     return type === PaymentTimingType.IMM ? "즉시 지급" : "추후 지급";
@@ -64,37 +53,37 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
         return null;
     }
   };
+
   const handleSelectAll = () => {
     const isChecked = !selectAll;
     setSelectAll(isChecked);
 
-    const updatedSelectedRewards = isChecked
-      ? rewards.reduce(
-          (acc, reward) => ({ ...acc, [reward.id]: isChecked }),
-          {} as { [key: string]: boolean },
-        )
-      : {};
-    setSelectedRewards(updatedSelectedRewards);
+    if (isChecked) {
+      setSelectedRewards([...rewards]);
+    } else {
+      setSelectedRewards([]);
+    }
   };
 
+  useEffect(() => {
+    if (selectAll) {
+      setSelectedRewards(rewards);
+    }
+  }, [selectAll, rewards, setSelectedRewards]);
+
   const handleCheckboxChange =
-    (rewardId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    (reward: RewardsArgs) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = e.target.checked;
-      setSelectedRewards((prev) => {
-        let updatedRewards = { ...prev };
-
+      setSelectedRewards((prevSelected) => {
         if (isChecked) {
-          updatedRewards[rewardId] = true;
+          return [...prevSelected, reward];
         } else {
-          delete updatedRewards[rewardId];
+          return prevSelected.filter((r) => r.id !== reward.id);
         }
-
-        const allSelected = rewards.every(
-          (reward) => updatedRewards[reward.id],
-        );
-        setSelectAll(allSelected);
-        return updatedRewards;
       });
+      const allSelected =
+        selectedRewards.length + (isChecked ? 1 : -1) === rewards.length;
+      setSelectAll(allSelected);
     };
   return (
     <>
@@ -133,8 +122,8 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
                     type="checkbox"
                     id={`reward_${reward.id}`}
                     name={`reward_${reward.id}`}
-                    checked={selectedRewards[reward.id] || false}
-                    onChange={handleCheckboxChange(reward.id)}
+                    checked={selectedRewards.some((r) => r.id === reward.id)}
+                    onChange={handleCheckboxChange(reward)}
                   />
                 </div>
                 <div className="text-center text-base font-semibold">
@@ -231,16 +220,9 @@ const CurrentRewardDetailsCard: React.FC<CurrentRewardDetailsCardProps> = ({
             )}
           </div>
         ))}
-        <button
-          className={`min-w-[45px] cursor-pointer rounded-md p-1 text-sm text-white ${Object.keys(selectedRewards).length !== 0 ? "bg-red-500" : "cursor-not-allowed bg-gray-300"}`}
-          onClick={() => handleDeleteAll()}
-          disabled={Object.keys(selectedRewards).length === 0}
-        >
-          선택삭제
-        </button>
       </div>
     </>
   );
 };
 
-export default CurrentRewardDetailsCard;
+export default RewardCurrentCardDetails;

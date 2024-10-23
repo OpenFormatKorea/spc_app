@@ -1,6 +1,6 @@
 import { ApiResponse } from "@/lib/types";
-import { useMemo, useState } from "react";
-import { CouponListArgs, CouponsArgs } from "@/lib/item/types";
+import { useMemo, useState, useEffect } from "react";
+import { CouponListArgs, CouponsArgs, RewardsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
 
 interface CouponListProps {
@@ -27,9 +27,16 @@ const CouponList: React.FC<CouponListProps> = ({
         : [],
     [apiResponse],
   );
+  console.log("coupons", coupons);
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-
+  useEffect(() => {
+    if (selectedItemList.length === coupons.length && coupons.length > 0) {
+      setSelectAll(true);
+    } else {
+      setSelectAll(false);
+    }
+  }, [selectedItemList, coupons]);
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
@@ -76,7 +83,6 @@ const CouponList: React.FC<CouponListProps> = ({
     };
 
   const handleAction = async () => {
-    let result;
     if (confirm("해당 쿠폰을 선택 하시겠어요?")) {
       setSelectedCouponItems(couponInputs);
       onClose();
@@ -88,6 +94,7 @@ const CouponList: React.FC<CouponListProps> = ({
   const tbodyStyle =
     "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
   const labelClass = "text-xs pt-4 text-gray-500";
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">

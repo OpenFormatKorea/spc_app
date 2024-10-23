@@ -5,14 +5,15 @@ import {
   RewardsArgs,
 } from "@/lib/item/types";
 
-interface RewardCardDetailsProps {
-  rewards: RewardsArgs[];
+interface RewardNewCardDetailsProps {
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
+  newAddedRewards: RewardsArgs[];
+  setNewAddedRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
-const RewardCardDetails: React.FC<RewardCardDetailsProps> = ({
-  rewards,
-  setRewards,
+const RewardNewCardDetails: React.FC<RewardNewCardDetailsProps> = ({
+  newAddedRewards,
+  setNewAddedRewards,
 }) => {
   const triggerTypes = ["SIGNUP", "PURCHASE"] as const;
   const conditionTypes = ["referrer_conditions", "referee_conditions"] as const;
@@ -21,7 +22,7 @@ const RewardCardDetails: React.FC<RewardCardDetailsProps> = ({
   const inputFormClass = "inputForm flex items-center text-sm";
   const handleDeleteRewards = (indexToDelete: number) => {
     if (confirm("리워드를 삭제하시겠습니까?")) {
-      setRewards((prevRewards) =>
+      setNewAddedRewards((prevRewards) =>
         prevRewards.filter((_, index) => index !== indexToDelete),
       );
     }
@@ -50,7 +51,7 @@ const RewardCardDetails: React.FC<RewardCardDetailsProps> = ({
 
   return (
     <>
-      {rewards.map((reward, index) => (
+      {newAddedRewards.map((reward, index) => (
         <div
           className="mb-4 rounded-xl bg-gray-100 p-4 text-sm"
           key={index}
@@ -145,4 +146,4 @@ const RewardCardDetails: React.FC<RewardCardDetailsProps> = ({
   );
 };
 
-export default RewardCardDetails;
+export default RewardNewCardDetails;

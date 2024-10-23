@@ -20,6 +20,8 @@ interface RewardModalDetailsProps {
   setPointAmount: (value: string) => void;
   isOpen: boolean;
   onClose: () => void;
+  newAddedRewards: RewardsArgs[];
+  setNewAddedRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
 }
 
 const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
@@ -31,6 +33,8 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
   setPointAmount,
   isOpen,
   onClose,
+  newAddedRewards,
+  setNewAddedRewards,
 }) => {
   const defaultPolicy = {
     SIGNUP: {
@@ -129,6 +133,10 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
     };
     if (infoCheck()) {
       setRewards((prevRewards) => [...prevRewards, rewardConditionsArgs]);
+      setNewAddedRewards((prevRewards) => [
+        ...prevRewards,
+        rewardConditionsArgs,
+      ]);
       onClose();
     } else {
       return false;
@@ -136,7 +144,6 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
   };
   const onclickAddCouponItemConditions = () => {
     couponInputs.forEach((inputCoupon: CouponsArgs) => {
-      // Create rewardConditionsArgs based on the reward type
       const rewardConditionsArgs: RewardsArgs = {
         reward_type,
         ...(reward_type === RewardType.CO
@@ -147,14 +154,16 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
       };
 
       if (infoCheck()) {
-        setRewards((prevRewards) => [...prevRewards, rewardConditionsArgs]);
+        setNewAddedRewards((prevRewards) => [
+          ...prevRewards,
+          rewardConditionsArgs,
+        ]);
         onClose();
       } else {
         return false;
       }
     });
   };
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
