@@ -170,7 +170,7 @@ export async function fetchModifyItem(
     return {
       status: 400,
       success: false,
-      message: "Either product or promotion must be provided.",
+      message: "상품 혹은 프로모션이 선택되어야합니다.",
     };
   }
   console.log("final dataObj", dataObj);
@@ -181,7 +181,7 @@ export async function fetchModifyItem(
       return {
         status: 200,
         success: true,
-        message: "Successfully updated the referral.",
+        message: "아이템을 수정하였습니다.",
         data: response.data,
       };
     } else {
