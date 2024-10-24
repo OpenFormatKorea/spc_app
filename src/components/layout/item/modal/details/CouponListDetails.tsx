@@ -39,10 +39,10 @@ const CouponList: React.FC<CouponListProps> = ({
       return [];
     }
   }, [apiResponse, rewards]);
+
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  // Function to pre-select checkboxes where reward.id matches coupon.id
   useEffect(() => {
     const matchedCoupons = coupons.filter((coupon: CouponListArgs) =>
       rewards.some(
@@ -65,13 +65,13 @@ const CouponList: React.FC<CouponListProps> = ({
 
     setCouponInputs(selectedCouponInputs);
   }, [coupons, rewards, setCouponInputs]);
+
   useEffect(() => {
-    if (selectedItemList.length === coupons.length && coupons.length > 0) {
-      setSelectAll(true);
-    } else {
-      setSelectAll(false);
-    }
+    setSelectAll(
+      selectedItemList.length === coupons.length && coupons.length > 0,
+    );
   }, [selectedItemList, coupons]);
+
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
@@ -88,7 +88,6 @@ const CouponList: React.FC<CouponListProps> = ({
       setCouponInputs([]);
       setSelectedItemList([]);
     }
-    setSelectAll(isChecked);
   };
 
   const handleCheckboxChange =

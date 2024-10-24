@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent, Dispatch, useEffect } from "react";
+import React, { useState, KeyboardEvent, useEffect } from "react";
 import InputTextBox from "@/components/base/InputText";
 import {
   RewardType,
@@ -36,7 +36,7 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
   newAddedRewards,
   setNewAddedRewards,
 }) => {
-  const defaultPolicy = {
+  const defaultPolicy: RewardPolicyArgs = {
     SIGNUP: {
       payment_timing: {
         type: PaymentTimingType.IMM,
@@ -58,216 +58,198 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
       },
     },
   };
+
   const [referrerState, setReferrerState] =
     useState<RewardPolicyArgs>(defaultPolicy);
   const [refereeState, setRefereeState] =
     useState<RewardPolicyArgs>(defaultPolicy);
 
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
+  // Class name constants
+  const inputFormClass = "flex flex-col text-left w-full pb-2";
   const labelClass = "text-xs pt-2 text-gray-500";
-  const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => {
-    return {
-      SIGNUP: {
-        payment_timing: {
-          type: state.SIGNUP?.payment_timing?.type || null,
-          delay_days: state.SIGNUP?.payment_timing?.delay_days ?? null,
-        },
-        payment_frequency: {
-          type: state.SIGNUP?.payment_frequency?.type || null,
-          repeat_count: state.SIGNUP?.payment_frequency?.repeat_count ?? null,
-        },
+
+  // Helper function to generate policy
+  const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => ({
+    SIGNUP: {
+      payment_timing: {
+        type: state.SIGNUP?.payment_timing?.type || null,
+        delay_days: state.SIGNUP?.payment_timing?.delay_days ?? null,
       },
-      PURCHASE: {
-        payment_timing: {
-          type: state.PURCHASE?.payment_timing?.type || null,
-          delay_days: state.PURCHASE?.payment_timing?.delay_days ?? null,
-        },
-        payment_frequency: {
-          type: state.PURCHASE?.payment_frequency?.type || null,
-          repeat_count: state.PURCHASE?.payment_frequency?.repeat_count ?? null,
-        },
+      payment_frequency: {
+        type: state.SIGNUP?.payment_frequency?.type || null,
+        repeat_count: state.SIGNUP?.payment_frequency?.repeat_count ?? null,
       },
+    },
+    PURCHASE: {
+      payment_timing: {
+        type: state.PURCHASE?.payment_timing?.type || null,
+        delay_days: state.PURCHASE?.payment_timing?.delay_days ?? null,
+      },
+      payment_frequency: {
+        type: state.PURCHASE?.payment_frequency?.type || null,
+        repeat_count: state.PURCHASE?.payment_frequency?.repeat_count ?? null,
+      },
+    },
+  });
+
+  // Validation function
+  const infoCheck = (): boolean => {
+    const validatePolicy = (
+      policy: RewardPolicyArgs,
+      role: string,
+    ): boolean => {
+      const { SIGNUP, PURCHASE } = policy;
+      if (
+        SIGNUP?.payment_frequency.type === PaymentFrequencyType.REP &&
+        SIGNUP.payment_frequency.repeat_count === null
+      ) {
+        alert(`${role} SIGNUP payment frequency repeat count is null`);
+        return false;
+      }
+      if (
+        PURCHASE?.payment_timing.type === PaymentTimingType.DEL &&
+        PURCHASE.payment_timing.delay_days === null
+      ) {
+        alert(`${role} PURCHASE payment timing delay days is null`);
+        return false;
+      }
+      return true;
     };
-  };
-  function infoCheck() {
-    if (
-      referrerState.SIGNUP?.payment_frequency.type ===
-        PaymentFrequencyType.REP &&
-      referrerState.SIGNUP?.payment_frequency.repeat_count === null
-    ) {
-      alert("referrerState SIGNUP payment frequency repeat count is null ");
-      return false;
-    }
-    if (
-      referrerState.PURCHASE?.payment_timing.type === PaymentTimingType.DEL &&
-      referrerState.PURCHASE?.payment_timing.delay_days === null
-    ) {
-      alert("referrerState PURCHASE payment timing delay days is null ");
-      return false;
-    }
-    if (
-      refereeState.SIGNUP?.payment_frequency.type ===
-        PaymentFrequencyType.REP &&
-      refereeState.SIGNUP?.payment_frequency.repeat_count === null
-    ) {
-      alert("refereeState SIGNUP payment frequency repeat count is null ");
-      return false;
-    }
-    if (
-      refereeState.PURCHASE?.payment_timing.type === PaymentTimingType.DEL &&
-      refereeState.PURCHASE?.payment_timing.delay_days === null
-    ) {
-      alert("refereeState PURCHASE payment timing delay days is null ");
-      return false;
-    }
+
+    if (!validatePolicy(referrerState, "referrerState")) return false;
+    if (!validatePolicy(refereeState, "refereeState")) return false;
 
     return true;
-  }
+  };
 
-  const onclickAddPointItemConditions = () => {
+  // Unified add function
+  const handleAddReward = () => {
     const rewardConditionsArgs: RewardsArgs = {
       reward_type,
       ...(reward_type === RewardType.PO && { point_amount }),
+      ...(reward_type === RewardType.CO &&
+        couponInputs.reduce<Record<string, string>>((acc, coupon) => {
+          acc[`coupon_code_${coupon.coupon_code}`] = String(coupon.coupon_code);
+          return acc;
+        }, {})),
       referrer_conditions: generatePolicy(referrerState),
       referee_conditions: generatePolicy(refereeState),
     };
+
     if (infoCheck()) {
-      setRewards((prevRewards) => [...prevRewards, rewardConditionsArgs]);
-      setNewAddedRewards((prevRewards) => [
-        ...prevRewards,
-        rewardConditionsArgs,
-      ]);
+      setRewards((prev) => [...prev, rewardConditionsArgs]);
+      setNewAddedRewards((prev) => [...prev, rewardConditionsArgs]);
       onClose();
-    } else {
-      return false;
     }
   };
-  const onclickAddCouponItemConditions = () => {
-    couponInputs.forEach((inputCoupon: CouponsArgs) => {
-      const rewardConditionsArgs: RewardsArgs = {
-        reward_type,
-        ...(reward_type === RewardType.CO
-          ? { coupon_code: String(inputCoupon.coupon_code) }
-          : {}),
-        referrer_conditions: generatePolicy(referrerState),
-        referee_conditions: generatePolicy(refereeState),
-      };
 
-      if (infoCheck()) {
-        setNewAddedRewards((prevRewards) => [
-          ...prevRewards,
-          rewardConditionsArgs,
-        ]);
-        onClose();
-      } else {
-        return false;
-      }
-    });
+  // Handle adding based on reward type
+  const handleAddButtonClick = () => {
+    if (reward_type === RewardType.PO) {
+      handleAddReward();
+    } else if (reward_type === RewardType.CO) {
+      couponInputs.forEach((inputCoupon) => {
+        const rewardArgs: RewardsArgs = {
+          reward_type,
+          coupon_code: String(inputCoupon.coupon_code),
+          referrer_conditions: generatePolicy(referrerState),
+          referee_conditions: generatePolicy(refereeState),
+        };
+
+        if (infoCheck()) {
+          setNewAddedRewards((prev) => [...prev, rewardArgs]);
+        }
+      });
+      onClose();
+    }
   };
+
   return (
-    <>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="flex flex-col items-center justify-center text-center">
-          <h1 className="w-full pb-2 text-left text-xl font-bold">
-            {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가 설정
-          </h1>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col items-center justify-center p-4 text-center">
+        <h1 className="w-full pb-2 text-left text-xl font-bold">
+          {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가 설정
+        </h1>
 
-          <div className="my-2 flex max-h-[550px] flex-col items-center overflow-y-scroll">
-            <div className="flex flex-col rounded-lg bg-white p-3">
-              <div className="mb-4 flex w-full flex-col items-center justify-center rounded-xl">
-                <div className="mb-2 flex w-full flex-col text-left">
-                  <label className="font-gray-300 mb-2 text-sm font-semibold">
-                    {reward_type === RewardType.CO
-                      ? "쿠폰 코드"
-                      : " 지급 포인트 금액"}
-                  </label>
+        <div className="my-2 flex max-h-[550px] w-full flex-col items-center overflow-y-scroll">
+          <div className="flex w-full flex-col rounded-lg bg-white p-3">
+            <div className="mb-4 flex w-full flex-col text-left">
+              <label className="mb-2 text-sm font-semibold text-gray-300">
+                {reward_type === RewardType.CO
+                  ? "쿠폰 코드"
+                  : "지급 포인트 금액"}
+              </label>
 
-                  <div className="flex w-full items-end">
-                    {reward_type === RewardType.PO ? (
-                      <>
-                        <InputTextBox
-                          type={"number"}
-                          id={"point_amount"}
-                          placeholder={
-                            "원하시는 지급 포인트 금액을 입력하세요."
-                          }
-                          value={
-                            reward_type === RewardType.PO
-                              ? point_amount
-                              : couponInputs.toString
-                          }
-                          onChange={(e) =>
-                            reward_type === RewardType.PO &&
-                            setPointAmount(e.target.value)
-                          }
-                          onKeyDown={handleKeyDown}
-                          disabled={true}
-                        />
-
-                        <label className="font-gray-300 ml-2 text-sm font-semibold">
-                          포인트
-                        </label>
-                      </>
-                    ) : (
-                      <div className="contents-container w-full justify-between pb-4">
-                        <div className="flex h-fit w-full flex-col">
-                          <div className="mb-2 flex w-full flex-col text-left">
-                            <label className={labelClass}>선택된 쿠폰</label>
-                            <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-sm">
-                              {couponInputs.length !== 0 ? (
-                                couponInputs.map((inputCoupon) => {
-                                  return (
-                                    inputCoupon && (
-                                      <div
-                                        key={inputCoupon.coupon_code}
-                                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
-                                      >
-                                        {inputCoupon.coupon_name}
-                                      </div>
-                                    )
-                                  );
-                                })
-                              ) : (
-                                <div className="flex h-full w-full items-center justify-center">
-                                  <div className="text-center text-gray-600">
-                                    선택된 쿠폰이 없습니다.
-                                    <br />
-                                    상품을 선택해주세요.
-                                  </div>
-                                </div>
-                              )}
-                            </div>
+              <div className="flex w-full items-end">
+                {reward_type === RewardType.PO ? (
+                  <>
+                    <InputTextBox
+                      type="number"
+                      id="point_amount"
+                      placeholder="원하시는 지급 포인트 금액을 입력하세요."
+                      value={point_amount}
+                      onChange={(e) => setPointAmount(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      disabled={true}
+                    />
+                    <label className="ml-2 text-sm font-semibold text-gray-500">
+                      포인트
+                    </label>
+                  </>
+                ) : (
+                  <div className="flex w-full flex-col">
+                    <label className={labelClass}>선택된 쿠폰</label>
+                    <div className="mt-2 flex flex-wrap justify-center rounded-xl bg-gray-100 p-2 pb-3 text-sm">
+                      {couponInputs.length > 0 ? (
+                        couponInputs.map((coupon) => (
+                          <div
+                            key={coupon.coupon_code}
+                            className="mr-1 mt-1 rounded-md bg-blue-300 p-1 text-sm text-white"
+                          >
+                            {coupon.coupon_name}
                           </div>
+                        ))
+                      ) : (
+                        <div className="flex items-center justify-center text-gray-600">
+                          선택된 쿠폰이 없습니다.
+                          <br />
+                          상품을 선택해주세요.
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
-              <RewardPolicySettingDetails
-                inputformClass={inputFormClass}
-                labelClass={labelClass}
-                reward_type={reward_type}
-                handleKeyDown={handleKeyDown}
-                setReferrerState={setReferrerState}
-                setRefereeState={setRefereeState}
-              />
             </div>
-          </div>
 
-          <button
-            className="mt-4 w-full rounded-lg bg-blue-500 p-2 text-white"
-            onClick={
-              reward_type === RewardType.PO
-                ? onclickAddPointItemConditions
-                : onclickAddCouponItemConditions
-            }
-          >
-            {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가
-          </button>
+            <RewardPolicySettingDetails
+              inputformClass={inputFormClass}
+              labelClass={labelClass}
+              reward_type={reward_type}
+              handleKeyDown={handleKeyDown}
+              setReferrerState={setReferrerState}
+              setRefereeState={setRefereeState}
+            />
+          </div>
         </div>
-      </Modal>
-    </>
+
+        <button
+          className={`mt-4 w-full rounded-lg p-2 text-white ${
+            (reward_type === RewardType.CO && couponInputs.length === 0) ||
+            (reward_type === RewardType.PO && point_amount === "")
+              ? "cursor-not-allowed bg-gray-400"
+              : "cursor-pointer bg-blue-500"
+          }`}
+          onClick={handleAddButtonClick}
+          disabled={
+            (reward_type === RewardType.CO && couponInputs.length === 0) ||
+            (reward_type === RewardType.PO && point_amount === "")
+          }
+        >
+          {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가
+        </button>
+      </div>
+    </Modal>
   );
 };
 

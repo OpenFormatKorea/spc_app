@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent, useEffect } from "react";
+import React, { useState, KeyboardEvent } from "react";
 import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import { ApiResponse } from "@/lib/types";
@@ -45,16 +45,19 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
+
   const handleRewardTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRewardType(e.target.value as RewardType);
   };
+
   const closeModal = () => setIsModalOpen(false);
   const openModal = () =>
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
+
   return (
     <>
       <h1 className="pb-2 text-xl font-bold">리워드</h1>
@@ -62,6 +65,7 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
         * 이전에 세팅된 리워드의 경우, 수정시 체크박스로 선택한 리워드만
         저장됩니다.
       </span>
+
       <div className={inputFormClass}>
         <RewardCurrentCardDetails
           rewards={rewards}
@@ -91,15 +95,14 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
           {reward_type === RewardType.CO && (
             <button
               id="create_item_container"
-              className={
-                "min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 p-1 text-center text-white"
-              }
+              className="min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 p-1 text-center text-white"
               onClick={openModal}
             >
               추가
             </button>
           )}
         </div>
+
         <div className="contents-container w-full justify-between pb-4">
           {reward_type === RewardType.CO && (
             <div className="flex h-fit w-full flex-col">
@@ -107,18 +110,14 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
                 <label className={labelClass}>선택된 쿠폰</label>
                 <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-sm">
                   {selectedCouponItems.length !== 0 ? (
-                    couponInputs.map((inputCoupon) => {
-                      return (
-                        inputCoupon && (
-                          <div
-                            key={inputCoupon.coupon_code}
-                            className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
-                          >
-                            {inputCoupon.coupon_name}
-                          </div>
-                        )
-                      );
-                    })
+                    couponInputs.map((inputCoupon) => (
+                      <div
+                        key={inputCoupon.coupon_code}
+                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
+                      >
+                        {inputCoupon.coupon_name}
+                      </div>
+                    ))
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
                       <div className="text-center text-gray-600">
@@ -132,6 +131,7 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
               </div>
             </div>
           )}
+
           {reward_type === RewardType.PO && (
             <div className="flex h-fit w-full flex-col">
               <div className={inputFormClass}>
@@ -163,6 +163,7 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
           </button>
         </div>
       </div>
+
       <CouponListDetails
         apiResponse={apiResponse}
         setSelectedCouponItems={setSelectedCouponItems}
@@ -172,20 +173,19 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
         isOpen={isModalOpen}
         rewards={rewards}
       />
-      <>
-        <RewardModalDetails
-          reward_type={reward_type}
-          handleKeyDown={handleKeyDown}
-          setRewards={setSelectedRewards}
-          point_amount={point_amount}
-          couponInputs={couponInputs}
-          setPointAmount={setPointAmount}
-          isOpen={isRewardModalOpen}
-          onClose={closeRewardModal}
-          newAddedRewards={newAddedRewards}
-          setNewAddedRewards={setNewAddedRewards}
-        />
-      </>
+
+      <RewardModalDetails
+        reward_type={reward_type}
+        handleKeyDown={handleKeyDown}
+        setRewards={setSelectedRewards}
+        point_amount={point_amount}
+        couponInputs={couponInputs}
+        setPointAmount={setPointAmount}
+        isOpen={isRewardModalOpen}
+        onClose={closeRewardModal}
+        newAddedRewards={newAddedRewards}
+        setNewAddedRewards={setNewAddedRewards}
+      />
     </>
   );
 };
