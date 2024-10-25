@@ -1,7 +1,10 @@
 import { ApiResponse } from "@/lib/types";
-import { useMemo, useState, useEffect } from "react";
-import { CouponListArgs, CouponsArgs, RewardsArgs } from "@/lib/item/types";
+import { useMemo, useState, useEffect, useRef, KeyboardEvent } from "react";
+import { CouponListArgs, CouponsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
+import InputTextBox from "@/components/base/InputText";
+import { fetchSearchCoupon } from "@/lib/item/apis";
+import { GetServerSidePropsContext } from "next";
 
 interface CouponListProps {
   apiResponse?: ApiResponse;
@@ -12,23 +15,32 @@ interface CouponListProps {
   onClose: () => void;
 }
 
-const CouponList: React.FC<CouponListProps> = ({
-  apiResponse,
-  couponInputs,
-  setCouponInputs,
-  setSelectedCouponItems,
-  isOpen,
-  onClose,
-}) => {
+const NewCouponList: React.FC<CouponListProps> = (
+  {
+    apiResponse,
+    couponInputs,
+    setCouponInputs,
+    setSelectedCouponItems,
+    isOpen,
+    onClose,
+  },
+  context: GetServerSidePropsContext,
+) => {
+  const [couponResponse, setCouponResponse] = useState<ApiResponse | undefined>(
+    apiResponse,
+  );
   const coupons = useMemo(
     () =>
-      Array.isArray(apiResponse?.data.data.content)
-        ? apiResponse.data.data.content
+      Array.isArray(couponResponse?.data.data.content)
+        ? couponResponse.data.data.content
         : [],
-    [apiResponse],
+    [couponResponse],
   );
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchFilter, setSearchFilter] = useState("name");
+
   useEffect(() => {
     if (selectedItemList.length === coupons.length && coupons.length > 0) {
       setSelectAll(true);
@@ -82,10 +94,38 @@ const CouponList: React.FC<CouponListProps> = ({
     };
 
   const handleAction = async () => {
+    if (couponInputs.length === 0) {
+      alert("선택된 쿠폰이 없습니다. 쿠폰을 선택해 주세요.");
+      return;
+    }
     if (confirm("해당 쿠폰을 선택 하시겠어요?")) {
       setSelectedCouponItems(couponInputs);
       onClose();
     }
+  };
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      buttonRef.current?.click();
+    }
+  };
+
+  const handleSearch = () => {
+    const searchResponse = fetchSearchCoupon(
+      searchKeyword,
+      searchFilter,
+      context,
+    );
+    searchResponse
+      .then((response) => {
+        console.log("data", response);
+        setCouponResponse(response);
+      })
+      .catch((error) => {
+        console.error("Error during search:", error);
+      });
   };
 
   const theadStyle =
@@ -99,12 +139,37 @@ const CouponList: React.FC<CouponListProps> = ({
       <div className="flex flex-col items-center justify-center text-center">
         <h1 className="w-full pb-2 text-left text-xl font-bold">쿠폰 선택</h1>
 
-        <div className="my-2 flex max-h-[550px] max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
-          <div className="flex flex-col rounded-lg bg-white p-3">
+        <div className="my-2 flex max-h-[550px] w-full max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
+          <div className="flex w-full flex-col rounded-lg bg-white p-3">
             <h1 className="text-md w-full pb-2 text-left font-semibold text-gray-500">
-              상품을 선택해 주세요
+              쿠폰을 선택해 주세요
             </h1>
-
+            <div className="flex gap-2">
+              <select
+                name="coupon"
+                id="coupon"
+                value={searchFilter}
+                onChange={(e) => setSearchFilter(e.target.value)}
+              >
+                <option value="cpnId">아이디</option>
+                <option value="name">이름</option>
+              </select>
+              <InputTextBox
+                disabled={false}
+                type="text"
+                id="coupon_id"
+                placeholder="검색어를 입력해주세요"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <button
+                className="w-[60px] rounded-lg bg-blue-500 p-2 text-white"
+                onClick={handleSearch}
+              >
+                검색
+              </button>
+            </div>
             <div className="block w-full py-3">
               <table className="table w-full border border-gray-100 text-center">
                 <thead>
@@ -134,7 +199,9 @@ const CouponList: React.FC<CouponListProps> = ({
                           onChange={handleCheckboxChange(coupon.cpnId)}
                         />
                       </td>
-                      <td className={tbodyStyle}>{coupon.cpnId}</td>
+                      <td className={tbodyStyle}>
+                        {coupon.cpnId.toLocaleString()}
+                      </td>
                       <td className={tbodyStyle}>{coupon.name}</td>
                     </tr>
                   ))}
@@ -196,4 +263,4 @@ const CouponList: React.FC<CouponListProps> = ({
   );
 };
 
-export default CouponList;
+export default NewCouponList;

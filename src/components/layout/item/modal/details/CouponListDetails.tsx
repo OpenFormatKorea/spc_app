@@ -1,7 +1,10 @@
 import { ApiResponse } from "@/lib/types";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef, KeyboardEvent } from "react";
 import { CouponListArgs, CouponsArgs, RewardsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
+import InputTextBox from "@/components/base/InputText";
+import { fetchSearchCoupon } from "@/lib/item/apis";
+import { GetServerSidePropsContext } from "next";
 
 interface CouponListProps {
   apiResponse?: ApiResponse;
@@ -13,19 +16,25 @@ interface CouponListProps {
   rewards: RewardsArgs[];
 }
 
-const CouponList: React.FC<CouponListProps> = ({
-  apiResponse,
-  couponInputs,
-  setCouponInputs,
-  setSelectedCouponItems,
-  isOpen,
-  onClose,
-  rewards,
-}) => {
+const CouponList: React.FC<CouponListProps> = (
+  {
+    apiResponse,
+    couponInputs,
+    setCouponInputs,
+    setSelectedCouponItems,
+    isOpen,
+    onClose,
+    rewards,
+  },
+  context: GetServerSidePropsContext,
+) => {
+  const [couponResponse, setCouponResponse] = useState<ApiResponse | undefined>(
+    apiResponse,
+  );
   const coupons = useMemo(() => {
     try {
-      if (Array.isArray(apiResponse?.data.data.content)) {
-        return apiResponse.data.data.content.filter(
+      if (Array.isArray(couponResponse?.data.data.content)) {
+        return couponResponse.data.data.content.filter(
           (coupon: CouponListArgs) =>
             !rewards.some(
               (reward: RewardsArgs) =>
@@ -38,10 +47,12 @@ const CouponList: React.FC<CouponListProps> = ({
       console.error("Error filtering coupons:", error);
       return [];
     }
-  }, [apiResponse, rewards]);
+  }, [couponResponse, rewards]);
 
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchFilter, setSearchFilter] = useState("name");
 
   useEffect(() => {
     const matchedCoupons = coupons.filter((coupon: CouponListArgs) =>
@@ -123,6 +134,29 @@ const CouponList: React.FC<CouponListProps> = ({
     }
   };
 
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      buttonRef.current?.click();
+    }
+  };
+
+  const handleSearch = () => {
+    const searchResponse = fetchSearchCoupon(
+      searchKeyword,
+      searchFilter,
+      context,
+    );
+    searchResponse
+      .then((response) => {
+        console.log("data", response);
+        setCouponResponse(response);
+      })
+      .catch((error) => {
+        console.error("검색 중 오류가 생겼습니다:", error);
+      });
+  };
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
@@ -136,12 +170,37 @@ const CouponList: React.FC<CouponListProps> = ({
           현재 추가 가능한 쿠폰 선택
         </h1>
 
-        <div className="my-2 flex max-h-[550px] max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
-          <div className="flex flex-col rounded-lg bg-white p-3">
+        <div className="my-2 flex max-h-[550px] w-full max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
+          <div className="flex w-full flex-col rounded-lg bg-white p-3">
             <h1 className="text-md w-full pb-2 text-left font-semibold text-gray-500">
-              상품을 선택해 주세요
+              쿠폰을 선택해 주세요
             </h1>
-
+            <div className="flex gap-2">
+              <select
+                name="coupon"
+                id="coupon"
+                value={searchFilter}
+                onChange={(e) => setSearchFilter(e.target.value)}
+              >
+                <option value="cpnId">아이디</option>
+                <option value="name">이름</option>
+              </select>
+              <InputTextBox
+                disabled={false}
+                type="text"
+                id="coupon_id"
+                placeholder="검색어를 입력해주세요"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <button
+                className="w-[60px] rounded-lg bg-blue-500 p-2 text-white"
+                onClick={handleSearch}
+              >
+                검색
+              </button>
+            </div>
             <div className="block w-full py-3">
               <table className="table w-full border border-gray-100 text-center">
                 <thead>

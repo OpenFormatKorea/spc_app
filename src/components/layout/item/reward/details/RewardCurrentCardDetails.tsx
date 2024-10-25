@@ -131,7 +131,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                 {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
                 {reward.reward_type === "COUPON"
                   ? reward.coupon_code
-                  : `${reward.point_amount} 포인트`}
+                  : `${(reward.point_amount ?? 0).toLocaleString()} 포인트`}
               </span>
             </div>
             <button
@@ -194,7 +194,10 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                                 제공 일:
                               </span>
                               <span className={inputFormClass}>
-                                {policy.payment_timing.delay_days}일
+                                {(
+                                  policy.payment_timing.delay_days ?? 0
+                                ).toLocaleString()}
+                                일
                               </span>
                             </div>
                           )}
@@ -212,7 +215,10 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                                 최대 지급 횟수:
                               </span>
                               <span className={inputFormClass}>
-                                {policy.payment_frequency.repeat_count}번
+                                {(
+                                  policy.payment_frequency.repeat_count ?? 0
+                                ).toLocaleString()}
+                                번
                               </span>
                             </div>
                           )}

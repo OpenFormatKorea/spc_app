@@ -95,7 +95,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
                   id={campaign.id}
                   onClick={handleCampaignClick}
                 >
-                  <td className={tbodyStyle}>{campaign.id}</td>
+                  <td className={tbodyStyle}>{campaign.id.toLocaleString()}</td>
                   <td className={tbodyStyle}>{campaign.title}</td>
                   <td className={tbodyStyle}>
                     <div className="flex w-full justify-center">

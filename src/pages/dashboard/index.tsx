@@ -59,6 +59,47 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
         </div>
         <div className="contents-container w-full justify-center">
           <ContentsContainer variant="dashboard">
+            <div className="DashboardTop mb-2">
+              <div className="mb-2 text-2xl font-semibold">
+                test22님, 환영합니다.
+              </div>
+              <div className="w-full text-end text-xs text-gray-400">
+                2024년 10월 24일 오전 10:10 기준
+              </div>
+            </div>
+            <div className="h-fit flex-col items-center justify-center rounded-xl border bg-gray-50 px-6 pb-6 pt-3">
+              <div className="mb-2 text-xl font-semibold text-gray-500">
+                Summary
+              </div>
+              <div className="flex gap-6">
+                <div className="h-[175px] w-[25%] rounded-xl border bg-white p-6">
+                  <div className="mb-10 text-xl font-semibold">예제제목</div>
+                  <div className="mb-10 w-full text-end text-4xl">
+                    {(131222111).toLocaleString()} 원{" "}
+                  </div>
+                </div>
+                <div className="h-[175px] w-[25%] rounded-xl border bg-white p-6">
+                  <div className="mb-10 text-xl font-semibold">예제제목</div>
+                  <div className="mb-10 w-full text-end text-4xl">
+                    {(131222111).toLocaleString()} 원
+                  </div>
+                </div>
+                <div className="h-[175px] w-[25%] rounded-xl border bg-white p-6">
+                  <div className="mb-10 text-xl font-semibold">예제제목</div>
+                  <div className="mb-10 w-full text-end text-4xl">
+                    {(131222111).toLocaleString()} 원{" "}
+                  </div>
+                </div>
+                <div className="h-[175px] w-[25%] rounded-xl border bg-white p-6">
+                  <div className="mb-10 text-xl font-semibold">예제제목</div>
+                  <div className="mb-10 w-full text-end text-4xl">
+                    {(131222111).toLocaleString()} 원{" "}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ContentsContainer>
+          <ContentsContainer variant="dashboard">
             <CampaignList
               theadStyle={theadStyle}
               tbodyStyle={tbodyStyle}

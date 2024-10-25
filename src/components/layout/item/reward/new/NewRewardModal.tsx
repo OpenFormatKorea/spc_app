@@ -164,7 +164,7 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
           </h1>
 
           <div className="my-2 flex max-h-[550px] flex-col items-center overflow-y-scroll">
-            <div className="flex flex-col rounded-lg bg-white p-3">
+            <div className="flex w-full flex-col rounded-lg bg-white p-3">
               <div className="mb-4 flex w-full flex-col items-center justify-center rounded-xl">
                 <div className="mb-2 flex w-full flex-col text-left">
                   <label className="font-gray-300 mb-2 text-sm font-semibold">

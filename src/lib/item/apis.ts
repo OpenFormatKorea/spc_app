@@ -202,6 +202,59 @@ export async function fetchModifyItem(
   }
 }
 
+export async function fetchSearchCoupon(
+  searchKeyword: string,
+  searchFilter: string,
+  context: GetServerSidePropsContext,
+) {
+  const shop_id = getShopIdFromCookies(context);
+
+  if (!shop_id) {
+    return {
+      redirect: {
+        destination: "auth/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const page = 1;
+  const size = 10;
+  let final_url;
+  searchFilter === "name"
+    ? (final_url =
+        `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` +
+        page +
+        "&size=" +
+        size +
+        "&name=" +
+        searchKeyword +
+        "&shop_id=" +
+        shop_id)
+    : (final_url =
+        `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` +
+        page +
+        "&size=" +
+        size +
+        "&cpn_id=" +
+        searchKeyword +
+        "&shop_id=" +
+        shop_id);
+
+  try {
+    const response = await fetchAPI(context, final_url, "GET", {});
+    return response;
+  } catch (error) {
+    console.error("error", error);
+    return {
+      status: 500,
+      success: false,
+      message: "리스트 호출을 실패하였습니다.",
+      error: error,
+    };
+  }
+}
+
 export async function fetchDeleteItem(
   item_id: string,
   campaign_id: string,

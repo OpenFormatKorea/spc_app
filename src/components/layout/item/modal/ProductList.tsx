@@ -99,7 +99,7 @@ const ProductList: React.FC<ProductListProps> = ({
         <h1 className="w-full pb-2 text-left text-xl font-bold">상품 선택</h1>
 
         <div className="my-2 flex max-h-[550px] max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
-          <div className="flex flex-col rounded-lg bg-white p-3">
+          <div className="flex w-full flex-col rounded-lg bg-white p-3">
             <h1 className="text-md w-full pb-2 text-left font-semibold text-gray-500">
               상품을 선택해 주세요
             </h1>
