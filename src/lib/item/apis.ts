@@ -205,6 +205,7 @@ export async function fetchModifyItem(
 export async function fetchSearchCoupon(
   searchKeyword: string,
   searchFilter: string,
+  setSearchSort: string,
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);

@@ -13,6 +13,7 @@ interface CouponListProps {
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   isOpen: boolean;
   onClose: () => void;
+  setAddReward: (value: Boolean) => void;
   rewards: RewardsArgs[];
 }
 
@@ -24,6 +25,7 @@ const CouponList: React.FC<CouponListProps> = (
     setSelectedCouponItems,
     isOpen,
     onClose,
+    setAddReward,
     rewards,
   },
   context: GetServerSidePropsContext,
@@ -53,6 +55,7 @@ const CouponList: React.FC<CouponListProps> = (
   const [selectAll, setSelectAll] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchFilter, setSearchFilter] = useState("name");
+  const [searchSort, setSearchSort] = useState("");
 
   useEffect(() => {
     const matchedCoupons = coupons.filter((coupon: CouponListArgs) =>
@@ -82,6 +85,11 @@ const CouponList: React.FC<CouponListProps> = (
       selectedItemList.length === coupons.length && coupons.length > 0,
     );
   }, [selectedItemList, coupons]);
+
+  useEffect(() => {
+    setSearchKeyword("");
+    setSearchSort("name");
+  }, [isOpen]);
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
@@ -128,8 +136,13 @@ const CouponList: React.FC<CouponListProps> = (
     };
 
   const handleAction = async () => {
+    if (couponInputs.length === 0) {
+      alert("선택된 쿠폰이 없습니다. 쿠폰을 선택해 주세요.");
+      return;
+    }
     if (confirm("해당 쿠폰을 선택 하시겠어요?")) {
       setSelectedCouponItems(couponInputs);
+      setAddReward(true);
       onClose();
     }
   };
@@ -146,6 +159,7 @@ const CouponList: React.FC<CouponListProps> = (
     const searchResponse = fetchSearchCoupon(
       searchKeyword,
       searchFilter,
+      searchSort,
       context,
     );
     searchResponse
@@ -157,14 +171,35 @@ const CouponList: React.FC<CouponListProps> = (
         console.error("검색 중 오류가 생겼습니다:", error);
       });
   };
+
+  const handleSort = async (event: React.MouseEvent<HTMLElement>) => {
+    const { id } = event.currentTarget;
+    id === "name_sort" ? setSearchSort("name") : setSearchSort("cpn_id");
+    const searchResponse = fetchSearchCoupon(
+      searchKeyword,
+      searchFilter,
+      searchSort,
+      context,
+    );
+    searchResponse
+      .then((response) => {
+        console.log("data", response);
+        setCouponResponse(response);
+      })
+      .catch((error) => {
+        console.error("검색 중 오류가 생겼습니다:", error);
+      });
+  };
+
   const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+    "px-6 py-3 border-b border-gray-200 text-left text-sm text-gray-700 text-center cursor-pointer";
   const tbodyStyle =
     "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
   const labelClass = "text-xs pt-4 text-gray-500";
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      {isOpen}
       <div className="flex flex-col items-center justify-center text-center">
         <h1 className="w-full pb-2 text-left text-xl font-bold">
           현재 추가 가능한 쿠폰 선택
@@ -182,7 +217,7 @@ const CouponList: React.FC<CouponListProps> = (
                 value={searchFilter}
                 onChange={(e) => setSearchFilter(e.target.value)}
               >
-                <option value="cpnId">아이디</option>
+                <option value="cpn_id">아이디</option>
                 <option value="name">이름</option>
               </select>
               <InputTextBox
@@ -214,8 +249,20 @@ const CouponList: React.FC<CouponListProps> = (
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th className={theadStyle}>쿠폰 ID</th>
-                    <th className={theadStyle}>쿠폰 명</th>
+                    <th
+                      className={`${theadStyle} ${searchSort === "name" ? "font-bold" : "font-normal"}`}
+                      id="name_sort"
+                      onClick={handleSort}
+                    >
+                      쿠폰 ID
+                    </th>
+                    <th
+                      className={`${theadStyle} ${searchSort === "cpn_id" ? "font-bold" : "font-normal"}`}
+                      id="cpn_id_sort"
+                      onClick={handleSort}
+                    >
+                      쿠폰 명
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

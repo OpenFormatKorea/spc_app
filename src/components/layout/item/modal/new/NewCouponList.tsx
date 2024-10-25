@@ -12,6 +12,8 @@ interface CouponListProps {
   setCouponInputs: (value: CouponsArgs[]) => void;
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   isOpen: boolean;
+  setAddReward: (value: Boolean) => void;
+
   onClose: () => void;
 }
 
@@ -23,6 +25,7 @@ const NewCouponList: React.FC<CouponListProps> = (
     setSelectedCouponItems,
     isOpen,
     onClose,
+    setAddReward,
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -40,6 +43,7 @@ const NewCouponList: React.FC<CouponListProps> = (
   const [selectAll, setSelectAll] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchFilter, setSearchFilter] = useState("name");
+  const [searchSort, setSearchSort] = useState("");
 
   useEffect(() => {
     if (selectedItemList.length === coupons.length && coupons.length > 0) {
@@ -100,6 +104,8 @@ const NewCouponList: React.FC<CouponListProps> = (
     }
     if (confirm("해당 쿠폰을 선택 하시겠어요?")) {
       setSelectedCouponItems(couponInputs);
+      setAddReward(true);
+
       onClose();
     }
   };
@@ -116,6 +122,7 @@ const NewCouponList: React.FC<CouponListProps> = (
     const searchResponse = fetchSearchCoupon(
       searchKeyword,
       searchFilter,
+      searchSort,
       context,
     );
     searchResponse
@@ -124,16 +131,33 @@ const NewCouponList: React.FC<CouponListProps> = (
         setCouponResponse(response);
       })
       .catch((error) => {
-        console.error("Error during search:", error);
+        console.error("검색 중 오류가 생겼습니다:", error);
+      });
+  };
+  const handleSort = async (event: React.MouseEvent<HTMLElement>) => {
+    const { id } = event.currentTarget;
+    id === "name_sort" ? setSearchSort("name") : setSearchSort("cpn_id");
+    const searchResponse = fetchSearchCoupon(
+      searchKeyword,
+      searchFilter,
+      searchSort,
+      context,
+    );
+    searchResponse
+      .then((response) => {
+        console.log("data", response);
+        setCouponResponse(response);
+      })
+      .catch((error) => {
+        console.error("검색 중 오류가 생겼습니다:", error);
       });
   };
 
   const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+    "px-6 py-3 border-b border-gray-200 text-left text-sm text-gray-700 text-center cursor-pointer";
   const tbodyStyle =
     "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
   const labelClass = "text-xs pt-4 text-gray-500";
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">
@@ -183,8 +207,20 @@ const NewCouponList: React.FC<CouponListProps> = (
                         onChange={handleSelectAll}
                       />
                     </th>
-                    <th className={theadStyle}>쿠폰 ID</th>
-                    <th className={theadStyle}>쿠폰 명</th>
+                    <th
+                      className={`${theadStyle} ${searchSort === "name" ? "font-bold" : "font-normal"}`}
+                      id="name_sort"
+                      onClick={handleSort}
+                    >
+                      쿠폰 ID
+                    </th>
+                    <th
+                      className={`${theadStyle} ${searchSort === "cpn_id" ? "font-bold" : "font-normal"}`}
+                      id="cpn_id_sort"
+                      onClick={handleSort}
+                    >
+                      쿠폰 명
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

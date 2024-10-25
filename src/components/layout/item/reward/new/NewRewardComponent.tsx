@@ -37,6 +37,8 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
+  const [addReward, setAddReward] = useState<Boolean>(false);
+
   const handleRewardTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -136,7 +138,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
           {(couponInputs.length !== 0 || point_amount !== "") && (
             <button
               id="create_item_container"
-              className={`border p-1 ${
+              className={`w-full border p-2 ${
                 couponInputs.length === 0 && point_amount === ""
                   ? "cursor-not-allowed bg-gray-400"
                   : "cursor-pointer bg-blue-500"
@@ -156,6 +158,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
         couponInputs={couponInputs}
         onClose={closeModal}
         isOpen={isModalOpen}
+        setAddReward={setAddReward}
       />
       {disableInput === false && (
         <>

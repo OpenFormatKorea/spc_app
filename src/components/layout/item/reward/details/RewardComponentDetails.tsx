@@ -45,6 +45,7 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
+  const [addReward, setAddReward] = useState<Boolean>(false);
 
   const handleRewardTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -151,13 +152,13 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
 
           <button
             id="create_item_container"
-            className={`my-2 flex w-full border p-2 ${
-              couponInputs.length === 0 && point_amount === ""
+            className={`my-2 flex w-full min-w-[45px] items-center justify-center rounded-lg border p-2 text-center text-white ${
+              selectedCouponItems.length === 0 && point_amount === ""
                 ? "cursor-not-allowed bg-gray-400"
                 : "cursor-pointer bg-blue-500"
-            } min-w-[45px] items-center justify-center rounded-lg text-center text-white`}
+            }`}
             onClick={openRewardModal}
-            disabled={couponInputs.length === 0 && point_amount === ""}
+            disabled={selectedCouponItems.length === 0 && point_amount === ""}
           >
             리워드 추가
           </button>
@@ -172,6 +173,7 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
         onClose={closeModal}
         isOpen={isModalOpen}
         rewards={rewards}
+        setAddReward={setAddReward}
       />
 
       <RewardModalDetails
