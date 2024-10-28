@@ -37,6 +37,9 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
     key: keyof ItemConditions["payment_timing"],
     value: PaymentTimingType | number | null,
   ) => {
+    if (key === "delay_days" && value === null) {
+      return;
+    }
     setItemConditions((prevState) => ({
       ...prevState,
       payment_timing: {
@@ -50,6 +53,9 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
     key: keyof ItemConditions["payment_frequency"],
     value: PaymentFrequencyType | number | null,
   ) => {
+    if (key === "repeat_count" && value === null) {
+      return;
+    }
     setItemConditions((prevState) => ({
       ...prevState,
       payment_frequency: {
@@ -142,8 +148,18 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
             className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_timing.type === PaymentTimingType.DEL ? "max-h-screen opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
           >
             <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
+              <style jsx>{`
+                input[type="number"]::-webkit-outer-spin-button,
+                input[type="number"]::-webkit-inner-spin-button {
+                  -webkit-appearance: none;
+                  margin: 0;
+                }
+                input[type="number"] {
+                  -moz-appearance: textfield;
+                }
+              `}</style>
               <input
-                type="text"
+                type="number"
                 id={`${target}_${trigger}_delay_days`}
                 placeholder=""
                 value={itemConditions.payment_timing.delay_days ?? ""}
@@ -175,7 +191,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
               onChange={(e) =>
                 handleFrequencyChange("type", PaymentFrequencyType.ONCE)
               }
-              disabled={isSignupAndReferee} // Disable when it's "signup" and "referee"
+              disabled={isSignupAndReferee}
             />
             <InputRadioBox
               label="반복"
@@ -201,7 +217,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
               onChange={(e) =>
                 handleFrequencyChange("type", PaymentFrequencyType.UNL)
               }
-              disabled={isSignupAndReferee} // Disable when it's "signup" and "referee"
+              disabled={isSignupAndReferee}
             />
           </div>
 
@@ -210,6 +226,16 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
           >
             <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
               <div className="mr-2 flex min-w-fit items-center">최대</div>
+              <style jsx>{`
+                input[type="number"]::-webkit-outer-spin-button,
+                input[type="number"]::-webkit-inner-spin-button {
+                  -webkit-appearance: none;
+                  margin: 0;
+                }
+                input[type="number"] {
+                  -moz-appearance: textfield;
+                }
+              `}</style>
               <input
                 type="number"
                 id={`${target}_${trigger}_repeat_count`}

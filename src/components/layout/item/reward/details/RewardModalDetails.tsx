@@ -10,6 +10,7 @@ import {
 } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
 import RewardPolicySettingDetails from "@/components/layout/item/reward/details/RewardPolicySettingDetails";
+import InputNumberTextBox from "@/components/base/InputNumberText";
 
 interface RewardModalDetailsProps {
   reward_type: RewardType;
@@ -183,8 +184,7 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
               <div className="flex w-full items-end">
                 {reward_type === RewardType.PO ? (
                   <>
-                    <InputTextBox
-                      type="number"
+                    <InputNumberTextBox
                       id="point_amount"
                       placeholder="원하시는 지급 포인트 금액을 입력하세요."
                       value={point_amount}

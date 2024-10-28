@@ -24,7 +24,6 @@ import {
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import RewardComponentDetails from "@/components/layout/item/reward/details/RewardComponentDetails";
-import RewardNewCardDetails from "@/components/layout/item/reward/details/RewardNewCardDetails";
 import { ApiResponse } from "@/lib/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -82,15 +81,8 @@ const DetailsItem = (
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
     apiResponse.promotions || [{ id: "", description: "" }],
   );
-  const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
-  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>(
-    [],
-  );
   const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
   const [active, setActive] = useState(apiResponse.active);
-  const [reward_type, setReward_Type] = useState<RewardType>(
-    apiResponse.rewards[0]?.reward_type || RewardType.CO,
-  );
   const [description, setDescription] = useState<string>(
     apiResponse.promotions?.description || "",
   );
@@ -116,7 +108,6 @@ const DetailsItem = (
     kakao_args: kakaoShareArgs,
     product: productInputs,
     promotion: promotionInputs,
-    new_rewards: newAddedRewards,
     current_rewards: selectedRewards,
     active,
     campaign_id,
@@ -212,7 +203,6 @@ const DetailsItem = (
                     "",
                 },
               ]}
-              // selectedProductItems={productInputs}
               setPromotionInputs={setPromotionInputs}
               setDescription={setDescription}
               setItem_type={setItem_type}
@@ -223,25 +213,10 @@ const DetailsItem = (
 
             <RewardComponentDetails
               apiResponse={couponResponse}
-              handleKeyDown={handleKeyDown}
-              reward_type={reward_type}
-              selectedCouponItems={selectedCouponItems}
-              couponInputs={couponInputs}
-              setRewardType={setReward_Type}
               disableInput={disableInput}
-              setSelectedCouponItems={setSelectedCouponItems}
-              setCouponInputs={setCouponInputs}
               selectedRewards={selectedRewards}
               setSelectedRewards={setSelectedRewards}
-              newAddedRewards={newAddedRewards}
-              setNewAddedRewards={setNewAddedRewards}
               rewards={rewards}
-            />
-
-            <RewardNewCardDetails
-              setRewards={setSelectedRewards}
-              newAddedRewards={newAddedRewards}
-              setNewAddedRewards={setNewAddedRewards}
             />
           </ContentsContainer>
         </div>

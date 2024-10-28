@@ -19,7 +19,6 @@ export interface ItemModifyArgs {
   kakao_args: KakaoShareArgs;
   product?: any;
   promotion?: any;
-  new_rewards: RewardsArgs[];
   current_rewards: RewardsArgs[];
   active: boolean;
 }

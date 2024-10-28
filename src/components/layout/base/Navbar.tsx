@@ -30,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }: { shop_id: string }) => {
         </div>
         <div className="setting-menu absolute bottom-[5%] w-full">
           <div className="flex w-full flex-col justify-center p-3">
-            <label className="text-xs text-white"> SHOP ID</label>
+            <label className="text-xs font-bold text-white">SHOP ID</label>
             <label className="text-xs text-white">{shop_id}</label>
           </div>
           <div

@@ -124,7 +124,6 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
               <div className={inputFormClass}>
                 <label className={labelClass}>포인트</label>
                 <InputNumberTextBox
-                  type="text"
                   id="point_amount"
                   placeholder="포인트를 입력해 주세요."
                   value={point_amount}

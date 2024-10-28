@@ -2,7 +2,6 @@ import React, { ChangeEvent, KeyboardEvent } from "react";
 
 interface InputNumberTextArgs {
   disabled: boolean;
-  type: string;
   id: string;
   placeholder: string;
   value: any;
@@ -12,7 +11,6 @@ interface InputNumberTextArgs {
 
 const InputNumberTextBox: React.FC<InputNumberTextArgs> = ({
   disabled,
-  type,
   id,
   placeholder,
   value,

@@ -5,6 +5,7 @@ import {
   RewardsArgs,
 } from "@/lib/item/types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 interface RewardCurrentCardDetailsProps {
   rewards: RewardsArgs[];
@@ -19,11 +20,6 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
 }) => {
   const triggerTypes = ["SIGNUP", "PURCHASE"] as const;
   const conditionTypes = ["referrer_conditions", "referee_conditions"] as const;
-
-  const labelClass =
-    "flex items-center text-sm text-left text-gray-500 w-[100px]";
-  const inputFormClass = "flex items-center text-sm";
-
   const [visibleRewards, setVisibleRewards] = useState<boolean[]>(
     Array(rewards.length).fill(false),
   );
@@ -61,12 +57,6 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
     }
   };
 
-  const handleSelectAll = () => {
-    const isChecked = !selectAll;
-    setSelectAll(isChecked);
-    setSelectedRewards(isChecked ? [...rewards] : []);
-  };
-
   useEffect(() => {
     if (selectAll) {
       setSelectedRewards([...rewards]);
@@ -81,7 +71,6 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
           ? [...prevSelected, reward]
           : prevSelected.filter((r) => r.id !== reward.id),
       );
-
       setSelectAll(
         isChecked
           ? selectedRewards.length + 1 === rewards.length
@@ -90,34 +79,22 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
     };
 
   return (
-    <div className="mt-4 rounded-xl border border-blue-200 bg-blue-200 p-4">
-      <div className="flex items-center justify-between px-2 pb-2">
+    <div className="mt-4 rounded-xl border border-gray-100 bg-gray-100 p-4">
+      <div className="flex items-center justify-between pb-2">
         <span className="text-lg font-bold text-gray-600">
           현재 세팅 된 리워드
         </span>
       </div>
-
-      <div className="mb-2 flex items-start rounded-md px-1 py-1 text-sm">
-        <label htmlFor="reward_all" className="flex items-center gap-1">
-          <input
-            type="checkbox"
-            id="reward_all"
-            name="reward_all"
-            checked={selectAll}
-            onChange={handleSelectAll}
-            className="h-4 w-4 rounded border-gray-300 text-blue-600"
-          />
-          <span className="text-xs font-bold">리워드 전체 선택</span>
-        </label>
-      </div>
-
       {rewards.map((reward, index) => (
         <div
-          className="mb-4 rounded-xl bg-gray-100 p-4 text-sm"
+          className="mb-4 rounded-xl bg-gray-300 p-4 text-sm"
           key={reward.id}
           id={`rewards_${reward.id}`}
         >
-          <div className="flex items-center justify-between">
+          <div
+            className="flex items-center justify-between"
+            onClick={() => toggleRewardDetails(index)}
+          >
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -126,6 +103,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                 checked={selectedRewards.some((r) => r.id === reward.id)}
                 onChange={handleCheckboxChange(reward)}
                 className="h-4 w-4 rounded border-gray-300 text-blue-600"
+                disabled={true}
               />
               <span className="text-base font-semibold">
                 {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
@@ -134,22 +112,21 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                   : `${(reward.point_amount ?? 0).toLocaleString()} 포인트`}
               </span>
             </div>
-            <button
-              type="button"
-              className="text-blue-500 focus:outline-none"
-              onClick={() => toggleRewardDetails(index)}
+            <div
+              className="text-blue-500"
               aria-expanded={visibleRewards[index]}
               aria-controls={`rewards_details_${reward.id}`}
             >
-              <KeyboardArrowDownIcon />
-            </button>
+              {visibleRewards[index] ? (
+                <KeyboardArrowUpIcon />
+              ) : (
+                <KeyboardArrowDownIcon />
+              )}
+            </div>
           </div>
 
           {visibleRewards[index] && (
-            <div
-              className="mt-4 flex flex-col rounded-xl bg-white lg:flex-row"
-              id={`rewards_details_${reward.id}`}
-            >
+            <div className="mt-4 flex flex-col rounded-xl bg-white lg:flex-row">
               {triggerTypes.map((trigger) => {
                 const conditions =
                   trigger === "SIGNUP"
@@ -180,45 +157,40 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                               : "피추천인"}
                           </div>
                           <div className="flex">
-                            <span className={labelClass}>지급 시점:</span>
-                            <span className={inputFormClass}>
-                              {renderPaymentTiming(policy.payment_timing.type)}
+                            <span className="flex w-[100px] items-center text-left text-sm text-gray-500">
+                              지급 시점:
+                            </span>
+                            <span className="flex items-center text-sm">
+                              {renderPaymentTiming(policy.payment_timing?.type)}
                             </span>
                           </div>
-                          {policy.payment_timing.delay_days != null && (
+                          {policy.payment_timing?.delay_days != null && (
                             <div className="flex">
-                              <span className={labelClass}>
-                                {trigger === "SIGNUP"
-                                  ? "회원가입 후"
-                                  : "구매 후"}{" "}
+                              <span className="flex w-[100px] items-center text-left text-sm text-gray-500">
                                 제공 일:
                               </span>
-                              <span className={inputFormClass}>
-                                {(
-                                  policy.payment_timing.delay_days ?? 0
-                                ).toLocaleString()}
-                                일
+                              <span className="flex items-center text-sm">
+                                {policy.payment_timing.delay_days} 일
                               </span>
                             </div>
                           )}
                           <div className="flex">
-                            <span className={labelClass}>지급 방식:</span>
-                            <span className={inputFormClass}>
+                            <span className="flex w-[100px] items-center text-left text-sm text-gray-500">
+                              지급 방식:
+                            </span>
+                            <span className="flex items-center text-sm">
                               {renderPaymentFrequency(
-                                policy.payment_frequency.type,
+                                policy.payment_frequency?.type,
                               )}
                             </span>
                           </div>
-                          {policy.payment_frequency.repeat_count != null && (
+                          {policy.payment_frequency?.repeat_count != null && (
                             <div className="flex">
-                              <span className={labelClass}>
+                              <span className="flex w-[100px] items-center text-left text-sm text-gray-500">
                                 최대 지급 횟수:
                               </span>
-                              <span className={inputFormClass}>
-                                {(
-                                  policy.payment_frequency.repeat_count ?? 0
-                                ).toLocaleString()}
-                                번
+                              <span className="flex items-center text-sm">
+                                {policy.payment_frequency.repeat_count} 번
                               </span>
                             </div>
                           )}
