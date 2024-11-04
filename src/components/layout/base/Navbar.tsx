@@ -23,6 +23,17 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }: { shop_id: string }) => {
         <div className="main-menu pl-3">
           <Navmenu menutitle="대시보드" link="/dashboard" />
           <Navmenu menutitle="캠페인" link="/campaign" />
+          <div className="flex w-full px-10 pb-2 text-sm text-white">
+            <a href="/campaign" className="w-full text-sm">
+              {" "}
+              - 캠페인 생성
+            </a>
+          </div>
+          <div className="flex w-full px-10 pb-2 text-sm text-white">
+            <a href="/campaign/stats" className="w-full text-sm">
+              - 캠페인 지표
+            </a>
+          </div>
         </div>
         <div className={`py-4 pl-4 text-sm text-white`}>setting</div>
         <div className="main-menu pl-3">
