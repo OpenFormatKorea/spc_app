@@ -1,6 +1,5 @@
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
 import { ApiResponse } from "@/lib/types";
-import campaign from "@/pages/campaign";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -69,7 +68,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
         <table className="hidden w-full border border-gray-100 text-center lg:table">
           <thead>
             <tr className="bg-gray-100">
-              <th className={theadStyle}>캠페인 ID</th>
+              <th className={theadStyle}>캠페인 타입</th>
               <th className={theadStyle}>캠페인 명</th>
               <th className={theadStyle}>시작일</th>
               <th className={theadStyle}>종료일</th>
@@ -84,7 +83,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
             {campaigns.length > 0 ? (
               campaigns.map((campaign) => (
                 <tr
-                  className="cursor-pointer"
+                  className={`cursor-pointer ${campaign.period_type === "UNLIMITED" ? "bg-green-50" : "bg-white"}`}
                   key={campaign.id}
                   id={campaign.id}
                   onClick={handleCampaignClick}
