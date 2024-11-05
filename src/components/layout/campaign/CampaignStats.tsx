@@ -1,6 +1,5 @@
-import { ApiResponse } from "@/lib/types";
+import { ApiResponse, CamapaignStats } from "@/lib/types";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 interface CampaignStatsProps {
   theadStyle: string;
@@ -33,7 +32,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
     });
   };
 
-  const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
+  const campaigns = Array.isArray(apiResponse.result) ? apiResponse.result : [];
   console.log("final campaigns on CampaignStats: ", campaigns);
 
   return (
@@ -65,7 +64,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
           </thead>
           <tbody>
             {campaigns.length > 0 ? (
-              campaigns.map((campaign) => (
+              campaigns.map((campaign: CamapaignStats) => (
                 <tr
                   className={`cursor-pointer ${campaign.period_type === "UNLIMITED" ? "bg-green-50" : "bg-white"}`}
                   key={campaign.campaign_id}

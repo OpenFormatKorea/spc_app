@@ -13,7 +13,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const today: Date = new Date();
   const end_date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   const thirtyDaysBefore: Date = new Date(today);
-  thirtyDaysBefore.setDate(today.getDate() - 180);
+  thirtyDaysBefore.setDate(today.getDate() - 30);
   const start_date = `${thirtyDaysBefore.getFullYear()}-${String(thirtyDaysBefore.getMonth() + 1).padStart(2, "0")}-${String(thirtyDaysBefore.getDate()).padStart(2, "0")}`;
   const page = "1";
   const page_size = "10";
@@ -90,6 +90,36 @@ const StatsCampaign = (
     };
     fetchData();
   };
+  const handlePeriodChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const newPeriod = event.target.value;
+
+    const newStartDate: Date = new Date();
+    newStartDate.setDate(Number(newStartDate.getDate()) - Number(newPeriod));
+
+    setStartDate(newStartDate.toString());
+    setPageNum("1");
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response: ApiResponse = await fetchGetCampaignStats(
+          startDate,
+          endDate,
+          "1",
+          pageSize,
+          context,
+        );
+        setNewApiResponse(response);
+      } catch (error) {
+        console.error("Failed to fetch campaign stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  };
   useEffect(() => {}, [pageNum, pageSize]);
   return (
     <>
@@ -104,24 +134,40 @@ const StatsCampaign = (
             <span className="text-2xl font-bold">캠페인 지표</span>
           </div>
         </div>
+
         <ContentsContainer variant="dashboard">
           <CampaignStats
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
             apiResponse={NewapiResponse}
           />
-          <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-            <div className="w-[70px]">아이템 수 </div>
-            <select
-              className="w-[50px]"
-              value={pageSize}
-              onChange={handlePageSizeChange}
-            >
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+          <div className="flex gap-2">
+            <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+              <div className="w-[70px]">아이템 수 </div>
+              <select
+                className="w-[50px]"
+                value={pageSize}
+                onChange={handlePageSizeChange}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+              <div className="w-[70px]">내역기간</div>
+              <select
+                className="w-[80px]"
+                value={pageSize}
+                onChange={handlePeriodChange}
+              >
+                <option value="30">30일 전</option>
+                <option value="60">60일 전</option>
+                <option value="90">90일 전</option>
+                <option value="120">120일 전</option>
+              </select>
+            </div>
           </div>
         </ContentsContainer>
       </DashboardContainer>
