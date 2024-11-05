@@ -20,6 +20,7 @@ export interface ItemModifyArgs {
   product?: any;
   promotion?: any;
   current_rewards: RewardsArgs[];
+  new_rewards?: RewardsArgs[];
   active: boolean;
 }
 

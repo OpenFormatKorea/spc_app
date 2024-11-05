@@ -1,7 +1,6 @@
 import {
   ItemArgs,
   ItemModifyArgs,
-  ProductsArgs,
   RewardPolicyArgs,
   RewardsArgs,
 } from "@/lib/item/types";
@@ -374,6 +373,38 @@ export async function fetchActivateItem(
       message: "삭제를 실패하였습니다.",
       error: error,
     };
+  }
+}
+
+export async function fetchGetItemStats(
+  start_date: string,
+  end_date: string | null,
+  page: number,
+  page_size: number,
+  campaign_id: string,
+  context: GetServerSidePropsContext,
+) {
+  const shop_id = getShopIdFromCookies(context);
+  const final_url =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/shop?shop_id=` +
+    shop_id +
+    "&start_date=" +
+    start_date +
+    "&end_date=" +
+    end_date +
+    "&page=" +
+    page +
+    "&page_size=" +
+    page_size +
+    "&campaign_id=" +
+    campaign_id;
+
+  try {
+    const response = await fetchAPI(context, final_url, "GET", {});
+    return response.data;
+  } catch (error) {
+    console.error("error", error);
+    return null;
   }
 }
 

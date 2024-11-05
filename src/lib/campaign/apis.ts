@@ -9,7 +9,6 @@ export async function fetchCreateCampaign(
 ) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign-create`;
   const shop_id = getShopIdFromCookies(context);
-
   const dataObj = {
     shop_id: shop_id,
     title: info.title,
@@ -19,6 +18,7 @@ export async function fetchCreateCampaign(
     end_date: info.end_date,
     active: info.active,
   };
+
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
 
@@ -145,11 +145,11 @@ export async function fetchGetCampaignList(context: GetServerSidePropsContext) {
   }
 }
 
-export async function fetchGetCamapaignStats(
+export async function fetchGetCampaignStats(
   start_date: string,
   end_date: string | null,
-  page: number,
-  page_size: number,
+  page: string,
+  page_size: string,
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
@@ -166,7 +166,7 @@ export async function fetchGetCamapaignStats(
     page_size;
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    console.log("response.data", response.data);
+
     return response.data;
   } catch (error) {
     console.error("error", error);
