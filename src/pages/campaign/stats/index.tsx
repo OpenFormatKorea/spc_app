@@ -97,15 +97,15 @@ const StatsCampaign = (
 
     const newStartDate: Date = new Date();
     newStartDate.setDate(Number(newStartDate.getDate()) - Number(newPeriod));
-
-    setStartDate(newStartDate.toString());
+    const formattedStartDate = newStartDate.toISOString().split("T")[0];
+    setStartDate(formattedStartDate);
     setPageNum("1");
 
     const fetchData = async () => {
       setLoading(true);
       try {
         const response: ApiResponse = await fetchGetCampaignStats(
-          startDate,
+          formattedStartDate,
           endDate,
           "1",
           pageSize,
