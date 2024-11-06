@@ -16,11 +16,12 @@ export interface StatsApiResponse {
 }
 export interface StatsList {
   period_type: string;
-  campaign_id: string;
+  campaign_id?: string;
+  item_group_id?: string;
   item_type: string;
   item_title: string;
-  start_date: string;
-  end_date: string;
+  start_date?: string;
+  end_date?: string;
   share_attempts_click_count: string;
   kakao_message_share_count: string;
   accepted_shares: string;

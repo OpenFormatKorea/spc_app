@@ -4,7 +4,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
-import CampaignStats from "@/components/layout/campaign/CampaignStats";
+import CampaignStats from "@/components/layout/campaign/stats/CampaignStats";
 import { ApiResponse, StatsApiResponse } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 

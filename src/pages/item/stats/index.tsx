@@ -1,13 +1,13 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse, StatsApiResponse } from "@/lib/types";
 import { fetchGetItemStats } from "@/lib/item/apis";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import ItemStats from "@/components/layout/item/item/ItemStats";
+import ItemStats from "@/components/layout/item/item/stats/ItemStats";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaign_id = context.query.campaign_id?.toString() || "";

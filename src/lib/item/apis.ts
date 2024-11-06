@@ -386,7 +386,7 @@ export async function fetchGetItemStats(
 ) {
   const shop_id = getShopIdFromCookies(context);
   const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/shop?shop_id=` +
+    `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/campaign?shop_id=` +
     shop_id +
     "&start_date=" +
     start_date +
@@ -401,6 +401,7 @@ export async function fetchGetItemStats(
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
+    console.log("responseresponse", response);
     return response.data;
   } catch (error) {
     console.error("error", error);

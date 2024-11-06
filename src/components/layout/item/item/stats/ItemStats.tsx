@@ -1,3 +1,4 @@
+import ItemTable from "@/components/layout/item/item/stats/ItemTable";
 import { StatsApiResponse, StatsList } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
@@ -47,8 +48,6 @@ const ItemStats: React.FC<ItemStatsProps> = (
             <tr className="bg-gray-100">
               <th className={theadStyle}>아이템 종류</th>
               <th className={theadStyle}>아이템 명</th>
-              <th className={theadStyle}>시작일</th>
-              <th className={theadStyle}>종료일</th>
               <th className={theadStyle}>공유버튼 클릭 수</th>
               <th className={theadStyle}>카카오 공유 수</th>
               <th className={theadStyle}>친구추천 수락 수</th>
@@ -58,45 +57,16 @@ const ItemStats: React.FC<ItemStatsProps> = (
           </thead>
           <tbody>
             {items.map((item: StatsList) => (
-              <tr
-                key={item.campaign_id}
-                className="cursor-pointer"
-                onClick={() => handleItemClick(item.campaign_id)}
-              >
-                <td className={tbodyStyle}>{item.item_type}</td>
-                <td className={tbodyStyle}>{item.item_title}</td>
-                <td className={tbodyStyle}>
-                  {new Date(item.start_date).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </td>
-                <td className={tbodyStyle}>
-                  {item.end_date
-                    ? new Date(item.end_date).toLocaleDateString("ko-KR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })
-                    : "N/A"}
-                </td>
-                <td className={tbodyStyle}>
-                  {item.share_attempts_click_count}
-                </td>
-                <td className={tbodyStyle}>{item.kakao_message_share_count}</td>
-                <td className={tbodyStyle}>{item.accepted_shares}</td>
-                <td className={tbodyStyle}>{item.new_referee_user_count}</td>
-                <td className={tbodyStyle}>
-                  {item.referee_order_complete_count}
-                </td>
-              </tr>
+              <>
+                <ItemTable item={item} tbodyStyle={tbodyStyle} />
+                <ItemTable item={item} tbodyStyle={tbodyStyle} />
+              </>
             ))}
             {!items.length && (
               <tr>
                 <td
                   className="p-3 text-center text-sm text-gray-500"
-                  colSpan={10}
+                  colSpan={8}
                 >
                   현재 사용중인 아이템이 없어요
                   <br />
