@@ -2,12 +2,19 @@ export interface ApiResponse {
   status: string;
   message: string;
   error?: string;
-  data?: CamapaignStats;
+  data?: [];
+}
+
+export interface StatsApiResponse {
+  status: string;
+  message: string;
+  error?: string;
+  data?: StatsList;
   result?: [];
   total_count?: Number;
   page_size?: Number;
 }
-export interface CamapaignStats {
+export interface StatsList {
   period_type: string;
   campaign_id: string;
   item_type: string;
