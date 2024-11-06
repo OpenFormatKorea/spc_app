@@ -1,4 +1,4 @@
-import { ApiResponse, CamapaignStats } from "@/lib/types";
+import { StatsApiResponse, StatsList } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
@@ -6,7 +6,7 @@ import { useMemo } from "react";
 interface ItemStatsProps {
   theadStyle: string;
   tbodyStyle: string;
-  apiResponse: ApiResponse;
+  apiResponse: StatsApiResponse;
   campaign_id: string;
 }
 
@@ -57,7 +57,7 @@ const ItemStats: React.FC<ItemStatsProps> = (
             </tr>
           </thead>
           <tbody>
-            {items.map((item: CamapaignStats) => (
+            {items.map((item: StatsList) => (
               <tr
                 key={item.campaign_id}
                 className="cursor-pointer"

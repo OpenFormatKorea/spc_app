@@ -1,12 +1,56 @@
 import Navmenu from "@/components/layout/base/Navmenu";
-import React from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { handleLogo, handleSignOut } from "@/lib/common";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
+import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
+
 interface NavbarProps {
   shop_id: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ shop_id }: { shop_id: string }) => {
+const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
+  const router = useRouter();
+  const [isHovered, setIsHovered] = useState<string | null>(null);
+
+  const handleMouseEnter = (menu: string) => setIsHovered(menu);
+  const handleMouseLeave = () => setIsHovered(null);
+  const handleClick = (link: string) => router.push(link);
+
+  // Check active state based on current route for each menu item
+  const isActive = (link: string) => router.pathname.startsWith(link);
+
+  // Render icons conditionally based on `menuTitle` and `isActive` state
+  const renderIcon = (menuTitle: string, active: boolean) => {
+    switch (menuTitle) {
+      case "대시보드":
+        return active ? (
+          <SpaceDashboardIcon fontSize="small" />
+        ) : (
+          <SpaceDashboardOutlinedIcon fontSize="small" />
+        );
+      case "캠페인":
+        return active ? (
+          <ConfirmationNumberIcon fontSize="small" />
+        ) : (
+          <ConfirmationNumberOutlinedIcon fontSize="small" />
+        );
+      case "마이 페이지":
+        return active ? (
+          <ContactPageIcon fontSize="small" />
+        ) : (
+          <ContactPageOutlinedIcon fontSize="small" />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <nav className="fixed hidden h-[100%] w-[250px] lg:fixed lg:block lg:h-[100%] lg:w-[250px]">
       <div className="flex h-[70px] items-center justify-center p-3">
@@ -14,30 +58,107 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }: { shop_id: string }) => {
           <img
             src="/images/incento_logo.png"
             alt="Incento Logo"
-            className="mr-4 h-[] cursor-pointer"
+            className="mr-4 h-auto cursor-pointer"
           />
         </a>
       </div>
       <div className="pt-4">
-        <div className={`pb-4 pl-4 text-sm text-white`}>main</div>
+        <div className="pb-4 pl-4 text-sm text-white">main</div>
         <div className="main-menu pl-3">
-          <Navmenu menutitle="대시보드" link="/dashboard" />
-          <Navmenu menutitle="캠페인" link="/campaign" />
+          {/* Dashboard */}
+          <div
+            className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
+            onClick={() => handleClick("/dashboard")}
+            onMouseEnter={() => handleMouseEnter("대시보드")}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div
+              className={`flex items-center justify-center rounded-xl p-2 transition-all duration-300 ${
+                isActive("/dashboard")
+                  ? "w-[95%] bg-gray-500"
+                  : isHovered === "대시보드"
+                    ? "w-[90%] opacity-85"
+                    : "h-[55px] w-[100%] p-4"
+              }`}
+            >
+              {renderIcon("대시보드", isActive("/dashboard"))}
+              <div className="w-full pl-3 text-left">
+                <span>대시보드</span>
+              </div>
+            </div>
+          </div>
+          {/* Campaign */}
+          <div
+            className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
+            onClick={() => handleClick("/campaign")}
+            onMouseEnter={() => handleMouseEnter("캠페인")}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div
+              className={`flex items-center justify-center rounded-xl p-2 transition-all duration-300 ${
+                isActive("/campaign")
+                  ? "w-[95%] bg-gray-500"
+                  : isHovered === "캠페인"
+                    ? "w-[90%] opacity-85"
+                    : "h-[55px] w-[100%] p-4"
+              }`}
+            >
+              {renderIcon("캠페인", isActive("/campaign"))}
+              <div className="w-full pl-3 text-left">
+                <span>캠페인</span>
+              </div>
+            </div>
+          </div>
+          {/* Campaign Submenus with Bold Active State */}
           <div className="flex w-full px-10 pb-2 text-sm text-white">
-            <a href="/campaign" className="w-full text-sm">
-              {" "}
+            <a
+              href="/campaign"
+              className={`w-full text-sm ${router.pathname === "/campaign" ? "font-bold" : ""}`}
+            >
+              - 캠페인 리스트
+            </a>
+          </div>
+          <div className="flex w-full px-10 pb-2 text-sm text-white">
+            <a
+              href="/campaign/new"
+              className={`w-full text-sm ${router.pathname === "/campaign/new" ? "font-bold" : ""}`}
+            >
               - 캠페인 생성
             </a>
           </div>
           <div className="flex w-full px-10 pb-2 text-sm text-white">
-            <a href="/campaign/stats" className="w-full text-sm">
+            <a
+              href="/campaign/stats"
+              className={`w-full text-sm ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
+            >
               - 캠페인 지표
             </a>
           </div>
         </div>
-        <div className={`py-4 pl-4 text-sm text-white`}>setting</div>
+        <div className="py-4 pl-4 text-sm text-white">setting</div>
         <div className="main-menu pl-3">
-          <Navmenu menutitle="마이 페이지" link="/mypage" />
+          {/* My Page */}
+          <div
+            className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
+            onClick={() => handleClick("/mypage")}
+            onMouseEnter={() => handleMouseEnter("마이 페이지")}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div
+              className={`flex items-center justify-center rounded-xl p-2 transition-all duration-300 ${
+                isActive("/mypage")
+                  ? "w-[95%] bg-gray-500"
+                  : isHovered === "마이 페이지"
+                    ? "w-[90%] opacity-85"
+                    : "h-[55px] w-[100%] p-4"
+              }`}
+            >
+              {renderIcon("마이 페이지", isActive("/mypage"))}
+              <div className="w-full pl-3 text-left">
+                <span>마이 페이지</span>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="setting-menu absolute bottom-[5%] w-full">
           <div className="flex w-full flex-col justify-center p-3">

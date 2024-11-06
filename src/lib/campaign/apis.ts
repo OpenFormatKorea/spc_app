@@ -166,7 +166,6 @@ export async function fetchGetCampaignStats(
     page_size;
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    console.log("response", response.data.result);
     return response.data;
   } catch (error) {
     console.error("error", error);

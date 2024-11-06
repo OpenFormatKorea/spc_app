@@ -5,32 +5,26 @@ import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import CampaignStats from "@/components/layout/campaign/CampaignStats";
-import { ApiResponse } from "@/lib/types";
+import { ApiResponse, StatsApiResponse } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const today: Date = new Date();
-  const end_date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-  const thirtyDaysBefore: Date = new Date(today);
-  thirtyDaysBefore.setDate(today.getDate() - 30);
-  const start_date = `${thirtyDaysBefore.getFullYear()}-${String(thirtyDaysBefore.getMonth() + 1).padStart(2, "0")}-${String(thirtyDaysBefore.getDate()).padStart(2, "0")}`;
-  const page = "1";
-  const page_size = "10";
+  const today = new Date();
+  const end_date = today.toISOString().split("T")[0];
+  const start_date = new Date(today.setDate(today.getDate() - 30))
+    .toISOString()
+    .split("T")[0];
+
   const apiResponse = await fetchGetCampaignStats(
     start_date,
     end_date,
-    page,
-    page_size,
+    "1",
+    "10",
     context,
   );
+
   return {
-    props: {
-      apiResponse,
-      start_date,
-      end_date,
-      page,
-      page_size,
-    },
+    props: { apiResponse, start_date, end_date, page: "1", page_size: "10" },
   };
 };
 
@@ -42,7 +36,7 @@ const StatsCampaign = (
     page,
     page_size,
   }: {
-    apiResponse: ApiResponse;
+    apiResponse: StatsApiResponse;
     start_date: string;
     end_date: string;
     page: string;
@@ -50,74 +44,63 @@ const StatsCampaign = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  const [endDate, setEndDate] = useState(end_date);
   const [startDate, setStartDate] = useState(start_date);
+  const [endDate] = useState(end_date);
   const [pageNum, setPageNum] = useState(page);
   const [pageSize, setPageSize] = useState(page_size);
-  const [NewapiResponse, setNewApiResponse] =
+  const [period, setPeriod] = useState("30");
+  const [newApiResponse, setNewApiResponse] =
     useState<ApiResponse>(apiResponse);
   const [loading, setLoading] = useState(false);
 
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
 
-  const handlePageSizeChange = async (
+  const fetchCampaignStats = async (
+    start: string,
+    end: string,
+    pgSize: string,
+    pgNum: string,
+  ) => {
+    setLoading(true);
+    try {
+      const response = await fetchGetCampaignStats(
+        start,
+        end,
+        pgNum,
+        pgSize,
+        context,
+      );
+      setNewApiResponse(response);
+    } catch (error) {
+      console.error("Failed to fetch campaign stats:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePageSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const newPageSize = event.target.value;
     setPageSize(newPageSize);
     setPageNum("1");
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response: ApiResponse = await fetchGetCampaignStats(
-          startDate,
-          endDate,
-          "1",
-          newPageSize,
-          context,
-        );
-        setNewApiResponse(response);
-      } catch (error) {
-        console.error("Failed to fetch campaign stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    fetchCampaignStats(startDate, endDate, newPageSize, "1");
   };
-  const handlePeriodChange = async (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const newPeriod = event.target.value;
 
-    const newStartDate: Date = new Date();
-    newStartDate.setDate(Number(newStartDate.getDate()) - Number(newPeriod));
+  const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newPeriod = event.target.value;
+    setPeriod(newPeriod);
+
+    const newStartDate = new Date();
+    newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
+
     setStartDate(formattedStartDate);
     setPageNum("1");
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response: ApiResponse = await fetchGetCampaignStats(
-          formattedStartDate,
-          endDate,
-          "1",
-          pageSize,
-          context,
-        );
-        setNewApiResponse(response);
-      } catch (error) {
-        console.error("Failed to fetch campaign stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    fetchCampaignStats(formattedStartDate, endDate, pageSize, "1");
   };
 
   return (
@@ -138,11 +121,11 @@ const StatsCampaign = (
           <CampaignStats
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
-            apiResponse={NewapiResponse}
+            apiResponse={newApiResponse}
           />
           <div className="flex gap-2">
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-              <div className="w-[70px]">아이템 수 </div>
+              <div className="w-[70px]">아이템 수</div>
               <select
                 className="w-[50px]"
                 value={pageSize}
@@ -158,7 +141,7 @@ const StatsCampaign = (
               <div className="w-[70px]">내역기간</div>
               <select
                 className="w-[80px]"
-                value={pageSize}
+                value={period}
                 onChange={handlePeriodChange}
               >
                 <option value="30">30일 전</option>
@@ -170,9 +153,6 @@ const StatsCampaign = (
           </div>
         </ContentsContainer>
       </DashboardContainer>
-      {/* <Modal isOpen={isOpen} onClose={onClose}>
-        <></>
-      </Modal> */}
     </>
   );
 };

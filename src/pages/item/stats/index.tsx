@@ -4,40 +4,40 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
-import { ApiResponse } from "@/lib/types";
+import { ApiResponse, StatsApiResponse } from "@/lib/types";
 import { fetchGetItemStats } from "@/lib/item/apis";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemStats from "@/components/layout/item/item/ItemStats";
-import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaign_id = context.query.campaign_id?.toString() || "";
-  const today: Date = new Date();
-  const end_date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-  const thirtyDaysBefore: Date = new Date(today);
-  thirtyDaysBefore.setDate(today.getDate() - 30);
-  const start_date = `${thirtyDaysBefore.getFullYear()}-${String(thirtyDaysBefore.getMonth() + 1).padStart(2, "0")}-${String(thirtyDaysBefore.getDate()).padStart(2, "0")}`;
-  const page = "1";
-  const page_size = "10";
+  const today = new Date();
+  const end_date = today.toISOString().split("T")[0];
+  const start_date = new Date(today.setDate(today.getDate() - 30))
+    .toISOString()
+    .split("T")[0];
+
   const apiResponse = await fetchGetItemStats(
     start_date,
     end_date,
-    page,
-    page_size,
+    "1",
+    "10",
     campaign_id,
     context,
   );
+
   return {
     props: {
       apiResponse,
       campaign_id,
       start_date,
       end_date,
-      page,
-      page_size,
+      page: "1",
+      page_size: "10",
     },
   };
 };
+
 const StatsItem = (
   {
     apiResponse,
@@ -47,7 +47,7 @@ const StatsItem = (
     page,
     page_size,
   }: {
-    apiResponse: ApiResponse;
+    apiResponse: StatsApiResponse;
     campaign_id: string;
     start_date: string;
     end_date: string;
@@ -56,78 +56,64 @@ const StatsItem = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  const router = useRouter();
-  const [endDate, setEndDate] = useState(end_date);
   const [startDate, setStartDate] = useState(start_date);
+  const [endDate] = useState(end_date);
   const [pageNum, setPageNum] = useState(page);
   const [pageSize, setPageSize] = useState(page_size);
-  const [NewapiResponse, setNewApiResponse] =
+  const [period, setPeriod] = useState("30");
+  const [newApiResponse, setNewApiResponse] =
     useState<ApiResponse>(apiResponse);
   const [loading, setLoading] = useState(false);
 
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
 
-  const handlePageSizeChange = async (
+  const fetchStats = async (
+    start: string,
+    end: string,
+    pgSize: string,
+    pgNum: string,
+  ) => {
+    setLoading(true);
+    try {
+      const response = await fetchGetItemStats(
+        start,
+        end,
+        pgNum,
+        pgSize,
+        campaign_id,
+        context,
+      );
+      setNewApiResponse(response);
+    } catch (error) {
+      console.error("Failed to fetch item stats:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePageSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const newPageSize = event.target.value;
     setPageSize(newPageSize);
     setPageNum("1");
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response: ApiResponse = await await fetchGetItemStats(
-          start_date,
-          end_date,
-          "1",
-          page_size,
-          campaign_id,
-          context,
-        );
-        setNewApiResponse(response);
-      } catch (error) {
-        console.error("Failed to fetch item stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    fetchStats(startDate, endDate, newPageSize, "1");
   };
-  const handlePeriodChange = async (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const newPeriod = event.target.value;
 
-    const newStartDate: Date = new Date();
-    newStartDate.setDate(Number(newStartDate.getDate()) - Number(newPeriod));
+  const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newPeriod = event.target.value;
+    setPeriod(newPeriod);
+    const newStartDate = new Date();
+    newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
     setStartDate(formattedStartDate);
     setPageNum("1");
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response: ApiResponse = await fetchGetItemStats(
-          start_date,
-          end_date,
-          "1",
-          page_size,
-          campaign_id,
-          context,
-        );
-        setNewApiResponse(response);
-      } catch (error) {
-        console.error("Failed to fetch item stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    fetchStats(formattedStartDate, endDate, pageSize, "1");
   };
+
   return (
     <>
       {loading && (
@@ -145,12 +131,12 @@ const StatsItem = (
           <ItemStats
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
-            apiResponse={apiResponse}
+            apiResponse={newApiResponse}
             campaign_id={campaign_id}
           />
           <div className="flex gap-2">
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-              <div className="w-[70px]">아이템 수 </div>
+              <div className="w-[70px]">아이템 수</div>
               <select
                 className="w-[50px]"
                 value={pageSize}
@@ -166,7 +152,7 @@ const StatsItem = (
               <div className="w-[70px]">내역기간</div>
               <select
                 className="w-[80px]"
-                value={pageSize}
+                value={period}
                 onChange={handlePeriodChange}
               >
                 <option value="30">30일 전</option>

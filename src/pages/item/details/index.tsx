@@ -119,7 +119,6 @@ const DetailsItem = (
       router.push(`/campaign/details?campaign_id=${campaign_id}`);
     } else if (id === "modify_item" && !loading) {
       setLoading(true);
-      console.log("final itemModifyArgs", itemModifyArgs);
 
       const result = await fetchModifyItem(
         itemModifyArgs,

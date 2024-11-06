@@ -1,10 +1,10 @@
-import { ApiResponse, CamapaignStats } from "@/lib/types";
+import { StatsApiResponse, StatsList } from "@/lib/types";
 import { useRouter } from "next/router";
 
 interface CampaignStatsProps {
   theadStyle: string;
   tbodyStyle: string;
-  apiResponse: ApiResponse;
+  apiResponse: StatsApiResponse;
 }
 
 const CampaignStats: React.FC<CampaignStatsProps> = ({
@@ -98,7 +98,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
           </thead>
           <tbody>
             {campaigns.length > 0 ? (
-              campaigns.map((campaign: CamapaignStats) => (
+              campaigns.map((campaign: StatsList) => (
                 <tr
                   className={`cursor-pointer ${
                     campaign.period_type === "UNLIMITED"
@@ -111,7 +111,18 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
                 >
                   <td className={tbodyStyle}>{campaign.item_type}</td>
                   <td className={tbodyStyle}>{campaign.item_title}</td>
-                  <td className={tbodyStyle}>{campaign.start_date}</td>
+                  <td className={tbodyStyle}>
+                    {campaign.start_date
+                      ? new Date(campaign.start_date).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )
+                      : "N/A"}
+                  </td>
                   <td className={tbodyStyle}>
                     {campaign.end_date
                       ? new Date(campaign.end_date).toLocaleDateString(
