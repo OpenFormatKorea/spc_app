@@ -379,8 +379,8 @@ export async function fetchActivateItem(
 export async function fetchGetItemStats(
   start_date: string,
   end_date: string | null,
-  page: number,
-  page_size: number,
+  page: string,
+  page_size: string,
   campaign_id: string,
   context: GetServerSidePropsContext,
 ) {

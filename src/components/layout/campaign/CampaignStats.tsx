@@ -22,12 +22,11 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
     });
   };
 
-  // const campaigns = Array.isArray(apiResponse?.result)
-  //   ? apiResponse.result
-  //   : [];
+  const campaigns = Array.isArray(apiResponse?.result)
+    ? apiResponse.result
+    : [];
 
-  // Handle the case where apiResponse.result is null
-  if (!apiResponse || !Array.isArray(apiResponse.result)) {
+  if (campaigns.length === 0) {
     return (
       <>
         <div className="mb-2 w-full pb-2">
@@ -68,7 +67,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
     );
   }
 
-  const campaigns = apiResponse.result;
+  // Render table with campaigns data
 
   return (
     <>
@@ -113,7 +112,18 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
                   <td className={tbodyStyle}>{campaign.item_type}</td>
                   <td className={tbodyStyle}>{campaign.item_title}</td>
                   <td className={tbodyStyle}>{campaign.start_date}</td>
-                  <td className={tbodyStyle}>{campaign.end_date || "N/A"}</td>
+                  <td className={tbodyStyle}>
+                    {campaign.end_date
+                      ? new Date(campaign.end_date).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )
+                      : "N/A"}
+                  </td>
                   <td className={tbodyStyle}>
                     {campaign.share_attempts_click_count}
                   </td>

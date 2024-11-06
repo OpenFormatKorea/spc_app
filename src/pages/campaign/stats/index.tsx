@@ -1,13 +1,12 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import CampaignStats from "@/components/layout/campaign/CampaignStats";
 import { ApiResponse } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
-import { Modal } from "@mui/material";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const today: Date = new Date();
@@ -120,7 +119,7 @@ const StatsCampaign = (
     };
     fetchData();
   };
-  useEffect(() => {}, [pageNum, pageSize]);
+
   return (
     <>
       {loading && (

@@ -2,28 +2,26 @@ import DashboardContainer from "@/components/layout/dashboard/DashboardContainer
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse } from "@/lib/types";
 import { fetchGetItemStats } from "@/lib/item/apis";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemStats from "@/components/layout/item/item/ItemStats";
+import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaign_id = context.query.campaign_id?.toString() || "";
-
   const today: Date = new Date();
-  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+  const end_date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   const thirtyDaysBefore: Date = new Date(today);
   thirtyDaysBefore.setDate(today.getDate() - 30);
-  const thirtyDaysBeforeStr = `${thirtyDaysBefore.getFullYear()}-${String(thirtyDaysBefore.getMonth() + 1).padStart(2, "0")}-${String(thirtyDaysBefore.getDate()).padStart(2, "0")}`;
-
-  const page = 1;
-  const page_size = 10;
+  const start_date = `${thirtyDaysBefore.getFullYear()}-${String(thirtyDaysBefore.getMonth() + 1).padStart(2, "0")}-${String(thirtyDaysBefore.getDate()).padStart(2, "0")}`;
+  const page = "1";
+  const page_size = "10";
   const apiResponse = await fetchGetItemStats(
-    thirtyDaysBeforeStr,
-    todayStr,
+    start_date,
+    end_date,
     page,
     page_size,
     campaign_id,
@@ -33,6 +31,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       apiResponse,
       campaign_id,
+      start_date,
+      end_date,
+      page,
+      page_size,
     },
   };
 };
@@ -40,16 +42,92 @@ const StatsItem = (
   {
     apiResponse,
     campaign_id,
-  }: { apiResponse: ApiResponse; campaign_id: string },
+    start_date,
+    end_date,
+    page,
+    page_size,
+  }: {
+    apiResponse: ApiResponse;
+    campaign_id: string;
+    start_date: string;
+    end_date: string;
+    page: string;
+    page_size: string;
+  },
   context: GetServerSidePropsContext,
 ) => {
   const router = useRouter();
+  const [endDate, setEndDate] = useState(end_date);
+  const [startDate, setStartDate] = useState(start_date);
+  const [pageNum, setPageNum] = useState(page);
+  const [pageSize, setPageSize] = useState(page_size);
+  const [NewapiResponse, setNewApiResponse] =
+    useState<ApiResponse>(apiResponse);
   const [loading, setLoading] = useState(false);
+
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
 
+  const handlePageSizeChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const newPageSize = event.target.value;
+    setPageSize(newPageSize);
+    setPageNum("1");
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response: ApiResponse = await await fetchGetItemStats(
+          start_date,
+          end_date,
+          "1",
+          page_size,
+          campaign_id,
+          context,
+        );
+        setNewApiResponse(response);
+      } catch (error) {
+        console.error("Failed to fetch item stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  };
+  const handlePeriodChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const newPeriod = event.target.value;
+
+    const newStartDate: Date = new Date();
+    newStartDate.setDate(Number(newStartDate.getDate()) - Number(newPeriod));
+    const formattedStartDate = newStartDate.toISOString().split("T")[0];
+    setStartDate(formattedStartDate);
+    setPageNum("1");
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response: ApiResponse = await fetchGetItemStats(
+          start_date,
+          end_date,
+          "1",
+          page_size,
+          campaign_id,
+          context,
+        );
+        setNewApiResponse(response);
+      } catch (error) {
+        console.error("Failed to fetch item stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  };
   return (
     <>
       {loading && (
@@ -62,11 +140,6 @@ const StatsItem = (
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">아이템 지표</span>
           </div>
-          {/* 
-          <div className="button-container flex w-full justify-end">
-            <ArrowBackIosIcon fontSize="small" />
-            <span className="hidden lg:ml-1 lg:block">뒤로가기</span>
-          </div> */}
         </div>
         <ContentsContainer variant="dashboard">
           <ItemStats
@@ -75,6 +148,34 @@ const StatsItem = (
             apiResponse={apiResponse}
             campaign_id={campaign_id}
           />
+          <div className="flex gap-2">
+            <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+              <div className="w-[70px]">아이템 수 </div>
+              <select
+                className="w-[50px]"
+                value={pageSize}
+                onChange={handlePageSizeChange}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+              <div className="w-[70px]">내역기간</div>
+              <select
+                className="w-[80px]"
+                value={pageSize}
+                onChange={handlePeriodChange}
+              >
+                <option value="30">30일 전</option>
+                <option value="60">60일 전</option>
+                <option value="90">90일 전</option>
+                <option value="120">120일 전</option>
+              </select>
+            </div>
+          </div>
         </ContentsContainer>
       </DashboardContainer>
     </>
