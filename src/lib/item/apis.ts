@@ -401,7 +401,6 @@ export async function fetchGetItemStats(
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    console.log("responseresponse", response);
     return response.data;
   } catch (error) {
     console.error("error", error);

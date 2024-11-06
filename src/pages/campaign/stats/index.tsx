@@ -14,7 +14,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const start_date = new Date(today.setDate(today.getDate() - 30))
     .toISOString()
     .split("T")[0];
-
   const apiResponse = await fetchGetCampaignStats(
     start_date,
     end_date,
@@ -63,7 +62,7 @@ const StatsCampaign = (
     end: string,
     pgSize: string,
     pgNum: string,
-  ) => {
+  ): Promise<StatsApiResponse> => {
     setLoading(true);
     try {
       const response = await fetchGetCampaignStats(
@@ -74,8 +73,10 @@ const StatsCampaign = (
         context,
       );
       setNewApiResponse(response);
+      return response;
     } catch (error) {
       console.error("Failed to fetch campaign stats:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -122,6 +123,12 @@ const StatsCampaign = (
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
             apiResponse={newApiResponse}
+            fetchCampaignStats={fetchCampaignStats}
+            pageNum={pageNum}
+            setPageNum={setPageNum}
+            startDate={startDate}
+            endDate={endDate}
+            pageSize={pageSize}
           />
           <div className="flex gap-2">
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
