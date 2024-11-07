@@ -1,10 +1,9 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
-import { ApiResponse, StatsApiResponse } from "@/lib/types";
+import { StatsApiResponse } from "@/lib/types";
 import { fetchGetItemStats } from "@/lib/item/apis";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import ItemStats from "@/components/layout/item/item/stats/ItemStats";
@@ -62,7 +61,7 @@ const StatsItem = (
   const [pageSize, setPageSize] = useState(page_size);
   const [period, setPeriod] = useState("30");
   const [newApiResponse, setNewApiResponse] =
-    useState<ApiResponse>(apiResponse);
+    useState<StatsApiResponse>(apiResponse);
   const [loading, setLoading] = useState(false);
 
   const theadStyle =
@@ -70,25 +69,27 @@ const StatsItem = (
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
 
-  const fetchStats = async (
+  const fetchItemsStats = async (
     start: string,
     end: string,
-    pgSize: string,
-    pgNum: string,
-  ) => {
+    pageSize: string,
+    pageNum: string,
+  ): Promise<StatsApiResponse> => {
     setLoading(true);
     try {
       const response = await fetchGetItemStats(
         start,
         end,
-        pgNum,
-        pgSize,
+        pageNum,
+        pageSize,
         campaign_id,
         context,
       );
       setNewApiResponse(response);
+      return response;
     } catch (error) {
       console.error("Failed to fetch item stats:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -100,7 +101,8 @@ const StatsItem = (
     const newPageSize = event.target.value;
     setPageSize(newPageSize);
     setPageNum("1");
-    fetchStats(startDate, endDate, newPageSize, "1");
+    setNewApiResponse({ ...newApiResponse, result: [] });
+    fetchItemsStats(startDate, endDate, newPageSize, "1");
   };
 
   const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -111,7 +113,8 @@ const StatsItem = (
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
     setStartDate(formattedStartDate);
     setPageNum("1");
-    fetchStats(formattedStartDate, endDate, pageSize, "1");
+    setNewApiResponse({ ...newApiResponse, result: [] });
+    fetchItemsStats(formattedStartDate, endDate, pageSize, "1");
   };
 
   return (
@@ -132,6 +135,13 @@ const StatsItem = (
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
             apiResponse={newApiResponse}
+            fetchItemsStats={fetchItemsStats}
+            pageNum={pageNum}
+            setPageNum={setPageNum}
+            startDate={startDate}
+            endDate={endDate}
+            pageSize={pageSize}
+            setLoading={setLoading}
           />
           <div className="flex gap-2">
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">

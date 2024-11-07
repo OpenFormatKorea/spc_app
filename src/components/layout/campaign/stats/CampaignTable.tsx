@@ -21,8 +21,6 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
     });
   };
 
-  // Render table with campaigns data
-
   return (
     <>
       {campaigns.length > 0 ? (

@@ -5,7 +5,7 @@ import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import CampaignStats from "@/components/layout/campaign/stats/CampaignStats";
-import { ApiResponse, StatsApiResponse } from "@/lib/types";
+import { StatsApiResponse } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -49,7 +49,7 @@ const StatsCampaign = (
   const [pageSize, setPageSize] = useState(page_size);
   const [period, setPeriod] = useState("30");
   const [newApiResponse, setNewApiResponse] =
-    useState<ApiResponse>(apiResponse);
+    useState<StatsApiResponse>(apiResponse);
   const [loading, setLoading] = useState(false);
 
   const theadStyle =
@@ -88,19 +88,19 @@ const StatsCampaign = (
     const newPageSize = event.target.value;
     setPageSize(newPageSize);
     setPageNum("1");
+    setNewApiResponse({ ...newApiResponse, result: [] });
     fetchCampaignStats(startDate, endDate, newPageSize, "1");
   };
 
   const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newPeriod = event.target.value;
     setPeriod(newPeriod);
-
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
-
     setStartDate(formattedStartDate);
     setPageNum("1");
+    setNewApiResponse({ ...newApiResponse, result: [] });
     fetchCampaignStats(formattedStartDate, endDate, pageSize, "1");
   };
 

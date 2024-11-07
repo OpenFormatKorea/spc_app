@@ -1,5 +1,4 @@
 import { StatsList } from "@/lib/types";
-import { useRouter } from "next/router";
 
 interface ItemTableProps {
   tbodyStyle: string;

@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import CampaignTable from "@/components/layout/campaign/stats/CampaignTable";
 import { StatsApiResponse, StatsList } from "@/lib/types";
 
 interface CampaignStatsProps {
   theadStyle: string;
   tbodyStyle: string;
+  startDate: string;
+  endDate: string;
+  pageSize: string;
+  pageNum: string;
+  setPageNum: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   apiResponse: StatsApiResponse;
   fetchCampaignStats: (
     start: string,
@@ -12,31 +18,27 @@ interface CampaignStatsProps {
     pageSize: string,
     pageNum: string,
   ) => Promise<StatsApiResponse>;
-  pageNum: string;
-  setPageNum: React.Dispatch<React.SetStateAction<string>>;
-  startDate: string;
-  endDate: string;
-  pageSize: string;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CampaignStats: React.FC<CampaignStatsProps> = ({
   theadStyle,
   tbodyStyle,
-  apiResponse,
-  fetchCampaignStats,
   startDate,
   endDate,
   pageSize,
   pageNum,
   setPageNum,
   setLoading,
+  apiResponse,
+  fetchCampaignStats,
 }) => {
   const [campaigns, setCampaigns] = useState<StatsList[]>(
     apiResponse?.result ?? [],
   );
-  const [isLoading, setIsLoading] = useState(false);
-
+  // const campaigns = useMemo(
+  //   () => (Array.isArray(apiResponse.result) ? apiResponse.result : []),
+  //   [apiResponse.result],
+  // );
   const useScrollPosition = () => {
     const [isBottom, setIsBottom] = useState(false);
     useEffect(() => {
@@ -46,7 +48,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
           document.documentElement.scrollHeight;
         setIsBottom(isAtBottom);
       };
-
       window.addEventListener("scroll", handleScroll, { passive: true });
       return () => {
         window.removeEventListener("scroll", handleScroll);
@@ -81,15 +82,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
         setLoading(false);
       }
     }
-  }, [
-    scrollPosition,
-    pageNum,
-    fetchCampaignStats,
-    startDate,
-    endDate,
-    pageSize,
-    isLoading,
-  ]);
+  }, [scrollPosition]);
 
   return (
     <>
