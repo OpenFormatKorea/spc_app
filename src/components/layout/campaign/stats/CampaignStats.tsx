@@ -35,28 +35,36 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
   const [campaigns, setCampaigns] = useState<StatsList[]>(
     apiResponse?.result ?? [],
   );
-  // const campaigns = useMemo(
-  //   () => (Array.isArray(apiResponse.result) ? apiResponse.result : []),
-  //   [apiResponse.result],
-  // );
-  const useScrollPosition = () => {
+
+  const useScrollPosition = (elementId: string) => {
     const [isBottom, setIsBottom] = useState(false);
     useEffect(() => {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+
       const handleScroll = () => {
         const isAtBottom =
-          window.innerHeight + window.scrollY >=
-          document.documentElement.scrollHeight;
+          element.scrollTop + element.clientHeight >= element.scrollHeight;
         setIsBottom(isAtBottom);
       };
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
+
+      const viewportHeight = window.innerHeight;
+      const elementHeight = element.scrollHeight;
+      console.log("viewportHeight", viewportHeight);
+      console.log("elementHeight", elementHeight);
+      if (elementHeight <= viewportHeight) {
+        setIsBottom(true);
+      } else {
+        element.addEventListener("scroll", handleScroll, { passive: true });
+        return () => {
+          element.removeEventListener("scroll", handleScroll);
+        };
+      }
     }, []);
 
     return isBottom;
   };
-  const scrollPosition = useScrollPosition();
+  const scrollPosition = useScrollPosition("tableDiv");
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse.total_count || 0;
   const getNextPage = () => {
@@ -67,7 +75,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
   };
   useEffect(() => {
     const isNextPage = getNextPage();
-    const nextPage = (parseInt(pageNum) + 1).toString();
+    const nextPageNum = (parseInt(pageNum) + 1).toString();
 
     if (isNextPage && scrollPosition) {
       setLoading(true);
@@ -75,7 +83,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
         fetchCampaignStats(startDate, endDate, pageSize, "1").then(
           (newData) => {
             setCampaigns((prev) => [...prev, ...(newData.result || [])]);
-            setPageNum(nextPage);
+            setPageNum(nextPageNum);
           },
         );
       } finally {
@@ -85,7 +93,12 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
   }, [scrollPosition]);
 
   return (
-    <>
+    <div
+      id="tableDiv"
+      className="overflow-y-auto"
+      style={{ maxHeight: "80vh" }}
+    >
+      {" "}
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
@@ -124,7 +137,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
 

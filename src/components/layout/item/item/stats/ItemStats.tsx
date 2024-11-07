@@ -46,10 +46,16 @@ const ItemStats: React.FC<ItemStatsProps> = ({
         setIsBottom(isAtBottom);
       };
 
-      element.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        element.removeEventListener("scroll", handleScroll);
-      };
+      const viewportHeight = window.innerHeight;
+      const elementHeight = element.scrollHeight;
+      if (elementHeight <= viewportHeight) {
+        setIsBottom(true);
+      } else {
+        element.addEventListener("scroll", handleScroll, { passive: true });
+        return () => {
+          element.removeEventListener("scroll", handleScroll);
+        };
+      }
     }, [elementId]);
 
     return isBottom;
@@ -67,13 +73,13 @@ const ItemStats: React.FC<ItemStatsProps> = ({
 
   useEffect(() => {
     const isNextPage = getNextPage();
-    const nextPage = (parseInt(pageNum) + 1).toString();
+    const nextPageNum = (parseInt(pageNum) + 1).toString();
     if (!isNextPage && scrollPosition) {
       setLoading(true);
       try {
         fetchItemsStats(startDate, endDate, pageSize, "1").then((newData) => {
           setItems((prev) => [...prev, ...(newData.result || [])]);
-          setPageNum(nextPage);
+          setPageNum(nextPageNum);
         });
       } finally {
         setLoading(false);
