@@ -17,6 +17,7 @@ interface CampaignStatsProps {
   startDate: string;
   endDate: string;
   pageSize: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CampaignStats: React.FC<CampaignStatsProps> = ({
@@ -24,67 +25,113 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
   tbodyStyle,
   apiResponse,
   fetchCampaignStats,
-  pageNum,
-  setPageNum,
   startDate,
   endDate,
   pageSize,
+  pageNum,
+  setPageNum,
+  setLoading,
 }) => {
   const [campaigns, setCampaigns] = useState<StatsList[]>(
     apiResponse?.result ?? [],
   );
   const [isLoading, setIsLoading] = useState(false);
-  const loader = useRef<HTMLTableRowElement | null>(null);
 
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver((entries) => {
-  //     if (entries[0].isIntersecting && !isLoading) {
-  //       const nextPage = (parseInt(pageNum) + 1).toString();
+  const useScrollPosition = () => {
+    const [isBottom, setIsBottom] = useState(false);
+    useEffect(() => {
+      const handleScroll = () => {
+        const isAtBottom =
+          window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight;
+        setIsBottom(isAtBottom);
+      };
 
-  //       fetchCampaignStats(startDate, endDate, pageSize, 1).then((newData) => {
-  //         setCampaigns((prev) => [...prev, ...(newData.result || [])]);
-  //         setPageNum(nextPage);
-  //       });
-  //     }
-  //   });
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }, []);
 
-  //   if (loader.current) observer.observe(loader.current);
+    return isBottom;
+  };
+  const scrollPosition = useScrollPosition();
+  const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+  const totalCount = apiResponse.total_count || 0;
+  const getNextPage = () => {
+    if (totalCount >= stackedDataAmount) {
+      return true;
+    }
+    return false;
+  };
+  useEffect(() => {
+    const isNextPage = getNextPage();
+    const nextPage = (parseInt(pageNum) + 1).toString();
 
-  //   return () => {
-  //     if (loader.current) {
-  //       observer.unobserve(loader.current);
-  //     }
-  //   };
-  // }, [pageNum, fetchCampaignStats, setPageNum]);
+    if (isNextPage && scrollPosition) {
+      setLoading(true);
+      try {
+        fetchCampaignStats(startDate, endDate, pageSize, "1").then(
+          (newData) => {
+            setCampaigns((prev) => [...prev, ...(newData.result || [])]);
+            setPageNum(nextPage);
+          },
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, [
+    scrollPosition,
+    pageNum,
+    fetchCampaignStats,
+    startDate,
+    endDate,
+    pageSize,
+    isLoading,
+  ]);
 
   return (
-    <div className="w-full py-2">
-      <table className="w-full border border-gray-100 text-center">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className={theadStyle}>캠페인 타입</th>
-            <th className={theadStyle}>캠페인 명</th>
-            <th className={theadStyle}>시작일</th>
-            <th className={theadStyle}>종료일</th>
-            <th className={theadStyle}>공유버튼 클릭 수</th>
-            <th className={theadStyle}>카카오 공유 수</th>
-            <th className={theadStyle}>친구추천 수락 수</th>
-            <th className={theadStyle}>신규 가입자수</th>
-            <th className={theadStyle}>주문완료 수</th>
-          </tr>
-        </thead>
-        <tbody>
-          <CampaignTable tbodyStyle={tbodyStyle} campaigns={campaigns} />
-          <tr ref={loader}>
-            <td colSpan={9} className="py-4 text-center">
-              {/* {isLoading
-                ? "Loading more campaigns..."
-                : "Scroll down to load more"} */}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="mb-2 w-full pb-2">
+        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
+          <div className="w-[80%]">
+            <div className="text-xl">캠페인 통계</div>
+            <div className="text-sm font-normal text-gray-500">
+              현재 사용중인 아이템 통계 내역이에요.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full py-2">
+        <table className="w-full border border-gray-100 text-center">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className={theadStyle}>캠페인 타입</th>
+              <th className={theadStyle}>캠페인 명</th>
+              <th className={theadStyle}>시작일</th>
+              <th className={theadStyle}>종료일</th>
+              <th className={theadStyle}>공유버튼 클릭 수</th>
+              <th className={theadStyle}>카카오 공유 수</th>
+              <th className={theadStyle}>친구추천 수락 수</th>
+              <th className={theadStyle}>신규 가입자수</th>
+              <th className={theadStyle}>주문완료 수</th>
+            </tr>
+          </thead>
+          <tbody>
+            <CampaignTable tbodyStyle={tbodyStyle} campaigns={campaigns} />
+
+            <tr>
+              <td colSpan={9} className="py-4 text-center">
+                {getNextPage()
+                  ? "Scroll down to load more"
+                  : "No more campaigns"}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

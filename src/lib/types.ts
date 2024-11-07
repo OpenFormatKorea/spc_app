@@ -11,8 +11,8 @@ export interface StatsApiResponse {
   error?: string;
   data?: StatsList;
   result?: [];
-  total_count?: Number;
-  page_size?: Number;
+  total_count?: number;
+  page_size?: number;
 }
 export interface StatsList {
   period_type: string;

@@ -129,6 +129,7 @@ const StatsCampaign = (
             startDate={startDate}
             endDate={endDate}
             pageSize={pageSize}
+            setLoading={setLoading}
           />
           <div className="flex gap-2">
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
