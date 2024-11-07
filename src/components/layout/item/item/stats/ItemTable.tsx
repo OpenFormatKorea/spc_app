@@ -9,7 +9,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ tbodyStyle, items }) => {
   return (
     <>
       {items.map((item: StatsList) => (
-        <tr key={item.item_group_id} className="cursor-pointer">
+        <tr key={item.item_group_id}>
           <td className={tbodyStyle}>{item.item_type}</td>
           <td className={tbodyStyle}>{item.item_title}</td>
           <td className={tbodyStyle}>{item.share_attempts_click_count}</td>
