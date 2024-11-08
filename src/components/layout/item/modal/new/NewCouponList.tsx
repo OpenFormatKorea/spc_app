@@ -7,13 +7,12 @@ import { fetchSearchCoupon } from "@/lib/item/apis";
 import { GetServerSidePropsContext } from "next";
 
 interface CouponListProps {
-  apiResponse?: ApiResponse;
+  apiResponse: ApiResponse;
   couponInputs: CouponsArgs[];
   setCouponInputs: (value: CouponsArgs[]) => void;
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   isOpen: boolean;
   setAddReward: (value: Boolean) => void;
-
   onClose: () => void;
 }
 
@@ -29,13 +28,13 @@ const NewCouponList: React.FC<CouponListProps> = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  const [couponResponse, setCouponResponse] = useState<ApiResponse | undefined>(
-    apiResponse,
-  );
+  const [couponResponse, setCouponResponse] =
+    useState<ApiResponse>(apiResponse);
+
   const coupons = useMemo(
     () =>
-      Array.isArray(couponResponse?.data.data.content)
-        ? couponResponse.data.data.content
+      Array.isArray(couponResponse?.data.content)
+        ? couponResponse.data.content
         : [],
     [couponResponse],
   );
@@ -127,7 +126,6 @@ const NewCouponList: React.FC<CouponListProps> = (
     );
     searchResponse
       .then((response) => {
-        console.log("data", response);
         setCouponResponse(response);
       })
       .catch((error) => {

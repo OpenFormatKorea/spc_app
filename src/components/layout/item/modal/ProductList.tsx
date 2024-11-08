@@ -22,9 +22,7 @@ const ProductList: React.FC<ProductListProps> = ({
 }) => {
   const products = useMemo(
     () =>
-      Array.isArray(apiResponse?.data.data.content)
-        ? apiResponse.data.data.content
-        : [],
+      Array.isArray(apiResponse.data.content) ? apiResponse.data.content : [],
     [apiResponse],
   );
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);

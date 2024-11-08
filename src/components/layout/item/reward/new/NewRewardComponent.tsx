@@ -7,7 +7,7 @@ import NewRewardModal from "@/components/layout/item/reward/new/NewRewardModal";
 import NewCouponList from "@/components/layout/item/modal/new/NewCouponList";
 
 interface NewRewardComponentProps {
-  apiResponse?: ApiResponse;
+  apiResponse: ApiResponse;
   selectedCouponItems: CouponsArgs[];
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   couponInputs: CouponsArgs[];

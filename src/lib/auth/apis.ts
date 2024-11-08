@@ -47,8 +47,7 @@ export async function fetchLogIn(info: AuthArgs) {
   try {
     const response = await axios.post(apiUrl, { username, password });
     const { access, refresh, shop_id } = response.data;
-    const end = Date.now();
-    const duration = end - start;
+
     return {
       success: true,
       message: "로그인에 성공 하였습니다.",

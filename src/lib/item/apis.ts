@@ -230,7 +230,9 @@ export async function fetchSearchCoupon(
         "&name=" +
         searchKeyword +
         "&shop_id=" +
-        shop_id)
+        shop_id +
+        "&sort=" +
+        searchFilter)
     : (final_url =
         `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` +
         page +
@@ -239,11 +241,13 @@ export async function fetchSearchCoupon(
         "&cpn_id=" +
         searchKeyword +
         "&shop_id=" +
-        shop_id);
+        shop_id +
+        "&sort=" +
+        searchFilter);
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    return response;
+    return response.data;
   } catch (error) {
     console.error("error", error);
     return {
@@ -471,11 +475,12 @@ export async function fetchGetProductCodeList(
     "&size=" +
     size +
     "&shop_id=" +
-    shop_id;
+    shop_id +
+    "&sort=name";
 
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    return response;
+    return response.data;
   } catch (error) {
     console.error("Error fetching product list:", error);
     return {
@@ -503,6 +508,8 @@ export async function fetchGetProductCodeList(
 }
 
 export async function fetchGetCouponCodeList(
+  page: string,
+  size: string,
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
@@ -516,19 +523,17 @@ export async function fetchGetCouponCodeList(
     };
   }
 
-  const page = 1;
-  const size = 10;
   const final_url =
     `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` +
     page +
     "&size=" +
     size +
     "&shop_id=" +
-    shop_id;
-
+    shop_id +
+    "&sort=name";
   try {
     const response = await fetchAPI(context, final_url, "GET", {});
-    return response;
+    return response.data;
   } catch (error) {
     return {
       response: {

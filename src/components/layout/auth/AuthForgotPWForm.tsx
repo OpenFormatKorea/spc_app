@@ -1,7 +1,6 @@
 import AuthButton from "@/components/layout/auth/AuthButton";
 import AuthContainer from "@/components/layout/auth/AuthContainer";
 import AuthInputBox from "@/components/layout/auth/AuthInputBox";
-import AuthLogin from "@/components/layout/auth/AuthLoginForm";
 interface AuthForgotPWProps {
   username: string;
   setUsername: (value: string) => void;
@@ -22,9 +21,11 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
 }) => {
   return (
     <AuthContainer>
-      <div className="min-w-[380px] min-h-[320px] rounded-xl p-6 bg-gradient-to-b from-blue-200 to-blue-300  flex flex-col justify-center  items-center text-center">
-        <div className="text-xl font-semibold m-2 w-full text-left">비밀번호 찾기</div>
-        <div className="flex flex-col w-full items-start justify-between">
+      <div className="flex min-h-[320px] min-w-[380px] flex-col items-center justify-center rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 p-6 text-center">
+        <div className="m-2 w-full text-left text-xl font-semibold">
+          비밀번호 찾기
+        </div>
+        <div className="flex w-full flex-col items-start justify-between">
           <AuthInputBox
             label="아이디"
             type="text"
@@ -41,14 +42,14 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
           buttonRef={buttonRef}
           onClick={handleSubmit}
         />
-        <div className="passwordDiv flex w-full m-1 p-1 justify-center items-center text-left">
-          <div className="mr-2 ml-2 text-sm cursor-pointer">
+        <div className="passwordDiv m-1 flex w-full items-center justify-center p-1 text-left">
+          <div className="ml-2 mr-2 cursor-pointer text-sm">
             <button id="signup" onClick={handleButton}>
               회원가입
             </button>
           </div>
           <div>|</div>
-          <div className="mr-2 ml-2 text-sm cursor-pointer">
+          <div className="ml-2 mr-2 cursor-pointer text-sm">
             <button id="login" onClick={handleButton}>
               로그인
             </button>

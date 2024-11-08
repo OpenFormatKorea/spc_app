@@ -3,7 +3,7 @@ import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
-import { useState, useRef, useEffect, KeyboardEvent } from "react";
+import { useRef, useEffect, KeyboardEvent, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import ReactS3Client from "@/lib/aws/ReactS3Client";
 import { getShopIdFromCookies } from "@/lib/helper";
@@ -32,9 +32,9 @@ import ProductList from "@/components/layout/item/modal/ProductList";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
   const campaign_id = context.query.campaign_id;
-  const productResponse = await fetchGetProductCodeList(context);
-  const couponResponse = await fetchGetCouponCodeList(context);
 
+  const productResponse = await fetchGetProductCodeList(context);
+  const couponResponse = await fetchGetCouponCodeList("1", "10", context);
   if (!shop_id || !campaign_id) {
     return { redirect: { destination: "auth/login", permanent: false } };
   }
@@ -57,6 +57,8 @@ const NewItem = (
   },
   context: GetServerSidePropsContext,
 ) => {
+  const [pageNum, setPageNum] = useState("1");
+  const [pageSize, setPageSize] = useState("10");
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
