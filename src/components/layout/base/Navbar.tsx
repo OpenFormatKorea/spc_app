@@ -9,7 +9,8 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
-
+import SearchIcon from "@mui/icons-material/Search";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 interface NavbarProps {
   shop_id: string;
 }
@@ -45,6 +46,12 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
           <ContactPageIcon fontSize="small" />
         ) : (
           <ContactPageOutlinedIcon fontSize="small" />
+        );
+      case "유저검색":
+        return active ? (
+          <SearchIcon fontSize="small" />
+        ) : (
+          <SearchOutlinedIcon fontSize="small" />
         );
       default:
         return null;
@@ -137,29 +144,53 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
         </div>
         <div className="py-4 pl-4 text-sm text-white">setting</div>
         <div className="main-menu pl-3">
-          {/* My Page */}
           <div
             className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
-            onClick={() => handleClick("/mypage")}
+            onClick={() => handleClick("/admin/usersearch")}
             onMouseEnter={() => handleMouseEnter("마이 페이지")}
             onMouseLeave={handleMouseLeave}
           >
             <div
               className={`flex items-center justify-center rounded-xl p-2 transition-all duration-300 ${
-                isActive("/mypage")
+                isActive("/admin/usersearch")
                   ? "w-[95%] bg-gray-500"
-                  : isHovered === "마이 페이지"
+                  : isHovered === "유저검색"
                     ? "w-[90%] opacity-85"
                     : "h-[55px] w-[100%] p-4"
               }`}
             >
-              {renderIcon("마이 페이지", isActive("/mypage"))}
+              {renderIcon("유저검색", isActive("/admin/usersearch"))}
               <div className="w-full pl-3 text-left">
-                <span>마이 페이지</span>
+                <span>유저검색</span>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div className="main-menu pl-3">
+        {/* My Page */}
+        <div
+          className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
+          onClick={() => handleClick("/mypage")}
+          onMouseEnter={() => handleMouseEnter("마이 페이지")}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div
+            className={`flex items-center justify-center rounded-xl p-2 transition-all duration-300 ${
+              isActive("/mypage")
+                ? "w-[95%] bg-gray-500"
+                : isHovered === "마이 페이지"
+                  ? "w-[90%] opacity-85"
+                  : "h-[55px] w-[100%] p-4"
+            }`}
+          >
+            {renderIcon("마이 페이지", isActive("/mypage"))}
+            <div className="w-full pl-3 text-left">
+              <span>마이 페이지</span>
+            </div>
+          </div>
+        </div>
+
         <div className="setting-menu absolute bottom-[5%] w-full">
           <div className="flex w-full flex-col justify-center p-3">
             <label className="text-xs font-bold text-white">SHOP ID</label>

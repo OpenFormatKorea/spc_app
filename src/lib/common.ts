@@ -19,3 +19,11 @@ export const handleSignOut = async (event?: React.FormEvent) => {
 export const handleLogo = () => {
   router.push("/dashboard");
 };
+
+export function hasWhiteSpace(s: string) {
+  return /\s/g.test(s);
+}
+
+export function removeWhiteSpace(s: string) {
+  return s.replace(/\s/g, "");
+}
