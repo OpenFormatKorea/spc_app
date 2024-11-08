@@ -9,16 +9,24 @@ export async function fetchUserSearch(
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
-
-  const apiUrl =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user?shop_id=` +
-    shop_id +
-    "&user_id=" +
-    userId +
-    "&page=" +
-    pageNum +
-    "&page_size=" +
-    pageSize;
+  let apiUrl = "";
+  userId !== ""
+    ? (apiUrl =
+        `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user?shop_id=` +
+        shop_id +
+        "&user_id=" +
+        userId +
+        "&page=" +
+        pageNum +
+        "&page_size=" +
+        pageSize)
+    : (apiUrl =
+        `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user?shop_id=` +
+        shop_id +
+        "&page=" +
+        pageNum +
+        "&page_size=" +
+        pageSize);
 
   try {
     const response = await fetchAPI(context, apiUrl, "GET", {});

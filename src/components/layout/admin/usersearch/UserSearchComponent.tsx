@@ -26,9 +26,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = (
       setUserId(trimmedUserId);
     }
   }, [userId]);
-  useEffect(() => {
-    console.log("newApiResponse", apiResponse);
-  }, [apiResponse]);
+
   return (
     <>
       <div className="mb-2 w-full pb-2">

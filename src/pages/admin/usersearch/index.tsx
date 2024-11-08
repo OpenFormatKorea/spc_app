@@ -17,15 +17,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 const UserSearch = (
-  apiResponse: StatsApiResponse,
+  { apiResponse }: { apiResponse: StatsApiResponse },
+
   context: GetServerSidePropsContext,
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
+  console.log(apiResponse);
+
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string>("");
   const [pageNum, setPageNum] = useState<string>("1");
   const [pageSize, setPageSize] = useState<string>("10");
+
   const handleSearch = async (event: React.MouseEvent<HTMLButtonElement>) => {
     try {
       const data = await fetchUserSearch(userId, pageNum, pageSize, context);
@@ -41,6 +45,17 @@ const UserSearch = (
       };
     }
   };
+
+  const handlePageSizeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const newPageSize = event.target.value;
+    setPageSize(newPageSize);
+    setPageNum("1");
+    setNewApiResponse({ ...newApiResponse, result: [] });
+    fetchUserSearch(userId, pageNum, pageSize, context);
+  };
+
   useEffect(() => {
     if (apiResponse) {
       setLoading(false);
@@ -67,6 +82,21 @@ const UserSearch = (
               userId={userId}
               setUserId={setUserId}
             />
+            <div className="flex gap-2">
+              <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+                <div className="w-[70px]">아이템 수</div>
+                <select
+                  className="w-[50px]"
+                  value={pageSize}
+                  onChange={handlePageSizeChange}
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+            </div>
           </ContentsContainer>
         </div>
       </DashboardContainer>
