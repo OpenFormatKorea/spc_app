@@ -172,7 +172,6 @@ export async function fetchModifyItem(
       message: "상품 혹은 프로모션이 선택되어야합니다.",
     };
   }
-  console.log("final dataObj", dataObj);
 
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);

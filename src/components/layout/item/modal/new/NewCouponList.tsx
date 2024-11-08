@@ -143,7 +143,6 @@ const NewCouponList: React.FC<CouponListProps> = (
     );
     searchResponse
       .then((response) => {
-        console.log("data", response);
         setCouponResponse(response);
       })
       .catch((error) => {

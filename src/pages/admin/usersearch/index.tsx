@@ -23,7 +23,6 @@ const UserSearch = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
-  console.log(apiResponse);
 
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string>("");
