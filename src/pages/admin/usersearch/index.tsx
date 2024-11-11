@@ -48,12 +48,30 @@ const UserSearch = (
   const handlePageSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    const newPageSize = event.target.value;
-    setPageSize(newPageSize);
+    setPageSize(event.target.value);
     setPageNum("1");
-    setNewApiResponse({ ...newApiResponse, result: [] });
-    fetchUserSearch(userId, pageNum, pageSize, context);
   };
+  useEffect(() => {
+    console.log("calling new data feetch");
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchUserSearch(userId, pageNum, pageSize, context);
+        setNewApiResponse(data as StatsApiResponse);
+      } catch (error) {
+        console.error("Error: ", error);
+        return {
+          status: 500,
+          success: false,
+          message: "검색어를 다시 확인 해 주세요",
+          error: String(error),
+        };
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [userId, pageNum, pageSize]);
 
   useEffect(() => {
     if (apiResponse) {
