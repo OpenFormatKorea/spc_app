@@ -48,6 +48,7 @@ const ItemStats: React.FC<ItemStatsProps> = ({
 
       const viewportHeight = window.innerHeight;
       const elementHeight = element.scrollHeight;
+
       if (elementHeight <= viewportHeight) {
         setIsBottom(true);
       } else {
@@ -64,17 +65,17 @@ const ItemStats: React.FC<ItemStatsProps> = ({
   const scrollPosition = useScrollPosition("tableDiv");
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse.total_count || 0;
+
   const getNextPage = () => {
     if (totalCount >= stackedDataAmount) {
       return true;
     }
     return false;
   };
-
   useEffect(() => {
     const isNextPage = getNextPage();
     const nextPageNum = (parseInt(pageNum) + 1).toString();
-    if (!isNextPage && scrollPosition) {
+    if (isNextPage && scrollPosition) {
       setLoading(true);
       try {
         fetchItemsStats(startDate, endDate, pageSize, "1").then((newData) => {
@@ -90,7 +91,7 @@ const ItemStats: React.FC<ItemStatsProps> = ({
     <div
       id="tableDiv"
       className="overflow-y-auto"
-      style={{ maxHeight: "80vh" }}
+      style={{ maxHeight: "70vh" }}
     >
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">

@@ -3,81 +3,67 @@ import UserSearchComponent from "@/components/layout/admin/usersearch/UserSearch
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import { withAuth } from "@/hoc/withAuth";
-import { fetchUserSearch } from "@/lib/admin/apis";
+import { fetchGetUserSearch } from "@/lib/admin/apis";
 import { StatsApiResponse } from "@/lib/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await fetchUserSearch("", "1", "10", context);
+  const response = await fetchGetUserSearch("", "1", "10", context);
   return {
-    props: {
-      apiResponse: response,
-    },
+    props: { apiResponse: response },
   };
 };
+
 const UserSearch = (
   { apiResponse }: { apiResponse: StatsApiResponse },
-
   context: GetServerSidePropsContext,
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
-
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [pageNum, setPageNum] = useState<string>("1");
   const [pageSize, setPageSize] = useState<string>("10");
 
-  const handleSearch = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSearch = async () => {
     setLoading(true);
     try {
-      const data = await fetchUserSearch(userId, pageNum, pageSize, context);
+      const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);
       setNewApiResponse(data as StatsApiResponse);
     } catch (error) {
-      console.error("Error: ", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
   };
-  const handlePageSizeChange = (
+
+  const handlePageSizeChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setPageSize(event.target.value);
     setPageNum("1");
+    fetchGetUserSearch(userId, pageNum, pageSize, context);
   };
 
-  useEffect(() => {
-    console.log("calling new data feetch");
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchUserSearch(userId, pageNum, pageSize, context);
-        setNewApiResponse(data as StatsApiResponse);
-      } catch (error) {
-        console.error("Error: ", error);
-        return {
-          status: 500,
-          success: false,
-          message: "검색어를 다시 확인 해 주세요",
-          error: String(error),
-        };
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [pageNum, pageSize]);
-
-  useEffect(() => {
-    if (apiResponse) {
+  const fetchUserSearch = async (
+    userId: string,
+    pageNum: string,
+    pageSize: string,
+  ): Promise<StatsApiResponse> => {
+    setLoading(true);
+    try {
+      const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);
+      setNewApiResponse(data); // Update the state with new data
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch campaign stats:", error);
+      throw error;
+    } finally {
       setLoading(false);
     }
-  }, [apiResponse]);
+  };
 
-  useEffect(() => {
-    console.log(newApiResponse);
-  }, [newApiResponse]);
   return (
     <>
       {loading && (
@@ -102,8 +88,9 @@ const UserSearch = (
               setPageNum={setPageNum}
               pageSize={pageSize}
               setLoading={setLoading}
+              fetchUserSearch={fetchUserSearch}
             />
-            <div className="flex gap-2">
+            <div className="mt-4 flex gap-2">
               <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
                 <div className="w-[70px]">아이템 수</div>
                 <select
@@ -124,4 +111,5 @@ const UserSearch = (
     </>
   );
 };
+
 export default withAuth(UserSearch);

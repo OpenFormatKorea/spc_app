@@ -5,7 +5,7 @@ import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import CampaignStats from "@/components/layout/campaign/stats/CampaignStats";
-import { StatsApiResponse } from "@/lib/types";
+import { ApiResponse, StatsApiResponse } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -43,14 +43,14 @@ const StatsCampaign = (
   },
   context: GetServerSidePropsContext,
 ) => {
+  const [newApiResponse, setNewApiResponse] =
+    useState<StatsApiResponse>(apiResponse);
+  const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(start_date);
   const [endDate] = useState(end_date);
   const [pageNum, setPageNum] = useState(page);
   const [pageSize, setPageSize] = useState(page_size);
   const [period, setPeriod] = useState("30");
-  const [newApiResponse, setNewApiResponse] =
-    useState<StatsApiResponse>(apiResponse);
-  const [loading, setLoading] = useState(false);
 
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
@@ -86,21 +86,21 @@ const StatsCampaign = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const newPageSize = event.target.value;
-    setPageSize(newPageSize);
+    setPageSize(event.target.value);
     setPageNum("1");
-    setNewApiResponse({ ...newApiResponse, result: [] });
     fetchCampaignStats(startDate, endDate, newPageSize, "1");
   };
 
   const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newPeriod = event.target.value;
     setPeriod(newPeriod);
+
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
+
     setStartDate(formattedStartDate);
     setPageNum("1");
-    setNewApiResponse({ ...newApiResponse, result: [] });
     fetchCampaignStats(formattedStartDate, endDate, pageSize, "1");
   };
 
@@ -131,7 +131,7 @@ const StatsCampaign = (
             pageSize={pageSize}
             setLoading={setLoading}
           />
-          <div className="flex gap-2">
+          <div className="mt-4 flex gap-2">
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
               <div className="w-[70px]">아이템 수</div>
               <select

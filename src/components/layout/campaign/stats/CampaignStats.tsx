@@ -52,14 +52,11 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
       const elementHeight = element.scrollHeight;
       console.log("viewportHeight", viewportHeight);
       console.log("elementHeight", elementHeight);
-      if (elementHeight <= viewportHeight) {
-        setIsBottom(true);
-      } else {
-        element.addEventListener("scroll", handleScroll, { passive: true });
-        return () => {
-          element.removeEventListener("scroll", handleScroll);
-        };
-      }
+
+      element.addEventListener("scroll", handleScroll, { passive: true });
+      return () => {
+        element.removeEventListener("scroll", handleScroll);
+      };
     }, []);
 
     return isBottom;
@@ -96,9 +93,8 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
     <div
       id="tableDiv"
       className="overflow-y-auto"
-      style={{ maxHeight: "80vh" }}
+      style={{ maxHeight: "70vh" }}
     >
-      {" "}
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
@@ -126,7 +122,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
           </thead>
           <tbody>
             <CampaignTable tbodyStyle={tbodyStyle} campaigns={campaigns} />
-
             <tr>
               <td colSpan={9} className="py-4 text-center">
                 {getNextPage()

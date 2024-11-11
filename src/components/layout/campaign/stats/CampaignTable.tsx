@@ -1,5 +1,4 @@
 import { StatsList } from "@/lib/types";
-import campaign from "@/pages/campaign";
 import { useRouter } from "next/router";
 
 interface CampaignTableProps {

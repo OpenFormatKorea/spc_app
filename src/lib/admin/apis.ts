@@ -2,7 +2,7 @@ import { fetchAPI } from "@/lib/api";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
 
-export async function fetchUserSearch(
+export async function fetchGetUserSearch(
   userId: string,
   pageNum: string,
   pageSize: string,

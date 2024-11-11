@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, KeyboardEvent } from "react";
 import { StatsApiResponse } from "@/lib/types";
-import { UserSearchList } from "@/lib/admin/types";
 import { removeWhiteSpace } from "@/lib/common";
 import UserSearchTable from "@/components/layout/admin/usersearch/UserSearchTable";
+import { GetServerSidePropsContext } from "next";
+import { UserSearchList } from "@/lib/admin/types";
 
 interface UserSearchComponentProps {
   handleSearch: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -13,29 +14,37 @@ interface UserSearchComponentProps {
   pageNum: string;
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchGetUserSearch: (
+    userId: string,
+    pageNum: string,
+    pageSize: string,
+  ) => Promise<StatsApiResponse>;
 }
 
-const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
-  handleSearch,
-  apiResponse,
-  userId,
-  setUserId,
-  pageSize,
-  pageNum,
-  setPageNum,
-  setLoading,
-}) => {
+const UserSearchComponent: React.FC<UserSearchComponentProps> = (
+  {
+    handleSearch,
+    apiResponse,
+    userId,
+    setUserId,
+    pageSize,
+    pageNum,
+    setPageNum,
+    setLoading,
+    fetchGetUserSearch,
+  },
+  context: GetServerSidePropsContext,
+) => {
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+
   const [userSearchResults, setUserSearchResults] = useState<UserSearchList[]>(
     apiResponse?.result ?? [],
   );
-
   const useScrollPosition = (elementId: string) => {
     const [isBottom, setIsBottom] = useState(false);
-
     useEffect(() => {
       const element = document.getElementById(elementId);
       if (!element) return;
@@ -48,15 +57,14 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
 
       const viewportHeight = window.innerHeight;
       const elementHeight = element.scrollHeight;
-      if (elementHeight <= viewportHeight) {
-        setIsBottom(true);
-      } else {
-        element.addEventListener("scroll", handleScroll, { passive: true });
-        return () => {
-          element.removeEventListener("scroll", handleScroll);
-        };
-      }
-    }, [elementId]);
+      console.log("viewportHeight", viewportHeight);
+      console.log("elementHeight", elementHeight);
+
+      element.addEventListener("scroll", handleScroll, { passive: true });
+      return () => {
+        element.removeEventListener("scroll", handleScroll);
+      };
+    }, []);
 
     return isBottom;
   };
@@ -70,18 +78,41 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
     }
     return false;
   };
+  useEffect(() => {
+    const isNextPage = getNextPage();
+    const nextPageNum = (parseInt(pageNum) + 1).toString();
+
+    if (isNextPage && scrollPosition) {
+      setLoading(true);
+      try {
+        fetchGetUserSearch(userId, pageNum, "1").then((newData) => {
+          setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
+          setPageNum(nextPageNum);
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, [scrollPosition]);
 
   useEffect(() => {
-    const trimmedUserId = removeWhiteSpace(userId);
-    if (trimmedUserId !== userId) {
-      setUserId(trimmedUserId);
+    setUserId(removeWhiteSpace(userId));
+  }, [userId]);
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      buttonRef.current?.click();
     }
-  }, [userId, setUserId]);
-  useEffect(() => {
-    setUserSearchResults(apiResponse?.result ?? []);
-  }, [apiResponse]);
+  };
+
   return (
-    <>
+    <div
+      id="tableDiv"
+      className="overflow-y-auto"
+      style={{ maxHeight: "70vh" }}
+    >
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
@@ -93,17 +124,19 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
         </div>
       </div>
       <div className="searchInputClass">
-        <div className="flex w-full items-center justify-end py-2">
+        <div className="flex w-full items-center justify-end gap-2">
           <input
             type="text"
             id="userId"
-            placeholder={"유저 아이디를 적어주세요"}
+            placeholder="유저 아이디를 적어주세요"
             value={userId}
             className="input-class w-full flex-grow border-b-[1px] py-2 text-sm lg:max-w-[450px]"
             onChange={(e) => setUserId(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <button
-            className={`min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 p-1 text-center text-white`}
+            ref={buttonRef}
+            className="min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 p-1 text-center text-white"
             onClick={handleSearch}
           >
             검색
@@ -124,11 +157,26 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
                 userSearchResults={userSearchResults}
                 tbodyStyle={tbodyStyle}
               />
+              <UserSearchTable
+                userSearchResults={userSearchResults}
+                tbodyStyle={tbodyStyle}
+              />
+              <UserSearchTable
+                userSearchResults={userSearchResults}
+                tbodyStyle={tbodyStyle}
+              />
+              <tr>
+                <td colSpan={4} className="py-4 text-center">
+                  {getNextPage()
+                    ? "Scroll down to load more"
+                    : "No more campaigns"}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
