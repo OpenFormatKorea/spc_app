@@ -30,27 +30,23 @@ const UserSearch = (
   const [pageSize, setPageSize] = useState<string>("10");
 
   const handleSearch = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    setLoading(true);
     try {
       const data = await fetchUserSearch(userId, pageNum, pageSize, context);
       setNewApiResponse(data as StatsApiResponse);
-      return data;
     } catch (error) {
       console.error("Error: ", error);
-      return {
-        status: 500,
-        success: false,
-        message: "검색어를 다시 확인 해 주세요",
-        error: String(error),
-      };
+    } finally {
+      setLoading(false);
     }
   };
-
   const handlePageSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setPageSize(event.target.value);
     setPageNum("1");
   };
+
   useEffect(() => {
     console.log("calling new data feetch");
     const fetchData = async () => {
@@ -71,13 +67,17 @@ const UserSearch = (
       }
     };
     fetchData();
-  }, [userId, pageNum, pageSize]);
+  }, [pageNum, pageSize]);
 
   useEffect(() => {
     if (apiResponse) {
       setLoading(false);
     }
   }, [apiResponse]);
+
+  useEffect(() => {
+    console.log(newApiResponse);
+  }, [newApiResponse]);
   return (
     <>
       {loading && (
@@ -98,6 +98,10 @@ const UserSearch = (
               apiResponse={newApiResponse}
               userId={userId}
               setUserId={setUserId}
+              pageNum={pageNum}
+              setPageNum={setPageNum}
+              pageSize={pageSize}
+              setLoading={setLoading}
             />
             <div className="flex gap-2">
               <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">

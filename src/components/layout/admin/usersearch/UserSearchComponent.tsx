@@ -1,32 +1,85 @@
+import { useEffect, useState } from "react";
+import { StatsApiResponse } from "@/lib/types";
 import { UserSearchList } from "@/lib/admin/types";
 import { removeWhiteSpace } from "@/lib/common";
-import { StatsApiResponse } from "@/lib/types";
-import { GetServerSidePropsContext } from "next";
-import { useEffect } from "react";
+import UserSearchTable from "@/components/layout/admin/usersearch/UserSearchTable";
 
 interface UserSearchComponentProps {
   handleSearch: (e: React.MouseEvent<HTMLButtonElement>) => void;
   apiResponse: StatsApiResponse;
   userId: string;
   setUserId: (value: string) => void;
+  pageSize: string;
+  pageNum: string;
+  setPageNum: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UserSearchComponent: React.FC<UserSearchComponentProps> = (
-  { handleSearch, apiResponse, userId, setUserId },
-  context: GetServerSidePropsContext,
-) => {
+const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
+  handleSearch,
+  apiResponse,
+  userId,
+  setUserId,
+  pageSize,
+  pageNum,
+  setPageNum,
+  setLoading,
+}) => {
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+  const [userSearchResults, setUserSearchResults] = useState<UserSearchList[]>(
+    apiResponse?.result ?? [],
+  );
+
+  const useScrollPosition = (elementId: string) => {
+    const [isBottom, setIsBottom] = useState(false);
+
+    useEffect(() => {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+
+      const handleScroll = () => {
+        const isAtBottom =
+          element.scrollTop + element.clientHeight >= element.scrollHeight;
+        setIsBottom(isAtBottom);
+      };
+
+      const viewportHeight = window.innerHeight;
+      const elementHeight = element.scrollHeight;
+      if (elementHeight <= viewportHeight) {
+        setIsBottom(true);
+      } else {
+        element.addEventListener("scroll", handleScroll, { passive: true });
+        return () => {
+          element.removeEventListener("scroll", handleScroll);
+        };
+      }
+    }, [elementId]);
+
+    return isBottom;
+  };
+
+  const scrollPosition = useScrollPosition("tableDiv");
+  const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+  const totalCount = apiResponse.total_count || 0;
+  const getNextPage = () => {
+    if (totalCount >= stackedDataAmount) {
+      return true;
+    }
+    return false;
+  };
 
   useEffect(() => {
     const trimmedUserId = removeWhiteSpace(userId);
     if (trimmedUserId !== userId) {
       setUserId(trimmedUserId);
     }
-  }, [userId]);
-
+  }, [userId, setUserId]);
+  useEffect(() => {
+    setUserSearchResults(apiResponse?.result ?? []);
+  }, [apiResponse]);
   return (
     <>
       <div className="mb-2 w-full pb-2">
@@ -67,23 +120,10 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = (
               </tr>
             </thead>
             <tbody>
-              {apiResponse.result && apiResponse.result.length > 0 ? (
-                apiResponse.result.map((user: UserSearchList) => (
-                  <tr key={user.id}>
-                    <td className={tbodyStyle}>{user.user_id}</td>
-                    <td className={tbodyStyle}>{user.status}</td>
-                    <td className={tbodyStyle}>{user.shop}</td>
-                    <td className={tbodyStyle}>{user.reward_eligibility}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td className={tbodyStyle} colSpan={5}>
-                    유저 데이터가 없습니다. <br />
-                    유저를 검색해주세요
-                  </td>
-                </tr>
-              )}
+              <UserSearchTable
+                userSearchResults={userSearchResults}
+                tbodyStyle={tbodyStyle}
+              />
             </tbody>
           </table>
         </div>
