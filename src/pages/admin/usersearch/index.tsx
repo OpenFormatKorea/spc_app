@@ -6,7 +6,7 @@ import { withAuth } from "@/hoc/withAuth";
 import { fetchGetUserSearch } from "@/lib/admin/apis";
 import { StatsApiResponse } from "@/lib/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await fetchGetUserSearch("", "1", "10", context);

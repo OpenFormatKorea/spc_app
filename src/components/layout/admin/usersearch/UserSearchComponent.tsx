@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, KeyboardEvent } from "react";
-import { StatsApiResponse } from "@/lib/types";
-import { removeWhiteSpace } from "@/lib/common";
 import UserSearchTable from "@/components/layout/admin/usersearch/UserSearchTable";
-import { GetServerSidePropsContext } from "next";
 import { UserSearchList } from "@/lib/admin/types";
+import { removeWhiteSpace } from "@/lib/common";
+import { StatsApiResponse } from "@/lib/types";
+import { GetServerSidePropsContext } from "next";
+import { useState, useEffect, useRef, KeyboardEvent } from "react";
 
 interface UserSearchComponentProps {
   handleSearch: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -14,7 +14,7 @@ interface UserSearchComponentProps {
   pageNum: string;
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  fetchGetUserSearch: (
+  fetchUserSearch: (
     userId: string,
     pageNum: string,
     pageSize: string,
@@ -31,7 +31,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = (
     pageNum,
     setPageNum,
     setLoading,
-    fetchGetUserSearch,
+    fetchUserSearch,
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -85,7 +85,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = (
     if (isNextPage && scrollPosition) {
       setLoading(true);
       try {
-        fetchGetUserSearch(userId, pageNum, "1").then((newData) => {
+        fetchUserSearch(userId, pageNum, "1").then((newData) => {
           setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
           setPageNum(nextPageNum);
         });
