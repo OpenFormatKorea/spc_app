@@ -6,10 +6,15 @@ import {
   fetchGetCampaignDetails,
   fetchModifyCampaign,
   fetchDeleteCampaign,
+  fetchPostCampaignRecords,
 } from "@/lib/campaign/apis";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
+import {
+  CampaignArgs,
+  CampaignRecordApiResponse,
+  PeriodType,
+} from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetItemList } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
@@ -17,6 +22,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { info } from "console";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
@@ -27,7 +33,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     shop_id,
     context,
   );
-
+  const campaignRecordApiResponse = await fetchPostCampaignRecords(
+    campaign_id,
+    "1",
+    "10",
+    "",
+    "",
+    context,
+  );
   if (!cDetailApiResponse || cDetailApiResponse.shop_id !== shop_id) {
     return {
       redirect: {
@@ -41,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       itemListApiResponse,
       cDetailApiResponse,
+      campaignRecordApiResponse,
       campaign_id,
     },
   };
@@ -51,15 +65,17 @@ const DetailsCampaign = (
     campaign_id,
     itemListApiResponse,
     cDetailApiResponse,
+    campaignRecordApiResponse,
   }: {
     campaign_id: string;
     itemListApiResponse: ApiResponse;
     cDetailApiResponse: CampaignArgs;
+    campaignRecordApiResponse: CampaignRecordApiResponse;
   },
   context: GetServerSidePropsContext,
 ) => {
   const router = useRouter();
-
+  console.log("campaignRecordApiResponse", campaignRecordApiResponse);
   const [title, setTitle] = useState(cDetailApiResponse.title);
   const [description, setDescription] = useState(
     cDetailApiResponse.description,

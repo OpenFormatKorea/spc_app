@@ -24,3 +24,34 @@ export interface KakaoTemplateArgs {
   description: string;
   button_name: string;
 }
+
+export interface CampaignRecordApiResponse {
+  status: string;
+  message: string;
+  error?: string;
+  data?: CampaignRecordsProps;
+  result?: [];
+  total_count?: number;
+  page_size?: number;
+}
+
+export interface CampaignRecordBody {
+  campaign_id: string;
+  page: string;
+  page_size: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface CampaignRecordsProps {
+  id: string;
+  base_user_id: string;
+  shop_id: string;
+  reward_trigger: string;
+  reward_target: string;
+  order_number: string;
+  status: string;
+  message: string;
+  processed_by: string;
+  created_at: string;
+}
