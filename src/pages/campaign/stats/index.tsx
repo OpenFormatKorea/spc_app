@@ -85,10 +85,9 @@ const StatsCampaign = (
   const handlePageSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    const newPageSize = event.target.value;
     setPageSize(event.target.value);
     setPageNum("1");
-    fetchCampaignStats(startDate, endDate, newPageSize, "1");
+    fetchCampaignStats(startDate, endDate, pageSize, "1");
   };
 
   const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
