@@ -80,7 +80,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
                 className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 text-sm text-white"
                 onClick={openModal}
               >
-                리워드 버튼
+                리워드내역
               </button>
             )}
           </div>
