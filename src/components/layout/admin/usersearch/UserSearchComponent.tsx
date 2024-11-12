@@ -21,20 +21,17 @@ interface UserSearchComponentProps {
   ) => Promise<StatsApiResponse>;
 }
 
-const UserSearchComponent: React.FC<UserSearchComponentProps> = (
-  {
-    handleSearch,
-    apiResponse,
-    userId,
-    setUserId,
-    pageSize,
-    pageNum,
-    setPageNum,
-    setLoading,
-    fetchUserSearch,
-  },
-  context: GetServerSidePropsContext,
-) => {
+const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
+  handleSearch,
+  apiResponse,
+  userId,
+  setUserId,
+  pageSize,
+  pageNum,
+  setPageNum,
+  setLoading,
+  fetchUserSearch,
+}) => {
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
@@ -157,14 +154,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = (
                 userSearchResults={userSearchResults}
                 tbodyStyle={tbodyStyle}
               />
-              <UserSearchTable
-                userSearchResults={userSearchResults}
-                tbodyStyle={tbodyStyle}
-              />
-              <UserSearchTable
-                userSearchResults={userSearchResults}
-                tbodyStyle={tbodyStyle}
-              />
+
               <tr>
                 <td colSpan={4} className="py-4 text-center">
                   {getNextPage()

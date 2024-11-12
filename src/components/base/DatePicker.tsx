@@ -58,7 +58,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     <div className="m-2 flex w-fit flex-col rounded-xl bg-gray-200 p-2 pb-2">
       <label className="pb-2 text-xs text-gray-500">{label}</label>
       <div className="flex-col items-center rounded-md bg-white p-2">
-        <div className="flex gap-2">
+        <div className="m-2 flex gap-2">
           <div className="mb-2 flex items-center gap-2 bg-white">
             <select
               value={year}
@@ -103,33 +103,35 @@ const DatePicker: React.FC<DatePickerProps> = ({
             일
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-white">
-          <select
-            value={hour}
-            onChange={(e) => setHour(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-1"
-          >
-            {hours.map((h) => (
-              <option key={h} value={h}>
-                {h}
-              </option>
-            ))}
-          </select>
-          시
-          <select
-            value={minute}
-            onChange={(e) => setMinute(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-1"
-          >
-            {minutes.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-          분
+        <div className="m-2 flex gap-2">
+          <div className="flex items-center gap-2 bg-white">
+            <select
+              value={hour}
+              onChange={(e) => setHour(e.target.value)}
+              disabled={disabled}
+              className="border-gra-300 rounded-md border p-1"
+            >
+              {hours.map((h) => (
+                <option key={h} value={h}>
+                  {h}
+                </option>
+              ))}
+            </select>
+            시
+            <select
+              value={minute}
+              onChange={(e) => setMinute(e.target.value)}
+              disabled={disabled}
+              className="rounded-md border border-gray-300 p-1"
+            >
+              {minutes.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            분
+          </div>
         </div>
       </div>
     </div>

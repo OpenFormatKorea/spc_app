@@ -147,7 +147,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
           <div
             className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
             onClick={() => handleClick("/admin/usersearch")}
-            onMouseEnter={() => handleMouseEnter("마이 페이지")}
+            onMouseEnter={() => handleMouseEnter("유저검색")}
             onMouseLeave={handleMouseLeave}
           >
             <div

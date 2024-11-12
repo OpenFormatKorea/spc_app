@@ -77,7 +77,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             </div>
             {page_type === "DETAILS" && (
               <button
-                className="rounded-lg bg-blue-300 p-1 text-sm text-white"
+                className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 text-sm text-white"
                 onClick={openModal}
               >
                 리워드 버튼
