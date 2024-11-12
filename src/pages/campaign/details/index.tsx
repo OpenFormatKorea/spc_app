@@ -18,11 +18,11 @@ import {
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetItemList } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import router, { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-import { info } from "console";
+import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
@@ -75,7 +75,6 @@ const DetailsCampaign = (
   context: GetServerSidePropsContext,
 ) => {
   const router = useRouter();
-  console.log("campaignRecordApiResponse", campaignRecordApiResponse);
   const [title, setTitle] = useState(cDetailApiResponse.title);
   const [description, setDescription] = useState(
     cDetailApiResponse.description,
@@ -87,6 +86,9 @@ const DetailsCampaign = (
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
   const [active, setActive] = useState(cDetailApiResponse.active);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeModal = () => setIsModalOpen(false);
+
   const campaignArgs: CampaignArgs = {
     title,
     description,
@@ -229,6 +231,7 @@ const DetailsCampaign = (
               setTitle={setTitle}
               setStart_date={setStart_date}
               setEnd_date={setEnd_date}
+              setIsOpen={setIsModalOpen}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">
@@ -258,6 +261,11 @@ const DetailsCampaign = (
           </button>
         </div>
       </DashboardContainer>
+      <CampaignRecord
+        apiResponse={campaignRecordApiResponse}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
     </>
   );
 };

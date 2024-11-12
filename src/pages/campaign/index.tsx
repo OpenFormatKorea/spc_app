@@ -4,7 +4,7 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import AddIcon from "@mui/icons-material/Add";
@@ -43,8 +43,19 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
     }
   };
 
-  const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
-
+  //const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
+  const campaigns = useMemo(() => {
+    try {
+      if (Array.isArray(apiResponse)) {
+        return apiResponse;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      return [];
+    }
+  }, [apiResponse]);
   useEffect(() => {
     if (apiResponse) {
       setLoading(false);

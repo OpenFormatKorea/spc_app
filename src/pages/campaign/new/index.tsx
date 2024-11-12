@@ -1,4 +1,3 @@
-import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
@@ -9,6 +8,7 @@ import { fetchCreateCampaign } from "@/lib/campaign/apis";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
+import CampaignNew from "@/components/layout/campaign/CampaignNew";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
@@ -116,7 +116,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           </div>
         </div>
         <ContentsContainer variant="campaign">
-          <CampaignDetails
+          <CampaignNew
             page_type="NEW"
             campaignArgs={campaignArgs}
             period_type={period_type}

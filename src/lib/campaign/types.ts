@@ -30,7 +30,7 @@ export interface CampaignRecordApiResponse {
   message: string;
   error?: string;
   data?: CampaignRecordsProps;
-  result?: [];
+  result?: any[];
   total_count?: number;
   page_size?: number;
 }
@@ -44,6 +44,7 @@ export interface CampaignRecordBody {
 }
 
 export interface CampaignRecordsProps {
+  result: any;
   id: string;
   base_user_id: string;
   shop_id: string;

@@ -6,7 +6,7 @@ import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRe
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import React, { useRef, KeyboardEvent, useState, useEffect } from "react";
 
-interface CampaignDetailsProps {
+interface CampaignNewProps {
   page_type: "NEW" | "DETAILS";
   campaignArgs: CampaignArgs;
   period_type: PeriodType;
@@ -17,10 +17,9 @@ interface CampaignDetailsProps {
   setStart_date: (value: string) => void;
   setEnd_date: (value: string | null) => void;
   campaign_id?: string;
-  setIsOpen: (value: boolean) => void;
 }
 
-const CampaignDetails: React.FC<CampaignDetailsProps> = ({
+const CampaignNew: React.FC<CampaignNewProps> = ({
   page_type,
   campaignArgs,
   campaign_id,
@@ -31,7 +30,6 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   setTitle,
   setStart_date,
   setEnd_date,
-  setIsOpen,
 }) => {
   const [activeStatus, setActiveStatus] = useState<boolean>(
     campaignArgs.active,
@@ -61,7 +59,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       buttonRef.current?.click();
     }
   };
-  const openModal = () => setIsOpen(true);
+
   const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) =>
     setActiveStatus(newStatus);
 
@@ -75,14 +73,6 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
                 ? "캠페인 상세 정보"
                 : "캠페인 옵션 추가"}
             </div>
-            {page_type === "DETAILS" && (
-              <button
-                className="rounded-lg bg-blue-300 p-2 font-bold text-white"
-                onClick={openModal}
-              >
-                리워드 버튼
-              </button>
-            )}
           </div>
 
           {page_type === "DETAILS" && (
@@ -198,4 +188,4 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   );
 };
 
-export default CampaignDetails;
+export default CampaignNew;

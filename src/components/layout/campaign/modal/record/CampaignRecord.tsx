@@ -1,10 +1,9 @@
-import { useMemo } from "react";
-import { ProductListArgs } from "@/lib/item/types";
-import Modal from "@/components/layout/base/Modal";
+import { useMemo, useState } from "react";
 import {
   CampaignRecordApiResponse,
   CampaignRecordsProps,
 } from "@/lib/campaign/types";
+import BigModal from "@/components/layout/base/BigModal";
 
 interface CampaignRecordProps {
   apiResponse: CampaignRecordApiResponse;
@@ -17,24 +16,29 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
   isOpen,
   onClose,
 }) => {
+  const campaignRecordsArray = apiResponse.data ?? { result: [] };
   const campaignRecords = useMemo(
-    () => (Array.isArray(apiResponse.result) ? apiResponse.result : []),
+    () =>
+      Array.isArray(campaignRecordsArray.result)
+        ? campaignRecordsArray.result
+        : [],
     [apiResponse],
   );
   const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+    "px-6 py-3 border-b border-gray-200 text-center text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
-    "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
-  const labelClass = "text-xs pt-4 text-gray-500";
+    "px-3 py-2 text-sm border-b justify-center border-gray-200 whitespace-normal break-words break-all text-center h-full";
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <BigModal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="w-full pb-2 text-left text-xl font-bold">상품 선택</h1>
+        <h1 className="w-full pb-2 text-left text-xl font-bold">
+          리워드 지급내역
+        </h1>
 
-        <div className="my-2 flex max-h-[550px] max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
+        <div className="my-2 flex max-h-[550px] w-full flex-col items-center overflow-x-hidden overflow-y-scroll lg:max-w-full">
           <div className="flex w-full flex-col rounded-lg bg-white p-3">
             <h1 className="text-md w-full pb-2 text-left font-semibold text-gray-500">
-              상품을 선택해 주세요
+              리워드 지급 내역 리스트입니다
             </h1>
 
             <div className="block w-full py-3">
@@ -42,23 +46,17 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
                 <thead>
                   <tr className="bg-gray-100">
                     <th className={theadStyle}>
-                      {/* <input
-                        type="checkbox"
-                        id="item_all"
-                        name="item_all"
-                        checked={selectAll}
-                        onChange={handleSelectAll}
-                      /> */}
+                      <input type="checkbox" />
                     </th>
                     <th className={theadStyle}>ID</th>
-                    <th className={theadStyle}>shop_id</th>
-                    <th className={theadStyle}>reward_trigger</th>
-                    <th className={theadStyle}>reward_target</th>
-                    <th className={theadStyle}>order_number</th>
-                    <th className={theadStyle}>status</th>
-                    <th className={theadStyle}>message</th>
-                    <th className={theadStyle}>processed_by</th>
-                    <th className={theadStyle}>created_at</th>
+                    <th className={theadStyle}>샵 ID</th>
+                    <th className={theadStyle}>지급방식</th>
+                    <th className={theadStyle}>지급대상</th>
+                    <th className={theadStyle}>주문번호</th>
+                    <th className={theadStyle}>지급여부</th>
+                    {/* <th className={theadStyle}>message</th> */}
+                    <th className={theadStyle}>자동/수동지급</th>
+                    <th className={theadStyle}>지급날짜</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -69,25 +67,80 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
                           type="checkbox"
                           id={`cr_${record.id}`}
                           name={`cr_${record.id}`}
-                          // checked={selectedItemList.includes(record.id)}
-                          // onChange={handleCheckboxChange(record.id)}
                         />
                       </td>
                       <td className={tbodyStyle}>{record.id}</td>
-
                       <td className={tbodyStyle}>{record.shop_id}</td>
-                      <td className={tbodyStyle}>{record.reward_trigger}</td>
-                      <td className={tbodyStyle}>{record.reward_target}</td>
+                      <td className={tbodyStyle}>
+                        <div className="flex items-center justify-center">
+                          {record.reward_trigger === "SIGNUP" ? (
+                            <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-orange-400">
+                              회원가입
+                            </div>
+                          ) : (
+                            <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-green-400">
+                              구매
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td className={tbodyStyle}>
+                        <div className="flex items-center justify-center">
+                          {record.reward_target === "referrer" ? (
+                            <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-blue-400">
+                              추천인
+                            </div>
+                          ) : (
+                            <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-gray-500">
+                              피추천인
+                            </div>
+                          )}
+                        </div>
+                      </td>
+
                       <td className={tbodyStyle}>{record.order_number}</td>
-                      <td className={tbodyStyle}>{record.status}</td>
-                      <td className={tbodyStyle}>{record.message}</td>
-                      <td className={tbodyStyle}>{record.processed_by}</td>
-                      <td className={tbodyStyle}>{record.created_at}</td>
+                      <td className={tbodyStyle}>
+                        <div className="flex items-center justify-center">
+                          {record.status === "SUCCESS" ? (
+                            <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-blue-400">
+                              지급완료
+                            </div>
+                          ) : (
+                            <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-red-400">
+                              지급실패
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      {/* <td className={tbodyStyle}>{record.message}</td> */}
+                      <td className={tbodyStyle}>
+                        <div className="flex items-center justify-center">
+                          {record.processed_by === "SYSTEM" ? (
+                            <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-blue-400">
+                              자동지급
+                            </div>
+                          ) : (
+                            <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-yellow-400">
+                              수동지급
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td className={tbodyStyle}>
+                        {new Date(record.created_at).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )}
+                      </td>
                     </tr>
                   ))}
                   {!campaignRecords.length && (
                     <tr>
-                      <td className={tbodyStyle} colSpan={4}>
+                      <td className={tbodyStyle} colSpan={10}>
                         현재 추가가능한 상품이 없어요.
                       </td>
                     </tr>
@@ -97,12 +150,12 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
             </div>
           </div>
         </div>
-
+        {/* 
         <button className="mt-4 w-full rounded-lg bg-blue-500 p-2 text-white">
           캠페인 테스트 버튼
-        </button>
+        </button> */}
       </div>
-    </Modal>
+    </BigModal>
   );
 };
 
