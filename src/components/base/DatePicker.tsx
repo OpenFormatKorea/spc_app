@@ -58,48 +58,50 @@ const DatePicker: React.FC<DatePickerProps> = ({
     <div className="m-2 flex w-fit flex-col rounded-xl bg-gray-200 p-2 pb-2">
       <label className="pb-2 text-xs text-gray-500">{label}</label>
       <div className="flex-col items-center rounded-md bg-white p-2">
-        <div className="mb-2 flex items-center gap-2 bg-white">
-          <select
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-1"
-          >
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
-          년
-        </div>
-        <div className="mb-2 flex items-center gap-2 bg-white">
-          <select
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-1"
-          >
-            {months.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-          월
-          <select
-            value={day}
-            onChange={(e) => setDay(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-1"
-          >
-            {days.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-          일
+        <div className="flex gap-2">
+          <div className="mb-2 flex items-center gap-2 bg-white">
+            <select
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              disabled={disabled}
+              className="rounded-md border border-gray-300 p-1"
+            >
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+            년
+          </div>
+          <div className="mb-2 flex items-center gap-2 bg-white">
+            <select
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              disabled={disabled}
+              className="rounded-md border border-gray-300 p-1"
+            >
+              {months.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            월
+            <select
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+              disabled={disabled}
+              className="rounded-md border border-gray-300 p-1"
+            >
+              {days.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+            일
+          </div>
         </div>
         <div className="flex items-center gap-2 bg-white">
           <select
