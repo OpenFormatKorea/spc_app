@@ -25,6 +25,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     context,
   );
 
+  if (!apiResponse) {
+    return {
+      redirect: {
+        destination: "/campaign/stats",
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
       apiResponse,
