@@ -16,7 +16,6 @@ const UserSearchTable: React.FC<UserSearchTableProps> = ({
       {userSearchResults.length > 0 ? (
         userSearchResults.map((user: UserSearchList) => (
           <tr
-            key={user.id}
             onClick={() => handleUserDetail(user.user_id)}
             className="cursor-pointer"
           >

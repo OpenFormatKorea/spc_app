@@ -9,8 +9,9 @@ export async function fetchGetUserSearch(
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
+  console.log(" api pageNum: ", pageNum, " api pageSize: ", pageSize);
   let apiUrl = "";
-  userId !== ""
+  userId !== "" || null
     ? (apiUrl =
         `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user?shop_id=` +
         shop_id +
@@ -30,6 +31,7 @@ export async function fetchGetUserSearch(
 
   try {
     const response = await fetchAPI(context, apiUrl, "GET", {});
+    console.log("response.data", response.data);
     return response.data;
   } catch (error) {
     console.error("Error: ", error);

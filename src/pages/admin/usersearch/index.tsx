@@ -5,8 +5,7 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import { withAuth } from "@/hoc/withAuth";
 import { fetchGetUserDetail, fetchGetUserSearch } from "@/lib/admin/apis";
-import { UserSearchList } from "@/lib/admin/types";
-import { StatsApiResponse } from "@/lib/types";
+import { UserDataApiResponse, UserSearchList } from "@/lib/admin/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useState } from "react";
 
@@ -18,11 +17,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const UserSearch = (
-  { apiResponse }: { apiResponse: StatsApiResponse },
+  { apiResponse }: { apiResponse: UserDataApiResponse },
   context: GetServerSidePropsContext,
 ) => {
   const [newApiResponse, setNewApiResponse] =
-    useState<StatsApiResponse>(apiResponse);
+    useState<UserDataApiResponse>(apiResponse);
   const [userDetailsResponse, setUserDetailsResponse] =
     useState<UserSearchList>({
       id: "",
@@ -43,7 +42,7 @@ const UserSearch = (
     setLoading(true);
     try {
       const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);
-      setNewApiResponse(data as StatsApiResponse);
+      setNewApiResponse(data as UserDataApiResponse);
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -76,7 +75,7 @@ const UserSearch = (
     userId: string,
     pageNum: string,
     pageSize: string,
-  ): Promise<StatsApiResponse> => {
+  ): Promise<UserDataApiResponse> => {
     setLoading(true);
     try {
       const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);

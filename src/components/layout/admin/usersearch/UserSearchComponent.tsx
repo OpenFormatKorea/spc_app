@@ -1,13 +1,12 @@
 import UserSearchTable from "@/components/layout/admin/usersearch/UserSearchTable";
-import { UserSearchList } from "@/lib/admin/types";
+import { UserDataApiResponse, UserSearchList } from "@/lib/admin/types";
 import { removeWhiteSpace } from "@/lib/common";
-import { StatsApiResponse } from "@/lib/types";
 import { useState, useEffect, useRef, KeyboardEvent } from "react";
 
 interface UserSearchComponentProps {
   handleSearch: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleUserDetail: (userId: string) => void;
-  apiResponse: StatsApiResponse;
+  apiResponse: UserDataApiResponse;
   userId: string;
   setUserId: (value: string) => void;
   pageSize: string;
@@ -18,7 +17,7 @@ interface UserSearchComponentProps {
     userId: string,
     pageNum: string,
     pageSize: string,
-  ) => Promise<StatsApiResponse>;
+  ) => Promise<UserDataApiResponse>;
 }
 
 const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
@@ -46,18 +45,13 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
     useEffect(() => {
       const element = document.getElementById(elementId);
       if (!element) return;
-
+      const viewportHeight = window.innerHeight;
+      const elementHeight = element.scrollHeight;
       const handleScroll = () => {
         const isAtBottom =
           element.scrollTop + element.clientHeight >= element.scrollHeight;
         setIsBottom(isAtBottom);
       };
-
-      const viewportHeight = window.innerHeight;
-      const elementHeight = element.scrollHeight;
-      console.log("viewportHeight", viewportHeight);
-      console.log("elementHeight", elementHeight);
-
       element.addEventListener("scroll", handleScroll, { passive: true });
       return () => {
         element.removeEventListener("scroll", handleScroll);
@@ -83,7 +77,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
     if (isNextPage && scrollPosition) {
       setLoading(true);
       try {
-        fetchUserSearch(userId, pageNum, "1").then((newData) => {
+        fetchUserSearch(userId, "1", pageSize).then((newData) => {
           setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
           setPageNum(nextPageNum);
         });
