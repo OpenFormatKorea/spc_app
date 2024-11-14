@@ -120,7 +120,9 @@ const ItemStats: React.FC<ItemStatsProps> = ({
             <ItemTable items={items} tbodyStyle={tbodyStyle} />
             <tr>
               <td colSpan={9} className="py-4 text-center">
-                {getNextPage() ? "Scroll down to load more" : ""}
+                {getNextPage()
+                  ? "스크롤하면 더 많은 아이템 통계 정보를 보실 수 있습니다."
+                  : ""}
               </td>
             </tr>
           </tbody>

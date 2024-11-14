@@ -45,9 +45,6 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
               <table className="table w-full border border-gray-100 text-center">
                 <thead>
                   <tr className="bg-gray-100">
-                    <th className={theadStyle}>
-                      <input type="checkbox" />
-                    </th>
                     <th className={theadStyle}>ID</th>
                     <th className={theadStyle}>샵 ID</th>
                     <th className={theadStyle}>지급방식</th>
@@ -62,13 +59,6 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
                 <tbody>
                   {campaignRecords.map((record: CampaignRecordsProps) => (
                     <tr key={record.id}>
-                      <td className={`${tbodyStyle} px-2`}>
-                        <input
-                          type="checkbox"
-                          id={`cr_${record.id}`}
-                          name={`cr_${record.id}`}
-                        />
-                      </td>
                       <td className={tbodyStyle}>{record.id}</td>
                       <td className={tbodyStyle}>{record.shop_id}</td>
                       <td className={tbodyStyle}>
@@ -140,7 +130,7 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
                   ))}
                   {!campaignRecords.length && (
                     <tr>
-                      <td className={tbodyStyle} colSpan={10}>
+                      <td className={tbodyStyle} colSpan={9}>
                         현재 추가가능한 상품이 없어요.
                       </td>
                     </tr>
