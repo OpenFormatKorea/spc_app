@@ -125,8 +125,8 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
             <tr>
               <td colSpan={9} className="py-4 text-center">
                 {getNextPage()
-                  ? "Scroll down to load more"
-                  : "No more campaigns"}
+                  ? "스크롤하면 더 많은 캠페인 통계를 보실 수 있습니다."
+                  : ""}
               </td>
             </tr>
           </tbody>
