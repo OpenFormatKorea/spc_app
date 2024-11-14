@@ -96,6 +96,10 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
     setUserId(removeWhiteSpace(userId));
   }, [userId]);
 
+  useEffect(() => {
+    return setUserSearchResults(apiResponse.result ?? []);
+  }, [apiResponse]);
+
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {

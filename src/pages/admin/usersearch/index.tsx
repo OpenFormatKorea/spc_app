@@ -54,7 +54,7 @@ const UserSearch = (
     setLoading(true);
     try {
       const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);
-      setNewApiResponse(data); // Update the state with new data
+
       return data;
     } catch (error) {
       console.error("Failed to fetch campaign stats:", error);
@@ -63,7 +63,6 @@ const UserSearch = (
       setLoading(false);
     }
   };
-
   return (
     <>
       {loading && (
