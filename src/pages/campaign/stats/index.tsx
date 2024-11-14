@@ -1,12 +1,13 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import CampaignStats from "@/components/layout/campaign/stats/CampaignStats";
 import { ApiResponse, StatsApiResponse } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
+import { start } from "repl";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const today = new Date();
@@ -72,7 +73,7 @@ const StatsCampaign = (
         pgSize,
         context,
       );
-      setNewApiResponse(response);
+      // setNewApiResponse(response);
       return response;
     } catch (error) {
       console.error("Failed to fetch campaign stats:", error);
@@ -82,27 +83,26 @@ const StatsCampaign = (
     }
   };
 
-  const handlePageSizeChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setPageSize(event.target.value);
-    setPageNum("1");
-    fetchCampaignStats(startDate, endDate, pageSize, "1");
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const newStartDate = new Date();
+      newStartDate.setDate(newStartDate.getDate() - Number(period));
+      const formattedStartDate = newStartDate.toISOString().split("T")[0];
 
-  const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newPeriod = event.target.value;
-    setPeriod(newPeriod);
-
-    const newStartDate = new Date();
-    newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
-    const formattedStartDate = newStartDate.toISOString().split("T")[0];
-
-    setStartDate(formattedStartDate);
-    setPageNum("1");
-    fetchCampaignStats(formattedStartDate, endDate, pageSize, "1");
-  };
-
+      setStartDate(formattedStartDate);
+      setPageNum("1");
+      const response = await fetchGetCampaignStats(
+        startDate,
+        endDate,
+        pageNum,
+        pageSize,
+        context,
+      );
+      console.log("statdataresponse: ", response);
+      setNewApiResponse(response);
+    };
+    fetchData();
+  }, [period, pageSize]);
   return (
     <>
       {loading && (
@@ -136,7 +136,7 @@ const StatsCampaign = (
               <select
                 className="w-[50px]"
                 value={pageSize}
-                onChange={handlePageSizeChange}
+                onChange={(e) => setPageSize(e.target.value)}
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -149,7 +149,7 @@ const StatsCampaign = (
               <select
                 className="w-[80px]"
                 value={period}
-                onChange={handlePeriodChange}
+                onChange={(e) => setPeriod(e.target.value)}
               >
                 <option value="30">30일 전</option>
                 <option value="60">60일 전</option>
@@ -157,6 +157,7 @@ const StatsCampaign = (
                 <option value="120">120일 전</option>
               </select>
             </div>
+            이거 왜 안돼??
           </div>
         </ContentsContainer>
       </DashboardContainer>
