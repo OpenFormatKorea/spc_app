@@ -143,7 +143,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
           <table className="w-full border border-gray-100 text-center">
             <thead>
               <tr className="bg-gray-100">
-                <th className={theadStyle}>캠페인 ID</th>
+                <th className={theadStyle}>유저 ID</th>
                 <th className={theadStyle}>활성화</th>
                 <th className={theadStyle}>SHOP ID</th>
                 <th className={theadStyle}>리워드 가능 여부</th>
@@ -158,8 +158,8 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
               <tr>
                 <td colSpan={4} className="py-4 text-center">
                   {getNextPage()
-                    ? "Scroll down to load more"
-                    : "No more campaigns"}
+                    ? "스크롤하면 더 많은 유저 정보를 보실 수 있습니다."
+                    : ""}
                 </td>
               </tr>
             </tbody>
