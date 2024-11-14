@@ -2,11 +2,11 @@ import UserSearchTable from "@/components/layout/admin/usersearch/UserSearchTabl
 import { UserSearchList } from "@/lib/admin/types";
 import { removeWhiteSpace } from "@/lib/common";
 import { StatsApiResponse } from "@/lib/types";
-import { GetServerSidePropsContext } from "next";
 import { useState, useEffect, useRef, KeyboardEvent } from "react";
 
 interface UserSearchComponentProps {
   handleSearch: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleUserDetail: (userId: string) => void;
   apiResponse: StatsApiResponse;
   userId: string;
   setUserId: (value: string) => void;
@@ -23,6 +23,7 @@ interface UserSearchComponentProps {
 
 const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
   handleSearch,
+  handleUserDetail,
   apiResponse,
   userId,
   setUserId,
@@ -156,9 +157,9 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
             <tbody>
               <UserSearchTable
                 userSearchResults={userSearchResults}
+                handleUserDetail={handleUserDetail}
                 tbodyStyle={tbodyStyle}
               />
-
               <tr>
                 <td colSpan={4} className="py-4 text-center">
                   {getNextPage()

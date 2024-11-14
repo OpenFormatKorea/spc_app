@@ -2,7 +2,6 @@ import DatePicker from "@/components/base/DatePicker";
 import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
-import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import React, { useRef, KeyboardEvent, useState, useEffect } from "react";
 

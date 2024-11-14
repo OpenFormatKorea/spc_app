@@ -3,17 +3,23 @@ import { UserSearchList } from "@/lib/admin/types";
 interface UserSearchTableProps {
   tbodyStyle: string;
   userSearchResults: UserSearchList[];
+  handleUserDetail: (userId: string) => void;
 }
 
 const UserSearchTable: React.FC<UserSearchTableProps> = ({
   tbodyStyle,
   userSearchResults,
+  handleUserDetail,
 }) => {
   return (
     <>
       {userSearchResults.length > 0 ? (
         userSearchResults.map((user: UserSearchList) => (
-          <tr key={user.id}>
+          <tr
+            key={user.id}
+            onClick={() => handleUserDetail(user.user_id)}
+            className="cursor-pointer"
+          >
             <td className={tbodyStyle}>{user.user_id}</td>
             <td className={tbodyStyle}>{user.status}</td>
             <td className={tbodyStyle}>{user.shop}</td>

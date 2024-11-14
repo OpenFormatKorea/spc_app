@@ -1,9 +1,11 @@
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import UserDetailsModal from "@/components/layout/admin/usersearch/stat/UserDetailsModal";
 import UserSearchComponent from "@/components/layout/admin/usersearch/UserSearchComponent";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import { withAuth } from "@/hoc/withAuth";
-import { fetchGetUserSearch } from "@/lib/admin/apis";
+import { fetchGetUserDetail, fetchGetUserSearch } from "@/lib/admin/apis";
+import { UserSearchList } from "@/lib/admin/types";
 import { StatsApiResponse } from "@/lib/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useState } from "react";
@@ -21,16 +23,40 @@ const UserSearch = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
+  const [userDetailsResponse, setUserDetailsResponse] =
+    useState<UserSearchList>({
+      id: "",
+      user_id: "",
+      shop: "",
+      status: "",
+      reward_eligibility: "",
+    });
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [pageNum, setPageNum] = useState<string>("1");
   const [pageSize, setPageSize] = useState<string>("10");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const closeModal = () => setIsModalOpen(false);
 
   const handleSearch = async () => {
     setLoading(true);
     try {
       const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);
       setNewApiResponse(data as StatsApiResponse);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleUserDetail = async (user_id: string) => {
+    setLoading(true);
+    try {
+      const data = await fetchGetUserDetail(user_id, context);
+      setUserDetailsResponse(data);
+      setIsModalOpen(true);
+      return data;
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -54,7 +80,6 @@ const UserSearch = (
     setLoading(true);
     try {
       const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);
-
       return data;
     } catch (error) {
       console.error("Failed to fetch campaign stats:", error);
@@ -80,6 +105,7 @@ const UserSearch = (
           <ContentsContainer variant="dashboard">
             <UserSearchComponent
               handleSearch={handleSearch}
+              handleUserDetail={handleUserDetail}
               apiResponse={newApiResponse}
               userId={userId}
               setUserId={setUserId}
@@ -107,6 +133,11 @@ const UserSearch = (
           </ContentsContainer>
         </div>
       </DashboardContainer>
+      <UserDetailsModal
+        apiResponse={userDetailsResponse}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
     </>
   );
 };

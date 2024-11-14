@@ -41,3 +41,29 @@ export async function fetchGetUserSearch(
     };
   }
 }
+
+export async function fetchGetUserDetail(
+  userId: string,
+
+  context: GetServerSidePropsContext,
+) {
+  const shop_id = getShopIdFromCookies(context);
+  const apiUrl =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user-details?shop_id=` +
+    shop_id +
+    "&base_user_id=" +
+    userId;
+
+  try {
+    const response = await fetchAPI(context, apiUrl, "GET", {});
+    return response.data;
+  } catch (error) {
+    console.error("Error: ", error);
+    return {
+      status: 500,
+      success: false,
+      message: "검색어를 다시 확인 해 주세요",
+      error: error,
+    };
+  }
+}
