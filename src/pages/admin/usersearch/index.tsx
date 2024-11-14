@@ -7,7 +7,7 @@ import { withAuth } from "@/hoc/withAuth";
 import { fetchGetUserDetail, fetchGetUserSearch } from "@/lib/admin/apis";
 import { UserDataApiResponse, UserSearchList } from "@/lib/admin/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await fetchGetUserSearch("", "1", "10", context);
@@ -63,14 +63,6 @@ const UserSearch = (
     }
   };
 
-  const handlePageSizeChange = async (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setPageSize(event.target.value);
-    setPageNum("1");
-    fetchGetUserSearch(userId, pageNum, pageSize, context);
-  };
-
   const fetchUserSearch = async (
     userId: string,
     pageNum: string,
@@ -87,6 +79,16 @@ const UserSearch = (
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPageNum("1");
+      const data = await fetchGetUserSearch(userId, "1", pageSize, context);
+      setNewApiResponse(data);
+    };
+    fetchData();
+  }, [pageSize]);
+
   return (
     <>
       {loading && (
@@ -120,7 +122,7 @@ const UserSearch = (
                 <select
                   className="w-[50px]"
                   value={pageSize}
-                  onChange={handlePageSizeChange}
+                  onChange={(e) => setPageSize(e.target.value)}
                 >
                   <option value="10">10</option>
                   <option value="25">25</option>
