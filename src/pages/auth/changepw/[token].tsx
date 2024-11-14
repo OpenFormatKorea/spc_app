@@ -24,7 +24,7 @@ const changepw = () => {
   };
 
   const infoCheck = (info: ChangePWArgs) => {
-    if (info.new_password !== newPasswordChk) {
+    if (info.new_password !== SHA256(newPasswordChk).toString()) {
       alert("Passwords do not match.");
       return false;
     } else if (!info.new_password) {
