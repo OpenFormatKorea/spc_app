@@ -160,13 +160,15 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
                 handleUserDetail={handleUserDetail}
                 tbodyStyle={tbodyStyle}
               />
-              <tr>
-                <td colSpan={4} className="py-4 text-center">
-                  {getNextPage()
-                    ? "스크롤하면 더 많은 유저 정보를 보실 수 있습니다."
-                    : ""}
-                </td>
-              </tr>
+              {getNextPage() ? (
+                <tr>
+                  <td colSpan={4} className="py-4 text-center">
+                    스크롤하면 더 많은 유저 정보를 보실 수 있습니다.
+                  </td>
+                </tr>
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>

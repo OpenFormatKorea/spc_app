@@ -122,13 +122,15 @@ const CampaignStats: React.FC<CampaignStatsProps> = ({
           </thead>
           <tbody>
             <CampaignTable tbodyStyle={tbodyStyle} campaigns={campaigns} />
-            <tr>
-              <td colSpan={9} className="py-4 text-center">
-                {getNextPage()
-                  ? "스크롤하면 더 많은 캠페인 통계를 보실 수 있습니다."
-                  : ""}
-              </td>
-            </tr>
+            {getNextPage() ? (
+              <tr>
+                <td colSpan={9} className="py-4 text-center">
+                  스크롤하면 더 많은 캠페인 통계를 보실 수 있습니다.{" "}
+                </td>
+              </tr>
+            ) : (
+              <></>
+            )}
           </tbody>
         </table>
       </div>
