@@ -17,7 +17,7 @@ const UserSearchTable: React.FC<UserSearchTableProps> = ({
         userSearchResults.map((user: UserSearchList) => (
           <tr
             onClick={() => handleUserDetail(user.user_id)}
-            className="cursor-pointer"
+            className="h-[3vh] cursor-pointer"
           >
             <td className={tbodyStyle}>{user.id}</td>
             <td className={tbodyStyle}>{user.user_id}</td>

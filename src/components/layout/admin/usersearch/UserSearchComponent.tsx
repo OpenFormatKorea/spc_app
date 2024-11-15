@@ -53,6 +53,12 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
       if (!element) return;
       const viewportHeight = window.innerHeight;
       const elementHeight = element.scrollHeight;
+      console.log(
+        "viewportHeight: ",
+        viewportHeight,
+        " elementHeight: ",
+        elementHeight,
+      );
       const handleScroll = () => {
         const isAtBottom =
           element.scrollTop + element.clientHeight >= element.scrollHeight;
@@ -150,14 +156,11 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
               />
               {getNextPage() ? (
                 <tr>
-                  <td colSpan={4}>
+                  <td colSpan={5}>
                     <div className="flex h-full items-center justify-center gap-4 py-2 text-center">
                       <label>
                         스크롤하면 더 많은 유저 정보를 보실 수 있습니다.
                       </label>
-                      <button className="moreButton flex items-center justify-center rounded-md border bg-blue-400 p-1 text-white">
-                        더보기
-                      </button>
                     </div>
                   </td>
                 </tr>

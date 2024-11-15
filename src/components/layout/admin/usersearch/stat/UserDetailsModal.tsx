@@ -51,8 +51,8 @@ const UserDetailsModal: React.FC<UserDetailsProps> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  <tr key={id}>
-                    <td className={tbodyStyle}>{id}</td>
+                  <tr className={tbodyStyle}>
+                    <td>{id}</td>
                     <td className={tbodyStyle}>{user_id}</td>
                     <td className={tbodyStyle}>
                       <div className="flex items-center justify-center">

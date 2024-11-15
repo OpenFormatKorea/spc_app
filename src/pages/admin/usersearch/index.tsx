@@ -10,7 +10,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await fetchGetUserSearch("", "1", "10", context);
+  const response = await fetchGetUserSearch("", "1", "25", context);
   return {
     props: { apiResponse: response },
   };
@@ -33,7 +33,7 @@ const UserSearch = (
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [pageNum, setPageNum] = useState<string>("1");
-  const [pageSize, setPageSize] = useState<string>("10");
+  const [pageSize, setPageSize] = useState<string>("25");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
@@ -116,7 +116,7 @@ const UserSearch = (
               setLoading={setLoading}
               fetchUserSearch={fetchUserSearch}
             />
-            <div className="mt-4 flex gap-2">
+            {/* <div className="mt-4 flex gap-2">
               <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
                 <div className="w-[70px]">아이템 수</div>
                 <select
@@ -130,7 +130,7 @@ const UserSearch = (
                   <option value="100">100</option>
                 </select>
               </div>
-            </div>
+            </div> */}
           </ContentsContainer>
         </div>
       </DashboardContainer>
