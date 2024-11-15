@@ -5,8 +5,6 @@ import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 import { GetServerSidePropsContext } from "next";
 
 interface CampaignStatsProps {
-  theadStyle: string;
-  tbodyStyle: string;
   startDate: string;
   endDate: string;
   pageSize: string;
@@ -18,8 +16,6 @@ interface CampaignStatsProps {
 
 const CampaignStats: React.FC<CampaignStatsProps> = (
   {
-    theadStyle,
-    tbodyStyle,
     startDate,
     endDate,
     pageSize,
@@ -30,6 +26,11 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   },
   context: GetServerSidePropsContext,
 ) => {
+  const theadStyle =
+    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+  const tbodyStyle =
+    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
+
   const [campaigns, setCampaigns] = useState<StatsList[]>(
     apiResponse?.result ?? [],
   );
@@ -85,7 +86,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   };
   const scrollPosition = useScrollPosition("tableDiv");
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  //const totalCount = apiResponse.total_count || 0;
   const [totalCount, setTotalCount] = useState(apiResponse?.total_count || 0);
   const getNextPage = () => {
     if (totalCount >= stackedDataAmount) {

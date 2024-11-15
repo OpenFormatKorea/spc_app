@@ -15,7 +15,6 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     router.replace(`/item/stats?campaign_id=${id}`, undefined, {
-      shallow: true,
       scroll: false,
     });
   };

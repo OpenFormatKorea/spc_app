@@ -14,7 +14,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const start_date = new Date(today.setDate(today.getDate() - 30))
     .toISOString()
     .split("T")[0];
-
   const apiResponse = await fetchGetCampaignStats(
     start_date,
     end_date,
@@ -22,7 +21,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     "25",
     context,
   );
-
   return {
     props: { apiResponse, start_date, end_date },
   };
@@ -42,35 +40,33 @@ const StatsCampaign = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
-  const [loading, setLoading] = useState(false);
+
+  const [period, setPeriod] = useState("30");
   const [startDate, setStartDate] = useState(start_date);
   const [endDate] = useState(end_date);
   const [pageNum, setPageNum] = useState("1");
   const pageSize = "25";
-  const [period, setPeriod] = useState("30");
 
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    const newStartDate = new Date();
+    newStartDate.setDate(newStartDate.getDate() - Number(period));
+    const formattedStartDate = newStartDate.toISOString().split("T")[0];
+    setStartDate(formattedStartDate);
+    setPageNum("1");
+    const data = await fetchGetCampaignStats(
+      startDate,
+      endDate,
+      pageNum,
+      pageSize,
+      context,
+    );
+    setNewApiResponse(data);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const newStartDate = new Date();
-      newStartDate.setDate(newStartDate.getDate() - Number(period));
-      const formattedStartDate = newStartDate.toISOString().split("T")[0];
-      setStartDate(formattedStartDate);
-      setPageNum("1");
-      const response = await fetchGetCampaignStats(
-        startDate,
-        endDate,
-        pageNum,
-        pageSize,
-        context,
-      );
-      setNewApiResponse(response);
-    };
     try {
       fetchData();
     } catch (e) {
@@ -79,6 +75,7 @@ const StatsCampaign = (
       setLoading(false);
     }
   }, [period, pageSize]);
+
   return (
     <>
       {loading && (
@@ -95,14 +92,12 @@ const StatsCampaign = (
 
         <ContentsContainer variant="dashboard">
           <CampaignStats
-            theadStyle={theadStyle}
-            tbodyStyle={tbodyStyle}
             apiResponse={newApiResponse}
             pageNum={pageNum}
             setPageNum={setPageNum}
             startDate={startDate}
             endDate={endDate}
-            pageSize={"25"}
+            pageSize={pageSize}
             setLoading={setLoading}
           />
           <div className="flex h-[40px] gap-2">
