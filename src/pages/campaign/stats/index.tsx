@@ -40,7 +40,6 @@ const StatsCampaign = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
-  console.log("newApiResponse", newApiResponse);
 
   const [period, setPeriod] = useState("30");
   const [startDate, setStartDate] = useState(start_date);
@@ -75,7 +74,7 @@ const StatsCampaign = (
     } finally {
       setLoading(false);
     }
-  }, [period, pageSize]);
+  }, [period]);
 
   return (
     <>

@@ -152,6 +152,7 @@ export async function fetchGetCampaignStats(
   page_size: string,
   context: GetServerSidePropsContext,
 ) {
+  console.log("&page=" + page + " & page_size= " + page_size);
   const shop_id = getShopIdFromCookies(context);
   const final_url =
     `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/shop?shop_id=` +

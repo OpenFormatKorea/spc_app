@@ -93,6 +93,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
     }
     return false;
   };
+
   useEffect(() => {
     const isNextPage = getNextPage();
     const nextPageNum = (parseInt(pageNum) + 1).toString();
@@ -100,7 +101,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
     if (isNextPage && scrollPosition) {
       setLoading(true);
       try {
-        fetchCampaignStats(startDate, endDate, pageSize, "1").then(
+        fetchCampaignStats(startDate, endDate, pageSize, nextPageNum).then(
           (newData) => {
             setCampaigns((prev) => [...prev, ...(newData.result || [])]);
             setPageNum(nextPageNum);

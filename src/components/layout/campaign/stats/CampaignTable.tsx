@@ -15,6 +15,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     router.replace(`/item/stats?campaign_id=${id}`, undefined, {
+      shallow: false,
       scroll: false,
     });
   };
@@ -27,7 +28,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
             className={`cursor-pointer ${
               campaign.period_type === "UNLIMITED" ? "bg-green-50" : "bg-white"
             }`}
-            key={campaign.campaign_id}
+            // key={campaign.campaign_id}
             id={campaign.campaign_id}
             onClick={handleCampaignClick}
           >
