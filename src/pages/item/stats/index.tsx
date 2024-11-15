@@ -1,6 +1,6 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import { StatsApiResponse } from "@/lib/types";
@@ -76,43 +76,34 @@ const StatsItem = (
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
 
-  const fetchItemsStats = async (
-    start: string,
-    end: string,
-    pageSize: string,
-    pageNum: string,
-  ): Promise<StatsApiResponse> => {
-    setLoading(true);
-    try {
-      const response = await fetchGetItemStats(
-        start,
-        end,
-        pageNum,
-        pageSize,
-        campaign_id,
-        context,
-      );
-      setNewApiResponse(response);
-      return response;
-    } catch (error) {
-      console.error("Failed to fetch item stats:", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newPeriod = event.target.value;
-    setPeriod(newPeriod);
+  const fetchData = async () => {
     const newStartDate = new Date();
-    newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
+    newStartDate.setDate(newStartDate.getDate() - Number(period));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
     setStartDate(formattedStartDate);
     setPageNum("1");
-    setNewApiResponse({ ...newApiResponse, result: [] });
-    fetchItemsStats(formattedStartDate, endDate, pageSize, "1");
+    const data = await fetchGetItemStats(
+      formattedStartDate,
+      endDate,
+      pageNum,
+      pageSize,
+      campaign_id,
+      context,
+    );
+    setNewApiResponse(data);
   };
+
+  useEffect(() => {
+    setLoading(true);
+
+    try {
+      fetchData();
+    } catch (e) {
+      console.error("error:", e);
+    } finally {
+      setLoading(false);
+    }
+  }, [period]);
 
   return (
     <>
@@ -132,7 +123,7 @@ const StatsItem = (
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
             apiResponse={newApiResponse}
-            fetchItemsStats={fetchItemsStats}
+            campaign_id={campaign_id}
             pageNum={pageNum}
             setPageNum={setPageNum}
             startDate={startDate}
@@ -146,7 +137,7 @@ const StatsItem = (
               <select
                 className="w-[80px]"
                 value={period}
-                onChange={handlePeriodChange}
+                onChange={(e) => setPeriod(e.target.value)}
               >
                 <option value="30">30일 전</option>
                 <option value="60">60일 전</option>

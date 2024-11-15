@@ -50,7 +50,6 @@ const StatsCampaign = (
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    setLoading(true);
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(period));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
@@ -67,6 +66,8 @@ const StatsCampaign = (
   };
 
   useEffect(() => {
+    setLoading(true);
+
     try {
       fetchData();
     } catch (e) {

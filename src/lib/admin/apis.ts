@@ -83,7 +83,6 @@ export async function fetchPutReWardEligibility(
     is_active: status,
     reward_eligibility: rewardEligibility,
   };
-  console.log("data", data);
 
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", data);

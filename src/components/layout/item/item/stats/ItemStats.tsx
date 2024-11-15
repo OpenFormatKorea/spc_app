@@ -1,5 +1,8 @@
 import ItemTable from "@/components/layout/item/item/stats/ItemTable";
+import { fetchGetItemStats } from "@/lib/item/apis";
 import { StatsApiResponse, StatsList } from "@/lib/types";
+import { paginationClasses } from "@mui/material";
+import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 
 interface ItemStatsProps {
@@ -10,29 +13,53 @@ interface ItemStatsProps {
   pageSize: string;
   pageNum: string;
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
+  campaign_id: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   apiResponse: StatsApiResponse;
-  fetchItemsStats: (
+}
+
+const ItemStats: React.FC<ItemStatsProps> = (
+  {
+    theadStyle,
+    tbodyStyle,
+    startDate,
+    endDate,
+    pageSize,
+    pageNum,
+    setPageNum,
+    campaign_id,
+    setLoading,
+    apiResponse,
+  },
+  context: GetServerSidePropsContext,
+) => {
+  const fetchItemsStats = async (
     start: string,
     end: string,
     pageSize: string,
     pageNum: string,
-  ) => Promise<StatsApiResponse>;
-}
+  ): Promise<StatsApiResponse> => {
+    setLoading(true);
+    try {
+      const response = await fetchGetItemStats(
+        start,
+        end,
+        pageNum,
+        pageSize,
+        campaign_id,
+        context,
+      );
+      return response;
+    } catch (error) {
+      console.error("Failed to fetch item stats:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const ItemStats: React.FC<ItemStatsProps> = ({
-  theadStyle,
-  tbodyStyle,
-  startDate,
-  endDate,
-  pageSize,
-  pageNum,
-  setPageNum,
-  setLoading,
-  apiResponse,
-  fetchItemsStats,
-}) => {
   const [items, setItems] = useState<StatsList[]>(apiResponse?.result ?? []);
+
   const useScrollPosition = (elementId: string) => {
     const [isBottom, setIsBottom] = useState(false);
 
@@ -46,18 +73,11 @@ const ItemStats: React.FC<ItemStatsProps> = ({
         setIsBottom(isAtBottom);
       };
 
-      const viewportHeight = window.innerHeight;
-      const elementHeight = element.scrollHeight;
-
-      if (elementHeight <= viewportHeight) {
-        setIsBottom(true);
-      } else {
-        element.addEventListener("scroll", handleScroll, { passive: true });
-        return () => {
-          element.removeEventListener("scroll", handleScroll);
-        };
-      }
-    }, [elementId]);
+      element.addEventListener("scroll", handleScroll, { passive: true });
+      return () => {
+        element.removeEventListener("scroll", handleScroll);
+      };
+    }, []);
 
     return isBottom;
   };
@@ -65,7 +85,6 @@ const ItemStats: React.FC<ItemStatsProps> = ({
   const scrollPosition = useScrollPosition("tableDiv");
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const [totalCount, setTotalCount] = useState(apiResponse?.total_count || 0);
-
   const getNextPage = () => {
     if (totalCount >= stackedDataAmount) {
       return true;
@@ -76,13 +95,16 @@ const ItemStats: React.FC<ItemStatsProps> = ({
   useEffect(() => {
     const isNextPage = getNextPage();
     const nextPageNum = (parseInt(pageNum) + 1).toString();
+    console.log("pageSize: ", pageSize, "nextPageNum: ", nextPageNum);
     if (isNextPage && scrollPosition) {
       setLoading(true);
       try {
-        fetchItemsStats(startDate, endDate, pageSize, "1").then((newData) => {
-          setItems((prev) => [...prev, ...(newData.result || [])]);
-          setPageNum(nextPageNum);
-        });
+        fetchItemsStats(startDate, endDate, pageSize, nextPageNum).then(
+          (newData) => {
+            setItems((prev) => [...prev, ...(newData.result || [])]);
+            setPageNum(nextPageNum);
+          },
+        );
       } finally {
         setLoading(false);
       }

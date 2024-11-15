@@ -71,11 +71,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
         setIsBottom(isAtBottom);
       };
 
-      const viewportHeight = window.innerHeight;
-      const elementHeight = element.scrollHeight;
-      console.log("viewportHeight", viewportHeight);
-      console.log("elementHeight", elementHeight);
-
       element.addEventListener("scroll", handleScroll, { passive: true });
       return () => {
         element.removeEventListener("scroll", handleScroll);
@@ -97,7 +92,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   useEffect(() => {
     const isNextPage = getNextPage();
     const nextPageNum = (parseInt(pageNum) + 1).toString();
-
     if (isNextPage && scrollPosition) {
       setLoading(true);
       try {
