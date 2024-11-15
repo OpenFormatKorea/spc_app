@@ -51,14 +51,6 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
     useEffect(() => {
       const element = document.getElementById(elementId);
       if (!element) return;
-      const viewportHeight = window.innerHeight;
-      const elementHeight = element.scrollHeight;
-      console.log(
-        "viewportHeight: ",
-        viewportHeight,
-        " elementHeight: ",
-        elementHeight,
-      );
       const handleScroll = () => {
         const isAtBottom =
           element.scrollTop + element.clientHeight >= element.scrollHeight;
@@ -88,7 +80,6 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
           setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
           setPageNum(nextPageNum);
         });
-        console.log("page size : ", pageSize, " page number: ", pageNum);
       } finally {
         setLoading(false);
       }

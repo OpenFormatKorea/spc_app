@@ -67,7 +67,6 @@ const Login = (context: GetServerSidePropsContext) => {
     if (!loading) {
       setLoading(true);
       if (infoCheck(loginInfo)) {
-        console.log("SHA256(password): ", loginInfo.password);
         const result = await postLogin(loginInfo);
         if (result.success) {
           deleteCookies();
