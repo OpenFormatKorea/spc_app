@@ -129,6 +129,7 @@ const UserSearch = (
               setLoading={setLoading}
               fetchUserSearch={fetchUserSearch}
             />
+            <div className="mt-4 flex gap-2"></div>
           </ContentsContainer>
         </div>
       </DashboardContainer>

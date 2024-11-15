@@ -15,10 +15,10 @@ const UserDetailsModal: React.FC<UserDetailsProps> = (
   { apiResponse, isOpen, onClose },
   context: GetServerSidePropsContext,
 ) => {
-  console.log("apiResponse", apiResponse);
   const campaignRecord: UserSearchList = apiResponse ?? {};
+
   const [rewardEligibility, setRewardEligibility] =
-    useState<RewardEligibilityType>(campaignRecord.reward_eligibility ?? "");
+    useState<RewardEligibilityType>(campaignRecord.reward_eligibility);
   const id = campaignRecord.id ?? "";
   const user_id = campaignRecord.user_id ?? "";
   const status = campaignRecord.status ?? "";
@@ -50,12 +50,14 @@ const UserDetailsModal: React.FC<UserDetailsProps> = (
     } finally {
       onClose();
       alert("지급 방법이 변경되었습니다.");
+      window.location.reload();
     }
   };
 
   useEffect(() => {
+    setRewardEligibility(campaignRecord.reward_eligibility);
     console.log("rewardEligibility", rewardEligibility);
-  }, [rewardEligibility]);
+  }, [isOpen]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -100,16 +102,18 @@ const UserDetailsModal: React.FC<UserDetailsProps> = (
                     </td>
                     <td className={tbodyStyle}>
                       <div className="m-2 flex h-full w-fit min-w-[120px] justify-center rounded-lg bg-gray-200 p-1 font-bold">
-                        {rewardEligibility === "ALL" && (
+                        {campaignRecord.reward_eligibility === "ALL" && (
                           <span className="text-blue-400">모두 지급</span>
                         )}
-                        {rewardEligibility === "REFERRER_ONLY" && (
+                        {campaignRecord.reward_eligibility ===
+                          "REFERRER_ONLY" && (
                           <span className="text-green-400">추천인 지급</span>
                         )}
-                        {rewardEligibility === "REFEREE_ONLY" && (
+                        {campaignRecord.reward_eligibility ===
+                          "REFEREE_ONLY" && (
                           <span className="text-orange-400">피추천인만</span>
                         )}
-                        {rewardEligibility === "NONE" && (
+                        {campaignRecord.reward_eligibility === "NONE" && (
                           <span className="text-red-400">미지급</span>
                         )}
                       </div>
