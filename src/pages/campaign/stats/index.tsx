@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     start_date,
     end_date,
     "1",
-    "25",
+    "10",
     context,
   );
   return {
@@ -40,12 +40,13 @@ const StatsCampaign = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
+  console.log("newApiResponse", newApiResponse);
 
   const [period, setPeriod] = useState("30");
   const [startDate, setStartDate] = useState(start_date);
   const [endDate] = useState(end_date);
   const [pageNum, setPageNum] = useState("1");
-  const pageSize = "25";
+  const pageSize = "10";
 
   const [loading, setLoading] = useState(false);
 

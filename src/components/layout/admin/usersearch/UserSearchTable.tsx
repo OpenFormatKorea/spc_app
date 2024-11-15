@@ -44,7 +44,7 @@ const UserSearchTable: React.FC<UserSearchTableProps> = ({
                     <span className="text-green-400">추천인 지급</span>
                   )}
                   {user.reward_eligibility === "REFEREE_ONLY" && (
-                    <span className="text-orange-400">피추천인만</span>
+                    <span className="text-orange-400">피추천인 지급</span>
                   )}
                   {user.reward_eligibility === "NONE" && (
                     <span className="text-red-400">미지급</span>

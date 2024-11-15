@@ -135,8 +135,8 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
                 <th className={theadStyle}>ID No.</th>
                 <th className={theadStyle}>유저 ID</th>
                 <th className={theadStyle}>활성화</th>
-                <th className={theadStyle}> 리워드 지급 조건</th>
-                <th className={theadStyle}>SHOP ID</th>
+                <th className={theadStyle}>리워드 지급 조건</th>
+                <th className={theadStyle}>샵 ID</th>
               </tr>
             </thead>
             <tbody className="h-full">
