@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       start_date,
       end_date,
       page: "1",
-      page_size: "10",
+      page_size: "25",
     },
   };
 };
@@ -53,21 +53,19 @@ const StatsItem = (
     start_date,
     end_date,
     page,
-    page_size,
   }: {
     apiResponse: StatsApiResponse;
     campaign_id: string;
     start_date: string;
     end_date: string;
     page: string;
-    page_size: string;
   },
   context: GetServerSidePropsContext,
 ) => {
   const [startDate, setStartDate] = useState(start_date);
   const [endDate] = useState(end_date);
   const [pageNum, setPageNum] = useState(page);
-  const [pageSize, setPageSize] = useState(page_size);
+  const pageSize = "25";
   const [period, setPeriod] = useState("30");
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
@@ -102,16 +100,6 @@ const StatsItem = (
     } finally {
       setLoading(false);
     }
-  };
-
-  const handlePageSizeChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const newPageSize = event.target.value;
-    setPageSize(newPageSize);
-    setPageNum("1");
-    setNewApiResponse({ ...newApiResponse, result: [] });
-    fetchItemsStats(startDate, endDate, newPageSize, "1");
   };
 
   const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -153,19 +141,6 @@ const StatsItem = (
             setLoading={setLoading}
           />
           <div className="flex gap-2">
-            <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-              <div className="w-[70px]">아이템 수</div>
-              <select
-                className="w-[50px]"
-                value={pageSize}
-                onChange={handlePageSizeChange}
-              >
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
               <div className="w-[70px]">내역기간</div>
               <select
