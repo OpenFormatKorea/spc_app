@@ -67,7 +67,6 @@ const UserDetailsModal: React.FC<UserDetailsProps> = ({
                         )}
                       </div>
                     </td>
-                    <td className={tbodyStyle}>{shop_id}</td>
                     <td className={tbodyStyle}>
                       <div className="flex items-center justify-center">
                         {reward_eligibility === "ALL" ? (
@@ -81,6 +80,7 @@ const UserDetailsModal: React.FC<UserDetailsProps> = ({
                         )}
                       </div>
                     </td>
+                    <td className={tbodyStyle}>{shop_id}</td>
                   </tr>
                 </tbody>
               </table>

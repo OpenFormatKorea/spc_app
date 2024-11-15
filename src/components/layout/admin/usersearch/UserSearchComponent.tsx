@@ -36,7 +36,13 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
-
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      buttonRef.current?.click();
+    }
+  };
   const [userSearchResults, setUserSearchResults] = useState<UserSearchList[]>(
     apiResponse?.result ?? [],
   );
@@ -60,16 +66,11 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
 
     return isBottom;
   };
-
   const scrollPosition = useScrollPosition("tableDiv");
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse.total_count || 0;
-  const getNextPage = () => {
-    if (totalCount >= stackedDataAmount) {
-      return true;
-    }
-    return false;
-  };
+  const getNextPage = () => totalCount >= stackedDataAmount;
+
   useEffect(() => {
     const isNextPage = getNextPage();
     const nextPageNum = (parseInt(pageNum) + 1).toString();
@@ -77,16 +78,16 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
     if (isNextPage && scrollPosition) {
       setLoading(true);
       try {
-        fetchUserSearch(userId, "1", pageSize).then((newData) => {
+        fetchUserSearch(userId, pageNum, pageSize).then((newData) => {
           setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
           setPageNum(nextPageNum);
         });
+        console.log("page size : ", pageSize, " page number: ", pageNum);
       } finally {
         setLoading(false);
       }
     }
   }, [scrollPosition]);
-
   useEffect(() => {
     setUserId(removeWhiteSpace(userId));
   }, [userId]);
@@ -94,14 +95,6 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
   useEffect(() => {
     return setUserSearchResults(apiResponse.result ?? []);
   }, [apiResponse]);
-
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      buttonRef.current?.click();
-    }
-  };
 
   return (
     <div
@@ -138,17 +131,18 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
             검색
           </button>
         </div>
-        <div className="w-full py-2">
-          <table className="w-full border border-gray-100 text-center">
+        <div className="h-full w-full py-2">
+          <table className="h-full min-h-full w-full border border-gray-100 text-center">
             <thead>
               <tr className="bg-gray-100">
+                <th className={theadStyle}>ID No.</th>
                 <th className={theadStyle}>유저 ID</th>
                 <th className={theadStyle}>활성화</th>
-                <th className={theadStyle}>SHOP ID</th>
                 <th className={theadStyle}>리워드 가능 여부</th>
+                <th className={theadStyle}>SHOP ID</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="h-full">
               <UserSearchTable
                 userSearchResults={userSearchResults}
                 handleUserDetail={handleUserDetail}
@@ -156,13 +150,18 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
               />
               {getNextPage() ? (
                 <tr>
-                  <td colSpan={4} className="py-4 text-center">
-                    스크롤하면 더 많은 유저 정보를 보실 수 있습니다.
+                  <td colSpan={4}>
+                    <div className="flex h-full items-center justify-center gap-4 py-2 text-center">
+                      <label>
+                        스크롤하면 더 많은 유저 정보를 보실 수 있습니다.
+                      </label>
+                      <button className="moreButton flex items-center justify-center rounded-md border bg-blue-400 p-1 text-white">
+                        더보기
+                      </button>
+                    </div>
                   </td>
                 </tr>
-              ) : (
-                <></>
-              )}
+              ) : null}
             </tbody>
           </table>
         </div>
