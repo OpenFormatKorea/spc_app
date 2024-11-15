@@ -36,15 +36,20 @@ const UserSearchTable: React.FC<UserSearchTableProps> = ({
             </td>
             <td className={tbodyStyle}>
               <div className="flex items-center justify-center">
-                {user.reward_eligibility === "ALL" ? (
-                  <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-blue-400">
-                    지급가능
-                  </div>
-                ) : (
-                  <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-red-400">
-                    지급불가능
-                  </div>
-                )}
+                <div className="m-2 flex h-full w-fit min-w-[120px] justify-center rounded-lg bg-gray-200 p-1 font-bold">
+                  {user.reward_eligibility === "ALL" && (
+                    <span className="text-blue-400">모두 지급</span>
+                  )}
+                  {user.reward_eligibility === "REFERRER_ONLY" && (
+                    <span className="text-green-400">추천인 지급</span>
+                  )}
+                  {user.reward_eligibility === "REFEREE_ONLY" && (
+                    <span className="text-orange-400">피추천인만</span>
+                  )}
+                  {user.reward_eligibility === "NONE" && (
+                    <span className="text-red-400">미지급</span>
+                  )}
+                </div>
               </div>
             </td>
             <td className={tbodyStyle}>{user.shop}</td>

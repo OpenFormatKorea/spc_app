@@ -13,5 +13,12 @@ export interface UserSearchList {
   user_id: string;
   status: string;
   shop: string;
-  reward_eligibility: string;
+  reward_eligibility: RewardEligibilityType;
+}
+
+export enum RewardEligibilityType {
+  ALL = "ALL",
+  REFERRER = "REFERRER_ONLY",
+  REFEREE = "REFEREE_ONLY",
+  NONE = "NONE",
 }

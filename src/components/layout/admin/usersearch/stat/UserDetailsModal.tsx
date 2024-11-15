@@ -1,5 +1,9 @@
-import { UserSearchList } from "@/lib/admin/types";
+import { RewardEligibilityType, UserSearchList } from "@/lib/admin/types";
 import Modal from "@/components/layout/base/Modal";
+import InputRadioBox from "@/components/base/InputRadio";
+import { useEffect, useState } from "react";
+import { fetchPutReWardEligibility } from "@/lib/admin/apis";
+import { GetServerSidePropsContext } from "next";
 
 interface UserDetailsProps {
   apiResponse: UserSearchList;
@@ -7,21 +11,52 @@ interface UserDetailsProps {
   onClose: () => void;
 }
 
-const UserDetailsModal: React.FC<UserDetailsProps> = ({
-  apiResponse,
-  isOpen,
-  onClose,
-}) => {
+const UserDetailsModal: React.FC<UserDetailsProps> = (
+  { apiResponse, isOpen, onClose },
+  context: GetServerSidePropsContext,
+) => {
+  console.log("apiResponse", apiResponse);
   const campaignRecord: UserSearchList = apiResponse ?? {};
+  const [rewardEligibility, setRewardEligibility] =
+    useState<RewardEligibilityType>(campaignRecord.reward_eligibility ?? "");
   const id = campaignRecord.id ?? "";
   const user_id = campaignRecord.user_id ?? "";
   const status = campaignRecord.status ?? "";
   const shop_id = campaignRecord.shop ?? "";
-  const reward_eligibility = campaignRecord.reward_eligibility ?? "";
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-center text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 text-sm border-b justify-center border-gray-200 whitespace-normal break-words break-all text-center h-full";
+
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setRewardEligibility(e.target.value as RewardEligibilityType);
+
+  const fetchData = async () => {
+    await fetchPutReWardEligibility(
+      user_id,
+      rewardEligibility,
+      status,
+      context,
+    );
+  };
+
+  const handleChangeReWardEligibility = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    try {
+      fetchData();
+    } catch (error) {
+      console.error("Error: ", error);
+    } finally {
+      onClose();
+      alert("지급 방법이 변경되었습니다.");
+    }
+  };
+
+  useEffect(() => {
+    console.log("rewardEligibility", rewardEligibility);
+  }, [rewardEligibility]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">
@@ -42,12 +77,8 @@ const UserDetailsModal: React.FC<UserDetailsProps> = ({
                     <th className={theadStyle}>ID</th>
                     <th className={theadStyle}>사용자 ID</th>
                     <th className={theadStyle}>활성화</th>
+                    <th className={theadStyle}>리워드 지급 조건</th>
                     <th className={theadStyle}>숍 ID</th>
-                    <th className={theadStyle}>
-                      리워드 지급
-                      <br />
-                      가능 여부
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -68,15 +99,18 @@ const UserDetailsModal: React.FC<UserDetailsProps> = ({
                       </div>
                     </td>
                     <td className={tbodyStyle}>
-                      <div className="flex items-center justify-center">
-                        {reward_eligibility === "ALL" ? (
-                          <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-blue-400">
-                            지급가능
-                          </div>
-                        ) : (
-                          <div className="m-2 flex h-full w-fit min-w-[60px] justify-center rounded-lg bg-gray-200 p-1 font-bold text-red-400">
-                            지급불가능
-                          </div>
+                      <div className="m-2 flex h-full w-fit min-w-[120px] justify-center rounded-lg bg-gray-200 p-1 font-bold">
+                        {rewardEligibility === "ALL" && (
+                          <span className="text-blue-400">모두 지급</span>
+                        )}
+                        {rewardEligibility === "REFERRER_ONLY" && (
+                          <span className="text-green-400">추천인 지급</span>
+                        )}
+                        {rewardEligibility === "REFEREE_ONLY" && (
+                          <span className="text-orange-400">피추천인만</span>
+                        )}
+                        {rewardEligibility === "NONE" && (
+                          <span className="text-red-400">미지급</span>
                         )}
                       </div>
                     </td>
@@ -84,6 +118,53 @@ const UserDetailsModal: React.FC<UserDetailsProps> = ({
                   </tr>
                 </tbody>
               </table>
+              <div className="flex w-full items-center justify-end gap-2 py-3 text-sm">
+                <div className="p-2 font-bold">리워드 지급 조건: </div>
+                <div className="flex gap-2">
+                  <InputRadioBox
+                    label="모두 지급"
+                    name="rewardEligibility"
+                    value={RewardEligibilityType.ALL}
+                    checked={rewardEligibility === RewardEligibilityType.ALL}
+                    onChange={handleRadioChange}
+                    disabled={false}
+                  />
+                  <InputRadioBox
+                    label="추천인 지급"
+                    name="rewardEligibility"
+                    value={RewardEligibilityType.REFERRER}
+                    checked={
+                      rewardEligibility === RewardEligibilityType.REFERRER
+                    }
+                    onChange={handleRadioChange}
+                    disabled={false}
+                  />
+                  <InputRadioBox
+                    label="피추천인 지급"
+                    name="rewardEligibility"
+                    value={RewardEligibilityType.REFEREE}
+                    checked={
+                      rewardEligibility === RewardEligibilityType.REFEREE
+                    }
+                    onChange={handleRadioChange}
+                    disabled={false}
+                  />
+                  <InputRadioBox
+                    label="미지급"
+                    name="rewardEligibility"
+                    value={RewardEligibilityType.NONE}
+                    checked={rewardEligibility === RewardEligibilityType.NONE}
+                    onChange={handleRadioChange}
+                    disabled={false}
+                  />
+                </div>
+                <button
+                  className="w-[50px] rounded-md bg-blue-400 p-1 text-white"
+                  onClick={handleChangeReWardEligibility}
+                >
+                  저장
+                </button>
+              </div>
             </div>
           </div>
         </div>

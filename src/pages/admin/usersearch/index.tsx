@@ -5,7 +5,11 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import { withAuth } from "@/hoc/withAuth";
 import { fetchGetUserDetail, fetchGetUserSearch } from "@/lib/admin/apis";
-import { UserDataApiResponse, UserSearchList } from "@/lib/admin/types";
+import {
+  RewardEligibilityType,
+  UserDataApiResponse,
+  UserSearchList,
+} from "@/lib/admin/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 
@@ -28,7 +32,7 @@ const UserSearch = (
       user_id: "",
       shop: "",
       status: "",
-      reward_eligibility: "",
+      reward_eligibility: RewardEligibilityType.ALL,
     });
 
   const [userId, setUserId] = useState<string>("");
