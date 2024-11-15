@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import CampaignTable from "@/components/layout/campaign/stats/CampaignTable";
 import { StatsApiResponse, StatsList } from "@/lib/types";
+import { fetchGetCampaignStats } from "@/lib/campaign/apis";
+import { GetServerSidePropsContext } from "next";
 
 interface CampaignStatsProps {
   theadStyle: string;
@@ -12,29 +14,49 @@ interface CampaignStatsProps {
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   apiResponse: StatsApiResponse;
-  fetchCampaignStats: (
-    start: string,
-    end: string,
-    pageSize: string,
-    pageNum: string,
-  ) => Promise<StatsApiResponse>;
 }
 
-const CampaignStats: React.FC<CampaignStatsProps> = ({
-  theadStyle,
-  tbodyStyle,
-  startDate,
-  endDate,
-  pageSize,
-  pageNum,
-  setPageNum,
-  setLoading,
-  apiResponse,
-  fetchCampaignStats,
-}) => {
+const CampaignStats: React.FC<CampaignStatsProps> = (
+  {
+    theadStyle,
+    tbodyStyle,
+    startDate,
+    endDate,
+    pageSize,
+    pageNum,
+    setPageNum,
+    setLoading,
+    apiResponse,
+  },
+  context: GetServerSidePropsContext,
+) => {
   const [campaigns, setCampaigns] = useState<StatsList[]>(
     apiResponse?.result ?? [],
   );
+
+  const fetchCampaignStats = async (
+    start: string,
+    end: string,
+    pgSize: string,
+    pgNum: string,
+  ): Promise<StatsApiResponse> => {
+    setLoading(true);
+    try {
+      const response = await fetchGetCampaignStats(
+        start,
+        end,
+        pgNum,
+        pgSize,
+        context,
+      );
+      return response;
+    } catch (error) {
+      console.error("Failed to fetch campaign stats:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const useScrollPosition = (elementId: string) => {
     const [isBottom, setIsBottom] = useState(false);

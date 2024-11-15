@@ -106,12 +106,6 @@ const StatsCampaign = (
             setLoading={setLoading}
           />
           <div className="flex h-[40px] gap-2">
-            {/* <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-              <div className="flex min-w-[100px] items-center gap-2 text-left text-sm">
-                <label className="font-bold">총 데이터 수: </label>
-                <label>{newApiResponse.total_count || "0"}</label>
-              </div>
-            </div> */}
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
               <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">
                 <label className="font-bold">내역기간</label>
