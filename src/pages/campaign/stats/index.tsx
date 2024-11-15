@@ -5,9 +5,8 @@ import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import CampaignStats from "@/components/layout/campaign/stats/CampaignStats";
-import { ApiResponse, StatsApiResponse } from "@/lib/types";
+import { StatsApiResponse } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
-import { start } from "repl";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const today = new Date();
@@ -15,16 +14,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const start_date = new Date(today.setDate(today.getDate() - 30))
     .toISOString()
     .split("T")[0];
+
   const apiResponse = await fetchGetCampaignStats(
     start_date,
     end_date,
     "1",
-    "10",
+    "25",
     context,
   );
 
   return {
-    props: { apiResponse, start_date, end_date, page: "1", page_size: "10" },
+    props: { apiResponse, start_date, end_date },
   };
 };
 
@@ -33,14 +33,10 @@ const StatsCampaign = (
     apiResponse,
     start_date,
     end_date,
-    page,
-    page_size,
   }: {
     apiResponse: StatsApiResponse;
     start_date: string;
     end_date: string;
-    page: string;
-    page_size: string;
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -49,8 +45,8 @@ const StatsCampaign = (
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(start_date);
   const [endDate] = useState(end_date);
-  const [pageNum, setPageNum] = useState(page);
-  const [pageSize, setPageSize] = useState(page_size);
+  const [pageNum, setPageNum] = useState("1");
+  const pageSize = "25";
   const [period, setPeriod] = useState("30");
 
   const theadStyle =
@@ -58,37 +54,12 @@ const StatsCampaign = (
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
 
-  const fetchCampaignStats = async (
-    start: string,
-    end: string,
-    pgSize: string,
-    pgNum: string,
-  ): Promise<StatsApiResponse> => {
-    setLoading(true);
-    try {
-      const response = await fetchGetCampaignStats(
-        start,
-        end,
-        pgNum,
-        pgSize,
-        context,
-      );
-      // setNewApiResponse(response);
-      return response;
-    } catch (error) {
-      console.error("Failed to fetch campaign stats:", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const newStartDate = new Date();
       newStartDate.setDate(newStartDate.getDate() - Number(period));
       const formattedStartDate = newStartDate.toISOString().split("T")[0];
-
       setStartDate(formattedStartDate);
       setPageNum("1");
       const response = await fetchGetCampaignStats(
@@ -98,10 +69,15 @@ const StatsCampaign = (
         pageSize,
         context,
       );
-      console.log("statdataresponse: ", response);
       setNewApiResponse(response);
     };
-    fetchData();
+    try {
+      fetchData();
+    } catch (e) {
+      console.error("error:", e);
+    } finally {
+      setLoading(false);
+    }
   }, [period, pageSize]);
   return (
     <>
@@ -122,32 +98,26 @@ const StatsCampaign = (
             theadStyle={theadStyle}
             tbodyStyle={tbodyStyle}
             apiResponse={newApiResponse}
-            fetchCampaignStats={fetchCampaignStats}
             pageNum={pageNum}
             setPageNum={setPageNum}
             startDate={startDate}
             endDate={endDate}
-            pageSize={pageSize}
+            pageSize={"25"}
             setLoading={setLoading}
           />
-          <div className="mt-4 flex gap-2">
+          <div className="flex h-[40px] gap-2">
+            {/* <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+              <div className="flex min-w-[100px] items-center gap-2 text-left text-sm">
+                <label className="font-bold">총 데이터 수: </label>
+                <label>{newApiResponse.total_count || "0"}</label>
+              </div>
+            </div> */}
             <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-              <div className="w-[70px]">아이템 수</div>
+              <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">
+                <label className="font-bold">내역기간</label>
+              </div>
               <select
-                className="w-[50px]"
-                value={pageSize}
-                onChange={(e) => setPageSize(e.target.value)}
-              >
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-              <div className="w-[70px]">내역기간</div>
-              <select
-                className="w-[80px]"
+                className="font-sm"
                 value={period}
                 onChange={(e) => setPeriod(e.target.value)}
               >
@@ -157,7 +127,6 @@ const StatsCampaign = (
                 <option value="120">120일 전</option>
               </select>
             </div>
-            이거 왜 안돼??
           </div>
         </ContentsContainer>
       </DashboardContainer>

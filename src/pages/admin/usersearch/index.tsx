@@ -117,12 +117,12 @@ const UserSearch = (
               fetchUserSearch={fetchUserSearch}
             />
             <div className="mt-4 flex gap-2">
-              <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+              {/* <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
                 <div className="flex min-w-[100px] items-center gap-2 text-left text-sm">
                   <label className="font-bold">총 유저 수: </label>
-                  <label>{newApiResponse.total_count || ""}</label>
+                  <label>{newApiResponse.total_count || "0"}</label>
                 </div>
-              </div>
+              </div> */}
             </div>
           </ContentsContainer>
         </div>
