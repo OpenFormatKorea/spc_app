@@ -64,7 +64,7 @@ const ItemStats: React.FC<ItemStatsProps> = ({
 
   const scrollPosition = useScrollPosition("tableDiv");
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  const totalCount = apiResponse.total_count || 0;
+  const [totalCount, setTotalCount] = useState(apiResponse.total_count || 0);
 
   const getNextPage = () => {
     if (totalCount >= stackedDataAmount) {
