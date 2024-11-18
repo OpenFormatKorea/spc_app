@@ -14,10 +14,14 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
 
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
-    router.replace(`/item/stats?campaign_id=${id}`, undefined, {
-      shallow: false,
-      scroll: false,
-    });
+    try {
+      router.replace(`/item/stats?campaign_id=${id}`, undefined, {
+        shallow: false,
+        scroll: false,
+      });
+    } catch (error) {
+      alert("캠페인 정보를 불러올 수 없습니다. 나중에 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -25,10 +29,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
       {campaigns.length > 0 ? (
         campaigns.map((campaign: StatsList) => (
           <tr
-            className={`cursor-pointer ${
-              campaign.period_type === "UNLIMITED" ? "bg-green-50" : "bg-white"
-            }`}
-            // key={campaign.campaign_id}
+            className={`cursor-pointer bg-white`}
             id={campaign.campaign_id}
             onClick={handleCampaignClick}
           >

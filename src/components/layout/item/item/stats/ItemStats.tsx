@@ -1,7 +1,6 @@
 import ItemTable from "@/components/layout/item/item/stats/ItemTable";
 import { fetchGetItemStats } from "@/lib/item/apis";
 import { StatsApiResponse, StatsList } from "@/lib/types";
-import { paginationClasses } from "@mui/material";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 
