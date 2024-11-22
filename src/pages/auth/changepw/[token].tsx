@@ -5,7 +5,7 @@ import { SHA256 } from "crypto-js";
 import { useRouter } from "next/router";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
-const changepw = () => {
+const ChangePw = () => {
   const [showPW, setShowPw] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [new_password, setNewPW] = useState("");
@@ -112,4 +112,4 @@ const changepw = () => {
     ></AuthChangePWForm>
   );
 };
-export default changepw;
+export default ChangePw;

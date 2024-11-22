@@ -5,7 +5,7 @@ import { AuthArgs } from "@/lib/auth/types";
 import router from "next/router";
 import { useEffect, useRef, useState, KeyboardEvent } from "react";
 
-const resetpw = () => {
+const ResetPw = () => {
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [username, setUsername] = useState("");
@@ -78,4 +78,4 @@ const resetpw = () => {
     </AuthContainer>
   );
 };
-export default resetpw;
+export default ResetPw;
