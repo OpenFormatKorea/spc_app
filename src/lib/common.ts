@@ -27,3 +27,22 @@ export function hasWhiteSpace(s: string) {
 export function removeWhiteSpace(s: string) {
   return s.replace(/\s/g, "");
 }
+
+export const S3Auth = async (path: string, file: File) => {
+  console.log("inside of S3 Auth;");
+  const response = await fetch("/api/s3-presigned-url.internal-api", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ key: path, fileType: "dummy" }),
+  });
+  const { uploadURL } = await response.json();
+  await fetch(uploadURL, {
+    method: "PUT",
+    body: file, // The actual File or Blob you want to upload
+  });
+  const url = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION_NAME}.amazonaws.com/${path}`;
+  console.log("url", url);
+  return url;
+};

@@ -91,8 +91,10 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                       >
                         {page_type === "NEW" && (
                           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 transition-all duration-300 group-hover:bg-opacity-20">
-                            <span className="text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            <span className="text-center text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                               사진 업로드
+                              <br />
+                              (80px * 80px)
                             </span>
                           </div>
                         )}

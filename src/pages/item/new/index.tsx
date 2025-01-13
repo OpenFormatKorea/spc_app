@@ -5,7 +5,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
 import { useRef, useEffect, KeyboardEvent, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-import ReactS3Client from "@/lib/aws/ReactS3Client";
+//import ReactS3Client from "@/lib/aws/ReactS3Client";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse } from "@/lib/types";
@@ -28,6 +28,7 @@ import {
 import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
 import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
 import ProductList from "@/components/layout/item/modal/ProductList";
+import { S3Auth } from "@/lib/common";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -165,6 +166,9 @@ const NewItem = (
 
   const onChangeImage =
     (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files || e.target.files.length === 0) {
+        return;
+      }
       const file = e.target.files?.[0];
       if (!file || !file.type.startsWith("image/")) {
         alert("Please upload a valid image file.");
@@ -207,13 +211,13 @@ const NewItem = (
       reader.readAsDataURL(file);
     };
 
-  const deletePreviousFile = async (previousFilePath: string) => {
-    try {
-      await ReactS3Client.deleteFile(previousFilePath);
-    } catch (error) {
-      console.error("Failed to delete previous file:", error);
-    }
-  };
+  // const deletePreviousFile = async (previousFilePath: string) => {
+  //   try {
+  //     await ReactS3Client.deleteFile(previousFilePath);
+  //   } catch (error) {
+  //     console.error("Failed to delete previous file:", error);
+  //   }
+  // };
 
   const uploadImage = async (
     file: File,
@@ -223,10 +227,11 @@ const NewItem = (
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
     const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}`;
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
+    console.log("path", path);
     try {
-      deletePreviousFile(previousFilePath);
-      await ReactS3Client.uploadFile(file, path);
-      return path;
+      //   // deletePreviousFile(previousFilePath);
+      const url = await S3Auth(path, file);
+      return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);
       throw error;

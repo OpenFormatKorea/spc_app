@@ -1,9 +1,7 @@
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
-import { UploadResponse } from "react-aws-s3-typescript/dist/types";
 
 import { AnyAction } from "../interfaces/index";
-import ReactS3Client from "../context/ReactS3Client";
 
 export function getAccessTokenFromCookies(context: GetServerSidePropsContext) {
   const acceess = getCookie("access_standalone", {
@@ -24,7 +22,10 @@ export function getShopIdFromCookies(context: GetServerSidePropsContext) {
   return shop;
 }
 
-export function setAccessTokenToCookies(context: GetServerSidePropsContext, token: string) {
+export function setAccessTokenToCookies(
+  context: GetServerSidePropsContext,
+  token: string,
+) {
   deleteCookie("access_standalone", {
     ...context,
   });
@@ -34,7 +35,10 @@ export function setAccessTokenToCookies(context: GetServerSidePropsContext, toke
   });
 }
 
-export function setRefreshTokenToCookies(context: GetServerSidePropsContext, token: string) {
+export function setRefreshTokenToCookies(
+  context: GetServerSidePropsContext,
+  token: string,
+) {
   deleteCookie("refresh_standalone", {
     ...context,
   });
@@ -44,7 +48,10 @@ export function setRefreshTokenToCookies(context: GetServerSidePropsContext, tok
   });
 }
 
-export function setShopIdTokenToCookies(context: GetServerSidePropsContext, token: string) {
+export function setShopIdTokenToCookies(
+  context: GetServerSidePropsContext,
+  token: string,
+) {
   deleteCookie("shop_id_standalone", {
     ...context,
   });
@@ -70,7 +77,10 @@ export const deleteCookies = () => {
   console.log("cookies deleted");
 };
 
-export const success_dispatch = (res: { status: number; message?: string }, dispatch: React.Dispatch<AnyAction>) => {
+export const success_dispatch = (
+  res: { status: number; message?: string },
+  dispatch: React.Dispatch<AnyAction>,
+) => {
   if (res.status < 300 && res.status >= 200) {
     dispatch({
       type: "SUCCESS",
@@ -87,7 +97,7 @@ export const success_dispatch = (res: { status: number; message?: string }, disp
             success: null,
           },
         }),
-      3000
+      3000,
     );
   } else {
     if (res.message) {
@@ -107,28 +117,4 @@ export const success_dispatch = (res: { status: number; message?: string }, disp
       });
     }
   }
-};
-
-export const uploadToAWS = async (images: { [key: string]: File }): Promise<UploadResponse[]> => {
-  return Promise.all(
-    Object.keys(images).map(async (key) => {
-      // At first, assign unique id to each image
-      let d = new Date().getTime();
-      const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-        const r = (d + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
-      });
-      const path = getCookie("shop_id_standalone") + "/" + uuid;
-
-      const res = await ReactS3Client.uploadFile(images[key] as File, path);
-      return res;
-    })
-  )
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      return err;
-    });
 };
