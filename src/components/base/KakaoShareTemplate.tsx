@@ -196,9 +196,9 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                   className="h-full w-full"
                                   src={
                                     page_type === "DETAILS"
-                                      ? `${baseUrl}${shop_logo}`
+                                      ? `${shop_logo}`
                                       : shop_logo_result ||
-                                        "/images/kakao/kakaolink-no-logo-default.png"
+                                        `${baseUrl}/images/kakao/kakaolink-no-logo-default.png`
                                   }
                                   alt="Shop Logo"
                                   style={{ borderRadius: "35%" }}

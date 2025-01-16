@@ -231,6 +231,7 @@ const NewItem = (
     try {
       //   // deletePreviousFile(previousFilePath);
       const url = await S3Auth(path, file);
+      console.log("url", url);
       return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);
