@@ -97,7 +97,7 @@ const NewItem = (
   const closeModal = () => setIsModalOpen(false);
   const openModal = () =>
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
-  const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE;
+  const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
 
   const itemArgs: ItemArgs = {
     title,
@@ -186,8 +186,10 @@ const NewItem = (
               imgType,
               imgType === "image" ? image : shop_logo,
             );
-            const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
+            console.log("imgUrl onChangeImage", imgUrl);
 
+            const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
+            console.log("full_imgUrl onChangeImage", full_imgUrl);
             if (imgType === "image") {
               setImage_result(reader.result);
               setImage(full_imgUrl);
@@ -225,18 +227,14 @@ const NewItem = (
     previousFilePath: string,
   ) => {
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const extension = file.name.split(".").pop(); // Extract the part after the last '.'
-    extension && extension !== file.name ? extension.toLowerCase() : null;
-    const extenstionFinal = "." + extension;
-    console.log("extenstionFinal", extenstionFinal);
-    const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}${extenstionFinal}`;
+    const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}`;
     const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
       //   // deletePreviousFile(previousFilePath);
       const url = await S3Auth(path, file);
       console.log("url", url);
-      return url;
+      return path;
     } catch (error) {
       console.error("Image Upload Failed:", error);
       throw error;

@@ -4,20 +4,13 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const isProduction = process.env.NODE_ENV === "production";
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 let credentials;
 if (isProduction) {
-  console.log("isproduction YES YES");
-
   credentials = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   };
-  console.log("credentials", credentials);
 } else {
-  console.log("isproduction NO NO");
-
-  // you muse have 'dashboard' aws profile locally
   credentials = fromIni({ profile: "dashboard" });
 }
 
@@ -37,8 +30,6 @@ export default async function handler(
 
   try {
     const uploadURL = await getSignedUrl(s3Client, command, { expiresIn: 10 });
-    console.log("req.body", req.body);
-    console.log("res", res.status, res);
     res.status(200).json({ uploadURL });
   } catch (error) {
     console.error("Error generating signed URL:", error);
