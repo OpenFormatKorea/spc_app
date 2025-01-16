@@ -3,8 +3,8 @@ import { fromIni } from "@aws-sdk/credential-providers";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-const isProduction = process.env.NODE_ENV === "production";
-//const isProduction = process.env.NODE_ENV === "development";
+//const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === "development" || "production";
 console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 let credentials;
 if (isProduction) {
