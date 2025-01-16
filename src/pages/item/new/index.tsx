@@ -188,7 +188,8 @@ const NewItem = (
             );
             console.log("imgUrl onChangeImage", imgUrl);
 
-            const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
+            //const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
+            const full_imgUrl = imgUrl + "." + fileExtension;
             console.log("full_imgUrl onChangeImage", full_imgUrl);
             if (imgType === "image") {
               setImage_result(reader.result);
@@ -234,7 +235,8 @@ const NewItem = (
       //   // deletePreviousFile(previousFilePath);
       const url = await S3Auth(path, file);
       console.log("url", url);
-      return path;
+      //return path;
+      return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);
       throw error;
