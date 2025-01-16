@@ -189,7 +189,7 @@ const NewItem = (
             console.log("imgUrl onChangeImage", imgUrl);
 
             //const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
-            const full_imgUrl = imgUrl + "." + fileExtension;
+            const full_imgUrl = imgUrl;
             console.log("full_imgUrl onChangeImage", full_imgUrl);
             if (imgType === "image") {
               setImage_result(reader.result);
@@ -228,7 +228,9 @@ const NewItem = (
     previousFilePath: string,
   ) => {
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}`;
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+    const finaleFileExtension = "." + fileExtension;
+    const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}${finaleFileExtension}`;
     const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
