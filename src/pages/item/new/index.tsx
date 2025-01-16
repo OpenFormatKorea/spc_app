@@ -225,7 +225,11 @@ const NewItem = (
     previousFilePath: string,
   ) => {
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}`;
+    const extension = file.name.split(".").pop(); // Extract the part after the last '.'
+    extension && extension !== file.name ? extension.toLowerCase() : null;
+    const extenstionFinal = "." + extension;
+    console.log("extenstionFinal", extenstionFinal);
+    const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}${extenstionFinal}`;
     const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
