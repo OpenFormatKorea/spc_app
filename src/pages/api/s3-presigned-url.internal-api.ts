@@ -3,8 +3,7 @@ import { fromIni } from "@aws-sdk/credential-providers";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-//const isProduction = process.env.NODE_ENV === "production";
-const isProduction = process.env.NODE_ENV === "development" || "production";
+const isProduction = process.env.NODE_ENV === "production";
 console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 let credentials;
 if (isProduction) {
@@ -12,6 +11,7 @@ if (isProduction) {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   };
+  console.log("credentials", credentials);
 } else {
   // you muse have 'dashboard' aws profile locally
   credentials = fromIni({ profile: "dashboard" });
