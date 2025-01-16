@@ -45,6 +45,5 @@ export const S3Auth = async (path: string, file: File) => {
     body: file, // The actual File or Blob you want to upload
   });
   const url = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION_NAME}.amazonaws.com/${path}`;
-  console.log("url", url);
   return url;
 };

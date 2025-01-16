@@ -12,7 +12,6 @@ if (isProduction) {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   };
-  console.log("credentials", credentials);
 } else {
   // you muse have 'dashboard' aws profile locally
   credentials = fromIni({ profile: "dashboard" });
@@ -21,8 +20,6 @@ if (isProduction) {
 const region = process.env.NEXT_PUBLIC_AWS_REGION_NAME;
 const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
 const s3Client = new S3Client({ region, credentials });
-console.log("region", region);
-console.log("bucketName", bucketName);
 
 export default async function handler(
   req: NextApiRequest,
@@ -36,7 +33,11 @@ export default async function handler(
 
   try {
     const uploadURL = await getSignedUrl(s3Client, command, { expiresIn: 10 });
+    console.log("req.body", req.body);
+    console.log("region", region);
+    console.log("bucketName", bucketName);
     console.log("uploadURL", uploadURL);
+    console.log("res", res);
     res.status(200).json({ uploadURL });
   } catch (error) {
     console.error("Error generating signed URL:", error);
