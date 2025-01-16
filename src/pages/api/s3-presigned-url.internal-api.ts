@@ -10,6 +10,7 @@ if (isProduction) {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   };
+  console.log("credentials", credentials);
 } else {
   credentials = fromIni({ profile: "dashboard" });
 }

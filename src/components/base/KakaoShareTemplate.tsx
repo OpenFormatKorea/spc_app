@@ -198,10 +198,14 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                     page_type === "DETAILS"
                                       ? `${shop_logo}`
                                       : shop_logo_result ||
-                                        `${baseUrl}/images/kakao/kakaolink-no-logo-default.png`
+                                        "/images/kakao/kakaolink-no-logo-default.png"
                                   }
                                   alt="Shop Logo"
                                   style={{ borderRadius: "35%" }}
+                                  onError={(e) => {
+                                    e.currentTarget.src =
+                                      "/images/kakao/kakaolink-no-logo-default.png";
+                                  }}
                                 />
                               </div>
                               <p className="text-xs text-gray-400">
