@@ -38,10 +38,7 @@ export default async function handler(
   try {
     const uploadURL = await getSignedUrl(s3Client, command, { expiresIn: 10 });
     console.log("req.body", req.body);
-    console.log("region", region);
-    console.log("bucketName", bucketName);
-    console.log("uploadURL", uploadURL);
-    console.log("res", res);
+    console.log("res", res.status, res);
     res.status(200).json({ uploadURL });
   } catch (error) {
     console.error("Error generating signed URL:", error);

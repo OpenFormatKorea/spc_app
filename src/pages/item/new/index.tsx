@@ -230,7 +230,7 @@ const NewItem = (
     const extenstionFinal = "." + extension;
     console.log("extenstionFinal", extenstionFinal);
     const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}${extenstionFinal}`;
-    const path = `standalone/${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
+    const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
       //   // deletePreviousFile(previousFilePath);

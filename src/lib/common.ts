@@ -37,7 +37,7 @@ export const S3Auth = async (path: string, file: File) => {
     },
     body: JSON.stringify({ key: path, fileType: "dummy" }),
   });
-  console.log("response", response);
+  console.log("S3Auth response", response);
 
   const { uploadURL } = await response.json();
   await fetch(uploadURL, {
