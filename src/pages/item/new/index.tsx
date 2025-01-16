@@ -97,7 +97,7 @@ const NewItem = (
   const closeModal = () => setIsModalOpen(false);
   const openModal = () =>
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
-  const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE;
 
   const itemArgs: ItemArgs = {
     title,
