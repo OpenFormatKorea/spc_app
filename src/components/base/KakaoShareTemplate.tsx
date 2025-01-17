@@ -130,14 +130,15 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                               onClick={() => shopLogoFileInput.current?.click()}
                             >
                               <img
-                                className="h-full w-full rounded-[8px]"
+                                className="h-full w-full"
                                 src={
                                   page_type === "DETAILS"
-                                    ? `${shop_logo_url}`
+                                    ? `${shop_logo}`
                                     : shop_logo_result ||
                                       "/images/kakao/kakaolink-no-logo-default.png"
                                 }
-                                alt="Selected"
+                                alt="Shop Logo"
+                                style={{ borderRadius: "35%" }}
                                 onError={(e) => {
                                   e.currentTarget.src =
                                     "/images/kakao/kakaolink-no-logo-default.png";
