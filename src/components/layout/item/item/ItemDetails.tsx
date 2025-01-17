@@ -27,7 +27,7 @@ interface ItemDetailsProps {
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>;
   setActive?: (value: boolean) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onChangeImage?: (
+  onChangeImage: (
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   campaign_id?: string;

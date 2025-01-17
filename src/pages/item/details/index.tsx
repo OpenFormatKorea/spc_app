@@ -15,19 +15,21 @@ import {
   ItemArgs,
   ProductsArgs,
   PromotionsArgs,
-  RewardType,
   RewardsArgs,
   KakaoShareArgs,
-  CouponsArgs,
   ItemModifyArgs,
 } from "@/lib/item/types";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import RewardComponentDetails from "@/components/layout/item/reward/details/RewardComponentDetails";
 import { ApiResponse } from "@/lib/types";
+import { S3Auth } from "@/lib/common";
+import { getShopIdFromCookies } from "@/lib/helper";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
+  const shop_id = getShopIdFromCookies(context);
+
   const couponResponse = await fetchGetCouponCodeList("1", "10", context);
   const IDetailApiResponse = await fetchGetItemDetails(
     item_id,
@@ -49,6 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       apiResponse: IDetailApiResponse,
       campaign_id,
       couponResponse,
+      shop_id,
     },
   };
 };
@@ -58,17 +61,21 @@ const DetailsItem = (
     apiResponse,
     campaign_id,
     couponResponse,
-  }: { apiResponse: any; campaign_id: string; couponResponse: ApiResponse },
+    shop_id,
+  }: {
+    apiResponse: any;
+    campaign_id: string;
+    couponResponse: ApiResponse;
+    shop_id: string;
+  },
   context: GetServerSidePropsContext,
 ) => {
   const [title, setTitle] = useState(apiResponse.title);
   const rewards = apiResponse.rewards || [];
+  const disableInput = false;
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
     apiResponse.kakao_args,
   );
-  const image = kakaoShareArgs.image;
-  const shop_logo = kakaoShareArgs.shop_logo;
-  const disableInput = false;
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
     apiResponse.products || [
       {
@@ -88,7 +95,10 @@ const DetailsItem = (
   );
   const [loading, setLoading] = useState(true);
   const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]);
-  const [newAddedRewards, setNewAddedRewards] = useState<RewardsArgs[]>([]);
+  const [image_result, setImage_result] = useState<string>("");
+  const [image, setImage] = useState<string>(kakaoShareArgs.image);
+  const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
+  const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const itemArgs: ItemArgs = {
     id: apiResponse.id || "",
     title,
@@ -111,6 +121,74 @@ const DetailsItem = (
     current_rewards: selectedRewards,
     active,
     campaign_id,
+  };
+
+  const onChangeImage =
+    (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files || e.target.files.length === 0) {
+        return;
+      }
+      const file = e.target.files?.[0];
+      console.log("file", file);
+      if (!file || !file.type.startsWith("image/")) {
+        alert("Please upload a valid image file.");
+        return;
+      }
+      const reader = new FileReader();
+
+      reader.onload = async () => {
+        if (reader.result && typeof reader.result === "string") {
+          try {
+            const imgUrl = await uploadImage(
+              file,
+              imgType,
+              imgType === "image" ? image : shop_logo,
+            );
+            console.log("imgUrl onChangeImage", imgUrl);
+            const full_imgUrl = imgUrl;
+            console.log("full_imgUrl onChangeImage", full_imgUrl);
+            if (imgType === "image") {
+              setImage_result(reader.result);
+              setImage(full_imgUrl);
+              setKakaoShareArgs((prevArgs) => ({
+                ...prevArgs,
+                image: full_imgUrl,
+              }));
+            } else {
+              setShop_logo_result(reader.result);
+              setShop_logo(full_imgUrl);
+              setKakaoShareArgs((prevArgs) => ({
+                ...prevArgs,
+                shop_logo: full_imgUrl,
+              }));
+            }
+          } catch (error) {
+            console.error(`${imgType} upload failed:`, error);
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+  const uploadImage = async (
+    file: File,
+    imgType: string,
+    previousFilePath: string,
+  ) => {
+    const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+    const finaleFileExtension = "." + fileExtension;
+    const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}${finaleFileExtension}`;
+    const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
+    console.log("path", path);
+    try {
+      const url = await S3Auth(path, file);
+      console.log("url", url);
+      return url;
+    } catch (error) {
+      console.error("Image Upload Failed:", error);
+      throw error;
+    }
   };
 
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
@@ -181,6 +259,9 @@ const DetailsItem = (
               handleKeyDown={handleKeyDown}
               image={image}
               shop_logo={shop_logo}
+              image_result={image_result}
+              shop_logo_result={shop_logo_result}
+              onChangeImage={onChangeImage}
               disableInput={disableInput}
             />
           </ContentsContainer>
@@ -207,7 +288,7 @@ const DetailsItem = (
               setItem_type={setItem_type}
               setProductInputs={setProductInputs}
               handleKeyDown={handleKeyDown}
-              disableInput
+              disableInput={disableInput}
             />
 
             <RewardComponentDetails

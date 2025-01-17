@@ -58,8 +58,8 @@ const NewItem = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  const [pageNum, setPageNum] = useState("1");
-  const [pageSize, setPageSize] = useState("10");
+  // const [pageNum, setPageNum] = useState("1");
+  // const [pageSize, setPageSize] = useState("10");
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
@@ -97,7 +97,7 @@ const NewItem = (
   const closeModal = () => setIsModalOpen(false);
   const openModal = () =>
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
-  const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
+  // const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
 
   const itemArgs: ItemArgs = {
     title,
@@ -186,7 +186,6 @@ const NewItem = (
               imgType,
               imgType === "image" ? image : shop_logo,
             );
-            console.log("imgUrl onChangeImage", imgUrl);
 
             //const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
             const full_imgUrl = imgUrl;

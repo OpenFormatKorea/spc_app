@@ -12,7 +12,7 @@ interface KakaoShareProps {
   shop_logo_result?: string;
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onChangeImage?: (
+  onChangeImage: (
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -79,9 +79,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         style={{ display: "none" }}
                         accept="image/jpg,image/png,image/jpeg"
                         name="image_result"
-                        onChange={
-                          onChangeImage ? onChangeImage("image") : undefined
-                        }
+                        onChange={onChangeImage("image")}
                         ref={imageFileInput}
                         disabled={disableInput}
                       />
@@ -123,11 +121,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                               style={{ display: "none" }}
                               accept="image/jpg,image/png,image/jpeg"
                               name="shop_logo_result"
-                              onChange={
-                                onChangeImage
-                                  ? onChangeImage("shop_logo")
-                                  : undefined
-                              }
+                              onChange={onChangeImage("shop_logo")}
                               ref={shopLogoFileInput}
                               disabled={disableInput}
                             />
