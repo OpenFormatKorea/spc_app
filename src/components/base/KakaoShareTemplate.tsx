@@ -41,7 +41,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   const [shop_logo_url, setShop_logo_url] = useState(shop_logo);
 
   const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
-
+  console.log("baseUrl", baseUrl);
   useEffect(() => {
     setImg_url(image);
     setShop_logo_url(shop_logo);
