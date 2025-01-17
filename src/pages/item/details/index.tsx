@@ -178,7 +178,7 @@ const DetailsItem = (
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const finaleFileExtension = "." + fileExtension;
-    const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}${finaleFileExtension}`;
+    const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
     const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
