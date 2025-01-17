@@ -43,7 +43,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
   console.log("baseUrl", baseUrl);
   useEffect(() => {
-    setImg_url(image);
+    setImg_url(img_url);
     setShop_logo_url(shop_logo);
     setKakaoShareArgs({
       shop_name,
@@ -100,7 +100,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                           className="h-full w-full"
                           src={
                             page_type === "DETAILS"
-                              ? `${img_url}`
+                              ? img_url
                               : image_result ||
                                 "/images/kakao/kakaolink-no-logo-default.png"
                           }
