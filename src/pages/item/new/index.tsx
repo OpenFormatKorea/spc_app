@@ -75,10 +75,8 @@ const NewItem = (
   );
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
     shop_name: "",
-    image:
-      "https://incento-standalone.s3.ap-northeast-2.amazonaws.com/standalone/images/kakao/kakaolink-no-logo-default.png",
-    shop_logo:
-      "https://incento-standalone.s3.ap-northeast-2.amazonaws.com/standalone/images/kakao/kakaolink-no-logo-default.png",
+    image: "",
+    shop_logo: "",
     title: "",
     description: "",
     button_name: "",

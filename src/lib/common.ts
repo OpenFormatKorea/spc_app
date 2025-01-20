@@ -34,7 +34,7 @@ export const S3AuthUpload = async (path: string, file: File) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ key: path, fileType: "dummy" }),
+    body: JSON.stringify({ key: path, fileType: "dummy", action: "upload" }),
   });
   console.log("S3Auth response", response);
 

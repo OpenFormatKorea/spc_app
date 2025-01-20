@@ -53,13 +53,14 @@ export default async function handler(
       .status(400)
       .json({ error: "Missing required parameters: 'key' or 'action'" });
   }
-
   try {
     if (action === "upload") {
       const command = new PutObjectCommand({
         Bucket: bucketName,
         Key: key,
       });
+      console.log("upload command,", command);
+
       const uploadURL = await getSignedUrl(s3Client, command, {
         expiresIn: 10,
       });
@@ -69,6 +70,8 @@ export default async function handler(
         Bucket: bucketName,
         Key: key,
       });
+      console.log("delete command,", command);
+
       await s3Client.send(command);
       return res
         .status(200)
