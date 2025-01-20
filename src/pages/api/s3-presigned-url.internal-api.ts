@@ -49,31 +49,32 @@ export default async function handler(
 ) {
   console.log("Request body:", req.body); // Debug request payload
   const { key, action } = req.body;
-
   // if (!key || !action) {
   //   return res
   //     .status(400)
   //     .json({ error: "Missing required parameters: 'key' or 'action'" });
   // }
-  // try {
-  if (action === "upload") {
-    const command = new PutObjectCommand({ Bucket: bucketName, Key: key });
-    const uploadURL = await getSignedUrl(s3Client, command, { expiresIn: 180 });
-    console.log("Generated upload URL:", uploadURL);
-    return res.status(200).json({ uploadURL });
-  } else if (action === "delete") {
-    const command = new DeleteObjectCommand({ Bucket: bucketName, Key: key });
-    await s3Client.send(command);
-    return res
-      .status(200)
-      .json({ message: `File '${key}' deleted successfully` });
-  } else {
-    return res
-      .status(400)
-      .json({ error: "Invalid action. Use 'upload' or 'delete'." });
+  try {
+    if (action === "upload") {
+      const command = new PutObjectCommand({ Bucket: bucketName, Key: key });
+      const uploadURL = await getSignedUrl(s3Client, command, {
+        expiresIn: 180,
+      });
+      console.log("Generated upload URL:", uploadURL);
+      return res.status(200).json({ uploadURL });
+    } else if (action === "delete") {
+      const command = new DeleteObjectCommand({ Bucket: bucketName, Key: key });
+      await s3Client.send(command);
+      return res
+        .status(200)
+        .json({ message: `File '${key}' deleted successfully` });
+    } else {
+      return res
+        .status(400)
+        .json({ error: "Invalid action. Use 'upload' or 'delete'." });
+    }
+  } catch (error) {
+    console.error("Error handling S3 operation:", error);
+    return res.status(500).json({ error: "Error handling S3 operation" });
   }
-  // } catch (error) {
-  //   console.error("Error handling S3 operation:", error);
-  //   return res.status(500).json({ error: "Error handling S3 operation" });
-  // }
 }
