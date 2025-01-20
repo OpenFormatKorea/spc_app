@@ -53,36 +53,36 @@ export default async function handler(
       .status(400)
       .json({ error: "Missing required parameters: 'key' or 'action'" });
   }
-  try {
-    if (action === "upload") {
-      const command = new PutObjectCommand({
-        Bucket: bucketName,
-        Key: key,
-      });
-      console.log("upload command,", command);
+  // try {
+  if (action === "upload") {
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+    });
+    console.log("upload command,", command);
 
-      const uploadURL = await getSignedUrl(s3Client, command, {
-        expiresIn: 10,
-      });
-      res.status(200).json({ uploadURL });
-    } else if (action === "delete") {
-      const command = new DeleteObjectCommand({
-        Bucket: bucketName,
-        Key: key,
-      });
-      console.log("delete command,", command);
+    const uploadURL = await getSignedUrl(s3Client, command, {
+      expiresIn: 10,
+    });
+    res.status(200).json({ uploadURL });
+  } else if (action === "delete") {
+    const command = new DeleteObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+    });
+    console.log("delete command,", command);
 
-      await s3Client.send(command);
-      return res
-        .status(200)
-        .json({ message: `File '${key}' deleted successfully` });
-    } else {
-      return res
-        .status(400)
-        .json({ error: "Invalid action. Use 'upload' or 'delete'." });
-    }
-  } catch (error) {
-    console.error("Error handling S3 operation:", error);
-    return res.status(500).json({ error: "Error handling S3 operation" });
+    await s3Client.send(command);
+    return res
+      .status(200)
+      .json({ message: `File '${key}' deleted successfully` });
+  } else {
+    return res
+      .status(400)
+      .json({ error: "Invalid action. Use 'upload' or 'delete'." });
   }
+  // } catch (error) {
+  //   console.error("Error handling S3 operation:", error);
+  //   return res.status(500).json({ error: "Error handling S3 operation" });
+  // }
 }
