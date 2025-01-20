@@ -50,11 +50,11 @@ export default async function handler(
   console.log("Request body:", req.body); // Debug request payload
   const { key, action } = req.body;
 
-  if (!key || !action) {
-    return res
-      .status(400)
-      .json({ error: "Missing required parameters: 'key' or 'action'" });
-  }
+  // if (!key || !action) {
+  //   return res
+  //     .status(400)
+  //     .json({ error: "Missing required parameters: 'key' or 'action'" });
+  // }
   // try {
   if (action === "upload") {
     const command = new PutObjectCommand({ Bucket: bucketName, Key: key });
