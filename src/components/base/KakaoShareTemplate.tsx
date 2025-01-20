@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import InputTextBox from "@/components/base/InputText";
 import { KakaoShareArgs } from "@/lib/item/types";
 
@@ -15,6 +15,7 @@ interface KakaoShareProps {
   onChangeImage: (
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  deletePreviousFile: (previousFilePath: string) => Promise<void>;
 }
 
 const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
@@ -28,6 +29,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   setKakaoShareArgs,
   handleKeyDown,
   onChangeImage,
+  deletePreviousFile,
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-4";
   const labelClass = "text-xs pt-4 text-gray-500";
@@ -39,9 +41,6 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   const [button_name, setButton_name] = useState(kakaoShareArgs.button_name);
   const [img_url, setImg_url] = useState(image);
   const [shop_logo_url, setShop_logo_url] = useState(shop_logo);
-
-  const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
-  console.log("baseUrl", baseUrl);
   useEffect(() => {
     setImg_url(img_url);
     setShop_logo_url(shop_logo);
@@ -53,6 +52,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
       image: img_url,
       shop_logo: shop_logo_url,
     });
+    console.log("img_url", img_url);
   }, [shop_name, title, description, button_name, img_url, shop_logo_url]);
 
   return (
@@ -266,6 +266,16 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                 disabled={disableInput}
               />
             </div>
+            <button
+              onClick={() =>
+                deletePreviousFile(img_url).catch((error) =>
+                  console.error("Failed to delete file:", error),
+                )
+              }
+              className="flex w-[70px] min-w-[70px] items-center justify-center rounded-lg bg-red-600 p-[5px] text-[11px] text-white"
+            >
+              썸네일 삭제
+            </button>
           </div>
         </div>
       </div>

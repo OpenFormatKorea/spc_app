@@ -28,8 +28,7 @@ export function removeWhiteSpace(s: string) {
   return s.replace(/\s/g, "");
 }
 
-export const S3Auth = async (path: string, file: File) => {
-  console.log("inside of S3 Auth;");
+export const S3AuthUpload = async (path: string, file: File) => {
   const response = await fetch("/api/s3-presigned-url.internal-api", {
     method: "POST",
     headers: {
@@ -46,4 +45,20 @@ export const S3Auth = async (path: string, file: File) => {
   });
   const url = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION_NAME}.amazonaws.com/${path}`;
   return url;
+};
+
+export const S3AuthDelete = async (path: string) => {
+  const response = await fetch("/api/s3-presigned-url.internal-api", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ key: path, action: "delete" }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to delete file from S3");
+  }
+
+  // Step 2: Log success
+  console.log(`File deleted successfully: ${path}`);
 };

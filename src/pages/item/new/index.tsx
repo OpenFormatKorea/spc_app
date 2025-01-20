@@ -5,7 +5,6 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
 import { useRef, useEffect, KeyboardEvent, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-//import ReactS3Client from "@/lib/aws/ReactS3Client";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse } from "@/lib/types";
@@ -28,7 +27,7 @@ import {
 import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
 import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
 import ProductList from "@/components/layout/item/modal/ProductList";
-import { S3Auth } from "@/lib/common";
+import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -97,7 +96,6 @@ const NewItem = (
   const closeModal = () => setIsModalOpen(false);
   const openModal = () =>
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
-  // const baseUrl = process.env.NEXT_PUBLIC_AWS_BASE_URL;
 
   const itemArgs: ItemArgs = {
     title,
@@ -174,8 +172,6 @@ const NewItem = (
         alert("Please upload a valid image file.");
         return;
       }
-
-      const fileExtension = file.name.split(".").pop()?.toLowerCase();
       const reader = new FileReader();
 
       reader.onload = async () => {
@@ -187,9 +183,7 @@ const NewItem = (
               imgType === "image" ? image : shop_logo,
             );
 
-            //const full_imgUrl = baseUrl + imgUrl + "." + fileExtension;
             const full_imgUrl = imgUrl;
-            console.log("full_imgUrl onChangeImage", full_imgUrl);
             if (imgType === "image") {
               setImage_result(reader.result);
               setImage(full_imgUrl);
@@ -213,13 +207,13 @@ const NewItem = (
       reader.readAsDataURL(file);
     };
 
-  // const deletePreviousFile = async (previousFilePath: string) => {
-  //   try {
-  //     await ReactS3Client.deleteFile(previousFilePath);
-  //   } catch (error) {
-  //     console.error("Failed to delete previous file:", error);
-  //   }
-  // };
+  const deletePreviousFile = async (previousFilePath: string) => {
+    try {
+      const url = await S3AuthDelete(previousFilePath);
+    } catch (error) {
+      console.error("Failed to delete previous file:", error);
+    }
+  };
 
   const uploadImage = async (
     file: File,
@@ -233,8 +227,10 @@ const NewItem = (
     const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
-      //   // deletePreviousFile(previousFilePath);
-      const url = await S3Auth(path, file);
+      if (previousFilePath !== "" || null) {
+        deletePreviousFile(previousFilePath);
+      }
+      const url = await S3AuthUpload(path, file);
       console.log("url", url);
       //return path;
       return url;
@@ -318,6 +314,7 @@ const NewItem = (
               shop_logo_result={shop_logo_result}
               onChangeImage={onChangeImage}
               disableInput={false}
+              deletePreviousFile={deletePreviousFile}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">

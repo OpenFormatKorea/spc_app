@@ -23,7 +23,7 @@ import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import RewardComponentDetails from "@/components/layout/item/reward/details/RewardComponentDetails";
 import { ApiResponse } from "@/lib/types";
-import { S3Auth } from "@/lib/common";
+import { S3AuthUpload } from "@/lib/common";
 import { getShopIdFromCookies } from "@/lib/helper";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -129,7 +129,6 @@ const DetailsItem = (
         return;
       }
       const file = e.target.files?.[0];
-      console.log("file", file);
       if (!file || !file.type.startsWith("image/")) {
         alert("Please upload a valid image file.");
         return;
@@ -144,7 +143,6 @@ const DetailsItem = (
               imgType,
               imgType === "image" ? image : shop_logo,
             );
-            console.log("imgUrl onChangeImage", imgUrl);
             const full_imgUrl = imgUrl;
             console.log("full_imgUrl onChangeImage", full_imgUrl);
             if (imgType === "image") {
@@ -182,7 +180,7 @@ const DetailsItem = (
     const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
-      const url = await S3Auth(path, file);
+      const url = await S3AuthUpload(path, file);
       console.log("url", url);
       return url;
     } catch (error) {

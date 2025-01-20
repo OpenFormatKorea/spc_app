@@ -9,7 +9,7 @@ import {
   KakaoShareArgs,
 } from "@/lib/item/types";
 import { GetServerSidePropsContext } from "next";
-import { useEffect } from "react";
+import { MouseEventHandler, useEffect } from "react";
 
 interface ItemDetailsProps {
   page_type: "DETAILS" | "NEW";
@@ -31,6 +31,7 @@ interface ItemDetailsProps {
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   campaign_id?: string;
+  deletePreviousFile: (previousFilePath: string) => Promise<void>;
 }
 
 const ItemDetails: React.FC<ItemDetailsProps> = (
@@ -51,6 +52,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     handleKeyDown,
     onChangeImage,
     campaign_id,
+    deletePreviousFile,
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -136,6 +138,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
         image_result={image_result}
         shop_logo_result={shop_logo_result}
         onChangeImage={onChangeImage}
+        deletePreviousFile={deletePreviousFile}
       />
     </>
   );
