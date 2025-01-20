@@ -23,7 +23,7 @@ import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import RewardComponentDetails from "@/components/layout/item/reward/details/RewardComponentDetails";
 import { ApiResponse } from "@/lib/types";
-import { S3AuthUpload } from "@/lib/common";
+import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
 import { getShopIdFromCookies } from "@/lib/helper";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -168,6 +168,14 @@ const DetailsItem = (
       reader.readAsDataURL(file);
     };
 
+  const deletePreviousFile = async (previousFilePath: string) => {
+    try {
+      const url = await S3AuthDelete(previousFilePath);
+    } catch (error) {
+      console.error("Failed to delete previous file:", error);
+    }
+  };
+
   const uploadImage = async (
     file: File,
     imgType: string,
@@ -261,6 +269,7 @@ const DetailsItem = (
               shop_logo_result={shop_logo_result}
               onChangeImage={onChangeImage}
               disableInput={disableInput}
+              deletePreviousFile={deletePreviousFile}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">
