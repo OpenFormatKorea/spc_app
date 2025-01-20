@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputTextBox from "@/components/base/InputText";
 import { KakaoShareArgs } from "@/lib/item/types";
 

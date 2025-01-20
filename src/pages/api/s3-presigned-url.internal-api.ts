@@ -8,13 +8,14 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const isProduction = process.env.NODE_ENV === "production";
+console.log("isProduction", isProduction);
 let credentials;
 if (isProduction) {
   credentials = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   };
-  console.log("credentials", credentials);
+  console.log("isProduction  true credentials", credentials);
 } else {
   credentials = fromIni({ profile: "dashboard" });
 }
@@ -46,7 +47,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { key, action } = req.body; // Expecting `key` (file path) and `action` ('upload' or 'delete')
+  console.log("Request body:", req.body); // Debug request payload
+  const { key, action } = req.body;
 
   if (!key || !action) {
     return res
@@ -55,25 +57,12 @@ export default async function handler(
   }
   // try {
   if (action === "upload") {
-    const command = new PutObjectCommand({
-      Bucket: bucketName,
-      Key: key,
-    });
-    console.log("upload command,", command);
-
-    const uploadURL = await getSignedUrl(s3Client, command, {
-      expiresIn: 10,
-    });
-    console.log("upload uploadURL,", uploadURL);
-
-    res.status(200).json({ uploadURL });
+    const command = new PutObjectCommand({ Bucket: bucketName, Key: key });
+    const uploadURL = await getSignedUrl(s3Client, command, { expiresIn: 180 });
+    console.log("Generated upload URL:", uploadURL);
+    return res.status(200).json({ uploadURL });
   } else if (action === "delete") {
-    const command = new DeleteObjectCommand({
-      Bucket: bucketName,
-      Key: key,
-    });
-    console.log("delete command,", command);
-
+    const command = new DeleteObjectCommand({ Bucket: bucketName, Key: key });
     await s3Client.send(command);
     return res
       .status(200)

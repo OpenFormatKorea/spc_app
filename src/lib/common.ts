@@ -34,15 +34,26 @@ export const S3AuthUpload = async (path: string, file: File) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ key: path, fileType: "dummy", action: "upload" }),
+    body: JSON.stringify({ key: path, action: "upload" }),
   });
-  console.log("S3Auth response", response);
+
+  if (!response.ok) {
+    const errorText = await response.text(); // Log raw error
+    console.error("Failed to fetch presigned URL:", errorText);
+    throw new Error(`Failed to fetch presigned URL: ${response.status}`);
+  }
 
   const { uploadURL } = await response.json();
-  await fetch(uploadURL, {
+
+  const uploadResponse = await fetch(uploadURL, {
     method: "PUT",
     body: file,
   });
+
+  if (!uploadResponse.ok) {
+    throw new Error(`Failed to upload file to S3: ${uploadResponse.status}`);
+  }
+
   const url = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION_NAME}.amazonaws.com/${path}`;
   return url;
 };

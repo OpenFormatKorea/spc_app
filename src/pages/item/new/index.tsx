@@ -170,45 +170,83 @@ const NewItem = (
         alert("Please upload a valid image file.");
         return;
       }
-      const reader = new FileReader();
 
-      reader.onload = async () => {
-        if (reader.result && typeof reader.result === "string") {
-          try {
-            const imgUrl = await uploadImage(
-              file,
-              imgType,
-              imgType === "image" ? image : shop_logo,
-            );
+      try {
+        const imgUrl = await uploadImage(
+          file,
+          imgType,
+          imgType === "image" ? image : shop_logo,
+        );
 
-            const full_imgUrl = imgUrl;
-            if (imgType === "image") {
-              setImage_result(reader.result);
-              setImage(full_imgUrl);
-              setKakaoShareArgs((prevArgs) => ({
-                ...prevArgs,
-                image: full_imgUrl,
-              }));
-            } else {
-              setShop_logo_result(reader.result);
-              setShop_logo(full_imgUrl);
-              setKakaoShareArgs((prevArgs) => ({
-                ...prevArgs,
-                shop_logo: full_imgUrl,
-              }));
-            }
-          } catch (error) {
-            console.error(`${imgType} upload failed:`, error);
-          }
+        const previewUrl = URL.createObjectURL(file); // Efficient image preview
+        if (imgType === "image") {
+          setImage_result(previewUrl);
+          setImage(imgUrl);
+          setKakaoShareArgs((prevArgs) => ({
+            ...prevArgs,
+            image: imgUrl,
+          }));
+        } else {
+          setShop_logo_result(previewUrl);
+          setShop_logo(imgUrl);
+          setKakaoShareArgs((prevArgs) => ({
+            ...prevArgs,
+            shop_logo: imgUrl,
+          }));
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error(`${imgType} upload failed:`, error);
+      }
     };
+  // const onChangeImage =
+  //   (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     if (!e.target.files || e.target.files.length === 0) {
+  //       return;
+  //     }
+  //     const file = e.target.files?.[0];
+  //     if (!file || !file.type.startsWith("image/")) {
+  //       alert("Please upload a valid image file.");
+  //       return;
+  //     }
+  //     const reader = new FileReader();
+
+  //     reader.onload = async () => {
+  //       if (reader.result && typeof reader.result === "string") {
+  //         try {
+  //           const imgUrl = await uploadImage(
+  //             file,
+  //             imgType,
+  //             imgType === "image" ? image : shop_logo,
+  //           );
+
+  //           const full_imgUrl = imgUrl;
+  //           if (imgType === "image") {
+  //             setImage_result(reader.result);
+  //             setImage(full_imgUrl);
+  //             setKakaoShareArgs((prevArgs) => ({
+  //               ...prevArgs,
+  //               image: full_imgUrl,
+  //             }));
+  //           } else {
+  //             setShop_logo_result(reader.result);
+  //             setShop_logo(full_imgUrl);
+  //             setKakaoShareArgs((prevArgs) => ({
+  //               ...prevArgs,
+  //               shop_logo: full_imgUrl,
+  //             }));
+  //           }
+  //         } catch (error) {
+  //           console.error(`${imgType} upload failed:`, error);
+  //         }
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   };
 
   const deletePreviousFile = async (previousFilePath: string) => {
     try {
-      const url = await S3AuthDelete(previousFilePath);
-      console.log("deletePreviousFile url", url);
+      await S3AuthDelete(previousFilePath);
+      console.log(`Previous file deleted: ${previousFilePath}`);
     } catch (error) {
       console.error("Failed to delete previous file:", error);
     }
@@ -221,18 +259,17 @@ const NewItem = (
   ) => {
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    const finaleFileExtension = "." + fileExtension;
+    const finaleFileExtension = `.${fileExtension}`;
     const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
     const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
-      // if (previousFilePath !== "" || null) {
-      //   deletePreviousFile(previousFilePath);
-      // }
+      if (previousFilePath) {
+        await deletePreviousFile(previousFilePath);
+      }
       const url = await S3AuthUpload(path, file);
       console.log("pathpath", path);
       console.log("url", url);
-      //return path;
       return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);
