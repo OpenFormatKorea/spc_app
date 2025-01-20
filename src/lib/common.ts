@@ -41,7 +41,7 @@ export const S3AuthUpload = async (path: string, file: File) => {
   const { uploadURL } = await response.json();
   await fetch(uploadURL, {
     method: "PUT",
-    body: file, // The actual File or Blob you want to upload
+    body: file,
   });
   const url = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION_NAME}.amazonaws.com/${path}`;
   return url;

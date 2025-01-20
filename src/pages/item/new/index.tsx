@@ -208,6 +208,7 @@ const NewItem = (
   const deletePreviousFile = async (previousFilePath: string) => {
     try {
       const url = await S3AuthDelete(previousFilePath);
+      console.log("deletePreviousFile url", url);
     } catch (error) {
       console.error("Failed to delete previous file:", error);
     }
@@ -225,10 +226,11 @@ const NewItem = (
     const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     console.log("path", path);
     try {
-      if (previousFilePath !== "" || null) {
-        deletePreviousFile(previousFilePath);
-      }
+      // if (previousFilePath !== "" || null) {
+      //   deletePreviousFile(previousFilePath);
+      // }
       const url = await S3AuthUpload(path, file);
+      console.log("pathpath", path);
       console.log("url", url);
       //return path;
       return url;
