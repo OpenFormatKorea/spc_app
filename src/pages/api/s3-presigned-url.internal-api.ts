@@ -64,6 +64,8 @@ export default async function handler(
     const uploadURL = await getSignedUrl(s3Client, command, {
       expiresIn: 10,
     });
+    console.log("upload uploadURL,", uploadURL);
+
     res.status(200).json({ uploadURL });
   } else if (action === "delete") {
     const command = new DeleteObjectCommand({
