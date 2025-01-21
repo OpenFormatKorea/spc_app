@@ -255,20 +255,22 @@ const DetailsItem = (
               page_type="DETAILS"
               itemArgs={itemArgs}
               kakaoShareArgs={kakaoShareArgs}
-              campaign_id={campaign_id}
               setItem_type={setItem_type}
               setTitle={setTitle}
               setKakaoShareArgs={setKakaoShareArgs}
               setProductInputs={setProductInputs}
               setPromotionInputs={setPromotionInputs}
-              setActive={setActive}
               handleKeyDown={handleKeyDown}
               image={image}
+              setImage={setImage}
               shop_logo={shop_logo}
+              setShop_logo={setShop_logo}
               image_result={image_result}
+              setImage_result={setImage_result}
               shop_logo_result={shop_logo_result}
+              setShop_logo_result={setShop_logo_result}
               onChangeImage={onChangeImage}
-              disableInput={disableInput}
+              disableInput={false}
               deletePreviousFile={deletePreviousFile}
             />
           </ContentsContainer>
