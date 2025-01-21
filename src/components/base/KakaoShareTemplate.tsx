@@ -57,7 +57,6 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
       image: image,
       shop_logo: shop_logo,
     });
-    console.log("img_url", image_result);
   }, [shop_name, title, description, button_name]);
 
   return (

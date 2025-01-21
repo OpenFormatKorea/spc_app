@@ -24,24 +24,6 @@ const region = process.env.NEXT_PUBLIC_AWS_REGION_NAME;
 const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
 const s3Client = new S3Client({ region, credentials });
 const baseURL = process.env.NEXT_PUBLIC_AWS_BASE_URL;
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse,
-// ) {
-//   const { key } = req.body;
-//   const command = new PutObjectCommand({
-//     Bucket: bucketName,
-//     Key: key,
-//   });
-
-//   try {
-//     const uploadURL = await getSignedUrl(s3Client, command, { expiresIn: 10 });
-//     res.status(200).json({ uploadURL });
-//   } catch (error) {
-//     console.error("Error generating signed URL:", error);
-//     res.status(500).json({ error: "Error generating signed URL" });
-//   }
-// }
 
 export default async function handler(
   req: NextApiRequest,
@@ -67,7 +49,8 @@ export default async function handler(
         Bucket: bucketName,
         Key: extractedKey,
       });
-      await s3Client.send(command);
+      const response = await s3Client.send(command);
+      console.log("Delete Response:", response);
       return res
         .status(200)
         .json({ message: `File '${extractedKey}' deleted successfully` });
