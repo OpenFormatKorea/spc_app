@@ -170,6 +170,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                           {description}
                         </p>
                       </div>
+
                       <div className="flex min-w-full flex-col items-center justify-end gap-0 pt-[10px]">
                         <button className="center mx-auto mb-1 h-[36px] w-[calc(100%-20px)] rounded-md bg-[#f1f2f4] text-[13px] focus:outline-none">
                           {button_name}
@@ -211,6 +212,29 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                       </div>
                     </div>
                   </div>
+                </div>
+                <div className="flex h-fit w-full items-center justify-center gap-[5px]">
+                  <button
+                    onClick={() =>
+                      deletePreviousFile(image, "image").catch((error) =>
+                        console.error("Failed to delete file:", error),
+                      )
+                    }
+                    className="flex w-[70px] min-w-[70px] items-center justify-center rounded-lg bg-red-600 p-[5px] text-[11px] text-white"
+                  >
+                    썸네일 삭제
+                  </button>
+                  <button
+                    onClick={() =>
+                      deletePreviousFile(shop_logo, "shop_logo").catch(
+                        (error) =>
+                          console.error("Failed to delete file:", error),
+                      )
+                    }
+                    className="flex w-[70px] min-w-[70px] items-center justify-center rounded-lg bg-red-600 p-[5px] text-[11px] text-white"
+                  >
+                    로고 삭제
+                  </button>
                 </div>
               </div>
             </div>
@@ -265,16 +289,6 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                 disabled={disableInput}
               />
             </div>
-            <button
-              onClick={() =>
-                deletePreviousFile(image, "image").catch((error) =>
-                  console.error("Failed to delete file:", error),
-                )
-              }
-              className="flex w-[70px] min-w-[70px] items-center justify-center rounded-lg bg-red-600 p-[5px] text-[11px] text-white"
-            >
-              썸네일 삭제
-            </button>
           </div>
         </div>
       </div>
