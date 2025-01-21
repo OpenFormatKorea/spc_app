@@ -47,11 +47,8 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   const [title, setTitle] = useState(kakaoShareArgs.title);
   const [description, setDescription] = useState(kakaoShareArgs.description);
   const [button_name, setButton_name] = useState(kakaoShareArgs.button_name);
-  //const [img_url, setImg_url] = useState(image);
-  //const [shop_logo_url, setShop_logo_url] = useState(shop_logo);
+
   useEffect(() => {
-    // setImage(image);
-    // setShop_logo(shop_logo);
     setKakaoShareArgs({
       shop_name,
       title,

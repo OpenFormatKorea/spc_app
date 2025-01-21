@@ -23,7 +23,7 @@ if (isProduction) {
 const region = process.env.NEXT_PUBLIC_AWS_REGION_NAME;
 const bucketName = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
 const s3Client = new S3Client({ region, credentials });
-
+const baseURL = process.env.NEXT_PUBLIC_AWS_BASE_URL;
 // export default async function handler(
 //   req: NextApiRequest,
 //   res: NextApiResponse,
@@ -49,11 +49,6 @@ export default async function handler(
 ) {
   console.log("Request body:", req.body); // Debug request payload
   const { key, action } = req.body;
-  // if (!key || !action) {
-  //   return res
-  //     .status(400)
-  //     .json({ error: "Missing required parameters: 'key' or 'action'" });
-  // }
   try {
     if (action === "upload") {
       const command = new PutObjectCommand({ Bucket: bucketName, Key: key });
@@ -63,11 +58,19 @@ export default async function handler(
       console.log("Generated upload URL:", uploadURL);
       return res.status(200).json({ uploadURL });
     } else if (action === "delete") {
-      const command = new DeleteObjectCommand({ Bucket: bucketName, Key: key });
+      // Extract the key from the full URL
+      const extractedKey = key.replace(baseURL, "");
+
+      console.log("Extracted Key for Deletion:", extractedKey);
+
+      const command = new DeleteObjectCommand({
+        Bucket: bucketName,
+        Key: extractedKey,
+      });
       await s3Client.send(command);
       return res
         .status(200)
-        .json({ message: `File '${key}' deleted successfully` });
+        .json({ message: `File '${extractedKey}' deleted successfully` });
     } else {
       return res
         .status(400)
