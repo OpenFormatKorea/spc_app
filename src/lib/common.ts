@@ -59,17 +59,16 @@ export const S3AuthUpload = async (path: string, file: File) => {
 };
 
 export const S3AuthDelete = async (path: string) => {
-  const response = await fetch("/api/s3-presigned-url.internal-api", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ key: path, action: "delete" }),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to delete file from S3");
+  try {
+    const response = await fetch("/api/s3-presigned-url.internal-api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ key: path, action: "delete" }),
+    });
+    console.log(" S3AuthDelete response", response);
+  } catch (e) {
+    console.error("error: ", e);
   }
-
-  // Step 2: Log success
-  console.log(`File deleted successfully: ${path}`);
 };

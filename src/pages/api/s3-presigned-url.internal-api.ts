@@ -29,16 +29,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  console.log("Request body:", req.body); // Debug request payload
   const { key, action } = req.body;
   try {
+    //업로드
     if (action === "upload") {
       const command = new PutObjectCommand({ Bucket: bucketName, Key: key });
       const uploadURL = await getSignedUrl(s3Client, command, {
         expiresIn: 180,
       });
-      console.log("Generated upload URL:", uploadURL);
+      console.log(" upload URL:", uploadURL);
       return res.status(200).json({ uploadURL });
+      //삭제
     } else if (action === "delete") {
       const extractedKey = key.replace(baseURL, "");
       console.log("Extracted Key final:", extractedKey);
