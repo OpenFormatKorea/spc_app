@@ -41,13 +41,12 @@ export default async function handler(
       return res.status(200).json({ uploadURL });
     } else if (action === "delete") {
       const extractedKey = key.replace(baseURL, "");
-      console.log("Extracted Key for Deletion:", extractedKey);
+      console.log("Extracted Key final:", extractedKey);
       const command = new DeleteObjectCommand({
         Bucket: bucketName,
         Key: extractedKey,
       });
       console.log("delete command:", command);
-
       const response = await s3Client.send(command);
       console.log("Delete Response:", response);
       return res
