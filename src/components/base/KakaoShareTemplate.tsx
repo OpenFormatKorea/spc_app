@@ -7,32 +7,27 @@ interface KakaoShareProps {
   disableInput: boolean;
   kakaoShareArgs: KakaoShareArgs;
   image: string;
-  setImage: (value: string) => void;
   shop_logo: string;
-  setShop_logo: (value: string) => void;
   image_result?: string;
-  setImage_result: (value: string) => void;
   shop_logo_result?: string;
-  setShop_logo_result: (value: string) => void;
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onChangeImage: (
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
-  deletePreviousFile: (previousFilePath: string) => Promise<void>;
+  deletePreviousFile: (
+    previousFilePath: string,
+    imgType: string,
+  ) => Promise<void>;
 }
 
 const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   page_type,
   disableInput,
   image,
-  setImage,
   shop_logo,
-  setShop_logo,
   image_result,
-  setImage_result,
   shop_logo_result,
-  setShop_logo_result,
   kakaoShareArgs,
   setKakaoShareArgs,
   handleKeyDown,
@@ -272,7 +267,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
             </div>
             <button
               onClick={() =>
-                deletePreviousFile(image).catch((error) =>
+                deletePreviousFile(image, "image").catch((error) =>
                   console.error("Failed to delete file:", error),
                 )
               }

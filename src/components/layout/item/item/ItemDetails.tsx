@@ -9,20 +9,16 @@ import {
   KakaoShareArgs,
 } from "@/lib/item/types";
 import { GetServerSidePropsContext } from "next";
-import { MouseEventHandler, useEffect } from "react";
+import { useEffect } from "react";
 
 interface ItemDetailsProps {
   page_type: "DETAILS" | "NEW";
   itemArgs: ItemArgs;
   kakaoShareArgs: KakaoShareArgs;
   image: string;
-  setImage: (value: string) => void;
   shop_logo: string;
-  setShop_logo: (value: string) => void;
   image_result?: string;
-  setImage_result: (value: string) => void;
   shop_logo_result?: string;
-  setShop_logo_result: (value: string) => void;
   disableInput: boolean;
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   setItem_type: (value: ItemType) => void;
@@ -35,7 +31,10 @@ interface ItemDetailsProps {
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   campaign_id?: string;
-  deletePreviousFile: (previousFilePath: string) => Promise<void>;
+  deletePreviousFile: (
+    previousFilePath: string,
+    imgType: string,
+  ) => Promise<void>;
 }
 
 const ItemDetails: React.FC<ItemDetailsProps> = (
@@ -44,13 +43,9 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     itemArgs,
     kakaoShareArgs,
     image,
-    setImage,
     shop_logo,
-    setShop_logo,
     image_result,
-    setImage_result,
     shop_logo_result,
-    setShop_logo_result,
     disableInput,
     setKakaoShareArgs,
     setTitle,
@@ -142,13 +137,9 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
         setKakaoShareArgs={setKakaoShareArgs}
         handleKeyDown={handleKeyDown}
         image={image}
-        setImage={setImage}
         shop_logo={shop_logo}
-        setShop_logo={setShop_logo}
         image_result={image_result}
-        setImage_result={setImage_result}
         shop_logo_result={shop_logo_result}
-        setShop_logo_result={setShop_logo_result}
         onChangeImage={onChangeImage}
         deletePreviousFile={deletePreviousFile}
       />
