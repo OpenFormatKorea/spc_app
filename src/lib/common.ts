@@ -61,7 +61,7 @@ export const S3AuthUpload = async (path: string, file: File) => {
 export const S3AuthDelete = async (path: string) => {
   try {
     const response = await fetch("/api/s3-presigned-url.internal-api", {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
