@@ -7,9 +7,13 @@ interface KakaoShareProps {
   disableInput: boolean;
   kakaoShareArgs: KakaoShareArgs;
   image: string;
+  setImage: (value: string) => void;
   shop_logo: string;
+  setShop_logo: (value: string) => void;
   image_result?: string;
+  setImage_result: (value: string) => void;
   shop_logo_result?: string;
+  setShop_logo_result: (value: string) => void;
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onChangeImage: (
@@ -22,9 +26,13 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   page_type,
   disableInput,
   image,
+  setImage,
   shop_logo,
+  setShop_logo,
   image_result,
+  setImage_result,
   shop_logo_result,
+  setShop_logo_result,
   kakaoShareArgs,
   setKakaoShareArgs,
   handleKeyDown,
@@ -39,21 +47,21 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   const [title, setTitle] = useState(kakaoShareArgs.title);
   const [description, setDescription] = useState(kakaoShareArgs.description);
   const [button_name, setButton_name] = useState(kakaoShareArgs.button_name);
-  const [img_url, setImg_url] = useState(image);
-  const [shop_logo_url, setShop_logo_url] = useState(shop_logo);
+  //const [img_url, setImg_url] = useState(image);
+  //const [shop_logo_url, setShop_logo_url] = useState(shop_logo);
   useEffect(() => {
-    setImg_url(img_url);
-    setShop_logo_url(shop_logo);
+    // setImage(image);
+    // setShop_logo(shop_logo);
     setKakaoShareArgs({
       shop_name,
       title,
       description,
       button_name,
-      image: img_url,
-      shop_logo: shop_logo_url,
+      image: image,
+      shop_logo: shop_logo,
     });
-    console.log("img_url", img_url);
-  }, [shop_name, title, description, button_name, img_url, shop_logo_url]);
+    console.log("img_url", image_result);
+  }, [shop_name, title, description, button_name]);
 
   return (
     <>
@@ -100,7 +108,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                           className="h-full w-full"
                           src={
                             page_type === "DETAILS"
-                              ? img_url
+                              ? image
                               : image_result ||
                                 "/images/kakao/kakaolink-no-logo-default.png"
                           }
@@ -268,7 +276,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
             </div>
             <button
               onClick={() =>
-                deletePreviousFile(img_url).catch((error) =>
+                deletePreviousFile(image).catch((error) =>
                   console.error("Failed to delete file:", error),
                 )
               }

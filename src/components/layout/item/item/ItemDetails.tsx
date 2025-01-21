@@ -16,9 +16,13 @@ interface ItemDetailsProps {
   itemArgs: ItemArgs;
   kakaoShareArgs: KakaoShareArgs;
   image: string;
+  setImage: (value: string) => void;
   shop_logo: string;
+  setShop_logo: (value: string) => void;
   image_result?: string;
+  setImage_result: (value: string) => void;
   shop_logo_result?: string;
+  setShop_logo_result: (value: string) => void;
   disableInput: boolean;
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   setItem_type: (value: ItemType) => void;
@@ -40,9 +44,13 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     itemArgs,
     kakaoShareArgs,
     image,
+    setImage,
     shop_logo,
+    setShop_logo,
     image_result,
+    setImage_result,
     shop_logo_result,
+    setShop_logo_result,
     disableInput,
     setKakaoShareArgs,
     setTitle,
@@ -128,15 +136,19 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
         </div>
       </div>
       <KakaoShareTemplate
-        image={image}
-        shop_logo={shop_logo}
         page_type={page_type}
         disableInput={disableInput}
         kakaoShareArgs={kakaoShareArgs}
         setKakaoShareArgs={setKakaoShareArgs}
         handleKeyDown={handleKeyDown}
+        image={image}
+        setImage={setImage}
+        shop_logo={shop_logo}
+        setShop_logo={setShop_logo}
         image_result={image_result}
+        setImage_result={setImage_result}
         shop_logo_result={shop_logo_result}
+        setShop_logo_result={setShop_logo_result}
         onChangeImage={onChangeImage}
         deletePreviousFile={deletePreviousFile}
       />
