@@ -195,7 +195,7 @@ const DetailsItem = (
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
 
-    if (id === "modify_item") {
+    if (id === "modify_item" && confirm("아이템을 수정하시겠습니까?")) {
       if (loading == false) {
         setLoading(true);
         try {

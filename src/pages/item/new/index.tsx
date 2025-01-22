@@ -1,17 +1,14 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import ItemDetails from "@/components/layout/item/item/ItemDetails";
-import LoadingSpinner from "@/components/base/LoadingSpinner";
-import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
-import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
-import ProductList from "@/components/layout/item/modal/ProductList";
-
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useRef, useEffect, useState, KeyboardEvent } from "react";
-import { useRouter } from "next/router";
+import ItemDetails from "@/components/layout/item/item/ItemDetails";
+import { useRef, useEffect, KeyboardEvent, useState } from "react";
+import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { getShopIdFromCookies } from "@/lib/helper";
 import { withAuth } from "@/hoc/withAuth";
-
+import { ApiResponse } from "@/lib/types";
+import { useRouter } from "next/router";
 import {
   fetchGetProductCodeList,
   fetchGetCouponCodeList,
@@ -27,22 +24,23 @@ import {
   RewardType,
   ItemArgs,
 } from "@/lib/item/types";
-import { ApiResponse } from "@/lib/types";
-import { getShopIdFromCookies } from "@/lib/helper";
+import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
+import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
+import ProductList from "@/components/layout/item/modal/ProductList";
 import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
   const campaign_id = context.query.campaign_id;
 
+  const productResponse = await fetchGetProductCodeList(context);
+  const couponResponse = await fetchGetCouponCodeList("1", "10", context);
   if (!shop_id || !campaign_id) {
     return { redirect: { destination: "auth/login", permanent: false } };
   }
-
-  const productResponse = await fetchGetProductCodeList(context);
-  const couponResponse = await fetchGetCouponCodeList("1", "10", context);
-
-  return { props: { shop_id, campaign_id, productResponse, couponResponse } };
+  return {
+    props: { shop_id, campaign_id, productResponse, couponResponse },
+  };
 };
 
 const NewItem = (
@@ -63,10 +61,10 @@ const NewItem = (
   // const [pageSize, setPageSize] = useState("10");
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
+  const [description, setDescription] = useState("");
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
-    { description },
+    { description: description },
   ]);
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
   const [selectedProductItems, setSelectedProductItems] = useState<
@@ -95,6 +93,10 @@ const NewItem = (
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const closeModal = () => setIsModalOpen(false);
+  const openModal = () =>
+    reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
+
   const itemArgs: ItemArgs = {
     title,
     item_type,
@@ -105,10 +107,6 @@ const NewItem = (
     campaign_id,
     active: false,
   };
-
-  const closeModal = () => setIsModalOpen(false);
-  const openModal = () =>
-    reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
 
   const infoCheck = (): boolean => {
     if (!title) {
@@ -152,7 +150,10 @@ const NewItem = (
   };
 
   const onChangeImage =
-    (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files || e.target.files.length === 0) {
+        return;
+      }
       const file = e.target.files?.[0];
       if (!file || !file.type.startsWith("image/")) {
         alert("이미지 파일을 업로드 해주시기 바랍니다.");
@@ -201,15 +202,17 @@ const NewItem = (
         await deletePreviousFile(previousFilePath, imgType);
       }
       const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-      const fileExtension = file
-        ? file.name.split(".").pop()?.toLowerCase()
-        : "";
-      const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}.${fileExtension}`;
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
+      const finaleFileExtension = `.${fileExtension}`;
+      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
       const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
       const url = await S3AuthUpload(path, file);
       const previewUrl = URL.createObjectURL(file);
-      if (imgType === "image") setImage_result(previewUrl);
-      else setShop_logo_result(previewUrl);
+      if (imgType === "image") {
+        setImage_result(previewUrl);
+      } else {
+        setShop_logo_result(previewUrl);
+      }
       return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);
@@ -229,7 +232,11 @@ const NewItem = (
       ]);
     }
 
-    if (id === "create_item" && infoCheck()) {
+    if (
+      id === "create_item" &&
+      infoCheck() &&
+      confirm("아이템을 추가하시겠습니까?")
+    ) {
       if (loading == false) {
         setLoading(true);
         try {
@@ -237,17 +244,19 @@ const NewItem = (
           let updatedShopLogo = shop_logo;
 
           if (imageFile) {
-            const updatedImage = await uploadImage(imageFile, "image", image);
-            setImage(updatedImage);
+            const url = await uploadImage(imageFile, "image", image);
+            updatedImage = url;
+            setImage(url);
           }
 
           if (imageLogoFile) {
-            const updatedShopLogo = await uploadImage(
+            const logoUrl = await uploadImage(
               imageLogoFile,
               "shop_logo",
               shop_logo,
             );
-            setShop_logo(updatedShopLogo);
+            updatedShopLogo = logoUrl;
+            setShop_logo(logoUrl);
           }
           const updatedItemArgs = {
             ...itemArgs,
