@@ -177,24 +177,15 @@ const NewItem = (
       reader.onload = () => {
         if (reader.result && typeof reader.result === "string") {
           if (imgType === "image") {
-            setImageFile(file); // Store the file for later upload
-            setImage_result(reader.result); // Update the preview URL
+            setImageFile(file);
+            setImage_result(reader.result);
           } else {
-            setImageLogoFile(file); // Store the file for later upload
-            setShop_logo_result(reader.result); // Update the preview URL
+            setImageLogoFile(file);
+            setShop_logo_result(reader.result);
           }
         }
       };
       reader.readAsDataURL(file);
-      // try {
-      //   if (imgType === "image") {
-      //     setImageFile(file);
-      //   } else {
-      //     setImageLogoFile(file);
-      //   }
-      // } catch (error) {
-      //   console.error(`${imgType} upload failed:`, error);
-      // }
     };
 
   const deletePreviousFile = async (
@@ -219,17 +210,16 @@ const NewItem = (
     imgType: string,
     previousFilePath: string,
   ) => {
-    const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    const finaleFileExtension = `.${fileExtension}`;
-    const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
-    const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
     try {
       if (previousFilePath) {
         await deletePreviousFile(previousFilePath, imgType);
       }
+      const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
+      const finaleFileExtension = `.${fileExtension}`;
+      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
+      const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
       const url = await S3AuthUpload(path, file);
-
       const previewUrl = URL.createObjectURL(file);
       if (imgType === "image") {
         setImage_result(previewUrl);
@@ -284,8 +274,19 @@ const NewItem = (
               shop_logo: logoUrl,
             }));
           }
-
-          const result = await fetchCreateItem(itemArgs, campaign_id, context);
+          const updatedItemArgs = {
+            ...itemArgs,
+            kakao_args: {
+              ...kakaoShareArgs,
+              image,
+              shop_logo,
+            },
+          };
+          const result = await fetchCreateItem(
+            updatedItemArgs,
+            campaign_id,
+            context,
+          );
           if (result.status === 200) {
             alert(result.message);
             setLoading(false);
