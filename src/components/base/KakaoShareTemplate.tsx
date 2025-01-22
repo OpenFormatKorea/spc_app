@@ -104,11 +104,21 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                 "/images/kakao/kakaolink-no-logo-default.png"
                           }
                           alt="Selected"
+                        />
+                        {/* <img
+                          className="h-full w-full"
+                          src={
+                            page_type === "DETAILS"
+                              ? image
+                              : image_result ||
+                                "/images/kakao/kakaolink-no-logo-default.png"
+                          }
+                          alt="Selected"
                           onError={(e) => {
                             e.currentTarget.src =
                               "/images/kakao/kakaolink-no-logo-default.png";
                           }}
-                        />
+                        /> */}
                       </div>
                     </div>
                     <div className="box-border flex h-[calc(100%-460px)] min-w-full flex-col items-start justify-between">
@@ -128,7 +138,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                               className="group relative flex h-full w-full items-center justify-center"
                               onClick={() => shopLogoFileInput.current?.click()}
                             >
-                              <img
+                              {/* <img
                                 className="h-full w-full"
                                 src={
                                   page_type === "DETAILS"
@@ -142,6 +152,17 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                   e.currentTarget.src =
                                     "/images/kakao/kakaolink-no-logo-default.png";
                                 }}
+                              /> */}
+                              <img
+                                className="h-full w-full"
+                                src={
+                                  page_type === "DETAILS"
+                                    ? shop_logo
+                                    : shop_logo_result ||
+                                      "/images/kakao/kakaolink-no-logo-default.png"
+                                }
+                                alt="Shop Logo"
+                                style={{ borderRadius: "35%" }}
                               />
                             </div>
                           </div>

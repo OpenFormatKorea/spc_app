@@ -173,15 +173,28 @@ const NewItem = (
         return;
       }
 
-      try {
-        if (imgType === "image") {
-          setImageFile(file);
-        } else {
-          setImageLogoFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === "string") {
+          if (imgType === "image") {
+            setImageFile(file); // Store the file for later upload
+            setImage_result(reader.result); // Update the preview URL
+          } else {
+            setImageLogoFile(file); // Store the file for later upload
+            setShop_logo_result(reader.result); // Update the preview URL
+          }
         }
-      } catch (error) {
-        console.error(`${imgType} upload failed:`, error);
-      }
+      };
+      reader.readAsDataURL(file);
+      // try {
+      //   if (imgType === "image") {
+      //     setImageFile(file);
+      //   } else {
+      //     setImageLogoFile(file);
+      //   }
+      // } catch (error) {
+      //   console.error(`${imgType} upload failed:`, error);
+      // }
     };
 
   const deletePreviousFile = async (
