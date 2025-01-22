@@ -61,13 +61,18 @@ export const S3AuthUpload = async (path: string, file: File) => {
 export const S3AuthDelete = async (path: string) => {
   try {
     const response = await fetch("/api/s3-presigned-url.internal-api", {
-      method: "DELETE",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ key: path, action: "delete" }),
     });
-    console.log(" S3AuthDelete response", response);
+    console.log("S3AuthDelete response", response);
+    if (!response.ok) {
+      const errorText = await response.text(); // Log raw error
+      console.error("Failed to Delete:", errorText);
+      throw new Error(`Failed to Delete: ${response.status}`);
+    }
   } catch (e) {
     console.error("error: ", e);
   }

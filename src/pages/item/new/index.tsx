@@ -8,7 +8,7 @@ import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { getShopIdFromCookies, setLoading } from "@/lib/helper";
 import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse } from "@/lib/types";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import {
   fetchGetProductCodeList,
   fetchGetCouponCodeList,
@@ -86,8 +86,10 @@ const NewItem = (
   const [reward_type, setReward_Type] = useState<RewardType>(RewardType.CO);
   const [image, setImage] = useState<string>(kakaoShareArgs.image);
   const [image_result, setImage_result] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File>();
   const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
+  const [imageLogoFile, setImageLogoFile] = useState<File>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -167,32 +169,15 @@ const NewItem = (
       }
       const file = e.target.files?.[0];
       if (!file || !file.type.startsWith("image/")) {
-        alert("Please upload a valid image file.");
+        alert("이미지 파일을 업로드 해주시기 바랍니다.");
         return;
       }
 
       try {
-        const imgUrl = await uploadImage(
-          file,
-          imgType,
-          imgType === "image" ? image : shop_logo,
-        );
-
-        const previewUrl = URL.createObjectURL(file); // Efficient image preview
         if (imgType === "image") {
-          setImage_result(previewUrl);
-          setImage(imgUrl);
-          setKakaoShareArgs((prevArgs) => ({
-            ...prevArgs,
-            image: imgUrl,
-          }));
+          setImageFile(file);
         } else {
-          setShop_logo_result(previewUrl);
-          setShop_logo(imgUrl);
-          setKakaoShareArgs((prevArgs) => ({
-            ...prevArgs,
-            shop_logo: imgUrl,
-          }));
+          setImageLogoFile(file);
         }
       } catch (error) {
         console.error(`${imgType} upload failed:`, error);
@@ -215,13 +200,7 @@ const NewItem = (
       console.error("Failed to delete previous file:", error);
     }
   };
-  useEffect(() => {
-    console.log("Image state updated:", image);
-  }, [image]);
 
-  useEffect(() => {
-    console.log("Shop logo state updated:", shop_logo);
-  }, [shop_logo]);
   const uploadImage = async (
     file: File,
     imgType: string,
@@ -237,7 +216,13 @@ const NewItem = (
         await deletePreviousFile(previousFilePath, imgType);
       }
       const url = await S3AuthUpload(path, file);
-      console.log("url", url);
+
+      const previewUrl = URL.createObjectURL(file);
+      if (imgType === "image") {
+        setImage_result(previewUrl);
+      } else {
+        setShop_logo_result(previewUrl);
+      }
       return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);
@@ -260,15 +245,46 @@ const NewItem = (
     if (id === "create_item" && infoCheck()) {
       if (loading == false) {
         setLoading(true);
-        const result = await fetchCreateItem(itemArgs, campaign_id, context);
-        if (result.status === 200) {
-          alert(result.message);
+        try {
+          // Upload image if imageFile exists
+          if (imageFile) {
+            const url = await uploadImage(imageFile, "image", image);
+
+            console.log("image url", url);
+            setImage(url);
+            setKakaoShareArgs((prevArgs) => ({
+              ...prevArgs,
+              image: url,
+            }));
+          }
+
+          if (imageLogoFile) {
+            const logoUrl = await uploadImage(
+              imageLogoFile,
+              "shop_logo",
+              shop_logo,
+            );
+            console.log("logoUrl url", logoUrl);
+            setShop_logo(logoUrl);
+            setKakaoShareArgs((prevArgs) => ({
+              ...prevArgs,
+              shop_logo: logoUrl,
+            }));
+          }
+
+          const result = await fetchCreateItem(itemArgs, campaign_id, context);
+          if (result.status === 200) {
+            alert(result.message);
+            setLoading(false);
+            if (result.success)
+              router.push(`/campaign/details?campaign_id=${campaign_id}`);
+          } else {
+            setLoading(false);
+            alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
+          }
+        } catch (e) {
           setLoading(false);
-          if (result.success)
-            router.push(`/campaign/details?campaign_id=${campaign_id}`);
-        } else {
-          setLoading(false);
-          alert(`리퍼럴 생성을 실패하였습니다. 상태 코드: ${result.status}`);
+          console.error(`리퍼럴 생성을 실패하였습니다. 상태 코드:`, e);
         }
       }
     } else if (id === "cancel_create_item") {
@@ -288,6 +304,13 @@ const NewItem = (
     setPromotionInputs([{ description }]);
   }, [description]);
 
+  useEffect(() => {
+    console.log("Image state updated:", image);
+  }, [image]);
+
+  useEffect(() => {
+    console.log("Shop logo state updated:", shop_logo);
+  }, [shop_logo]);
   return (
     <>
       {loading && (
