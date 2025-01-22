@@ -253,7 +253,6 @@ const NewItem = (
           if (imageFile) {
             const url = await uploadImage(imageFile, "image", image);
 
-            console.log("image url", url);
             setImage(url);
             setKakaoShareArgs((prevArgs) => ({
               ...prevArgs,
@@ -267,7 +266,6 @@ const NewItem = (
               "shop_logo",
               shop_logo,
             );
-            console.log("logoUrl url", logoUrl);
             setShop_logo(logoUrl);
             setKakaoShareArgs((prevArgs) => ({
               ...prevArgs,
@@ -282,6 +280,8 @@ const NewItem = (
               shop_logo,
             },
           };
+          console.log("updatedItemArgs", updatedItemArgs);
+
           const result = await fetchCreateItem(
             updatedItemArgs,
             campaign_id,
@@ -318,13 +318,6 @@ const NewItem = (
     setPromotionInputs([{ description }]);
   }, [description]);
 
-  useEffect(() => {
-    console.log("Image state updated:", image);
-  }, [image]);
-
-  useEffect(() => {
-    console.log("Shop logo state updated:", shop_logo);
-  }, [shop_logo]);
   return (
     <>
       {loading && (
