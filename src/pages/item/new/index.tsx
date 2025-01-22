@@ -1,14 +1,17 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
-import { useRef, useEffect, KeyboardEvent, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-import { getShopIdFromCookies } from "@/lib/helper";
-import { withAuth } from "@/hoc/withAuth";
-import { ApiResponse } from "@/lib/types";
+import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
+import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
+import ProductList from "@/components/layout/item/modal/ProductList";
+
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRef, useEffect, useState, KeyboardEvent } from "react";
 import { useRouter } from "next/router";
+import { withAuth } from "@/hoc/withAuth";
+
 import {
   fetchGetProductCodeList,
   fetchGetCouponCodeList,
@@ -24,23 +27,22 @@ import {
   RewardType,
   ItemArgs,
 } from "@/lib/item/types";
-import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
-import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
-import ProductList from "@/components/layout/item/modal/ProductList";
+import { ApiResponse } from "@/lib/types";
+import { getShopIdFromCookies } from "@/lib/helper";
 import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
   const campaign_id = context.query.campaign_id;
 
-  const productResponse = await fetchGetProductCodeList(context);
-  const couponResponse = await fetchGetCouponCodeList("1", "10", context);
   if (!shop_id || !campaign_id) {
     return { redirect: { destination: "auth/login", permanent: false } };
   }
-  return {
-    props: { shop_id, campaign_id, productResponse, couponResponse },
-  };
+
+  const productResponse = await fetchGetProductCodeList(context);
+  const couponResponse = await fetchGetCouponCodeList("1", "10", context);
+
+  return { props: { shop_id, campaign_id, productResponse, couponResponse } };
 };
 
 const NewItem = (
@@ -61,10 +63,10 @@ const NewItem = (
   // const [pageSize, setPageSize] = useState("10");
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
   const [description, setDescription] = useState("");
+  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
   const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
-    { description: description },
+    { description },
   ]);
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
   const [selectedProductItems, setSelectedProductItems] = useState<
@@ -93,10 +95,6 @@ const NewItem = (
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const closeModal = () => setIsModalOpen(false);
-  const openModal = () =>
-    reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
-
   const itemArgs: ItemArgs = {
     title,
     item_type,
@@ -108,65 +106,53 @@ const NewItem = (
     active: false,
   };
 
-  const infoCheck = () => {
+  const closeModal = () => setIsModalOpen(false);
+  const openModal = () =>
+    reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
+
+  const infoCheck = (): boolean => {
     if (!title) {
       alert("아이템 명을 입력해주세요.");
       return false;
     }
-
-    if (productInputs.length === 0 && promotionInputs.length === 0) {
+    if (!productInputs.length && !promotionInputs.length) {
       alert("아이템 적용을 원하시는 상품 혹은 쿠폰을 추가해주세요.");
       return false;
     }
-    const validProductInputs = productInputs.filter(
-      (product) => product.product_model_code && product.product_model_name,
-    );
-
-    if (item_type === ItemType.PD) {
-      if (productInputs.length > 0 && validProductInputs.length === 0) {
-        alert("유효한 상품 모델 코드를 입력해주세요.");
-        return false;
-      }
-    } else {
-      if (promotionInputs.length > 0 && !promotionInputs[0].description) {
-        alert("프로모션 설명을 입력해주세요.");
-        return false;
-      }
-    }
-
-    if (!kakaoShareArgs.shop_name) {
-      alert("숍 이름을 입력해주세요.");
+    if (
+      item_type === ItemType.PD &&
+      productInputs.some((p) => !p.product_model_code || !p.product_model_name)
+    ) {
+      alert("유효한 상품 모델 코드를 입력해주세요.");
       return false;
     }
-    if (!kakaoShareArgs.title) {
-      alert("카카오 공유 메시지 타이틀을 입력해주세요.");
+    if (
+      item_type !== ItemType.PD &&
+      promotionInputs.some((p) => !p.description)
+    ) {
+      alert("프로모션 설명을 입력해주세요.");
       return false;
     }
-    if (!kakaoShareArgs.description) {
-      alert("카카오 공유 메시지 설명을 입력해주세요.");
-      return false;
-    }
-    if (!kakaoShareArgs.button_name) {
-      alert("카카오 공유 버튼 이름을 입력해주세요.");
+    if (
+      !kakaoShareArgs.shop_name ||
+      !kakaoShareArgs.title ||
+      !kakaoShareArgs.description ||
+      !kakaoShareArgs.button_name
+    ) {
+      alert("카카오 공유 메시지 관련 정보를 입력해주세요.");
       return false;
     }
     if (
       !rewards.length &&
-      !confirm(
-        "해당 아이템에 아직 리워드가 추가되지 않았어요, 그래도 아이템 생성을 원하시나요?",
-      )
+      !confirm("리워드가 없습니다. 그래도 계속 진행하시겠습니까?")
     ) {
       return false;
     }
-
     return true;
   };
 
   const onChangeImage =
-    (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files || e.target.files.length === 0) {
-        return;
-      }
+    (imgType: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file || !file.type.startsWith("image/")) {
         alert("이미지 파일을 업로드 해주시기 바랍니다.");
@@ -215,17 +201,15 @@ const NewItem = (
         await deletePreviousFile(previousFilePath, imgType);
       }
       const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-      const fileExtension = file.name.split(".").pop()?.toLowerCase();
-      const finaleFileExtension = `.${fileExtension}`;
-      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
+      const fileExtension = file
+        ? file.name.split(".").pop()?.toLowerCase()
+        : "";
+      const fileName = `${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}.${fileExtension}`;
       const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
       const url = await S3AuthUpload(path, file);
       const previewUrl = URL.createObjectURL(file);
-      if (imgType === "image") {
-        setImage_result(previewUrl);
-      } else {
-        setShop_logo_result(previewUrl);
-      }
+      if (imgType === "image") setImage_result(previewUrl);
+      else setShop_logo_result(previewUrl);
       return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);
@@ -253,19 +237,17 @@ const NewItem = (
           let updatedShopLogo = shop_logo;
 
           if (imageFile) {
-            const url = await uploadImage(imageFile, "image", image);
-            updatedImage = url;
-            setImage(url);
+            const updatedImage = await uploadImage(imageFile, "image", image);
+            setImage(updatedImage);
           }
 
           if (imageLogoFile) {
-            const logoUrl = await uploadImage(
+            const updatedShopLogo = await uploadImage(
               imageLogoFile,
               "shop_logo",
               shop_logo,
             );
-            updatedShopLogo = logoUrl;
-            setShop_logo(logoUrl);
+            setShop_logo(updatedShopLogo);
           }
           const updatedItemArgs = {
             ...itemArgs,
