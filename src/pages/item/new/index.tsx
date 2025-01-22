@@ -249,15 +249,13 @@ const NewItem = (
       if (loading == false) {
         setLoading(true);
         try {
-          // Upload image if imageFile exists
+          let updatedImage = image;
+          let updatedShopLogo = shop_logo;
+
           if (imageFile) {
             const url = await uploadImage(imageFile, "image", image);
-
+            updatedImage = url; // Use this for updated args
             setImage(url);
-            setKakaoShareArgs((prevArgs) => ({
-              ...prevArgs,
-              image: url,
-            }));
           }
 
           if (imageLogoFile) {
@@ -266,21 +264,18 @@ const NewItem = (
               "shop_logo",
               shop_logo,
             );
+            updatedShopLogo = logoUrl; // Use this for updated args
             setShop_logo(logoUrl);
-            setKakaoShareArgs((prevArgs) => ({
-              ...prevArgs,
-              shop_logo: logoUrl,
-            }));
           }
           const updatedItemArgs = {
             ...itemArgs,
             kakao_args: {
               ...kakaoShareArgs,
-              image,
-              shop_logo,
+              image: updatedImage,
+              shop_logo: updatedShopLogo,
             },
           };
-          console.log("updatedItemArgs", updatedItemArgs);
+          console.log("Final Args Sent to API:", updatedItemArgs);
 
           const result = await fetchCreateItem(
             updatedItemArgs,
