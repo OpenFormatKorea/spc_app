@@ -5,7 +5,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
 import { useRef, useEffect, KeyboardEvent, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-import { getShopIdFromCookies, setLoading } from "@/lib/helper";
+import { getShopIdFromCookies } from "@/lib/helper";
 import { withAuth } from "@/hoc/withAuth";
 import { ApiResponse } from "@/lib/types";
 import { useRouter } from "next/router";
@@ -254,7 +254,7 @@ const NewItem = (
 
           if (imageFile) {
             const url = await uploadImage(imageFile, "image", image);
-            updatedImage = url; // Use this for updated args
+            updatedImage = url;
             setImage(url);
           }
 
@@ -264,7 +264,7 @@ const NewItem = (
               "shop_logo",
               shop_logo,
             );
-            updatedShopLogo = logoUrl; // Use this for updated args
+            updatedShopLogo = logoUrl;
             setShop_logo(logoUrl);
           }
           const updatedItemArgs = {
@@ -275,7 +275,6 @@ const NewItem = (
               shop_logo: updatedShopLogo,
             },
           };
-          console.log("Final Args Sent to API:", updatedItemArgs);
 
           const result = await fetchCreateItem(
             updatedItemArgs,

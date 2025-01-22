@@ -9,7 +9,6 @@ import {
   fetchModifyItem,
 } from "@/lib/item/apis";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import router from "next/router";
 import {
   ItemType,
   ItemArgs,
@@ -25,6 +24,7 @@ import RewardComponentDetails from "@/components/layout/item/reward/details/Rewa
 import { ApiResponse } from "@/lib/types";
 import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
 import { getShopIdFromCookies } from "@/lib/helper";
+import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
@@ -70,9 +70,9 @@ const DetailsItem = (
   },
   context: GetServerSidePropsContext,
 ) => {
+  const router = useRouter();
   const [title, setTitle] = useState(apiResponse.title);
-  const rewards = apiResponse.rewards || [];
-  const disableInput = false;
+  const rewards: RewardsArgs[] = apiResponse.rewards;
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
     apiResponse.kakao_args,
   );
@@ -89,7 +89,7 @@ const DetailsItem = (
     apiResponse.promotions || [{ id: "", description: "" }],
   );
   const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
-  const [active, setActive] = useState(apiResponse.active);
+  const active = apiResponse.active;
   const [description, setDescription] = useState<string>(
     apiResponse.promotions?.description || "",
   );
@@ -97,8 +97,11 @@ const DetailsItem = (
   const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]);
   const [image_result, setImage_result] = useState<string>("");
   const [image, setImage] = useState<string>(kakaoShareArgs.image);
+  const [imageFile, setImageFile] = useState<File>();
   const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
+  const [imageLogoFile, setImageLogoFile] = useState<File>();
+
   const itemArgs: ItemArgs = {
     id: apiResponse.id || "",
     title,
@@ -130,47 +133,36 @@ const DetailsItem = (
       }
       const file = e.target.files?.[0];
       if (!file || !file.type.startsWith("image/")) {
-        alert("Please upload a valid image file.");
+        alert("이미지 파일을 업로드 해주시기 바랍니다.");
         return;
       }
       const reader = new FileReader();
-
-      reader.onload = async () => {
+      reader.onload = () => {
         if (reader.result && typeof reader.result === "string") {
-          try {
-            const imgUrl = await uploadImage(
-              file,
-              imgType,
-              imgType === "image" ? image : shop_logo,
-            );
-            const full_imgUrl = imgUrl;
-            console.log("full_imgUrl onChangeImage", full_imgUrl);
-            if (imgType === "image") {
-              setImage_result(reader.result);
-              setImage(full_imgUrl);
-              setKakaoShareArgs((prevArgs) => ({
-                ...prevArgs,
-                image: full_imgUrl,
-              }));
-            } else {
-              setShop_logo_result(reader.result);
-              setShop_logo(full_imgUrl);
-              setKakaoShareArgs((prevArgs) => ({
-                ...prevArgs,
-                shop_logo: full_imgUrl,
-              }));
-            }
-          } catch (error) {
-            console.error(`${imgType} upload failed:`, error);
+          if (imgType === "image") {
+            setImageFile(file);
+            setImage_result(reader.result);
+          } else {
+            setImageLogoFile(file);
+            setShop_logo_result(reader.result);
           }
         }
       };
       reader.readAsDataURL(file);
     };
 
-  const deletePreviousFile = async (previousFilePath: string) => {
+  const deletePreviousFile = async (
+    previousFilePath: string,
+    imgType: string,
+  ) => {
     try {
-      const url = await S3AuthDelete(previousFilePath);
+      await S3AuthDelete(previousFilePath);
+      if (imgType === "image") {
+        setImage("");
+      } else {
+        setShop_logo("");
+      }
+      console.log(`Previous file deleted: ${previousFilePath}`);
     } catch (error) {
       console.error("Failed to delete previous file:", error);
     }
@@ -181,6 +173,9 @@ const DetailsItem = (
     imgType: string,
     previousFilePath: string,
   ) => {
+    if (previousFilePath) {
+      await deletePreviousFile(previousFilePath, imgType);
+    }
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const finaleFileExtension = "." + fileExtension;
@@ -199,26 +194,59 @@ const DetailsItem = (
 
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
-    if (id === "cancel_create_item") {
-      router.push(`/campaign/details?campaign_id=${campaign_id}`);
-    } else if (id === "modify_item" && !loading) {
-      setLoading(true);
 
-      const result = await fetchModifyItem(
-        itemModifyArgs,
-        campaign_id,
-        context,
-      );
+    if (id === "modify_item") {
+      if (loading == false) {
+        setLoading(true);
+        try {
+          let updatedImage = image;
+          let updatedShopLogo = shop_logo;
 
-      setLoading(false);
-      if (result.status === 200) {
-        alert(result.message);
-        if (result.success) {
-          router.push(`/campaign/details?campaign_id=${campaign_id}`);
+          if (imageFile) {
+            const url = await uploadImage(imageFile, "image", image);
+            updatedImage = url;
+            setImage(url);
+          }
+
+          if (imageLogoFile) {
+            const logoUrl = await uploadImage(
+              imageLogoFile,
+              "shop_logo",
+              shop_logo,
+            );
+            updatedShopLogo = logoUrl;
+            setShop_logo(logoUrl);
+          }
+
+          const updatedItemArgs = {
+            ...itemModifyArgs,
+            kakao_args: {
+              ...kakaoShareArgs,
+              image: updatedImage,
+              shop_logo: updatedShopLogo,
+            },
+          };
+
+          const result = await fetchModifyItem(
+            updatedItemArgs,
+            campaign_id,
+            context,
+          );
+          setLoading(false);
+          if (result.status === 200) {
+            alert(result.message);
+            if (result.success) {
+              router.push(`/campaign/details?campaign_id=${campaign_id}`);
+            }
+          } else {
+            alert(`리퍼럴 수정을 실패하였습니다. 상태 코드: ${result.status}`);
+          }
+        } catch (e) {
+          console.error("handlesubmit error: ", e);
         }
-      } else {
-        alert(`리퍼럴 수정을 실패하였습니다. 상태 코드: ${result.status}`);
       }
+    } else if (id === "cancel_create_item") {
+      router.push(`/campaign/details?campaign_id=${campaign_id}`);
     }
   };
 
@@ -293,12 +321,12 @@ const DetailsItem = (
               setItem_type={setItem_type}
               setProductInputs={setProductInputs}
               handleKeyDown={handleKeyDown}
-              disableInput={disableInput}
+              disableInput={false}
             />
 
             <RewardComponentDetails
               apiResponse={couponResponse}
-              disableInput={disableInput}
+              disableInput={false}
               selectedRewards={selectedRewards}
               setSelectedRewards={setSelectedRewards}
               rewards={rewards}

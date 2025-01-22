@@ -59,7 +59,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  console.log("kakaoShareArgs", kakaoShareArgs);
   useEffect(() => {
     if (page_type === "DETAILS") {
       setProductInputs(itemArgs.products);
