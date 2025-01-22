@@ -213,7 +213,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="flex h-fit w-full items-center justify-center gap-[5px]">
+                {/* <div className="flex h-fit w-full items-center justify-center gap-[5px]">
                   <button
                     onClick={() =>
                       deletePreviousFile(image, "image").catch((error) =>
@@ -235,7 +235,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                   >
                     로고 삭제
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
