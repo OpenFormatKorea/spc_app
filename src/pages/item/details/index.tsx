@@ -140,11 +140,11 @@ const DetailsItem = (
       reader.onload = () => {
         if (reader.result && typeof reader.result === "string") {
           if (imgType === "image") {
-            setImageFile(file);
             setImage_result(reader.result);
+            setImageFile(file);
           } else {
-            setImageLogoFile(file);
             setShop_logo_result(reader.result);
+            setImageLogoFile(file);
           }
         }
       };
@@ -155,14 +155,18 @@ const DetailsItem = (
     previousFilePath: string,
     imgType: string,
   ) => {
+    const baseURL = process.env.NEXT_PUBLIC_AWS_BASE_URL;
+    const extractedKey = previousFilePath.replace(baseURL || "", "");
+
+    console.log("extractedKey", extractedKey);
     try {
-      await S3AuthDelete(previousFilePath);
+      await S3AuthDelete(extractedKey);
       if (imgType === "image") {
         setImage("");
       } else {
         setShop_logo("");
       }
-      console.log(`Previous file deleted: ${previousFilePath}`);
+      console.log(`Previous file deleted:`, previousFilePath);
     } catch (error) {
       console.error("Failed to delete previous file:", error);
     }
@@ -173,6 +177,7 @@ const DetailsItem = (
     imgType: string,
     previousFilePath: string,
   ) => {
+    console.log("deletePreviousFile previousFilePath", previousFilePath);
     if (previousFilePath) {
       await deletePreviousFile(previousFilePath, imgType);
     }

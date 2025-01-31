@@ -8,14 +8,13 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const isProduction = process.env.NODE_ENV === "production";
-console.log("isProduction", isProduction);
 let credentials;
 if (isProduction) {
   credentials = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   };
-  console.log("isProduction  true credentials", credentials);
+  console.log("isProduction true credentials", credentials);
 } else {
   credentials = fromIni({ profile: "dashboard" });
 }
@@ -39,20 +38,22 @@ export default async function handler(
       });
       console.log(" upload URL:", uploadURL);
       return res.status(200).json({ uploadURL });
-      //삭제
+      //삭제이런
     } else if (action === "delete") {
-      const extractedKey = key.replace(baseURL, "");
-      console.log("Extracted Key final:", extractedKey);
+      // const extractedKey = key.replace(baseURL, "");
+      // console.log("Extracted Key final:", extractedKey);
       const command = new DeleteObjectCommand({
         Bucket: bucketName,
-        Key: extractedKey,
+        Key: key,
+        //Key: extractedKey,
       });
       console.log("delete command:", command);
       const response = await s3Client.send(command);
       console.log("Delete Response:", response);
       return res
         .status(200)
-        .json({ message: `File '${extractedKey}' deleted successfully` });
+        .json({ message: `File '${key}' deleted successfully` });
+      //        .json({ message: `File '${extractedKey}' deleted successfully` });
     } else {
       return res
         .status(400)
