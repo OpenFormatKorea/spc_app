@@ -61,7 +61,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
           카카오 메시지 설정
         </label>
         <div className="lg:flex lg:gap-4">
-          <button
+          {/* <button
             className="bg-gray-300"
             onClick={async () => {
               try {
@@ -72,7 +72,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
             }}
           >
             이미지 삭제
-          </button>
+          </button> */}
           <div className="flex w-full items-center justify-center rounded-xl bg-gray-200 lg:w-fit lg:items-start lg:justify-start lg:bg-transparent">
             <div className="relative my-4">
               <div className="mx-auto hidden w-[200px] lg:block lg:w-[290px]">
