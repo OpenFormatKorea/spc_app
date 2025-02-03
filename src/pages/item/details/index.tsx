@@ -188,7 +188,6 @@ const DetailsItem = (
     try {
       await S3AuthDelete(previousFilePath);
       handleTempImageDelete(imgType);
-      console.log(`Previous file deleted: ${previousFilePath}`);
     } catch (error) {
       console.error("Failed to delete previous file:", error);
     }
@@ -213,7 +212,7 @@ const DetailsItem = (
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
       const finaleFileExtension = `.${fileExtension}`;
       const timestamp = new Date().toISOString().slice(0, 16).replace("T", "_");
-      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${timestamp}${finaleFileExtension}`;
+      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${timestamp}${finaleFileExtension}`;
       const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
       const url = await S3AuthUpload(path, file);
       const previewUrl = URL.createObjectURL(file);

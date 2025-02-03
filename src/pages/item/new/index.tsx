@@ -93,9 +93,9 @@ const NewItem = (
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const closeModal = () => setIsModalOpen(false);
   const openModal = () =>
     reward_type ? setIsModalOpen(true) : alert("리워드 종류를 선택해주세요.");
+  const closeModal = () => setIsModalOpen(false);
 
   const itemArgs: ItemArgs = {
     title,
@@ -150,31 +150,21 @@ const NewItem = (
   };
 
   const handleImageChange = (imgType: string, file: File, result: string) => {
-    if (imgType === "image") {
-      setImageFile(file);
-      setImage_result(result);
-    } else {
-      setImageLogoFile(file);
-      setShop_logo_result(result);
-    }
+    imgType === "image" ? setImageFile(file) : setImageLogoFile(file);
+    imgType === "image" ? setImage_result(result) : setShop_logo_result(result);
   };
 
   const onChangeImage =
     (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      if (!file) {
-        alert("파일을 선택해주세요.");
-        return;
-      }
-      if (!file || !file.type.startsWith("image/")) {
-        alert("이미지 파일을 업로드 해주시기 바랍니다.");
-        return;
-      }
+      if (!file) return alert("파일을 선택해주세요.");
+      if (!file || !file.type.startsWith("image/"))
+        return alert("이미지 파일을 업로드 해주시기 바랍니다.");
+
       const reader = new FileReader();
       reader.onload = () => {
-        if (typeof reader.result === "string") {
+        if (typeof reader.result === "string")
           handleImageChange(imgType, file, reader.result);
-        }
       };
       reader.readAsDataURL(file);
     };
@@ -183,12 +173,9 @@ const NewItem = (
     previousFilePath: string,
     imgType: string,
   ) => {
-    console.log("previousFilePath", previousFilePath);
     try {
       await S3AuthDelete(previousFilePath);
       handleTempImageDelete(imgType);
-
-      console.log(`Previous file deleted: ${previousFilePath}`);
     } catch (error) {
       console.error("Failed to delete previous file:", error);
     }
@@ -209,12 +196,11 @@ const NewItem = (
       if (previousFilePath) {
         await handleImageDelete(previousFilePath, imgType);
       }
+      const timestamp = new Date().toISOString().slice(0, 16).replace("T", "_");
       const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
       const finaleFileExtension = `.${fileExtension}`;
-      const timestamp = new Date().toISOString().slice(0, 16).replace("T", "_");
-
-      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${timestamp}${finaleFileExtension}`;
+      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${timestamp}${finaleFileExtension}`;
       const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
       const url = await S3AuthUpload(path, file);
       const previewUrl = URL.createObjectURL(file);
@@ -310,9 +296,7 @@ const NewItem = (
     }
   };
 
-  useEffect(() => {
-    setPromotionInputs([{ description }]);
-  }, [description]);
+  useEffect(() => setPromotionInputs([{ description }]), [description]);
 
   return (
     <>
