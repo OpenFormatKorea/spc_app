@@ -22,7 +22,7 @@ import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import RewardComponentDetails from "@/components/layout/item/reward/details/RewardComponentDetails";
 import { ApiResponse } from "@/lib/types";
-import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
+import { isNonEmptyString, S3AuthDelete, S3AuthUpload } from "@/lib/common";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { useRouter } from "next/router";
 
@@ -107,11 +107,15 @@ const DetailsItem = (
     ? apiResponse.rewards
     : [];
   const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
-  const prev_img = kakaoShareArgs.image || "";
+  const prev_img = isNonEmptyString(kakaoShareArgs.image)
+    ? kakaoShareArgs.image
+    : "";
   const [image, setImage] = useState<string>(prev_img);
   const [image_result, setImage_result] = useState<string>("");
   const [imageFile, setImageFile] = useState<File>();
-  const prev_shop_logo = kakaoShareArgs.shop_logo || "";
+  const prev_shop_logo = isNonEmptyString(kakaoShareArgs.shop_logo)
+    ? kakaoShareArgs.shop_logo
+    : "";
   const [shop_logo, setShop_logo] = useState<string>(prev_shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const [imageLogoFile, setImageLogoFile] = useState<File>();

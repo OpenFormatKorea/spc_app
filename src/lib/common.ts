@@ -19,6 +19,9 @@ export const handleSignOut = async (event?: React.FormEvent) => {
 export const handleLogo = () => {
   router.push("/dashboard");
 };
+export const isNonEmptyString = (value: string | undefined | null): boolean => {
+  return typeof value === "string" && value.trim() !== "";
+};
 
 export function hasWhiteSpace(s: string) {
   return /\s/g.test(s);
