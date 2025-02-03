@@ -31,7 +31,7 @@ interface ItemDetailsProps {
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   campaign_id?: string;
-  deletePreviousFile: (
+  handleImageDelete: (
     previousFilePath: string,
     imgType: string,
   ) => Promise<void>;
@@ -55,7 +55,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     handleKeyDown,
     onChangeImage,
     campaign_id,
-    deletePreviousFile,
+    handleImageDelete,
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -141,7 +141,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
         image_result={image_result}
         shop_logo_result={shop_logo_result}
         onChangeImage={onChangeImage}
-        deletePreviousFile={deletePreviousFile}
+        handleImageDelete={handleImageDelete}
       />
     </>
   );
