@@ -150,27 +150,31 @@ const NewItem = (
     return true;
   };
 
+  const handleImageChange = (imgType: string, file: File, result: string) => {
+    if (imgType === "image") {
+      setImageFile(file);
+      setImage_result(result);
+    } else {
+      setImageLogoFile(file);
+      setShop_logo_result(result);
+    }
+  };
+
   const onChangeImage =
     (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files || e.target.files.length === 0) {
+      const file = e.target.files?.[0];
+      if (!file) {
+        alert("파일을 선택해주세요.");
         return;
       }
-      const file = e.target.files?.[0];
       if (!file || !file.type.startsWith("image/")) {
         alert("이미지 파일을 업로드 해주시기 바랍니다.");
         return;
       }
-
       const reader = new FileReader();
       reader.onload = () => {
-        if (reader.result && typeof reader.result === "string") {
-          if (imgType === "image") {
-            setImageFile(file);
-            setImage_result(reader.result);
-          } else {
-            setImageLogoFile(file);
-            setShop_logo_result(reader.result);
-          }
+        if (typeof reader.result === "string") {
+          handleImageChange(imgType, file, reader.result);
         }
       };
       reader.readAsDataURL(file);

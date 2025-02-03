@@ -112,7 +112,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                         <img
                           className="h-full w-full"
                           src={
-                            page_type === "DETAILS"
+                            page_type === "DETAILS" && image !== ""
                               ? image
                               : image_result ||
                                 "/images/kakao/kakaolink-no-logo-default.png"
@@ -145,7 +145,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                               <img
                                 className="h-full w-full"
                                 src={
-                                  page_type === "DETAILS"
+                                  page_type === "DETAILS" && shop_logo !== ""
                                     ? shop_logo
                                     : shop_logo_result ||
                                       "/images/kakao/kakaolink-no-logo-default.png"
@@ -204,7 +204,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                 <img
                                   className="h-full w-full"
                                   src={
-                                    page_type === "DETAILS"
+                                    page_type === "DETAILS" && shop_logo !== ""
                                       ? shop_logo
                                       : shop_logo_result ||
                                         "/images/kakao/kakaolink-no-logo-default.png"
@@ -254,7 +254,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
             </div>
           </div>
 
-          <div className="flex h-full w-full flex-col">
+          <div className="flex h-fit w-full flex-col">
             <div className={inputFormClass}>
               <label className={labelClass}>Shop Name</label>
               <InputTextBox

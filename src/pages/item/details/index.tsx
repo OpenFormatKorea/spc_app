@@ -17,6 +17,7 @@ import {
   RewardsArgs,
   KakaoShareArgs,
   ItemModifyArgs,
+  CouponsArgs,
 } from "@/lib/item/types";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
@@ -72,10 +73,6 @@ const DetailsItem = (
 ) => {
   const router = useRouter();
   const [title, setTitle] = useState(apiResponse.title);
-  const rewards: RewardsArgs[] = apiResponse.rewards;
-  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
-    apiResponse.kakao_args,
-  );
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
     apiResponse.products || [
       {
@@ -85,22 +82,43 @@ const DetailsItem = (
       },
     ],
   );
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
-    apiResponse.promotions || [{ id: "", description: "" }],
-  );
-  const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
-  const active = apiResponse.active;
   const [description, setDescription] = useState<string>(
     apiResponse.promotions?.description || "",
   );
-  const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]);
-  const [image_result, setImage_result] = useState<string>("");
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>(
+    apiResponse.promotions || [{ id: "", description: "" }],
+  );
+
+  const selectedProductItems = [
+    {
+      product_model_code:
+        apiResponse.products?.product_model_code ||
+        apiResponse.products?.model_name ||
+        "",
+      product_model_name:
+        apiResponse.products?.product_model_name ||
+        apiResponse.products?.model_name ||
+        "",
+    },
+  ];
+  const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
+    apiResponse.kakao_args,
+  );
+  const rewards: RewardsArgs[] = Array.isArray(apiResponse?.rewards)
+    ? apiResponse.rewards
+    : [];
+  const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
+
   const [image, setImage] = useState<string>(kakaoShareArgs.image);
+  const [image_result, setImage_result] = useState<string>("");
   const [imageFile, setImageFile] = useState<File>();
   const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const [imageLogoFile, setImageLogoFile] = useState<File>();
   const [loading, setLoading] = useState(true);
+
+  const active = apiResponse.active;
+  const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]);
 
   const itemArgs: ItemArgs = {
     id: apiResponse.id || "",
@@ -197,12 +215,29 @@ const DetailsItem = (
   //   }
   // };
 
+  const handleImageChange = (imgType: string, file: File, result: string) => {
+    if (imgType === "image") {
+      console.log("file", file);
+      console.log("result", result);
+      setImage("");
+      setImageFile(file);
+      setImage_result(result);
+    } else {
+      setShop_logo("");
+      setImageLogoFile(file);
+      setShop_logo_result(result);
+    }
+  };
+
   const onChangeImage =
     (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files || e.target.files.length === 0) {
+      const file = e.target.files?.[0];
+      console.log("ONCHANGE IMAGE ", imgType);
+
+      if (!file) {
+        alert("파일을 선택해주세요.");
         return;
       }
-      const file = e.target.files?.[0];
       if (!file || !file.type.startsWith("image/")) {
         alert("이미지 파일을 업로드 해주시기 바랍니다.");
         return;
@@ -210,14 +245,8 @@ const DetailsItem = (
 
       const reader = new FileReader();
       reader.onload = () => {
-        if (reader.result && typeof reader.result === "string") {
-          if (imgType === "image") {
-            setImageFile(file);
-            setImage_result(reader.result);
-          } else {
-            setImageLogoFile(file);
-            setShop_logo_result(reader.result);
-          }
+        if (typeof reader.result === "string") {
+          handleImageChange(imgType, file, reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -383,18 +412,7 @@ const DetailsItem = (
               item_type={item_type}
               itemArgs={itemArgs}
               description={description}
-              selectedProductItems={[
-                {
-                  product_model_code:
-                    apiResponse.products?.product_model_code ||
-                    apiResponse.products?.model_name ||
-                    "",
-                  product_model_name:
-                    apiResponse.products?.product_model_name ||
-                    apiResponse.products?.model_name ||
-                    "",
-                },
-              ]}
+              selectedProductItems={selectedProductItems}
               setPromotionInputs={setPromotionInputs}
               setDescription={setDescription}
               setItem_type={setItem_type}
