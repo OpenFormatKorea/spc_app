@@ -204,7 +204,7 @@ const NewItem = (
       const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
       const finaleFileExtension = `.${fileExtension}`;
-      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${timestamp}${finaleFileExtension}`;
+      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${timestamp}${finaleFileExtension}`;
       const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
       const url = await S3AuthUpload(path, file);
       const previewUrl = URL.createObjectURL(file);
