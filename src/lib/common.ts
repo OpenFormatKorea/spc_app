@@ -61,7 +61,7 @@ export const S3AuthUpload = async (path: string, file: File) => {
 export const S3AuthDelete = async (path: string) => {
   const baseURL = process.env.NEXT_PUBLIC_AWS_BASE_URL + "/" || "";
   const key_path = path.replace(baseURL + "/", "");
-
+  console.log("key_path: ", key_path);
   try {
     const response = await fetch("/api/s3-presigned-url.internal-api", {
       method: "POST",
