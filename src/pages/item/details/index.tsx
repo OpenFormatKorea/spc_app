@@ -145,8 +145,6 @@ const DetailsItem = (
 
   const handleImageChange = (imgType: string, file: File, result: string) => {
     if (imgType === "image") {
-      console.log("file", file);
-      console.log("result", result);
       setImage("");
       setImageFile(file);
       setImage_result(result);
@@ -160,8 +158,6 @@ const DetailsItem = (
   const onChangeImage =
     (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      console.log("ONCHANGE IMAGE ", imgType);
-
       if (!file) {
         alert("파일을 선택해주세요.");
         return;
@@ -184,20 +180,21 @@ const DetailsItem = (
     previousFilePath: string,
     imgType: string,
   ) => {
-    console.log("previousFilePath", previousFilePath);
     try {
       await S3AuthDelete(previousFilePath);
-      if (imgType === "image") {
-        setImage("");
-      } else {
-        setShop_logo("");
-      }
+      handleTempImageDelete(imgType);
       console.log(`Previous file deleted: ${previousFilePath}`);
     } catch (error) {
       console.error("Failed to delete previous file:", error);
     }
   };
-
+  const handleTempImageDelete = (imgType: string) => {
+    if (imgType === "image") {
+      setImage("");
+    } else {
+      setShop_logo("");
+    }
+  };
   const uploadImage = async (
     file: File,
     imgType: string,
@@ -333,7 +330,7 @@ const DetailsItem = (
               shop_logo_result={shop_logo_result}
               onChangeImage={onChangeImage}
               disableInput={false}
-              handleImageDelete={handleImageDelete}
+              handleTempImageDelete={handleTempImageDelete}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">

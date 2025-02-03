@@ -38,22 +38,17 @@ export default async function handler(
       });
       console.log(" upload URL:", uploadURL);
       return res.status(200).json({ uploadURL });
-      //삭제이런
+      //삭제
     } else if (action === "delete") {
-      // const extractedKey = key.replace(baseURL, "");
-      // console.log("Extracted Key final:", extractedKey);
       const command = new DeleteObjectCommand({
         Bucket: bucketName,
         Key: key,
-        //Key: extractedKey,
       });
       console.log("delete command:", command);
       const response = await s3Client.send(command);
-      console.log("Delete Response:", response);
       return res
         .status(200)
         .json({ message: `File '${key}' deleted successfully` });
-      //        .json({ message: `File '${extractedKey}' deleted successfully` });
     } else {
       return res
         .status(400)

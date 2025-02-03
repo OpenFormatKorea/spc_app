@@ -15,10 +15,7 @@ interface KakaoShareProps {
   onChangeImage: (
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleImageDelete: (
-    previousFilePath: string,
-    imgType: string,
-  ) => Promise<void>;
+  handleTempImageDelete: (imgType: string) => void;
 }
 
 const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
@@ -32,7 +29,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   setKakaoShareArgs,
   handleKeyDown,
   onChangeImage,
-  handleImageDelete,
+  handleTempImageDelete,
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-4";
   const labelClass = "text-xs pt-4 text-gray-500";
@@ -215,29 +212,6 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                     </div>
                   </div>
                 </div>
-                {/* <div className="flex h-fit w-full items-center justify-center gap-[5px]">
-                  <button
-                    onClick={() =>
-                      deletePreviousFile(image, "image").catch((error) =>
-                        console.error("Failed to delete file:", error),
-                      )
-                    }
-                    className="flex w-[70px] min-w-[70px] items-center justify-center rounded-lg bg-red-600 p-[5px] text-[11px] text-white"
-                  >
-                    썸네일 삭제
-                  </button>
-                  <button
-                    onClick={() =>
-                      deletePreviousFile(shop_logo, "shop_logo").catch(
-                        (error) =>
-                          console.error("Failed to delete file:", error),
-                      )
-                    }
-                    className="flex w-[70px] min-w-[70px] items-center justify-center rounded-lg bg-red-600 p-[5px] text-[11px] text-white"
-                  >
-                    로고 삭제
-                  </button>
-                </div> */}
               </div>
             </div>
           </div>
@@ -298,7 +272,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                   className="w-fit min-w-[80px] rounded-lg bg-red-600 p-[5px] text-white"
                   onClick={async () => {
                     try {
-                      await handleImageDelete(image, "image");
+                      await handleTempImageDelete("image");
                     } catch (error) {
                       console.error("Failed to delete image:", error);
                     }
@@ -310,7 +284,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                   className="w-fit min-w-[80px] rounded-lg bg-red-600 p-[5px] text-white"
                   onClick={async () => {
                     try {
-                      await handleImageDelete(shop_logo, "shop_logo");
+                      await handleTempImageDelete("shop_logo");
                     } catch (error) {
                       console.error("Failed to delete image:", error);
                     }
