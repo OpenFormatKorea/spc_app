@@ -183,8 +183,12 @@ const NewItem = (
   const handleTempImageDelete = (imgType: string) => {
     if (imgType === "image") {
       setImage("");
+      setImageFile(undefined);
+      setImage_result("");
     } else {
       setShop_logo("");
+      setImageLogoFile(undefined);
+      setShop_logo_result("");
     }
   };
   const uploadImage = async (
