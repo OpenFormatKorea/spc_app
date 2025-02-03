@@ -107,11 +107,12 @@ const DetailsItem = (
     ? apiResponse.rewards
     : [];
   const [item_type, setItem_type] = useState<ItemType>(apiResponse.item_type);
-
-  const [image, setImage] = useState<string>(kakaoShareArgs.image);
+  const prev_img = kakaoShareArgs.image || "";
+  const [image, setImage] = useState<string>(prev_img);
   const [image_result, setImage_result] = useState<string>("");
   const [imageFile, setImageFile] = useState<File>();
-  const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
+  const prev_shop_logo = kakaoShareArgs.shop_logo || "";
+  const [shop_logo, setShop_logo] = useState<string>(prev_shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const [imageLogoFile, setImageLogoFile] = useState<File>();
   const [loading, setLoading] = useState(true);
@@ -237,7 +238,7 @@ const DetailsItem = (
           let updatedShopLogo = shop_logo;
 
           if (imageFile) {
-            const url = await uploadImage(imageFile, "image", image);
+            const url = await uploadImage(imageFile, "image", prev_img);
             updatedImage = url;
             setImage(url);
           }
@@ -246,7 +247,7 @@ const DetailsItem = (
             const logoUrl = await uploadImage(
               imageLogoFile,
               "shop_logo",
-              shop_logo,
+              prev_shop_logo,
             );
             updatedShopLogo = logoUrl;
             setShop_logo(logoUrl);
