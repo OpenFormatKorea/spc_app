@@ -1,5 +1,4 @@
-import React, { useState, KeyboardEvent, Dispatch, useEffect } from "react";
-import InputTextBox from "@/components/base/InputText";
+import React, { useState, KeyboardEvent } from "react";
 import {
   RewardType,
   RewardsArgs,

@@ -93,7 +93,6 @@ const DetailsItem = (
   const [description, setDescription] = useState<string>(
     apiResponse.promotions?.description || "",
   );
-  const [loading, setLoading] = useState(true);
   const [selectedRewards, setSelectedRewards] = useState<RewardsArgs[]>([]);
   const [image_result, setImage_result] = useState<string>("");
   const [image, setImage] = useState<string>(kakaoShareArgs.image);
@@ -101,6 +100,7 @@ const DetailsItem = (
   const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const [imageLogoFile, setImageLogoFile] = useState<File>();
+  const [loading, setLoading] = useState(true);
 
   const itemArgs: ItemArgs = {
     id: apiResponse.id || "",
@@ -126,6 +126,77 @@ const DetailsItem = (
     campaign_id,
   };
 
+  // const onChangeImage =
+  //   (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     if (!e.target.files || e.target.files.length === 0) {
+  //       return;
+  //     }
+  //     const file = e.target.files?.[0];
+  //     if (!file || !file.type.startsWith("image/")) {
+  //       alert("이미지 파일을 업로드 해주시기 바랍니다.");
+  //       return;
+  //     }
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       if (reader.result && typeof reader.result === "string") {
+  //         if (imgType === "image") {
+  //           setImage_result(reader.result);
+  //           setImageFile(file);
+  //         } else {
+  //           setShop_logo_result(reader.result);
+  //           setImageLogoFile(file);
+  //         }
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   };
+
+  // const deletePreviousFile = async (
+  //   previousFilePath: string,
+  //   imgType: string,
+  // ) => {
+  //   const baseURL = process.env.NEXT_PUBLIC_AWS_BASE_URL;
+  //   const extractedKey = previousFilePath.replace(baseURL || "", "");
+
+  //   console.log("extractedKey", extractedKey);
+  //   try {
+  //     await S3AuthDelete(extractedKey);
+  //     if (imgType === "image") {
+  //       setImage("");
+  //     } else {
+  //       setShop_logo("");
+  //     }
+  //     console.log(`Previous file deleted:`, previousFilePath);
+  //   } catch (error) {
+  //     console.error("Failed to delete previous file:", error);
+  //   }
+  // };
+
+  // const uploadImage = async (
+  //   file: File,
+  //   imgType: string,
+  //   previousFilePath: string,
+  // ) => {
+  //   console.log("deletePreviousFile previousFilePath", previousFilePath);
+  //   if (previousFilePath) {
+  //     await deletePreviousFile(previousFilePath, imgType);
+  //   }
+  //   const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
+  //   const fileExtension = file.name.split(".").pop()?.toLowerCase();
+  //   const finaleFileExtension = "." + fileExtension;
+  //   const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
+  //   const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
+  //   console.log("path", path);
+  //   try {
+  //     const url = await S3AuthUpload(path, file);
+  //     console.log("url", url);
+  //     return url;
+  //   } catch (error) {
+  //     console.error("Image Upload Failed:", error);
+  //     throw error;
+  //   }
+  // };
+
   const onChangeImage =
     (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files || e.target.files.length === 0) {
@@ -136,15 +207,16 @@ const DetailsItem = (
         alert("이미지 파일을 업로드 해주시기 바랍니다.");
         return;
       }
+
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.result && typeof reader.result === "string") {
           if (imgType === "image") {
-            setImage_result(reader.result);
             setImageFile(file);
+            setImage_result(reader.result);
           } else {
-            setShop_logo_result(reader.result);
             setImageLogoFile(file);
+            setShop_logo_result(reader.result);
           }
         }
       };
@@ -155,18 +227,14 @@ const DetailsItem = (
     previousFilePath: string,
     imgType: string,
   ) => {
-    const baseURL = process.env.NEXT_PUBLIC_AWS_BASE_URL;
-    const extractedKey = previousFilePath.replace(baseURL || "", "");
-
-    console.log("extractedKey", extractedKey);
     try {
-      await S3AuthDelete(extractedKey);
+      await S3AuthDelete(previousFilePath);
       if (imgType === "image") {
         setImage("");
       } else {
         setShop_logo("");
       }
-      console.log(`Previous file deleted:`, previousFilePath);
+      console.log(`Previous file deleted: ${previousFilePath}`);
     } catch (error) {
       console.error("Failed to delete previous file:", error);
     }
@@ -177,19 +245,25 @@ const DetailsItem = (
     imgType: string,
     previousFilePath: string,
   ) => {
-    console.log("deletePreviousFile previousFilePath", previousFilePath);
-    if (previousFilePath) {
-      await deletePreviousFile(previousFilePath, imgType);
-    }
-    const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    const finaleFileExtension = "." + fileExtension;
-    const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
-    const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
-    console.log("path", path);
     try {
+      if (previousFilePath) {
+        await deletePreviousFile(previousFilePath, imgType);
+      }
+      const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
+      const finaleFileExtension = `.${fileExtension}`;
+      const timestamp = new Date().toISOString().slice(0, 16).replace("T", "_");
+      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${timestamp}${finaleFileExtension}`;
+      const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
       const url = await S3AuthUpload(path, file);
+      const previewUrl = URL.createObjectURL(file);
+      if (imgType === "image") {
+        setImage_result(previewUrl);
+      } else {
+        setShop_logo_result(previewUrl);
+      }
       console.log("url", url);
+
       return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);

@@ -28,6 +28,7 @@ import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardCom
 import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
 import ProductList from "@/components/layout/item/modal/ProductList";
 import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
+import { url } from "inspector";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
@@ -204,7 +205,9 @@ const NewItem = (
       const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
       const finaleFileExtension = `.${fileExtension}`;
-      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${new Date().toISOString()}${finaleFileExtension}`;
+      const timestamp = new Date().toISOString().slice(0, 16).replace("T", "_");
+
+      const fileName = `standalone/${imgType === "image" ? "kakaoShare_image" : "kakaoShare_logo_img"}_${shop_id}_${campaign_id}_${timestamp}${finaleFileExtension}`;
       const path = `${environment}/${shop_id}/${campaign_id}/kakaoshare/${imgType}/${fileName}`;
       const url = await S3AuthUpload(path, file);
       const previewUrl = URL.createObjectURL(file);
@@ -213,6 +216,7 @@ const NewItem = (
       } else {
         setShop_logo_result(previewUrl);
       }
+      console.log("url", url);
       return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);

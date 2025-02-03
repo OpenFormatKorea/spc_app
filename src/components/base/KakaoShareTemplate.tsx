@@ -56,31 +56,33 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
 
   return (
     <>
-      <div className="contents-container w-full pt-4">
-        <label className="pt-4 font-bold text-gray-500">
-          카카오 메시지 설정
-        </label>
-        <div className="lg:flex lg:gap-4">
-          {/* <button
-            className="bg-gray-300"
-            onClick={async () => {
-              try {
-                await deletePreviousFile(image, "image");
-              } catch (error) {
-                console.error("Failed to delete image:", error);
-              }
-            }}
-          >
-            이미지 삭제
-          </button> */}
+      <div className="lg:flex lg:gap-4">
+        <div className="contents-container w-full pt-4">
+          <label className="pt-4 font-bold text-gray-500">
+            카카오 메시지 설정
+          </label>
+
           <div className="flex w-full items-center justify-center rounded-xl bg-gray-200 lg:w-fit lg:items-start lg:justify-start lg:bg-transparent">
             <div className="relative my-4">
+              <button
+                className="bg-gray-300"
+                onClick={async () => {
+                  try {
+                    await deletePreviousFile(image, "image");
+                  } catch (error) {
+                    console.error("Failed to delete image:", error);
+                  }
+                }}
+              >
+                이미지 삭제
+              </button>
               <div className="mx-auto hidden w-[200px] lg:block lg:w-[290px]">
                 <img
                   src="/images/kakao/kakao-message-template.png"
                   alt="Phone Mockup"
                 />
               </div>
+
               <div className="left-0 top-0 lg:absolute lg:left-[40px] lg:top-[85px]">
                 <div className="shadow-card_shadow flex h-full max-w-full flex-col items-center justify-center rounded-lg bg-white">
                   <div className="min-h-full w-[230px] min-w-full overflow-hidden rounded-lg">
