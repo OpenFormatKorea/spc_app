@@ -180,7 +180,7 @@ const DetailsItem = (
       reader.readAsDataURL(file);
     };
 
-  const deletePreviousFile = async (
+  const handleImageDelete = async (
     previousFilePath: string,
     imgType: string,
   ) => {
@@ -205,7 +205,7 @@ const DetailsItem = (
   ) => {
     try {
       if (previousFilePath) {
-        await deletePreviousFile(previousFilePath, imgType);
+        await handleImageDelete(previousFilePath, imgType);
       }
       const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
@@ -279,10 +279,11 @@ const DetailsItem = (
             alert(`리퍼럴 수정을 실패하였습니다. 상태 코드: ${result.status}`);
           }
         } catch (e) {
+          setLoading(false);
           console.error("handlesubmit error: ", e);
         }
       }
-    } else if (id === "cancel_create_item") {
+    } else if (id === "cancel_item") {
       router.push(`/campaign/details?campaign_id=${campaign_id}`);
     }
   };
@@ -332,7 +333,7 @@ const DetailsItem = (
               shop_logo_result={shop_logo_result}
               onChangeImage={onChangeImage}
               disableInput={false}
-              deletePreviousFile={deletePreviousFile}
+              handleImageDelete={handleImageDelete}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">
@@ -363,7 +364,7 @@ const DetailsItem = (
           <button
             className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white lg:w-fit"
             onClick={handleSubmit}
-            id="cancel_create_item"
+            id="cancel_item"
           >
             뒤로가기
           </button>

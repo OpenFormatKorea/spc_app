@@ -15,7 +15,7 @@ interface KakaoShareProps {
   onChangeImage: (
     imgType: string,
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
-  deletePreviousFile: (
+  handleImageDelete: (
     previousFilePath: string,
     imgType: string,
   ) => Promise<void>;
@@ -32,7 +32,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   setKakaoShareArgs,
   handleKeyDown,
   onChangeImage,
-  deletePreviousFile,
+  handleImageDelete,
 }) => {
   const inputFormClass = "inputForm flex flex-col text-left w-full pb-4";
   const labelClass = "text-xs pt-4 text-gray-500";
@@ -64,18 +64,6 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
 
           <div className="flex w-full items-center justify-center rounded-xl bg-gray-200 lg:w-fit lg:items-start lg:justify-start lg:bg-transparent">
             <div className="relative my-4">
-              <button
-                className="bg-gray-300"
-                onClick={async () => {
-                  try {
-                    await deletePreviousFile(image, "image");
-                  } catch (error) {
-                    console.error("Failed to delete image:", error);
-                  }
-                }}
-              >
-                이미지 삭제
-              </button>
               <div className="mx-auto hidden w-[200px] lg:block lg:w-[290px]">
                 <img
                   src="/images/kakao/kakao-message-template.png"
@@ -302,6 +290,35 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                 onKeyDown={handleKeyDown}
                 disabled={disableInput}
               />
+            </div>
+            <div className={inputFormClass}>
+              <label className={labelClass}>이미지 삭제</label>
+              <div className="flex gap-[5px]">
+                <button
+                  className="w-fit min-w-[80px] rounded-lg bg-red-600 p-[5px] text-white"
+                  onClick={async () => {
+                    try {
+                      await handleImageDelete(image, "image");
+                    } catch (error) {
+                      console.error("Failed to delete image:", error);
+                    }
+                  }}
+                >
+                  썸네일 삭제
+                </button>
+                <button
+                  className="w-fit min-w-[80px] rounded-lg bg-red-600 p-[5px] text-white"
+                  onClick={async () => {
+                    try {
+                      await handleImageDelete(shop_logo, "shop_logo");
+                    } catch (error) {
+                      console.error("Failed to delete image:", error);
+                    }
+                  }}
+                >
+                  로고 삭제
+                </button>
+              </div>
             </div>
           </div>
         </div>
