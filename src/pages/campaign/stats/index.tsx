@@ -70,9 +70,8 @@ const StatsCampaign = (
   };
 
   useEffect(() => {
-    setLoading(true);
-
     try {
+      setLoading(true);
       fetchData(period);
     } catch (e) {
       console.error("error:", e);

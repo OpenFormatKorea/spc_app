@@ -76,9 +76,9 @@ const StatsItem = (
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
 
-  const fetchData = async () => {
+  const fetchData = async (newPeriod: string) => {
     const newStartDate = new Date();
-    newStartDate.setDate(newStartDate.getDate() - Number(period));
+    newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
     setStartDate(formattedStartDate);
     setPageNum("1");
@@ -97,7 +97,7 @@ const StatsItem = (
     setLoading(true);
 
     try {
-      fetchData();
+      fetchData(period);
     } catch (e) {
       console.error("error:", e);
     } finally {
