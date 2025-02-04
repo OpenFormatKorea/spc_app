@@ -14,7 +14,7 @@ const ContentsContainer: React.FC<ContentsContainerProps> = ({
   return (
     <div
       className={`flex flex-col overflow-y-auto rounded-2xl bg-white p-[16px] shadow-md lg:p-[16px] ${containerClass}`}
-      style={{ height: "calc(82vh)" }}
+      style={{ height: "calc(78vh)" }}
     >
       {children}
     </div>
