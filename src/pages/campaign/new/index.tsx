@@ -14,21 +14,27 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
 
   const today = new Date();
-  const getFormattedDate = (): string => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    const hours = String(today.getHours()).padStart(2, "0");
-    const minutes = String(today.getMinutes()).padStart(2, "0");
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const getFormattedDate = (date: string): string => {
+    const targetDate = date === "today" ? today : tomorrow;
+    const year = targetDate.getFullYear();
+    const month = String(targetDate.getMonth() + 1).padStart(2, "0");
+    const day = String(targetDate.getDate()).padStart(2, "0");
+    const hours = String(targetDate.getHours()).padStart(2, "0");
+    const minutes = String(targetDate.getMinutes()).padStart(2, "0");
+
     return `${year}-${month}-${day} ${hours}:${minutes}:00`;
   };
+
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [period_type, setPeriod_type] = useState(PeriodType.L);
-  const [start_date, setStart_date] = useState(getFormattedDate);
-  const [end_date, setEnd_date] = useState<string | null>(getFormattedDate);
+  const [start_date, setStart_date] = useState(getFormattedDate("today"));
+  const [end_date, setEnd_date] = useState<string | null>(
+    getFormattedDate("tomorrow"),
+  );
   const [active, setActive] = useState(false);
 
   // Validate campaign information
