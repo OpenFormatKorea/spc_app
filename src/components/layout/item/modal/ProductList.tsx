@@ -1,11 +1,12 @@
 import { ApiResponse } from "@/lib/types";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductListArgs, ProductsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
 
 interface ProductListProps {
   apiResponse: ApiResponse;
   productInputs: ProductsArgs[];
+
   setProductInputs: (value: ProductsArgs[]) => void;
   setSelectedProductItems: (value: ProductsArgs[]) => void;
   isOpen: boolean;
@@ -85,6 +86,12 @@ const ProductList: React.FC<ProductListProps> = ({
       onClose();
     }
   };
+
+  // useEffect(() => {
+  //   if (selectedItemList.length === 0) {
+  //     setSelectAll(false);
+  //   }
+  // }, [selectedItemList]);
 
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";

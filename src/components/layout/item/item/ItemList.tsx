@@ -120,194 +120,199 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         </h1>
       </div>
-      <div className="hidden w-full py-3 lg:block">
-        <table className="w-full border border-gray-100 text-center">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className={theadStyle}>
-                <input
-                  type="checkbox"
-                  id="item_all"
-                  name="item_all"
-                  checked={selectAll}
-                  onChange={handleSelectAll}
-                />
-              </th>
-              <th className={theadStyle}>아이템 명</th>
-              <th className={theadStyle}>아이템 종류</th>
-              <th className={theadStyle}>생성일</th>
-              <th className={theadStyle}>수정일</th>
-              <th className={theadStyle}>활성화</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr
-                key={item.id}
-                className="cursor-pointer"
-                onClick={() => handleItemClick(item.id)}
-              >
-                <td
-                  className={`${tbodyStyle} px-2`}
-                  onClick={(e) => e.stopPropagation()}
-                >
+      <div className="mb-3 flex h-full w-full flex-col items-center justify-between overflow-y-auto">
+        <div className="hidden w-full py-3 lg:block">
+          <table className="w-full border border-gray-100 text-center">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className={theadStyle}>
                   <input
                     type="checkbox"
-                    id={`item_${item.id}`}
-                    name={`item_${item.id}`}
-                    checked={selectedProductItems[item.id] || false}
-                    onChange={handleCheckboxChange(item.id)}
+                    id="item_all"
+                    name="item_all"
+                    checked={selectAll}
+                    onChange={handleSelectAll}
                   />
-                </td>
-                <td className={tbodyStyle}>{item.title}</td>
-                <td className={tbodyStyle}>
-                  <div className="flex w-full justify-center">
-                    <div
-                      className={`w-fit rounded-md px-2 py-1 text-sm font-semibold ${
-                        item.item_type === "PRODUCT"
-                          ? "bg-blue-200 text-blue-600"
-                          : "bg-orange-200 text-orange-600"
-                      }`}
-                    >
-                      {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
-                    </div>
-                  </div>
-                </td>
-                <td className={tbodyStyle}>
-                  {new Date(item.created_at).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </td>
-                <td className={tbodyStyle}>
-                  {new Date(item.updated_at).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </td>
-                <td className={tbodyStyle} onClick={(e) => e.stopPropagation()}>
-                  <ItemActiveButton
-                    view="PC"
-                    item_id={item.id}
-                    campaign_id={campaign_id}
-                    activeStatus={activeStatusMap[item.id]}
-                    toggleItemActiveStatus={toggleItemActiveStatus}
-                  />
-                </td>
+                </th>
+                <th className={theadStyle}>아이템 명</th>
+                <th className={theadStyle}>아이템 종류</th>
+                <th className={theadStyle}>생성일</th>
+                <th className={theadStyle}>수정일</th>
+                <th className={theadStyle}>활성화</th>
               </tr>
-            ))}
-            {!items.length && (
-              <tr>
-                <td
-                  className="p-3 text-center text-sm text-gray-500"
-                  colSpan={6}
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr
+                  key={item.id}
+                  className="cursor-pointer"
+                  onClick={() => handleItemClick(item.id)}
                 >
-                  현재 사용중인 아이템이 없어요
-                  <br />
-                  새로운 아이템을 등록해 주세요.
-                </td>
-              </tr>
+                  <td
+                    className={`${tbodyStyle} px-2`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <input
+                      type="checkbox"
+                      id={`item_${item.id}`}
+                      name={`item_${item.id}`}
+                      checked={selectedProductItems[item.id] || false}
+                      onChange={handleCheckboxChange(item.id)}
+                    />
+                  </td>
+                  <td className={tbodyStyle}>{item.title}</td>
+                  <td className={tbodyStyle}>
+                    <div className="flex w-full justify-center">
+                      <div
+                        className={`w-fit rounded-md px-2 py-1 text-sm font-semibold ${
+                          item.item_type === "PRODUCT"
+                            ? "bg-blue-200 text-blue-600"
+                            : "bg-orange-200 text-orange-600"
+                        }`}
+                      >
+                        {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
+                      </div>
+                    </div>
+                  </td>
+                  <td className={tbodyStyle}>
+                    {new Date(item.created_at).toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </td>
+                  <td className={tbodyStyle}>
+                    {new Date(item.updated_at).toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </td>
+                  <td
+                    className={tbodyStyle}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <ItemActiveButton
+                      view="PC"
+                      item_id={item.id}
+                      campaign_id={campaign_id}
+                      activeStatus={activeStatusMap[item.id]}
+                      toggleItemActiveStatus={toggleItemActiveStatus}
+                    />
+                  </td>
+                </tr>
+              ))}
+              {!items.length && (
+                <tr>
+                  <td
+                    className="p-3 text-center text-sm text-gray-500"
+                    colSpan={6}
+                  >
+                    현재 사용중인 아이템이 없어요
+                    <br />
+                    새로운 아이템을 등록해 주세요.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          <div className="hidden items-center justify-between pt-4 lg:flex">
+            {!items.length ? (
+              ""
+            ) : selectedItemIds.length ? (
+              <button
+                className="cursor-pointer rounded-md bg-red-500 px-2 py-2 text-xs text-white"
+                id="delete_items"
+                onClick={() => handleAction("delete")}
+              >
+                선택삭제
+              </button>
+            ) : (
+              <button
+                className="cursor-not-allowed rounded-md bg-gray-400 px-2 py-2 text-xs text-white"
+                id="delete_items"
+              >
+                선택삭제
+              </button>
             )}
-          </tbody>
-        </table>
-        <div className="hidden items-center justify-between pt-4 lg:flex">
-          {!items.length ? (
-            ""
-          ) : selectedItemIds.length ? (
-            <button
-              className="cursor-pointer rounded-md bg-red-500 px-2 py-2 text-xs text-white"
-              id="delete_items"
-              onClick={() => handleAction("delete")}
+          </div>
+        </div>
+        {/* Mobile-friendly layout */}
+        <div className="mt-2 block lg:hidden">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="mb-4 cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
+              onClick={() => handleItemClick(item.id)}
             >
-              선택삭제
-            </button>
-          ) : (
-            <button
-              className="cursor-not-allowed rounded-md bg-gray-400 px-2 py-2 text-xs text-white"
-              id="delete_items"
-            >
-              선택삭제
-            </button>
+              <div
+                className="mb-2 flex w-full justify-between border-b pb-1 font-bold text-black"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="w-full">{item.title}</div>
+                <ItemActiveButton
+                  view="MOBILE"
+                  item_id={item.id}
+                  campaign_id={campaign_id}
+                  activeStatus={activeStatusMap[item.id]}
+                  toggleItemActiveStatus={toggleItemActiveStatus}
+                />
+              </div>
+              <div className="flex items-center pr-2 text-sm">
+                <div className="w-[100px]">
+                  <strong>아이템 종류: </strong>
+                </div>
+                <div
+                  className={`w-fit rounded-md px-2 py-1 text-sm font-semibold ${
+                    item.item_type === "PRODUCT"
+                      ? "bg-blue-200 text-blue-600"
+                      : "bg-orange-200 text-orange-600"
+                  }`}
+                >
+                  {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
+                </div>
+              </div>
+              <div className="flex items-center pr-2 text-sm">
+                <div className="w-[100px]">
+                  <strong>생성일: </strong>
+                </div>
+                {new Date(item.created_at).toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </div>
+              <div className="flex items-center pr-2 text-sm">
+                <div className="w-[100px]">
+                  <strong>캠페인 수정일: </strong>
+                </div>
+                {new Date(item.updated_at).toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </div>
+              <div className="flex w-full justify-end">
+                <button
+                  className="w-[60px] rounded-md bg-red-500 p-2 text-sm text-white"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAction("delete", item.id);
+                  }}
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
+          ))}
+          {!items.length && (
+            <div className="p-3 text-center text-sm text-gray-500">
+              현재 사용중인 아이템이 없어요
+              <br />
+              새로운 아이템을 등록해 주세요.
+            </div>
           )}
         </div>
-      </div>
-      {/* Mobile-friendly layout */}
-      <div className="mt-2 block lg:hidden">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="mb-4 cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
-            onClick={() => handleItemClick(item.id)}
-          >
-            <div
-              className="mb-2 flex w-full justify-between border-b pb-1 font-bold text-black"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="w-full">{item.title}</div>
-              <ItemActiveButton
-                view="MOBILE"
-                item_id={item.id}
-                campaign_id={campaign_id}
-                activeStatus={activeStatusMap[item.id]}
-                toggleItemActiveStatus={toggleItemActiveStatus}
-              />
-            </div>
-            <div className="flex items-center pr-2 text-sm">
-              <div className="w-[100px]">
-                <strong>아이템 종류: </strong>
-              </div>
-              <div
-                className={`w-fit rounded-md px-2 py-1 text-sm font-semibold ${
-                  item.item_type === "PRODUCT"
-                    ? "bg-blue-200 text-blue-600"
-                    : "bg-orange-200 text-orange-600"
-                }`}
-              >
-                {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
-              </div>
-            </div>
-            <div className="flex items-center pr-2 text-sm">
-              <div className="w-[100px]">
-                <strong>생성일: </strong>
-              </div>
-              {new Date(item.created_at).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </div>
-            <div className="flex items-center pr-2 text-sm">
-              <div className="w-[100px]">
-                <strong>캠페인 수정일: </strong>
-              </div>
-              {new Date(item.updated_at).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </div>
-            <div className="flex w-full justify-end">
-              <button
-                className="w-[60px] rounded-md bg-red-500 p-2 text-sm text-white"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAction("delete", item.id);
-                }}
-              >
-                삭제
-              </button>
-            </div>
-          </div>
-        ))}
-        {!items.length && (
-          <div className="p-3 text-center text-sm text-gray-500">
-            현재 사용중인 아이템이 없어요
-            <br />
-            새로운 아이템을 등록해 주세요.
-          </div>
-        )}
       </div>
       <div className="flex w-full pt-2 text-center text-white lg:justify-end">
         <div

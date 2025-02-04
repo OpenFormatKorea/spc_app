@@ -63,9 +63,7 @@ const NewItem = (
   const [title, setTitle] = useState("");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
   const [description, setDescription] = useState("");
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
-    { description: description },
-  ]);
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([]);
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
   const [selectedProductItems, setSelectedProductItems] = useState<
     ProductsArgs[]
@@ -113,24 +111,30 @@ const NewItem = (
       alert("아이템 명을 입력해주세요.");
       return false;
     }
-    if (!productInputs.length && !promotionInputs.length) {
-      alert("아이템 적용을 원하시는 상품 혹은 쿠폰을 추가해주세요.");
-      return false;
+    if (item_type === ItemType.PD) {
+      if (!productInputs.length) {
+        alert("아이템 적용을 원하시는 상품을 추가해주세요.");
+        return false;
+      }
+      if (
+        productInputs.some(
+          (p) => !p.product_model_code || !p.product_model_name,
+        )
+      ) {
+        alert("유효한 상품 모델 코드를 입력해주세요.");
+        return false;
+      }
+    } else if (item_type === ItemType.PM) {
+      // if (!promotionInputs.length) {
+      //   alert("아이템 적용을 원하시는 프로모션을 추가해주세요.");
+      //   return false;
+      // }
+      if (!description) {
+        alert("프로모션 코드를 입력해주세요.");
+        return false;
+      }
     }
-    if (
-      item_type === ItemType.PD &&
-      productInputs.some((p) => !p.product_model_code || !p.product_model_name)
-    ) {
-      alert("유효한 상품 모델 코드를 입력해주세요.");
-      return false;
-    }
-    if (
-      item_type !== ItemType.PD &&
-      promotionInputs.some((p) => !p.description)
-    ) {
-      alert("프로모션 설명을 입력해주세요.");
-      return false;
-    }
+
     if (
       !kakaoShareArgs.shop_name ||
       !kakaoShareArgs.title ||
@@ -223,7 +227,7 @@ const NewItem = (
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
-    if (productInputs.length === 0) {
+    if (item_type === ItemType.PM && productInputs.length === 0) {
       setProductInputs([
         {
           product_model_code: "",
@@ -300,7 +304,18 @@ const NewItem = (
     }
   };
 
-  useEffect(() => setPromotionInputs([{ description }]), [description]);
+  useEffect(() => {
+    if (item_type === ItemType.PD) {
+      setPromotionInputs([]);
+      setSelectedCouponItems([]);
+      setDescription("");
+    } else if (item_type === ItemType.PM) {
+      setProductInputs([]);
+      setSelectedProductItems([]);
+    }
+    console.log("useEffect productInputs length", productInputs.length);
+    console.log("useEffect promotionInputs length", promotionInputs.length);
+  }, [item_type]);
 
   return (
     <>
