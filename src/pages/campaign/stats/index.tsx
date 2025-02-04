@@ -43,20 +43,21 @@ const StatsCampaign = (
 
   const [period, setPeriod] = useState("30");
   const [startDate, setStartDate] = useState(start_date);
-  const [endDate] = useState(end_date);
+  const endDate = end_date;
   const [pageNum, setPageNum] = useState("1");
   const pageSize = "10";
 
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = async (newPeriod: string) => {
+    console.log("newPeriod", newPeriod);
     const newStartDate = new Date();
-    newStartDate.setDate(newStartDate.getDate() - Number(period));
+    newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
 
     setStartDate(formattedStartDate);
     setPageNum("1");
-    console.log("startDate ", startDate);
+    console.log("startDate ", formattedStartDate);
     console.log("endDate ", endDate);
     const data = await fetchGetCampaignStats(
       startDate,
@@ -72,7 +73,7 @@ const StatsCampaign = (
     setLoading(true);
 
     try {
-      fetchData();
+      fetchData(period);
     } catch (e) {
       console.error("error:", e);
     } finally {
