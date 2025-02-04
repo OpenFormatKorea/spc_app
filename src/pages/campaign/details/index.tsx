@@ -18,8 +18,8 @@ import {
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetItemList } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
-import router, { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
@@ -119,7 +119,7 @@ const DetailsCampaign = (
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget as HTMLButtonElement;
-
+    setLoading(true);
     if (
       id === "modify_campaign" &&
       isInfoValid(campaignArgs) &&
@@ -150,6 +150,7 @@ const DetailsCampaign = (
         alert(`캠페인 삭제를 실패 하였습니다. 상태 코드: ${result.status}`);
       }
     }
+    setLoading(false);
   };
 
   const isInfoValid = (info: CampaignArgs): boolean => {

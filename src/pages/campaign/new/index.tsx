@@ -81,20 +81,20 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
         if (isCampaignInfoValid(campaignArgs)) {
           const result = await fetchCreateCampaign(campaignArgs, context);
           if (result.status === 200) {
-            setLoading(false);
             alert(result.message);
             if (result.success) {
               router.push("/campaign");
             }
           } else {
-            setLoading(false);
             alert(`캠페인 생성을 실패 하였습니다. 상태 코드: ${result.status}`);
           }
         }
       }
     } else if (id === "cancel_modify_campaign") {
+      setLoading(false);
       router.push("/campaign");
     }
+    setLoading(false);
   };
 
   return (
