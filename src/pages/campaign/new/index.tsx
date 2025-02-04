@@ -109,7 +109,6 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">새 캠페인 생성</span>
           </div>
-
           <div className="button-container flex w-full justify-end">
             <button
               className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
@@ -122,20 +121,22 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           </div>
         </div>
         <ContentsContainer variant="campaign">
-          <CampaignNew
-            page_type="NEW"
-            campaignArgs={campaignArgs}
-            period_type={period_type}
-            setPeriod_type={setPeriod_type}
-            setDescription={setDescription}
-            setActive={setActive}
-            setTitle={setTitle}
-            setStart_date={setStart_date}
-            setEnd_date={setEnd_date}
-          />
+          <div className="mb-3 flex h-full w-full flex-col items-center justify-between overflow-y-auto">
+            <CampaignNew
+              page_type="NEW"
+              campaignArgs={campaignArgs}
+              period_type={period_type}
+              setPeriod_type={setPeriod_type}
+              setDescription={setDescription}
+              setActive={setActive}
+              setTitle={setTitle}
+              setStart_date={setStart_date}
+              setEnd_date={setEnd_date}
+            />
+          </div>
           <div className="button-container flex w-full items-center justify-center pt-4">
             <button
-              className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-blue-500 p-2 text-white"
+              className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-blue-500 p-[5px] text-white"
               onClick={handleSubmit}
               id="create_campaign"
             >

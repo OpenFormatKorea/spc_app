@@ -114,7 +114,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
             </div>
           )}
         </h1>
-        <div className="inputForm flex w-full flex-col pb-2 text-left">
+        <div className="inputForm flex w-full flex-col pb-[5px] text-left">
           <label className="pt-4 text-xs text-gray-500">아이템 명</label>
           <InputTextBox
             type="text"

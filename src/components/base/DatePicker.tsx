@@ -55,16 +55,16 @@ const DatePicker: React.FC<DatePickerProps> = ({
   );
 
   return (
-    <div className="m-2 flex w-fit flex-col rounded-xl bg-gray-200 p-2 pb-2">
-      <label className="pb-2 text-xs text-gray-500">{label}</label>
+    <div className="m-[5px] flex w-fit flex-col rounded-xl bg-gray-200 p-[8px] pb-[8px]">
+      <label className="pb-[5px] text-xs text-gray-500">{label}</label>
       <div className="flex-col items-center rounded-md bg-white p-2">
-        <div className="m-2 flex gap-2">
-          <div className="mb-2 flex items-center gap-2 bg-white">
+        <div className="flex gap-[5px]">
+          <div className="flex h-full items-center gap-[5px] bg-white">
             <select
               value={year}
               onChange={(e) => setYear(e.target.value)}
               disabled={disabled}
-              className="rounded-md border border-gray-300 p-1"
+              className="rounded-md border border-gray-300 p-[4px]"
             >
               {years.map((y) => (
                 <option key={y} value={y}>
@@ -74,7 +74,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
             </select>
             년
           </div>
-          <div className="mb-2 flex items-center gap-2 bg-white">
+          <div className="flex items-center gap-2 bg-white">
             <select
               value={month}
               onChange={(e) => setMonth(e.target.value)}

@@ -95,8 +95,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             </div>
           )}
         </div>
-        <div className="inputForm flex w-full flex-col pb-2 text-left">
-          <label className="pt-2 text-xs text-gray-500">캠페인 명</label>
+        <div className="inputForm flex w-full flex-col pb-[5px] text-left">
+          <label className="pt-[5px] text-xs text-gray-500">캠페인 명</label>
           <InputTextBox
             type="text"
             id="title"
@@ -108,7 +108,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
 
-        <div className="inputForm flex w-full flex-col pb-2 text-left">
+        <div className="inputForm flex w-full flex-col pb-[5px] text-left">
           <label className="pt-4 text-xs text-gray-500">캠페인 설명</label>
           <InputTextBox
             type="text"
@@ -121,7 +121,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           />
         </div>
 
-        <div className="inputForm flex w-full flex-col pb-2 text-left">
+        <div className="inputForm flex w-full flex-col pb-[5px] text-left">
           <label className="pb-2 pt-4 text-xs text-gray-500">기간 종류</label>
           <div className="flex w-full justify-between md:w-[300px] lg:w-[300px]">
             <InputRadioBox
@@ -142,7 +142,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             />
           </div>
         </div>
-        <div className="inputForm flex w-full flex-col pb-2 text-left">
+        <div className="inputForm flex w-full flex-col pb-[5px] text-left">
           <label className="pt-4 text-xs text-gray-500">캠페인 기간</label>
           <div className="flex w-full flex-wrap items-center justify-center gap-2">
             <DatePicker
@@ -165,7 +165,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         </div>
 
         {page_type === "NEW" && (
-          <div className="inputForm flex w-full flex-col pb-2 text-left">
+          <div className="inputForm flex w-full flex-col pb-[5px] text-left">
             <label className="pb-2 pt-4 text-xs text-gray-500">
               캠페인 활성화
             </label>
