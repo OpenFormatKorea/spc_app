@@ -53,8 +53,11 @@ const StatsCampaign = (
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(period));
     const formattedStartDate = newStartDate.toISOString().split("T")[0];
+
     setStartDate(formattedStartDate);
     setPageNum("1");
+    console.log("startDate ", startDate);
+    console.log("endDate ", endDate);
     const data = await fetchGetCampaignStats(
       startDate,
       endDate,
