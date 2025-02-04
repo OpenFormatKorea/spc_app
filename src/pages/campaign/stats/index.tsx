@@ -53,14 +53,16 @@ const StatsCampaign = (
     console.log("newPeriod", newPeriod);
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
-    const formattedStartDate = newStartDate.toISOString().split("T")[0];
 
+    const year = newStartDate.getFullYear();
+    const month = String(newStartDate.getMonth() + 1).padStart(2, "0");
+    const day = String(newStartDate.getDate()).padStart(2, "0");
+
+    const formattedStartDate = `${year}-${month}-${day}`;
     setStartDate(formattedStartDate);
     setPageNum("1");
-    console.log("startDate ", formattedStartDate);
-    console.log("endDate ", endDate);
     const data = await fetchGetCampaignStats(
-      startDate,
+      formattedStartDate,
       endDate,
       pageNum,
       pageSize,
