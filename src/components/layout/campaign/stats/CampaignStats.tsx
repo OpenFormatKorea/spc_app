@@ -9,9 +9,12 @@ interface CampaignStatsProps {
   endDate: string;
   pageSize: string;
   pageNum: string;
+  period: string;
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
+  setPeriod: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   apiResponse: StatsApiResponse;
+  resetTrigger: boolean;
 }
 
 const CampaignStats: React.FC<CampaignStatsProps> = (
@@ -20,9 +23,12 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
     endDate,
     pageSize,
     pageNum,
+    period,
     setPageNum,
+    setPeriod,
     setLoading,
     apiResponse,
+    resetTrigger,
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -97,7 +103,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
       try {
         fetchCampaignStats(startDate, endDate, pageSize, nextPageNum).then(
           (newData) => {
-            setCampaigns((prev) => [...prev, ...(newData.result || [])]);
+            setCampaigns((prev) => [...prev, ...(newData.result || [])]); // Append results
             setPageNum(nextPageNum);
           },
         );
@@ -105,7 +111,13 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
         setLoading(false);
       }
     }
-  }, [scrollPosition]);
+  }, [scrollPosition, startDate]);
+
+  useEffect(() => {
+    setCampaigns(apiResponse?.result || []);
+    setTotalCount(apiResponse?.total_count || 0);
+    setPageNum("1");
+  }, [resetTrigger]);
 
   return (
     <div
@@ -123,8 +135,8 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
           </div>
         </div>
       </div>
-      <div className="w-full overflow-y-auto py-2">
-        <table className="w-full border border-gray-100 text-center">
+      <div className="h-[calc(100% - 40px)] w-full overflow-y-auto overflow-x-hidden py-2">
+        <table className="h-full w-full border border-gray-100 text-center">
           <thead>
             <tr className="bg-gray-100">
               <th className={theadStyle}>캠페인 타입</th>
@@ -151,6 +163,23 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
             )}
           </tbody>
         </table>
+      </div>
+      <div className="flex h-[40px] w-full gap-2">
+        <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+          <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">
+            <label className="font-bold">내역기간</label>
+          </div>
+          <select
+            className="font-sm"
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+          >
+            <option value="30">30일 전</option>
+            <option value="60">60일 전</option>
+            <option value="90">90일 전</option>
+            <option value="120">120일 전</option>
+          </select>
+        </div>
       </div>
     </div>
   );

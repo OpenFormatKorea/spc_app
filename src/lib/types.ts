@@ -17,6 +17,7 @@ export interface StatsApiResponse {
 export interface StatsList {
   period_type: string;
   campaign_id?: string;
+  campaign_title?: string;
   item_group_id?: string;
   item_type: string;
   item_title: string;

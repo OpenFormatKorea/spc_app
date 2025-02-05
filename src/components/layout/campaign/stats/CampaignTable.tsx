@@ -34,7 +34,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
             onClick={handleCampaignClick}
           >
             <td className={tbodyStyle}>{campaign.item_type}</td>
-            <td className={tbodyStyle}>{campaign.item_title}</td>
+            <td className={tbodyStyle}>{campaign.campaign_title}</td>
             <td className={tbodyStyle}>
               {campaign.start_date
                 ? new Date(campaign.start_date).toLocaleDateString("ko-KR", {

@@ -40,7 +40,6 @@ const StatsCampaign = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
-
   const [period, setPeriod] = useState("30");
   const [startDate, setStartDate] = useState(start_date);
   const endDate = end_date;
@@ -48,6 +47,7 @@ const StatsCampaign = (
   const pageSize = "10";
 
   const [loading, setLoading] = useState(false);
+  const [resetTrigger, setResetTrigger] = useState(false); // New trigger state for period change
 
   const fetchData = async (newPeriod: string) => {
     console.log("newPeriod", newPeriod);
@@ -61,25 +61,27 @@ const StatsCampaign = (
     const formattedStartDate = `${year}-${month}-${day}`;
     setStartDate(formattedStartDate);
     setPageNum("1");
-    const data = await fetchGetCampaignStats(
-      formattedStartDate,
-      endDate,
-      pageNum,
-      pageSize,
-      context,
-    );
-    setNewApiResponse(data);
-  };
+    setLoading(true);
 
-  useEffect(() => {
     try {
-      setLoading(true);
-      fetchData(period);
+      const data = await fetchGetCampaignStats(
+        formattedStartDate,
+        end_date,
+        "1",
+        pageSize,
+        context,
+      );
+      setNewApiResponse(data);
+      setResetTrigger((prev) => !prev); // Toggle to trigger campaign reset
     } catch (e) {
-      console.error("error:", e);
+      console.error("Error fetching data:", e);
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchData(period);
   }, [period]);
 
   return (
@@ -104,25 +106,11 @@ const StatsCampaign = (
             startDate={startDate}
             endDate={endDate}
             pageSize={pageSize}
+            period={period}
             setLoading={setLoading}
+            setPeriod={setPeriod}
+            resetTrigger={resetTrigger}
           />
-          <div className="flex h-[40px] gap-2">
-            <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-              <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">
-                <label className="font-bold">내역기간</label>
-              </div>
-              <select
-                className="font-sm"
-                value={period}
-                onChange={(e) => setPeriod(e.target.value)}
-              >
-                <option value="30">30일 전</option>
-                <option value="60">60일 전</option>
-                <option value="90">90일 전</option>
-                <option value="120">120일 전</option>
-              </select>
-            </div>
-          </div>
         </ContentsContainer>
       </DashboardContainer>
     </>

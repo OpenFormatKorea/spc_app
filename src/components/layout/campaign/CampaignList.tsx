@@ -37,8 +37,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     router.replace(`/campaign/details?campaign_id=${id}`, undefined, {
-      shallow: true,
-      scroll: false,
+      scroll: false, // Keep scrolling disabled
     });
   };
 
