@@ -1,4 +1,5 @@
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
+import { setLoading } from "@/lib/helper";
 import { ApiResponse } from "@/lib/types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ interface CampaignListProps {
   tbodyStyle: string;
   apiResponse: ApiResponse;
   handleButton: (e: React.MouseEvent<HTMLDivElement>) => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CampaignList: React.FC<CampaignListProps> = ({
@@ -15,6 +17,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
   tbodyStyle,
   apiResponse,
   handleButton,
+  setLoading,
 }) => {
   const router = useRouter();
   const [isCampaignPage, setIsCampaignPage] = useState(false);
@@ -36,9 +39,16 @@ const CampaignList: React.FC<CampaignListProps> = ({
 
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
-    router.replace(`/campaign/details?campaign_id=${id}`, undefined, {
-      scroll: false, // Keep scrolling disabled
-    });
+    setLoading(true);
+    try {
+      router.replace(`/campaign/details?campaign_id=${id}`, undefined, {
+        scroll: false, // Keep scrolling disabled
+      });
+    } catch (e) {
+      alert(
+        "캠페인 상세정보를 가져오는 도중 문제가 생겼습니다. 나중에 다시 시도해주세요.",
+      );
+    }
   };
 
   const toggleCampaignActiveStatus = (

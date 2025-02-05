@@ -64,6 +64,7 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
               tbodyStyle={tbodyStyle}
               apiResponse={apiResponse}
               handleButton={handleButton}
+              setLoading={setLoading}
             />
           </ContentsContainer>
         </div>

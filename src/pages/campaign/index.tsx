@@ -88,6 +88,7 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
                 tbodyStyle={tbodyStyle}
                 apiResponse={apiResponse}
                 handleButton={handleButton}
+                setLoading={setLoading}
               />
               <div className="button-container flex w-full py-3 lg:justify-end">
                 <button

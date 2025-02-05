@@ -120,11 +120,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   }, [resetTrigger]);
 
   return (
-    <div
-      id="tableDiv"
-      // className="overflow-y-auto"
-      style={{ maxHeight: "70vh" }}
-    >
+    <div id="tableDiv" style={{ maxHeight: "70vh" }}>
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
@@ -135,7 +131,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
           </div>
         </div>
       </div>
-      <div className="h-[calc(100% - 40px)] w-full overflow-y-auto overflow-x-hidden py-2">
+      <div className="h-full max-h-[calc(100%-100px)] w-full overflow-y-auto overflow-x-hidden py-2">
         <table className="h-full w-full border border-gray-100 text-center">
           <thead>
             <tr className="bg-gray-100">
@@ -164,7 +160,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
           </tbody>
         </table>
       </div>
-      <div className="flex h-[40px] w-full gap-2">
+      <div className="mt-[12px] flex h-fit w-full">
         <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
           <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">
             <label className="font-bold">내역기간</label>
