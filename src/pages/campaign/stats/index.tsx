@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     context,
   );
   return {
-    props: { apiResponse, start_date, end_date },
+    props: { apiResponse, start_date, end_date, page: "1", page_size: "10" },
   };
 };
 
@@ -31,10 +31,14 @@ const StatsCampaign = (
     apiResponse,
     start_date,
     end_date,
+    page,
+    page_size,
   }: {
     apiResponse: StatsApiResponse;
     start_date: string;
     end_date: string;
+    page: string;
+    page_size: string;
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -43,11 +47,11 @@ const StatsCampaign = (
   const [period, setPeriod] = useState("30");
   const [startDate, setStartDate] = useState(start_date);
   const endDate = end_date;
-  const [pageNum, setPageNum] = useState("1");
-  const pageSize = "10";
-
+  const [pageNum, setPageNum] = useState(page);
   const [loading, setLoading] = useState(false);
-  const [resetTrigger, setResetTrigger] = useState(false); // New trigger state for period change
+  const pageSize = page_size;
+
+  const [resetTrigger, setResetTrigger] = useState(false);
 
   const fetchData = async (newPeriod: string) => {
     console.log("newPeriod", newPeriod);
@@ -92,7 +96,7 @@ const StatsCampaign = (
         </div>
       )}
       <DashboardContainer>
-        <div className="">
+        <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">캠페인 지표</span>
           </div>

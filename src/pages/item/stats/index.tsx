@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       start_date,
       end_date,
       page: "1",
-      page_size: "25",
+      page_size: "10",
     },
   };
 };
@@ -53,28 +53,27 @@ const StatsItem = (
     start_date,
     end_date,
     page,
+    page_size,
   }: {
     apiResponse: StatsApiResponse;
     campaign_id: string;
     start_date: string;
     end_date: string;
     page: string;
+    page_size: string;
   },
   context: GetServerSidePropsContext,
 ) => {
-  const [startDate, setStartDate] = useState(start_date);
-  const [endDate] = useState(end_date);
-  const [pageNum, setPageNum] = useState(page);
-  const pageSize = "25";
-  const [period, setPeriod] = useState("30");
   const [newApiResponse, setNewApiResponse] =
     useState<StatsApiResponse>(apiResponse);
+  const [period, setPeriod] = useState("30");
+  const [startDate, setStartDate] = useState(start_date);
+  const endDate = end_date;
+  const [pageNum, setPageNum] = useState(page);
   const [loading, setLoading] = useState(false);
+  const pageSize = page_size;
 
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
+  const [resetTrigger, setResetTrigger] = useState(false);
 
   const fetchData = async (newPeriod: string) => {
     const newStartDate = new Date();
@@ -87,28 +86,33 @@ const StatsItem = (
     const formattedStartDate = `${year}-${month}-${day}`;
     setStartDate(formattedStartDate);
     setPageNum("1");
-    const data = await fetchGetItemStats(
-      formattedStartDate,
-      endDate,
-      pageNum,
-      pageSize,
-      campaign_id,
-      context,
-    );
-    setNewApiResponse(data);
-  };
-
-  useEffect(() => {
     setLoading(true);
-
     try {
-      fetchData(period);
+      const data = await fetchGetItemStats(
+        formattedStartDate,
+        endDate,
+        pageNum,
+        pageSize,
+        campaign_id,
+        context,
+      );
+      setNewApiResponse(data);
+      setResetTrigger((prev) => !prev);
     } catch (e) {
-      console.error("error:", e);
+      console.error("Error fetching data:", e);
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchData(period);
   }, [period]);
+
+  const theadStyle =
+    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+  const tbodyStyle =
+    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
 
   return (
     <>
@@ -134,23 +138,11 @@ const StatsItem = (
             startDate={startDate}
             endDate={endDate}
             pageSize={pageSize}
+            period={period}
             setLoading={setLoading}
+            setPeriod={setPeriod}
+            resetTrigger={resetTrigger}
           />
-          <div className="flex gap-2">
-            <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-              <div className="w-[70px]">내역기간</div>
-              <select
-                className="w-[80px]"
-                value={period}
-                onChange={(e) => setPeriod(e.target.value)}
-              >
-                <option value="30">30일 전</option>
-                <option value="60">60일 전</option>
-                <option value="90">90일 전</option>
-                <option value="120">120일 전</option>
-              </select>
-            </div>
-          </div>
         </ContentsContainer>
       </DashboardContainer>
     </>

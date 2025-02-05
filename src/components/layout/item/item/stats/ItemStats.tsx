@@ -11,10 +11,14 @@ interface ItemStatsProps {
   endDate: string;
   pageSize: string;
   pageNum: string;
-  setPageNum: React.Dispatch<React.SetStateAction<string>>;
   campaign_id: string;
+  period: string;
+
+  setPageNum: React.Dispatch<React.SetStateAction<string>>;
+  setPeriod: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   apiResponse: StatsApiResponse;
+  resetTrigger: boolean;
 }
 
 const ItemStats: React.FC<ItemStatsProps> = (
@@ -25,10 +29,13 @@ const ItemStats: React.FC<ItemStatsProps> = (
     endDate,
     pageSize,
     pageNum,
-    setPageNum,
     campaign_id,
+    period,
+    setPageNum,
+    setPeriod,
     setLoading,
     apiResponse,
+    resetTrigger,
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -77,7 +84,7 @@ const ItemStats: React.FC<ItemStatsProps> = (
         element.removeEventListener("scroll", handleScroll);
       };
     }, []);
-
+    console.log("isBottom", isBottom);
     return isBottom;
   };
 
@@ -94,8 +101,16 @@ const ItemStats: React.FC<ItemStatsProps> = (
   useEffect(() => {
     const isNextPage = getNextPage();
     const nextPageNum = (parseInt(pageNum) + 1).toString();
-    console.log("pageSize: ", pageSize, "nextPageNum: ", nextPageNum);
     if (isNextPage && scrollPosition) {
+      console.log(
+        "isNextPage ",
+        isNextPage,
+        "pageSize: ",
+        pageSize,
+        "nextPageNum: ",
+        nextPageNum,
+      );
+
       setLoading(true);
       try {
         fetchItemsStats(startDate, endDate, pageSize, nextPageNum).then(
@@ -108,14 +123,16 @@ const ItemStats: React.FC<ItemStatsProps> = (
         setLoading(false);
       }
     }
-  }, [scrollPosition]);
+  }, [scrollPosition, startDate]);
+
+  useEffect(() => {
+    setItems(apiResponse?.result || []);
+    setTotalCount(apiResponse?.total_count || 0);
+    setPageNum("1");
+  }, [resetTrigger]);
 
   return (
-    <div
-      id="tableDiv"
-      className="overflow-y-auto"
-      style={{ maxHeight: "70vh" }}
-    >
+    <div style={{ maxHeight: "70vh" }}>
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
@@ -126,8 +143,11 @@ const ItemStats: React.FC<ItemStatsProps> = (
           </div>
         </div>
       </div>
-      <div className="w-full py-2">
-        <table className="w-full border border-gray-100 text-center">
+      <div
+        id="tableDiv"
+        className="h-full max-h-[calc(100%-100px)] w-full overflow-y-auto overflow-x-hidden py-2"
+      >
+        <table className="h-full w-full border border-gray-100 text-center">
           <thead>
             <tr className="bg-gray-100">
               <th className={theadStyle}>아이템 종류</th>
@@ -144,7 +164,7 @@ const ItemStats: React.FC<ItemStatsProps> = (
             {getNextPage() ? (
               <tr>
                 <td colSpan={9} className="py-4 text-center">
-                  "스크롤하면 더 많은 아이템 통계 정보를 보실 수 있습니다."
+                  스크롤하면 더 많은 아이템 통계를 보실 수 있습니다.
                 </td>
               </tr>
             ) : (
@@ -152,6 +172,21 @@ const ItemStats: React.FC<ItemStatsProps> = (
             )}
           </tbody>
         </table>
+      </div>
+      <div className="mt-[12px] flex h-fit w-full">
+        <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
+          <div className="w-[70px]">내역기간</div>
+          <select
+            className="w-[80px]"
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+          >
+            <option value="30">30일 전</option>
+            <option value="60">60일 전</option>
+            <option value="90">90일 전</option>
+            <option value="120">120일 전</option>
+          </select>
+        </div>
       </div>
     </div>
   );

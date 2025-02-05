@@ -82,13 +82,19 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
         element.removeEventListener("scroll", handleScroll);
       };
     }, []);
-
+    console.log("isBottom", isBottom);
     return isBottom;
   };
   const scrollPosition = useScrollPosition("tableDiv");
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const [totalCount, setTotalCount] = useState(apiResponse?.total_count || 0);
   const getNextPage = () => {
+    console.log(
+      "stackedDataAmount ",
+      stackedDataAmount,
+      "totalCount ",
+      totalCount,
+    );
     if (totalCount >= stackedDataAmount) {
       return true;
     }
@@ -98,6 +104,24 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   useEffect(() => {
     const isNextPage = getNextPage();
     const nextPageNum = (parseInt(pageNum) + 1).toString();
+    console.log(
+      "isNextPage",
+      isNextPage,
+      "pageSize: ",
+      pageSize,
+      "nextPageNum: ",
+      nextPageNum,
+    );
+    console.log(
+      "isNextPage",
+      isNextPage,
+      "scrollPosition ",
+      scrollPosition,
+      "pageSize: ",
+      pageSize,
+      "nextPageNum: ",
+      nextPageNum,
+    );
     if (isNextPage && scrollPosition) {
       setLoading(true);
       try {
@@ -120,7 +144,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   }, [resetTrigger]);
 
   return (
-    <div id="tableDiv" style={{ maxHeight: "70vh" }}>
+    <div style={{ maxHeight: "70vh" }}>
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
@@ -131,7 +155,10 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
           </div>
         </div>
       </div>
-      <div className="h-full max-h-[calc(100%-100px)] w-full overflow-y-auto overflow-x-hidden py-2">
+      <div
+        id="tableDiv"
+        className="h-full max-h-[calc(100%-100px)] w-full overflow-y-auto overflow-x-hidden py-2"
+      >
         <table className="h-full w-full border border-gray-100 text-center">
           <thead>
             <tr className="bg-gray-100">
