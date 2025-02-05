@@ -63,7 +63,9 @@ const NewItem = (
   const [title, setTitle] = useState("");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
   const [description, setDescription] = useState("");
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([]);
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
+    { description: description },
+  ]);
   const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
   const [selectedProductItems, setSelectedProductItems] = useState<
     ProductsArgs[]
@@ -125,11 +127,7 @@ const NewItem = (
         return false;
       }
     } else if (item_type === ItemType.PM) {
-      // if (!promotionInputs.length) {
-      //   alert("아이템 적용을 원하시는 프로모션을 추가해주세요.");
-      //   return false;
-      // }
-      if (!description) {
+      if (!description || description === "") {
         alert("프로모션 코드를 입력해주세요.");
         return false;
       }
@@ -236,7 +234,6 @@ const NewItem = (
         },
       ]);
     }
-
     if (
       id === "create_item" &&
       infoCheck() &&
@@ -265,6 +262,7 @@ const NewItem = (
           }
           const updatedItemArgs = {
             ...itemArgs,
+            promotions: promotionInputs,
             kakao_args: {
               ...kakaoShareArgs,
               image: updatedImage,
@@ -313,10 +311,10 @@ const NewItem = (
       setProductInputs([]);
       setSelectedProductItems([]);
     }
-    console.log("useEffect productInputs length", productInputs.length);
-    console.log("useEffect promotionInputs length", promotionInputs.length);
   }, [item_type]);
-
+  useEffect(() => {
+    setPromotionInputs([{ description: description }]);
+  }, [description]);
   return (
     <>
       {loading && (
