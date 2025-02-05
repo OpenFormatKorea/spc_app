@@ -153,7 +153,6 @@ export async function fetchGetCampaignStats(
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
-  console.log("start_date", start_date);
   const final_url =
     `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/shop?shop_id=` +
     shop_id +

@@ -120,7 +120,7 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         </h1>
       </div>
-      <div className="mb-3 flex h-full w-full flex-col items-center justify-between overflow-y-auto">
+      <div className="flex h-full w-full flex-col items-center justify-between overflow-y-auto">
         <div className="hidden w-full py-3 lg:block">
           <table className="w-full border border-gray-100 text-center">
             <thead>
@@ -216,33 +216,13 @@ const ItemList: React.FC<ItemListProps> = (
               )}
             </tbody>
           </table>
-          <div className="hidden items-center justify-between pt-4 lg:flex">
-            {!items.length ? (
-              ""
-            ) : selectedItemIds.length ? (
-              <button
-                className="cursor-pointer rounded-md bg-red-500 px-2 py-2 text-xs text-white"
-                id="delete_items"
-                onClick={() => handleAction("delete")}
-              >
-                선택삭제
-              </button>
-            ) : (
-              <button
-                className="cursor-not-allowed rounded-md bg-gray-400 px-2 py-2 text-xs text-white"
-                id="delete_items"
-              >
-                선택삭제
-              </button>
-            )}
-          </div>
         </div>
         {/* Mobile-friendly layout */}
-        <div className="mt-2 block lg:hidden">
+        <div className="mt-2 block h-fit w-full p-[4px] lg:hidden">
           {items.map((item) => (
             <div
               key={item.id}
-              className="mb-4 cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
+              className="mb-4 w-full cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
               onClick={() => handleItemClick(item.id)}
             >
               <div
@@ -314,7 +294,27 @@ const ItemList: React.FC<ItemListProps> = (
           )}
         </div>
       </div>
-      <div className="flex w-full pt-2 text-center text-white lg:justify-end">
+      <div className="flex w-full pt-2 text-center text-white lg:justify-between">
+        <div className="hidden h-full items-start justify-start lg:flex">
+          {!items.length ? (
+            ""
+          ) : selectedItemIds.length ? (
+            <button
+              className="cursor-pointer rounded-md bg-red-500 px-2 py-2 text-xs text-white"
+              id="delete_items"
+              onClick={() => handleAction("delete")}
+            >
+              선택삭제
+            </button>
+          ) : (
+            <button
+              className="cursor-not-allowed rounded-md bg-gray-400 px-2 py-2 text-xs text-white"
+              id="delete_items"
+            >
+              선택삭제
+            </button>
+          )}
+        </div>
         <div
           id="create_item"
           className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-blue-500 p-2 lg:w-fit"

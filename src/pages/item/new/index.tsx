@@ -325,7 +325,7 @@ const NewItem = (
         </div>
       )}
       <DashboardContainer>
-        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
+        <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">아이템 추가</span>
           </div>
@@ -381,7 +381,7 @@ const NewItem = (
             <NewRewardCard rewards={rewards} setRewards={setRewards} />
           </ContentsContainer>
         </div>
-        <div className="button-container flex w-full justify-between pt-4 lg:justify-end">
+        <div className="button-container flex w-full justify-between pt-[5px] lg:justify-end">
           <div className="flex w-full space-x-2 lg:w-fit">
             <button
               className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white lg:w-fit"

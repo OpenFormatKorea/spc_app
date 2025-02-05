@@ -203,7 +203,7 @@ const DetailsCampaign = (
         </div>
       )}
       <DashboardContainer>
-        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
+        <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">캠페인 상세 정보</span>
           </div>
@@ -247,7 +247,7 @@ const DetailsCampaign = (
             </div>
           </ContentsContainer>
         </div>
-        <div className="mt-6 flex items-center justify-end gap-x-2 gap-y-2">
+        <div className="mt-[5px] flex items-center justify-end gap-x-2 gap-y-2">
           <button
             id="delete_campaign"
             className="w-full cursor-pointer rounded-lg border bg-red-500 p-2 text-white lg:w-fit"

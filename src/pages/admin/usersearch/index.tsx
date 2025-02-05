@@ -110,12 +110,12 @@ const UserSearch = (
         </div>
       )}
       <DashboardContainer>
-        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
+        <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <div className="text-2xl font-bold">유저 검색</div>
           </div>
         </div>
-        <div className="flex w-full flex-col justify-center sm:flex-row md:flex-row md:space-x-4 lg:space-x-4">
+        <div className="flex w-full flex-col items-center justify-center sm:flex-row md:flex-row md:space-x-4 lg:space-x-4">
           <ContentsContainer variant="dashboard">
             <UserSearchComponent
               handleSearch={handleSearch}

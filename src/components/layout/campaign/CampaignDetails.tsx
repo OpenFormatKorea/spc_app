@@ -66,7 +66,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
 
   return (
     <>
-      <div className="mb-2 w-full pb-2">
+      <div className="mb-2 h-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="flex w-full items-center gap-4">
             <div className="text-lg font-bold text-black">

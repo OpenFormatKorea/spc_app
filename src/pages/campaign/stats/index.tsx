@@ -90,7 +90,7 @@ const StatsCampaign = (
         </div>
       )}
       <DashboardContainer>
-        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
+        <div className="">
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">캠페인 지표</span>
           </div>

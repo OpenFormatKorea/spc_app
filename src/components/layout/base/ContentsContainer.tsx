@@ -13,7 +13,7 @@ const ContentsContainer: React.FC<ContentsContainerProps> = ({
     variant === "dashboard" ? "w-full" : "w-full lg:w-[50%]";
   return (
     <div
-      className={`m-[5px] flex flex-col overflow-y-auto rounded-2xl bg-white p-[16px] lg:p-[16px] ${containerClass}`}
+      className={`m-[5px] flex flex-col overflow-y-auto rounded-xl bg-white p-[16px] lg:p-[16px] ${containerClass}`}
       style={{ height: "calc(78vh)" }}
     >
       {children}

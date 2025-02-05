@@ -79,7 +79,12 @@ const StatsItem = (
   const fetchData = async (newPeriod: string) => {
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
-    const formattedStartDate = newStartDate.toISOString().split("T")[0];
+
+    const year = newStartDate.getFullYear();
+    const month = String(newStartDate.getMonth() + 1).padStart(2, "0");
+    const day = String(newStartDate.getDate()).padStart(2, "0");
+
+    const formattedStartDate = `${year}-${month}-${day}`;
     setStartDate(formattedStartDate);
     setPageNum("1");
     const data = await fetchGetItemStats(
@@ -113,7 +118,7 @@ const StatsItem = (
         </div>
       )}
       <DashboardContainer>
-        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
+        <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">아이템 지표</span>
           </div>

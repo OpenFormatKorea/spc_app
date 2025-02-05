@@ -267,9 +267,9 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
             </div>
             <div className={inputFormClass}>
               <label className={labelClass}>이미지 삭제</label>
-              <div className="flex gap-[5px]">
+              <div className="mt-[4px] flex gap-[5px]">
                 <button
-                  className="w-fit min-w-[80px] rounded-lg bg-red-600 p-[5px] text-white"
+                  className="w-fit min-w-[60px] rounded-lg bg-red-600 p-[5px] text-[12px] text-white"
                   onClick={async () => {
                     try {
                       await handleTempImageDelete("image");
@@ -281,7 +281,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                   썸네일 삭제
                 </button>
                 <button
-                  className="w-fit min-w-[80px] rounded-lg bg-red-600 p-[5px] text-white"
+                  className="w-fit min-w-[60px] rounded-lg bg-red-600 p-[5px] text-[12px] text-white"
                   onClick={async () => {
                     try {
                       await handleTempImageDelete("shop_logo");

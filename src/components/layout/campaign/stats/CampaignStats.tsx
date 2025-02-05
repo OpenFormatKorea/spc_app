@@ -110,7 +110,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   return (
     <div
       id="tableDiv"
-      className="overflow-y-auto"
+      // className="overflow-y-auto"
       style={{ maxHeight: "70vh" }}
     >
       <div className="mb-2 w-full pb-2">
@@ -118,12 +118,12 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
           <div className="w-[80%]">
             <div className="text-xl">캠페인 통계</div>
             <div className="text-sm font-normal text-gray-500">
-              현재 사용중인 아이템 통계 내역이에요.
+              현재 사용중인 캠페인 통계 내역이에요.
             </div>
           </div>
         </div>
       </div>
-      <div className="w-full py-2">
+      <div className="w-full overflow-y-auto py-2">
         <table className="w-full border border-gray-100 text-center">
           <thead>
             <tr className="bg-gray-100">

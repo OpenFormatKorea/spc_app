@@ -52,7 +52,7 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
         </div>
       )}
       <DashboardContainer>
-        <div className="mb-3 flex h-[42px] w-full items-center justify-between">
+        <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">대시보드</span>
           </div>

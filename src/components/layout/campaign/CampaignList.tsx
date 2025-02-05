@@ -75,7 +75,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
           )}
         </div>
       </div>
-      <div className="w-full py-2">
+      <div className="h-full w-full overflow-y-auto py-2">
         <table className="hidden w-full border border-gray-100 text-center lg:table">
           <thead>
             <tr className="bg-gray-100">
@@ -161,7 +161,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
             campaigns.map((campaign) => (
               <div
                 key={campaign.id}
-                className="mb-4 cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600 shadow-sm"
+                className="mb-4 w-full cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
                 id={campaign.id}
                 onClick={handleCampaignClick}
               >
