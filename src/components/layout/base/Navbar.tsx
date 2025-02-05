@@ -26,7 +26,6 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
   // Check active state based on current route for each menu item
   const isActive = (link: string) => router.pathname.startsWith(link);
 
-  // Render icons conditionally based on `menuTitle` and `isActive` state
   const renderIcon = (menuTitle: string, active: boolean) => {
     switch (menuTitle) {
       case "대시보드":

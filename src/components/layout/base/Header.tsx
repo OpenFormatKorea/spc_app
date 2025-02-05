@@ -3,12 +3,14 @@ import { FaBars, FaTimes } from "react-icons/fa"; // Importing icons for menu
 import Navmenu from "@/components/layout/base/Navmenu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { handleLogo, handleSignOut } from "@/lib/common";
+
 interface HeaderProps {
   shop_id: any;
 }
 
-const Header: React.FC<HeaderProps> = ({ shop_id }: { shop_id: any }) => {
+const Header: React.FC<HeaderProps> = ({ shop_id }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -35,13 +37,27 @@ const Header: React.FC<HeaderProps> = ({ shop_id }: { shop_id: any }) => {
           </button>
         </div>
       </div>
+
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="flex flex-col items-start bg-gray-400 p-4 text-white lg:hidden">
           <Navmenu menutitle="대시보드" link="/dashboard" />
-          <Navmenu menutitle="캠페인" link="/campaign" />
+
+          <Navmenu
+            menutitle="캠페인"
+            link="/campaign"
+            submenus={[
+              { title: "캠페인 리스트", link: "/campaign" },
+              { title: "캠페인 생성", link: "/campaign/new" },
+              { title: "캠페인 지표", link: "/campaign/stats" },
+            ]}
+          />
+
           <div className="my-2 w-full border-t border-white"></div>
+
+          <Navmenu menutitle="유저검색" link="/admin/usersearch" />
           <Navmenu menutitle="마이 페이지" link="/mypage" />
+
           <div
             className={`text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300`}
           >
@@ -58,8 +74,9 @@ const Header: React.FC<HeaderProps> = ({ shop_id }: { shop_id: any }) => {
               </div>
             </div>
           </div>
+
           <div className="flex w-full flex-col justify-center px-5">
-            <span className="text-xs text-white"> SHOP ID</span>
+            <span className="text-xs text-white">SHOP ID</span>
             <span id="shop_id" className="flex text-xs text-white">
               {shop_id}
             </span>
