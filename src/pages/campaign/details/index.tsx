@@ -24,96 +24,40 @@ import { withAuth } from "@/hoc/withAuth";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const { campaign_id }: any = context.query;
-//   const shop_id: any = getShopIdFromCookies(context);
-//   const itemListApiResponse = await fetchGetItemList(campaign_id, context);
-//   const cDetailApiResponse = await fetchGetCampaignDetails(
-//     campaign_id,
-//     shop_id,
-//     context,
-//   );
-//   const campaignRecordApiResponse = await fetchPostCampaignRecords(
-//     campaign_id,
-//     "1",
-//     "10",
-//     "",
-//     "",
-//     context,
-//   );
-//   if (!cDetailApiResponse || cDetailApiResponse.shop_id !== shop_id) {
-//     return {
-//       redirect: {
-//         destination: "/auth/login",
-//         permanent: false,
-//       },
-//     };
-//   }
-
-//   return {
-//     props: {
-//       itemListApiResponse,
-//       cDetailApiResponse,
-//       campaignRecordApiResponse,
-//       campaign_id,
-//     },
-//   };
-// };
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
   const shop_id: any = getShopIdFromCookies(context);
-
-  try {
-    const itemListApiResponse = await fetchGetItemList(campaign_id, context);
-    const cDetailApiResponse = await fetchGetCampaignDetails(
-      campaign_id,
-      shop_id,
-      context,
-    );
-    const campaignRecordApiResponse = await fetchPostCampaignRecords(
-      campaign_id,
-      "1",
-      "10",
-      "",
-      "",
-      context,
-    );
-
-    // Check if campaign details belong to the correct shop
-    if (!cDetailApiResponse || cDetailApiResponse.shop_id !== shop_id) {
-      return {
-        redirect: {
-          destination: "/auth/login",
-          permanent: false,
-        },
-      };
-    }
-
+  const itemListApiResponse = await fetchGetItemList(campaign_id, context);
+  const cDetailApiResponse = await fetchGetCampaignDetails(
+    campaign_id,
+    shop_id,
+    context,
+  );
+  const campaignRecordApiResponse = await fetchPostCampaignRecords(
+    campaign_id,
+    "1",
+    "10",
+    "",
+    "",
+    context,
+  );
+  if (!cDetailApiResponse || cDetailApiResponse.shop_id !== shop_id) {
     return {
-      props: {
-        itemListApiResponse,
-        cDetailApiResponse,
-        campaignRecordApiResponse,
-        campaign_id,
-      },
-    };
-  } catch (error: any) {
-    console.error("Error in getServerSideProps:", error);
-
-    return {
-      props: {
-        itemListApiResponse: null,
-        cDetailApiResponse: null,
-        campaignRecordApiResponse: null,
-        campaign_id,
-        error: {
-          message: error.message || "Something went wrong",
-          name: error.name || "ServerSideError",
-        },
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
       },
     };
   }
+
+  return {
+    props: {
+      itemListApiResponse,
+      cDetailApiResponse,
+      campaignRecordApiResponse,
+      campaign_id,
+    },
+  };
 };
 
 const DetailsCampaign = (
@@ -144,6 +88,9 @@ const DetailsCampaign = (
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => setIsModalOpen(false);
+
+  const [pageNum, setPageNum] = useState<string>("1");
+  const pageSize = "10";
 
   const campaignArgs: CampaignArgs = {
     title,
@@ -324,6 +271,11 @@ const DetailsCampaign = (
         apiResponse={campaignRecordApiResponse}
         isOpen={isModalOpen}
         onClose={closeModal}
+        campaign_id={campaign_id}
+        pageSize={pageSize}
+        pageNum={pageNum}
+        setPageNum={setPageNum}
+        setLoading={setLoading}
       />
     </>
   );

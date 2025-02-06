@@ -55,4 +55,6 @@ export interface CampaignRecordsProps {
   message: string;
   processed_by: string;
   created_at: string;
+  total_count: number;
+  total_pages: number;
 }

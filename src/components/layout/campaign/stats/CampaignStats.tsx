@@ -73,7 +73,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
 
       const handleScroll = () => {
         const isAtBottom =
-          element.scrollTop + element.clientHeight >= element.scrollHeight;
+          element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
         setIsBottom(isAtBottom);
       };
 
@@ -104,14 +104,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   useEffect(() => {
     const isNextPage = getNextPage();
     const nextPageNum = (parseInt(pageNum) + 1).toString();
-    console.log(
-      "isNextPage",
-      isNextPage,
-      "pageSize: ",
-      pageSize,
-      "nextPageNum: ",
-      nextPageNum,
-    );
+
     console.log(
       "isNextPage",
       isNextPage,

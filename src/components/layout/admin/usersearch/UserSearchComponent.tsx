@@ -53,7 +53,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
       if (!element) return;
       const handleScroll = () => {
         const isAtBottom =
-          element.scrollTop + element.clientHeight >= element.scrollHeight;
+          element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
         setIsBottom(isAtBottom);
       };
       element.addEventListener("scroll", handleScroll, { passive: true });

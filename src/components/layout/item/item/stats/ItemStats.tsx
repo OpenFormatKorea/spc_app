@@ -75,7 +75,7 @@ const ItemStats: React.FC<ItemStatsProps> = (
 
       const handleScroll = () => {
         const isAtBottom =
-          element.scrollTop + element.clientHeight >= element.scrollHeight;
+          element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
         setIsBottom(isAtBottom);
       };
 

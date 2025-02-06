@@ -120,7 +120,10 @@ const ItemList: React.FC<ItemListProps> = (
           </div>
         </h1>
       </div>
-      <div className="flex h-full w-full flex-col items-center justify-between overflow-y-auto">
+      <div
+        id="itemTableDiv"
+        className="flex h-full w-full flex-col items-center justify-between overflow-y-auto"
+      >
         <div className="hidden w-full py-3 lg:block">
           <table className="w-full border border-gray-100 text-center">
             <thead>

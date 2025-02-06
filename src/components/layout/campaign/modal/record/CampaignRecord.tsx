@@ -1,29 +1,90 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   CampaignRecordApiResponse,
   CampaignRecordsProps,
 } from "@/lib/campaign/types";
 import BigModal from "@/components/layout/base/BigModal";
+import { fetchPostCampaignRecords } from "@/lib/campaign/apis";
+import { GetServerSidePropsContext } from "next";
 
 interface CampaignRecordProps {
   apiResponse: CampaignRecordApiResponse;
   isOpen: boolean;
   onClose: () => void;
+  campaign_id: string;
+  pageSize: string;
+  pageNum: string;
+  setPageNum: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
+const useScrollPosition = (isOpen: boolean) => {
+  const [isBottom, setIsBottom] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-const CampaignRecord: React.FC<CampaignRecordProps> = ({
-  apiResponse,
-  isOpen,
-  onClose,
-}) => {
-  const campaignRecordsArray = apiResponse.data ?? { result: [] };
-  const campaignRecords = useMemo(
-    () =>
-      Array.isArray(campaignRecordsArray.result)
-        ? campaignRecordsArray.result
-        : [],
-    [apiResponse],
-  );
+  useEffect(() => {
+    if (!isOpen || !scrollRef.current) return;
+
+    const element = scrollRef.current;
+    const handleScroll = () => {
+      const isAtBottom =
+        element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
+      setIsBottom(isAtBottom);
+    };
+
+    element.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      element.removeEventListener("scroll", handleScroll);
+    };
+  }, [isOpen]);
+
+  return { isBottom, scrollRef };
+};
+const CampaignRecord: React.FC<CampaignRecordProps> = (
+  { apiResponse, isOpen, onClose, campaign_id, pageSize, pageNum, setPageNum },
+  context: GetServerSidePropsContext,
+) => {
+  const { isBottom, scrollRef } = useScrollPosition(isOpen);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [campaignRecords, setCampaignRecords] = useState<
+    CampaignRecordsProps[]
+  >(apiResponse.data?.result ?? []);
+  const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+  const totalCount = apiResponse?.data?.total_count || 0;
+  const getNextPage = totalCount > stackedDataAmount;
+
+  // 무한 스크롤
+
+  useEffect(() => {
+    const fetchNextPage = async () => {
+      if (!getNextPage || !scrollRef.current || isLoading) return;
+
+      setIsLoading(true);
+      try {
+        const newData = await fetchPostCampaignRecords(
+          campaign_id,
+          pageNum,
+          pageSize,
+          "",
+          "",
+          context,
+        );
+
+        setCampaignRecords((prev) => [
+          ...prev,
+          ...(newData.data?.result || []),
+        ]);
+        setPageNum((prevPageNum) => (parseInt(prevPageNum) + 1).toString());
+      } catch (error) {
+        console.error("Failed to fetch next page:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNextPage();
+  }, [isBottom]);
+
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-center text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
@@ -35,7 +96,11 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
           리워드 지급내역
         </h1>
         <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">
-          <div className="flex w-full flex-col overflow-x-hidden overflow-y-scroll bg-white p-[8px]">
+          <div
+            ref={scrollRef}
+            id="CRTableDiv"
+            className="flex w-full flex-col overflow-x-hidden overflow-y-scroll rounded-xl bg-white p-[8px]"
+          >
             <table className="table w-full border border-gray-100 text-center">
               <thead>
                 <tr className="bg-gray-100">
@@ -117,6 +182,15 @@ const CampaignRecord: React.FC<CampaignRecordProps> = ({
                     </td>
                   </tr>
                 ))}
+                {getNextPage ? (
+                  <tr>
+                    <td colSpan={9} className="py-4 text-center">
+                      스크롤하면 더 많은 캠페인 통계를 보실 수 있습니다.
+                    </td>
+                  </tr>
+                ) : (
+                  <></>
+                )}
                 {!campaignRecords.length && (
                   <tr>
                     <td className={tbodyStyle} colSpan={9}>
