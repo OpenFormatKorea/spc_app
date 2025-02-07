@@ -3,7 +3,7 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import CampaignList from "@/components/layout/campaign/CampaignList";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import React, { useEffect, useMemo, useState } from "react";
-import { CampaignApiResponse } from "@/lib/campaign/types";
+import { CampaignListApiResponse } from "@/lib/campaign/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import { getShopIdFromCookies } from "@/lib/helper";
 import AddIcon from "@mui/icons-material/Add";
@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const Campaign: React.FC<{
-  apiResponse: CampaignApiResponse;
+  apiResponse: CampaignListApiResponse;
   page: string;
   page_size: string;
 }> = ({ apiResponse, page, page_size }) => {

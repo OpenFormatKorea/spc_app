@@ -38,7 +38,6 @@ export function useInfiniteScroll(
       }
     }
   }, [isLoading, hasMore, onLoadMore, isEnabled]);
-
   // 리스너 등록 및 해제
   useEffect(() => {
     const currentRef = containerRef.current;
@@ -49,7 +48,6 @@ export function useInfiniteScroll(
       currentRef.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll, isEnabled]);
-
   return {
     containerRef,
     isLoading,

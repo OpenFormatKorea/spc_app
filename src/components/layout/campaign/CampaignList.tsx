@@ -33,18 +33,6 @@ const CampaignList: React.FC<CampaignListProps> = (
   const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
     apiResponse.result ?? [],
   );
-  console.log("campaigns", campaigns);
-  const loadMoreRecords = async () => {
-    const newData = await fetchGetCampaignList(pageNum, pageSize, context);
-    const newRecords = newData.data?.result || [];
-    setCampaigns((prev) => [...prev, ...newRecords]);
-    setPageNum((prev) => (parseInt(prev) + 1).toString());
-
-    // Update hasMore based on whether we've reached the total count
-    const totalCount = newData.data?.total_count || 0;
-    const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-    setHasMore(totalCount > stackedDataAmount);
-  };
 
   const router = useRouter();
   const [isCampaignPage, setIsCampaignPage] = useState(false);
@@ -52,6 +40,29 @@ const CampaignList: React.FC<CampaignListProps> = (
     [key: string]: boolean;
   }>({});
 
+  const loadMoreRecords = async () => {
+    try {
+      const nextPage = (parseInt(pageNum) + 1).toString();
+      const newData = await fetchGetCampaignList(nextPage, pageSize, context);
+      const newRecords = newData.result || [];
+
+      if (newRecords.length > 0) {
+        console.log("New data: ", newRecords);
+        setCampaigns((prev) => [...prev, ...newRecords]);
+        setPageNum(nextPage);
+
+        const totalCount = newData.total_count || 0;
+        console.log("totalCount: ", totalCount);
+        const stackedDataAmount = parseInt(nextPage) * parseInt(pageSize);
+        setHasMore(totalCount > stackedDataAmount);
+      } else {
+        console.log("No more data to fetch.");
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Failed to load more records:", error);
+    }
+  };
   const { containerRef, isLoading, hasMore, setHasMore } = useInfiniteScroll(
     loadMoreRecords,
     {},
@@ -60,9 +71,12 @@ const CampaignList: React.FC<CampaignListProps> = (
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
 
-    if (Array.isArray(apiResponse)) {
-      const initialStatus = apiResponse.reduce(
-        (acc, campaign) => ({ ...acc, [campaign.id]: campaign.active }),
+    if (Array.isArray(apiResponse.result)) {
+      const initialStatus = apiResponse.result.reduce(
+        (acc, campaign) => ({
+          ...acc,
+          [campaign.id.toString()]: campaign.active,
+        }),
         {} as { [key: string]: boolean },
       );
       setActiveStatusMap(initialStatus);
@@ -74,7 +88,7 @@ const CampaignList: React.FC<CampaignListProps> = (
     setLoading(true);
     try {
       router.replace(`/campaign/details?campaign_id=${id}`, undefined, {
-        scroll: false, // Keep scrolling disabled
+        scroll: false,
       });
     } catch (e) {
       alert(
@@ -92,7 +106,11 @@ const CampaignList: React.FC<CampaignListProps> = (
       [campaignId]: newStatus,
     }));
   };
-
+  useEffect(() => {
+    if (!campaigns.length) {
+      loadMoreRecords();
+    }
+  }, []);
   return (
     <>
       <div className="mb-2 w-full pb-2">
@@ -173,14 +191,13 @@ const CampaignList: React.FC<CampaignListProps> = (
                     className="border-b border-gray-200 px-2 py-2 text-sm"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {typeof campaign.active +
-                      "campaign active," +
-                      campaign.active}
                     <CampaignActiveButton
                       view="PC"
                       campaign={campaign}
                       activeStatus={
-                        activeStatusMap[campaign.id!.toString()] ?? false
+                        activeStatusMap[
+                          (campaign.id ? campaign.id : "").toString()
+                        ] ?? false
                       }
                       toggleCampaignActiveStatus={toggleCampaignActiveStatus}
                     />
@@ -222,7 +239,11 @@ const CampaignList: React.FC<CampaignListProps> = (
                     <CampaignActiveButton
                       view="MOBILE"
                       campaign={campaign}
-                      activeStatus={activeStatusMap[campaign.id]}
+                      activeStatus={
+                        activeStatusMap[
+                          (campaign.id ? campaign.id : "").toString()
+                        ] ?? false
+                      }
                       toggleCampaignActiveStatus={toggleCampaignActiveStatus}
                     />
                   </div>

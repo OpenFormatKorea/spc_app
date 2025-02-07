@@ -75,7 +75,10 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
     const { id } = event.currentTarget;
-    if (id === "create_campaign") {
+    if (
+      id === "create_campaign" &&
+      confirm("새로운 캠페인을 생성하시곘습니까?")
+    ) {
       if (loading == false) {
         setLoading(true);
         if (isCampaignInfoValid(campaignArgs)) {

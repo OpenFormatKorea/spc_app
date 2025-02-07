@@ -139,16 +139,14 @@ export async function fetchGetCampaignList(
 ) {
   const shop_id = getShopIdFromCookies(context);
   const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns/` + shop_id;
-  // + "?page=" +
-  // page +
-  // "&page_size=" +
-  // page_size;
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns/` +
+    shop_id +
+    "?page=" +
+    page +
+    "&page_size=" +
+    page_size;
   try {
-    const response = await fetchAPI(context, final_url, "GET", {
-      page,
-      page_size,
-    });
+    const response = await fetchAPI(context, final_url, "GET", {});
     return response.data;
   } catch (error) {
     return null;

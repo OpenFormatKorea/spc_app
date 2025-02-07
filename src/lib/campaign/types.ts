@@ -1,5 +1,5 @@
 export interface CampaignArgs {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   period_type: PeriodType;

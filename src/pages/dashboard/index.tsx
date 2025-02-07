@@ -2,10 +2,7 @@ import DashboardContainer from "@/components/layout/dashboard/DashboardContainer
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import CampaignList from "@/components/layout/campaign/CampaignList";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-import {
-  CampaignApiResponse,
-  CampaignListApiResponse,
-} from "@/lib/campaign/types";
+import { CampaignListApiResponse } from "@/lib/campaign/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
@@ -30,12 +27,10 @@ const Dashboard: React.FC<{
 }> = ({ apiResponse, page, page_size }) => {
   const [pageNum, setPageNum] = useState(page);
   const pageSize = page_size;
+  console.log("pageNum pageSize", pageNum, pageSize);
+
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     if (id === "more_campaign") {
@@ -54,6 +49,10 @@ const Dashboard: React.FC<{
     }
   }, [apiResponse]);
 
+  const theadStyle =
+    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+  const tbodyStyle =
+    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   return (
     <>
       {loading && (
