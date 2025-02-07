@@ -12,16 +12,16 @@ import { withAuth } from "@/hoc/withAuth";
 import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const shop_id = getShopIdFromCookies(context);
+  //const shop_id = getShopIdFromCookies(context);
+  // if (!shop_id) {
+  //   return {
+  //     redirect: {
+  //       destination: "auth/login",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
   const campaignResponse = await fetchGetCampaignList("1", "25", context);
-  if (!shop_id) {
-    return {
-      redirect: {
-        destination: "auth/login",
-        permanent: false,
-      },
-    };
-  }
   return {
     props: {
       apiResponse: campaignResponse,
@@ -50,19 +50,6 @@ const Campaign: React.FC<{
       router.push("campaign/new");
     }
   };
-
-  const campaigns = useMemo(() => {
-    try {
-      if (Array.isArray(apiResponse)) {
-        return apiResponse;
-      } else {
-        return [];
-      }
-    } catch (error) {
-      console.error("Error: ", error);
-      return [];
-    }
-  }, [apiResponse]);
 
   useEffect(() => {
     if (apiResponse) {
