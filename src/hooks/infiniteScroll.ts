@@ -3,7 +3,6 @@ import { useEffect, useRef, useState, useCallback } from "react";
 interface UseInfiniteScrollOptions {
   isEnabled?: boolean;
 }
-
 interface UseInfiniteScrollReturn {
   containerRef: React.RefObject<HTMLDivElement>;
   isLoading: boolean;
@@ -25,8 +24,8 @@ export function useInfiniteScroll(
   const handleScroll = useCallback(async () => {
     if (!containerRef.current || isLoading || !hasMore || !isEnabled) return;
 
-    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
     // 스크롤이 바닥에 근접하면 onLoadMore 실행
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
     if (scrollHeight - (scrollTop + clientHeight) <= 5) {
       setIsLoading(true);
       try {
@@ -38,16 +37,16 @@ export function useInfiniteScroll(
       }
     }
   }, [isLoading, hasMore, onLoadMore, isEnabled]);
+
   // 리스너 등록 및 해제
   useEffect(() => {
     const currentRef = containerRef.current;
     if (!currentRef || !isEnabled) return;
 
     currentRef.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      currentRef.removeEventListener("scroll", handleScroll);
-    };
+    return () => currentRef.removeEventListener("scroll", handleScroll);
   }, [handleScroll, isEnabled]);
+
   return {
     containerRef,
     isLoading,

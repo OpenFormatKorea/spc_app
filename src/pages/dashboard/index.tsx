@@ -8,6 +8,11 @@ import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+interface DashboardProps {
+  apiResponse: CampaignListApiResponse;
+  page: string;
+  page_size: string;
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaignResponse = await fetchGetCampaignList("1", "25", context);
@@ -20,20 +25,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const Dashboard: React.FC<{
-  apiResponse: CampaignListApiResponse;
-  page: string;
-  page_size: string;
-}> = ({ apiResponse, page, page_size }) => {
+const Dashboard: React.FC<DashboardProps> = ({
+  apiResponse,
+  page,
+  page_size,
+}) => {
   const [pageNum, setPageNum] = useState(page);
   const pageSize = page_size;
-  console.log("pageNum pageSize", pageNum, pageSize);
-
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {
-    const { id } = event.currentTarget;
-    if (id === "more_campaign") {
+    if (event.currentTarget.id === "more_campaign") {
       router.push("/campaign");
     }
   };
@@ -42,9 +45,7 @@ const Dashboard: React.FC<{
     if (apiResponse) {
       setLoading(false);
     } else {
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+      const timer = setTimeout(() => setLoading(false), 2000);
       return () => clearTimeout(timer);
     }
   }, [apiResponse]);

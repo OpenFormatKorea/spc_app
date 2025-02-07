@@ -88,7 +88,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
             <div>
               <CampaignActiveButton
                 view="PC"
-                campaign={{ ...campaignArgs, id: Number(campaign_id) }}
+                campaign={{ ...campaignArgs, id: campaign_id }}
                 activeStatus={activeStatus}
                 toggleCampaignActiveStatus={toggleCampaignActiveStatus}
               />

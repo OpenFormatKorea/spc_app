@@ -5,7 +5,6 @@ import { CampaignArgs, CampaignListApiResponse } from "@/lib/campaign/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
 interface CampaignListProps {
   theadStyle: string;
   tbodyStyle: string;
@@ -47,70 +46,48 @@ const CampaignList: React.FC<CampaignListProps> = (
       const newRecords = newData.result || [];
 
       if (newRecords.length > 0) {
-        console.log("New data: ", newRecords);
         setCampaigns((prev) => [...prev, ...newRecords]);
         setPageNum(nextPage);
-
-        const totalCount = newData.total_count || 0;
-        console.log("totalCount: ", totalCount);
-        const stackedDataAmount = parseInt(nextPage) * parseInt(pageSize);
-        setHasMore(totalCount > stackedDataAmount);
+        setHasMore(
+          newData.total_count > parseInt(nextPage) * parseInt(pageSize),
+        );
       } else {
-        console.log("No more data to fetch.");
         setHasMore(false);
       }
     } catch (error) {
       console.error("Failed to load more records:", error);
     }
   };
-  const { containerRef, isLoading, hasMore, setHasMore } = useInfiniteScroll(
-    loadMoreRecords,
-    {},
-  );
+
+  const { containerRef, isLoading, hasMore, setHasMore } =
+    useInfiniteScroll(loadMoreRecords);
 
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
 
-    if (Array.isArray(apiResponse.result)) {
-      const initialStatus = apiResponse.result.reduce(
+    setActiveStatusMap(
+      (apiResponse.result ?? []).reduce(
         (acc, campaign) => ({
           ...acc,
           [campaign.id.toString()]: campaign.active,
         }),
-        {} as { [key: string]: boolean },
-      );
-      setActiveStatusMap(initialStatus);
-    }
+        {},
+      ),
+    );
   }, [router.pathname, apiResponse]);
 
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
-    const { id } = event.currentTarget;
     setLoading(true);
-    try {
-      router.replace(`/campaign/details?campaign_id=${id}`, undefined, {
-        scroll: false,
-      });
-    } catch (e) {
-      alert(
-        "캠페인 상세정보를 가져오는 도중 문제가 생겼습니다. 나중에 다시 시도해주세요.",
-      );
-    }
+    router.replace(`/campaign/details?campaign_id=${event.currentTarget.id}`);
   };
 
   const toggleCampaignActiveStatus = (
     campaignId: string,
     newStatus: boolean,
   ) => {
-    setActiveStatusMap((prevState) => ({
-      ...prevState,
-      [campaignId]: newStatus,
-    }));
+    setActiveStatusMap((prev) => ({ ...prev, [campaignId]: newStatus }));
   };
-  useEffect(() => {
-    if (!campaigns.length) {
-      loadMoreRecords();
-    }
-  }, []);
+
   return (
     <>
       <div className="mb-2 w-full pb-2">
@@ -144,85 +121,78 @@ const CampaignList: React.FC<CampaignListProps> = (
             </tr>
           </thead>
           <tbody>
-            {campaigns.length > 0 ? (
-              campaigns.map((campaign) => (
-                <tr
-                  className="cursor-pointer"
-                  key={campaign.id}
-                  id={`${campaign.id}`}
-                  onClick={handleCampaignClick}
-                >
-                  <td className={tbodyStyle}>{campaign.id}</td>
-                  <td className={tbodyStyle}>{campaign.title}</td>
-                  <td className={tbodyStyle}>
-                    <div className="flex w-full justify-center">
-                      <div
-                        className={`${
-                          campaign.period_type === "LIMITED"
-                            ? "bg-yellow-200 text-yellow-600"
-                            : "bg-green-200 text-green-600"
-                        } w-fit rounded-md px-2 py-1 text-sm font-semibold`}
-                      >
-                        {campaign.period_type === "LIMITED"
-                          ? "기간 제한"
-                          : "무기한"}
-                      </div>
+            {campaigns.map((campaign) => (
+              <tr
+                className="cursor-pointer"
+                key={campaign.id}
+                id={`${campaign.id}`}
+                onClick={handleCampaignClick}
+              >
+                <td className={tbodyStyle}>{campaign.id}</td>
+                <td className={tbodyStyle}>{campaign.title}</td>
+                <td className={tbodyStyle}>
+                  <div className="flex w-full justify-center">
+                    <div
+                      className={`${
+                        campaign.period_type === "LIMITED"
+                          ? "bg-yellow-200 text-yellow-600"
+                          : "bg-green-200 text-green-600"
+                      } w-fit rounded-md px-2 py-1 text-sm font-semibold`}
+                    >
+                      {campaign.period_type === "LIMITED"
+                        ? "기간 제한"
+                        : "무기한"}
                     </div>
-                  </td>
-                  <td className={tbodyStyle}>
-                    {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}{" "}
-                    ~{" "}
-                    {campaign.end_date
-                      ? new Date(campaign.end_date).toLocaleDateString(
-                          "ko-KR",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          },
-                        )
-                      : ""}
-                  </td>
-                  <td
-                    className="border-b border-gray-200 px-2 py-2 text-sm"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <CampaignActiveButton
-                      view="PC"
-                      campaign={campaign}
-                      activeStatus={
-                        activeStatusMap[
-                          (campaign.id ? campaign.id : "").toString()
-                        ] ?? false
-                      }
-                      toggleCampaignActiveStatus={toggleCampaignActiveStatus}
-                    />
-                  </td>
-                </tr>
-              ))
-            ) : (
+                  </div>
+                </td>
+                <td className={tbodyStyle}>
+                  {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}{" "}
+                  ~
+                  {campaign.end_date
+                    ? new Date(campaign.end_date).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : ""}
+                </td>
+                <td
+                  className="border-b border-gray-200 px-2 py-2 text-sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <CampaignActiveButton
+                    view="PC"
+                    campaign={campaign}
+                    activeStatus={
+                      activeStatusMap[
+                        (campaign.id ? campaign.id : "").toString()
+                      ] ?? false
+                    }
+                    toggleCampaignActiveStatus={toggleCampaignActiveStatus}
+                  />
+                </td>
+              </tr>
+            ))}
+            {!hasMore && campaigns.length > 0 && (
               <tr>
-                <td className={tbodyStyle} colSpan={5}>
-                  생성된 캠페인이 없어요.
-                  <br />
-                  새로운 캠페인을 생성해주세요.
+                <td colSpan={5} className="py-4 text-center text-gray-500">
+                  모든 데이터를 불러왔습니다.
                 </td>
               </tr>
             )}
-            {isLoading && (
-              <div className="py-4 text-center text-gray-500">로딩 중...</div>
+            {campaigns.length === 0 && !isLoading && (
+              <tr>
+                <td colSpan={5} className={tbodyStyle}>
+                  생성된 캠페인이 없어요. 새로운 캠페인을 생성해주세요.
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
-        {!hasMore && campaigns.length > 0 && (
-          <div className="py-4 text-center text-gray-500">
-            모든 데이터를 불러왔습니다.
-          </div>
-        )}
         {/* Mobile-friendly layout */}
         <div className="block lg:hidden">
           {campaigns.length > 0 ? (
