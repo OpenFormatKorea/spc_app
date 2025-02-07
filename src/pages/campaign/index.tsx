@@ -5,22 +5,12 @@ import LoadingSpinner from "@/components/base/LoadingSpinner";
 import React, { useEffect, useMemo, useState } from "react";
 import { CampaignListApiResponse } from "@/lib/campaign/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
-import { getShopIdFromCookies } from "@/lib/helper";
 import AddIcon from "@mui/icons-material/Add";
 import { GetServerSideProps } from "next";
 import { withAuth } from "@/hoc/withAuth";
 import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  //const shop_id = getShopIdFromCookies(context);
-  // if (!shop_id) {
-  //   return {
-  //     redirect: {
-  //       destination: "auth/login",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
   const campaignResponse = await fetchGetCampaignList("1", "25", context);
   return {
     props: {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CampaignApiResponse,
   CampaignRecordsProps,
@@ -6,6 +6,7 @@ import {
 import BigModal from "@/components/layout/base/BigModal";
 import { fetchPostCampaignRecords } from "@/lib/campaign/apis";
 import { GetServerSidePropsContext } from "next";
+import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 
 interface CampaignRecordProps {
   apiResponse: CampaignApiResponse;
@@ -17,28 +18,7 @@ interface CampaignRecordProps {
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const useScrollPosition = (isOpen: boolean) => {
-  const [isBottom, setIsBottom] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!isOpen || !scrollRef.current) return;
-
-    const element = scrollRef.current;
-    const handleScroll = () => {
-      const isAtBottom =
-        element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
-      setIsBottom(isAtBottom);
-    };
-
-    element.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      element.removeEventListener("scroll", handleScroll);
-    };
-  }, [isOpen]);
-
-  return { isBottom, scrollRef };
-};
 const CampaignRecord: React.FC<CampaignRecordProps> = (
   { apiResponse, isOpen, onClose, campaign_id, pageSize, pageNum, setPageNum },
   context: GetServerSidePropsContext,
@@ -58,23 +38,22 @@ const CampaignRecord: React.FC<CampaignRecordProps> = (
   useEffect(() => {
     const fetchNextPage = async () => {
       if (!getNextPage || !scrollRef.current || isLoading) return;
-
       setIsLoading(true);
+      const currentPage = (parseInt(pageNum) + 1).toString();
+
       try {
         const newData = await fetchPostCampaignRecords(
           campaign_id,
-          pageNum,
+          currentPage,
           pageSize,
           "",
           "",
           context,
         );
-
-        setCampaignRecords((prev) => [
-          ...prev,
-          ...(newData.data?.result || []),
-        ]);
-        setPageNum((prevPageNum) => (parseInt(prevPageNum) + 1).toString());
+        if (newData.data?.result && newData.data?.result.length > 0) {
+          setCampaignRecords((prev) => [...prev, ...newData.data?.result]);
+        }
+        setPageNum(currentPage);
       } catch (error) {
         console.error("Failed to fetch next page:", error);
       } finally {

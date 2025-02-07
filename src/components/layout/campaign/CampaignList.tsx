@@ -1,10 +1,10 @@
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
-import { useInfiniteScroll } from "@/hooks/infiniteScroll";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import { CampaignArgs, CampaignListApiResponse } from "@/lib/campaign/types";
+import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 interface CampaignListProps {
   theadStyle: string;
   tbodyStyle: string;
@@ -29,52 +29,51 @@ const CampaignList: React.FC<CampaignListProps> = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
-    apiResponse.result ?? [],
-  );
-
   const router = useRouter();
   const [isCampaignPage, setIsCampaignPage] = useState(false);
-  const [activeStatusMap, setActiveStatusMap] = useState<{
-    [key: string]: boolean;
-  }>({});
-
-  const loadMoreRecords = async () => {
-    try {
-      const nextPage = (parseInt(pageNum) + 1).toString();
-      const newData = await fetchGetCampaignList(nextPage, pageSize, context);
-      const newRecords = newData.result || [];
-
-      if (newRecords.length > 0) {
-        setCampaigns((prev) => [...prev, ...newRecords]);
-        setPageNum(nextPage);
-        setHasMore(
-          newData.total_count > parseInt(nextPage) * parseInt(pageSize),
-        );
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Failed to load more records:", error);
-    }
-  };
-
-  const { containerRef, isLoading, hasMore, setHasMore } =
-    useInfiniteScroll(loadMoreRecords);
 
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
-
-    setActiveStatusMap(
-      (apiResponse.result ?? []).reduce(
-        (acc, campaign) => ({
-          ...acc,
-          [campaign.id.toString()]: campaign.active,
-        }),
-        {},
-      ),
-    );
   }, [router.pathname, apiResponse]);
+
+  const { isBottom, scrollRef } = useScrollPosition(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
+    apiResponse.result ?? [],
+  );
+  const [activeStatusMap, setActiveStatusMap] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+  const totalCount = apiResponse.total_count || 0;
+  const getNextPage = totalCount > stackedDataAmount;
+  // 무한 스크롤
+  useEffect(() => {
+    const fetchNextPage = async () => {
+      if (!getNextPage || !scrollRef.current || isLoading) return;
+      setIsLoading(true);
+      const currentPage = (parseInt(pageNum) + 1).toString();
+      try {
+        const newData = await fetchGetCampaignList(
+          currentPage,
+          pageSize,
+          context,
+        );
+        console.log(newData);
+        if (newData?.result && newData.result.length > 0) {
+          setCampaigns((prev) => [...prev, ...newData.result]);
+        }
+        setPageNum(currentPage);
+      } catch (error) {
+        console.error("Failed to fetch next page:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (isBottom) {
+      fetchNextPage();
+    }
+  }, [isBottom]);
 
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     setLoading(true);
@@ -109,7 +108,7 @@ const CampaignList: React.FC<CampaignListProps> = (
           )}
         </div>
       </div>
-      <div ref={containerRef} className="h-full w-full overflow-y-auto py-2">
+      <div ref={scrollRef} className="h-full w-full overflow-y-auto py-2">
         <table className="hidden w-full border border-gray-100 text-center lg:table">
           <thead>
             <tr className="bg-gray-100">
@@ -177,20 +176,15 @@ const CampaignList: React.FC<CampaignListProps> = (
                 </td>
               </tr>
             ))}
-            {!hasMore && campaigns.length > 0 && (
+            {!getNextPage || (campaigns.length === 0 && !isLoading) ? (
               <tr>
                 <td colSpan={5} className="py-4 text-center text-gray-500">
-                  모든 데이터를 불러왔습니다.
+                  {campaigns.length === 0 && !isLoading
+                    ? "생성된 캠페인이 없어요. 새로운 캠페인을 생성해주세요."
+                    : "모든 데이터를 불러왔습니다."}
                 </td>
               </tr>
-            )}
-            {campaigns.length === 0 && !isLoading && (
-              <tr>
-                <td colSpan={5} className={tbodyStyle}>
-                  생성된 캠페인이 없어요. 새로운 캠페인을 생성해주세요.
-                </td>
-              </tr>
-            )}
+            ) : null}
           </tbody>
         </table>
         {/* Mobile-friendly layout */}
