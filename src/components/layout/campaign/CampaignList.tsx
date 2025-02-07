@@ -4,7 +4,7 @@ import { CampaignArgs, CampaignListApiResponse } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 interface CampaignListProps {
   theadStyle: string;
   tbodyStyle: string;
@@ -36,7 +36,6 @@ const CampaignList: React.FC<CampaignListProps> = (
     setIsCampaignPage(router.pathname.includes("/campaign"));
   }, [router.pathname, apiResponse]);
 
-  const { isBottom, scrollRef } = useScrollPosition(true);
   const [isLoading, setIsLoading] = useState(false);
   const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
     apiResponse.result ?? [],
@@ -44,32 +43,35 @@ const CampaignList: React.FC<CampaignListProps> = (
   const [activeStatusMap, setActiveStatusMap] = useState<{
     [key: string]: boolean;
   }>({});
+
+  // 무한 스크롤
+  const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;
-  // 무한 스크롤
-  useEffect(() => {
-    const fetchNextPage = async () => {
-      if (!getNextPage || !scrollRef.current || isLoading) return;
-      setIsLoading(true);
-      const currentPage = (parseInt(pageNum) + 1).toString();
-      try {
-        const newData = await fetchGetCampaignList(
-          currentPage,
-          pageSize,
-          context,
-        );
-        console.log(newData);
-        if (newData?.result && newData.result.length > 0) {
-          setCampaigns((prev) => [...prev, ...newData.result]);
-        }
-        setPageNum(currentPage);
-      } catch (error) {
-        console.error("Failed to fetch next page:", error);
-      } finally {
-        setIsLoading(false);
+
+  const fetchNextPage = async () => {
+    if (!getNextPage || !scrollRef.current || isLoading) return;
+    setIsLoading(true);
+    const currentPage = (parseInt(pageNum) + 1).toString();
+    try {
+      const newData = await fetchGetCampaignList(
+        currentPage,
+        pageSize,
+        context,
+      );
+      console.log(newData);
+      if (newData?.result && newData.result.length > 0) {
+        setCampaigns((prev) => [...prev, ...newData.result]);
       }
-    };
+      setPageNum(currentPage);
+    } catch (error) {
+      console.error("Failed to fetch next page:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
     if (isBottom) {
       fetchNextPage();
     }

@@ -23,45 +23,47 @@ const CampaignRecord: React.FC<CampaignRecordProps> = (
   { apiResponse, isOpen, onClose, campaign_id, pageSize, pageNum, setPageNum },
   context: GetServerSidePropsContext,
 ) => {
-  const { isBottom, scrollRef } = useScrollPosition(isOpen);
   const [isLoading, setIsLoading] = useState(false);
 
   const [campaignRecords, setCampaignRecords] = useState<
     CampaignRecordsProps[]
   >(apiResponse.data?.result ?? []);
+
+  // 무한 스크롤
+  const { isBottom, scrollRef } = useScrollPosition(isOpen);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse?.data?.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;
 
-  // 무한 스크롤
+  const fetchNextPage = async () => {
+    if (!getNextPage || !scrollRef.current || isLoading) return;
+    setIsLoading(true);
+    const currentPage = (parseInt(pageNum) + 1).toString();
+
+    try {
+      const newData = await fetchPostCampaignRecords(
+        campaign_id,
+        currentPage,
+        pageSize,
+        "",
+        "",
+        context,
+      );
+      if (newData.data?.result && newData.data?.result.length > 0) {
+        setCampaignRecords((prev) => [...prev, ...newData.data?.result]);
+      }
+      setPageNum(currentPage);
+    } catch (error) {
+      console.error("Failed to fetch next page:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchNextPage = async () => {
-      if (!getNextPage || !scrollRef.current || isLoading) return;
-      setIsLoading(true);
-      const currentPage = (parseInt(pageNum) + 1).toString();
-
-      try {
-        const newData = await fetchPostCampaignRecords(
-          campaign_id,
-          currentPage,
-          pageSize,
-          "",
-          "",
-          context,
-        );
-        if (newData.data?.result && newData.data?.result.length > 0) {
-          setCampaignRecords((prev) => [...prev, ...newData.data?.result]);
-        }
-        setPageNum(currentPage);
-      } catch (error) {
-        console.error("Failed to fetch next page:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchNextPage();
+    if (isBottom) {
+      fetchNextPage();
+    }
   }, [isBottom]);
 
   const theadStyle =
