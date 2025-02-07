@@ -18,11 +18,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     start_date,
     end_date,
     "1",
-    "10",
+    "25",
     context,
   );
   return {
-    props: { apiResponse, start_date, end_date, page: "1", page_size: "10" },
+    props: { apiResponse, start_date, end_date, page: "1", page_size: "25" },
   };
 };
 

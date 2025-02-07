@@ -1,25 +1,35 @@
-// src/pages/dashboard.tsx
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import CampaignList from "@/components/layout/campaign/CampaignList";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import {
+  CampaignApiResponse,
+  CampaignListApiResponse,
+} from "@/lib/campaign/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
-import { ApiResponse } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const campaignResponse = await fetchGetCampaignList(context);
+  const campaignResponse = await fetchGetCampaignList("1", "25", context);
   return {
     props: {
       apiResponse: campaignResponse,
+      page: "1",
+      page_size: "25",
     },
   };
 };
 
-const Dashboard: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
+const Dashboard: React.FC<{
+  apiResponse: CampaignListApiResponse;
+  page: string;
+  page_size: string;
+}> = ({ apiResponse, page, page_size }) => {
+  const [pageNum, setPageNum] = useState(page);
+  const pageSize = page_size;
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const theadStyle =
@@ -63,8 +73,11 @@ const Dashboard: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
               theadStyle={theadStyle}
               tbodyStyle={tbodyStyle}
               apiResponse={apiResponse}
+              pageNum={pageNum}
+              pageSize={pageSize}
               handleButton={handleButton}
               setLoading={setLoading}
+              setPageNum={setPageNum}
             />
           </ContentsContainer>
         </div>

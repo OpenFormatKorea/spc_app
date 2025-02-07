@@ -12,7 +12,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import {
   CampaignArgs,
-  CampaignRecordApiResponse,
+  CampaignApiResponse,
   PeriodType,
 } from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaignRecordApiResponse = await fetchPostCampaignRecords(
     campaign_id,
     "1",
-    "10",
+    "25",
     "",
     "",
     context,
@@ -70,7 +70,7 @@ const DetailsCampaign = (
     campaign_id: string;
     itemListApiResponse: ApiResponse;
     cDetailApiResponse: CampaignArgs;
-    campaignRecordApiResponse: CampaignRecordApiResponse;
+    campaignRecordApiResponse: CampaignApiResponse;
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -90,7 +90,7 @@ const DetailsCampaign = (
   const closeModal = () => setIsModalOpen(false);
 
   const [pageNum, setPageNum] = useState<string>("1");
-  const pageSize = "10";
+  const pageSize = "25";
 
   const campaignArgs: CampaignArgs = {
     title,

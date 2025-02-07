@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     start_date,
     end_date,
     "1",
-    "10",
+    "25",
     campaign_id,
     context,
   );
@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       start_date,
       end_date,
       page: "1",
-      page_size: "10",
+      page_size: "25",
     },
   };
 };

@@ -1,5 +1,5 @@
 export interface CampaignArgs {
-  id?: number;
+  id: string;
   title: string;
   description: string;
   period_type: PeriodType;
@@ -25,11 +25,21 @@ export interface KakaoTemplateArgs {
   button_name: string;
 }
 
-export interface CampaignRecordApiResponse {
-  status: string;
-  message: string;
+export interface CampaignApiResponse {
+  status?: string;
+  message?: string;
   error?: string;
   data?: CampaignRecordsProps;
+  result?: any[];
+  total_count?: number;
+  page_size?: number;
+}
+
+export interface CampaignListApiResponse {
+  status?: string;
+  message?: string;
+  error?: string;
+  data?: CampaignArgs;
   result?: any[];
   total_count?: number;
   page_size?: number;

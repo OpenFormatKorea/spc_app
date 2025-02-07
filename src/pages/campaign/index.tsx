@@ -1,19 +1,19 @@
-import CampaignList from "@/components/layout/campaign/CampaignList";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import { ApiResponse } from "@/lib/types";
-import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useState } from "react";
-import { getShopIdFromCookies } from "@/lib/helper";
-import { fetchGetCampaignList } from "@/lib/campaign/apis";
-import AddIcon from "@mui/icons-material/Add";
+import CampaignList from "@/components/layout/campaign/CampaignList";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import React, { useEffect, useMemo, useState } from "react";
+import { CampaignApiResponse } from "@/lib/campaign/types";
+import { fetchGetCampaignList } from "@/lib/campaign/apis";
+import { getShopIdFromCookies } from "@/lib/helper";
+import AddIcon from "@mui/icons-material/Add";
+import { GetServerSideProps } from "next";
 import { withAuth } from "@/hoc/withAuth";
+import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
-  const response = await fetchGetCampaignList(context);
+  const campaignResponse = await fetchGetCampaignList("1", "25", context);
   if (!shop_id) {
     return {
       redirect: {
@@ -24,12 +24,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   return {
     props: {
-      apiResponse: response,
+      apiResponse: campaignResponse,
+      page: "1",
+      page_size: "25",
     },
   };
 };
 
-const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
+const Campaign: React.FC<{
+  apiResponse: CampaignApiResponse;
+  page: string;
+  page_size: string;
+}> = ({ apiResponse, page, page_size }) => {
+  const [pageNum, setPageNum] = useState(page);
+  const pageSize = page_size;
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const theadStyle =
@@ -43,7 +51,6 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
     }
   };
 
-  //const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
   const campaigns = useMemo(() => {
     try {
       if (Array.isArray(apiResponse)) {
@@ -56,6 +63,7 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
       return [];
     }
   }, [apiResponse]);
+
   useEffect(() => {
     if (apiResponse) {
       setLoading(false);
@@ -87,8 +95,11 @@ const Campaign: React.FC<{ apiResponse: ApiResponse }> = ({ apiResponse }) => {
                 theadStyle={theadStyle}
                 tbodyStyle={tbodyStyle}
                 apiResponse={apiResponse}
+                pageNum={pageNum}
+                pageSize={pageSize}
                 handleButton={handleButton}
                 setLoading={setLoading}
+                setPageNum={setPageNum}
               />
               <div className="button-container flex w-full py-3 lg:justify-end">
                 <button

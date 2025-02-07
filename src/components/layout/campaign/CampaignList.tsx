@@ -1,29 +1,61 @@
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
-import { setLoading } from "@/lib/helper";
-import { ApiResponse } from "@/lib/types";
+import { useInfiniteScroll } from "@/hooks/infiniteScroll";
+import { fetchGetCampaignList } from "@/lib/campaign/apis";
+import { CampaignArgs, CampaignListApiResponse } from "@/lib/campaign/types";
+import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface CampaignListProps {
   theadStyle: string;
   tbodyStyle: string;
-  apiResponse: ApiResponse;
+  apiResponse: CampaignListApiResponse;
+  pageSize: string;
+  pageNum: string;
   handleButton: (e: React.MouseEvent<HTMLDivElement>) => void;
+  setPageNum: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CampaignList: React.FC<CampaignListProps> = ({
-  theadStyle,
-  tbodyStyle,
-  apiResponse,
-  handleButton,
-  setLoading,
-}) => {
+const CampaignList: React.FC<CampaignListProps> = (
+  {
+    theadStyle,
+    tbodyStyle,
+    apiResponse,
+    pageSize,
+    pageNum,
+    handleButton,
+    setPageNum,
+    setLoading,
+  },
+  context: GetServerSidePropsContext,
+) => {
+  const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
+    apiResponse.result ?? [],
+  );
+  console.log("campaigns", campaigns);
+  const loadMoreRecords = async () => {
+    const newData = await fetchGetCampaignList(pageNum, pageSize, context);
+    const newRecords = newData.data?.result || [];
+    setCampaigns((prev) => [...prev, ...newRecords]);
+    setPageNum((prev) => (parseInt(prev) + 1).toString());
+
+    // Update hasMore based on whether we've reached the total count
+    const totalCount = newData.data?.total_count || 0;
+    const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+    setHasMore(totalCount > stackedDataAmount);
+  };
+
   const router = useRouter();
   const [isCampaignPage, setIsCampaignPage] = useState(false);
   const [activeStatusMap, setActiveStatusMap] = useState<{
     [key: string]: boolean;
   }>({});
+
+  const { containerRef, isLoading, hasMore, setHasMore } = useInfiniteScroll(
+    loadMoreRecords,
+    {},
+  );
 
   useEffect(() => {
     setIsCampaignPage(router.pathname.includes("/campaign"));
@@ -61,8 +93,6 @@ const CampaignList: React.FC<CampaignListProps> = ({
     }));
   };
 
-  const campaigns = Array.isArray(apiResponse) ? apiResponse : [];
-
   return (
     <>
       <div className="mb-2 w-full pb-2">
@@ -84,7 +114,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
           )}
         </div>
       </div>
-      <div className="h-full w-full overflow-y-auto py-2">
+      <div ref={containerRef} className="h-full w-full overflow-y-auto py-2">
         <table className="hidden w-full border border-gray-100 text-center lg:table">
           <thead>
             <tr className="bg-gray-100">
@@ -101,10 +131,10 @@ const CampaignList: React.FC<CampaignListProps> = ({
                 <tr
                   className="cursor-pointer"
                   key={campaign.id}
-                  id={campaign.id}
+                  id={`${campaign.id}`}
                   onClick={handleCampaignClick}
                 >
-                  <td className={tbodyStyle}>{campaign.id.toLocaleString()}</td>
+                  <td className={tbodyStyle}>{campaign.id}</td>
                   <td className={tbodyStyle}>{campaign.title}</td>
                   <td className={tbodyStyle}>
                     <div className="flex w-full justify-center">
@@ -143,10 +173,15 @@ const CampaignList: React.FC<CampaignListProps> = ({
                     className="border-b border-gray-200 px-2 py-2 text-sm"
                     onClick={(e) => e.stopPropagation()}
                   >
+                    {typeof campaign.active +
+                      "campaign active," +
+                      campaign.active}
                     <CampaignActiveButton
                       view="PC"
                       campaign={campaign}
-                      activeStatus={activeStatusMap[campaign.id]}
+                      activeStatus={
+                        activeStatusMap[campaign.id!.toString()] ?? false
+                      }
                       toggleCampaignActiveStatus={toggleCampaignActiveStatus}
                     />
                   </td>
@@ -161,9 +196,16 @@ const CampaignList: React.FC<CampaignListProps> = ({
                 </td>
               </tr>
             )}
+            {isLoading && (
+              <div className="py-4 text-center text-gray-500">로딩 중...</div>
+            )}
           </tbody>
         </table>
-
+        {!hasMore && campaigns.length > 0 && (
+          <div className="py-4 text-center text-gray-500">
+            모든 데이터를 불러왔습니다.
+          </div>
+        )}
         {/* Mobile-friendly layout */}
         <div className="block lg:hidden">
           {campaigns.length > 0 ? (
@@ -171,7 +213,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
               <div
                 key={campaign.id}
                 className="mb-4 w-full cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
-                id={campaign.id}
+                id={`${campaign.id}`}
                 onClick={handleCampaignClick}
               >
                 <div className="mb-2 flex w-full justify-between border-b pb-1 font-bold text-black">

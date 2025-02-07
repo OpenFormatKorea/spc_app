@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const campaign_id = context.query.campaign_id;
 
   const productResponse = await fetchGetProductCodeList(context);
-  const couponResponse = await fetchGetCouponCodeList("1", "10", context);
+  const couponResponse = await fetchGetCouponCodeList("1", "25", context);
   if (!shop_id || !campaign_id) {
     return { redirect: { destination: "auth/login", permanent: false } };
   }
@@ -58,7 +58,7 @@ const NewItem = (
   context: GetServerSidePropsContext,
 ) => {
   // const [pageNum, setPageNum] = useState("1");
-  // const [pageSize, setPageSize] = useState("10");
+  // const [pageSize, setPageSize] = useState("25");
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);

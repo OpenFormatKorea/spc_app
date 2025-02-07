@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
   const shop_id = getShopIdFromCookies(context);
 
-  const couponResponse = await fetchGetCouponCodeList("1", "10", context);
+  const couponResponse = await fetchGetCouponCodeList("1", "25", context);
   const IDetailApiResponse = await fetchGetItemDetails(
     item_id,
     campaign_id,

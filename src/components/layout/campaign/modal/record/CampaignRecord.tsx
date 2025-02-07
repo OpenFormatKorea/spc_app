@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  CampaignRecordApiResponse,
+  CampaignApiResponse,
   CampaignRecordsProps,
 } from "@/lib/campaign/types";
 import BigModal from "@/components/layout/base/BigModal";
@@ -8,7 +8,7 @@ import { fetchPostCampaignRecords } from "@/lib/campaign/apis";
 import { GetServerSidePropsContext } from "next";
 
 interface CampaignRecordProps {
-  apiResponse: CampaignRecordApiResponse;
+  apiResponse: CampaignApiResponse;
   isOpen: boolean;
   onClose: () => void;
   campaign_id: string;
