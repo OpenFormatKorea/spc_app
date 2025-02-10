@@ -40,9 +40,20 @@ const CampaignList: React.FC<CampaignListProps> = (
   const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
     apiResponse.result ?? [],
   );
+
   const [activeStatusMap, setActiveStatusMap] = useState<{
     [key: string]: boolean;
   }>({});
+
+  useEffect(() => {
+    const initialStatusMap: { [key: string]: boolean } = {};
+    campaigns.forEach((campaign) => {
+      if (campaign.id !== undefined) {
+        initialStatusMap[campaign.id.toString()] = campaign.active;
+      }
+    });
+    setActiveStatusMap(initialStatusMap);
+  }, [campaigns]);
 
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
@@ -171,7 +182,7 @@ const CampaignList: React.FC<CampaignListProps> = (
                     activeStatus={
                       activeStatusMap[
                         (campaign.id ? campaign.id : "").toString()
-                      ] ?? false
+                      ]
                     }
                     toggleCampaignActiveStatus={toggleCampaignActiveStatus}
                   />

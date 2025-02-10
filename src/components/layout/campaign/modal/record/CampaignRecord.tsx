@@ -23,8 +23,6 @@ const CampaignRecord: React.FC<CampaignRecordProps> = (
   { apiResponse, isOpen, onClose, campaign_id, pageSize, pageNum, setPageNum },
   context: GetServerSidePropsContext,
 ) => {
-  const [isLoading, setIsLoading] = useState(false);
-
   const [campaignRecords, setCampaignRecords] = useState<
     CampaignRecordsProps[]
   >(apiResponse.data?.result ?? []);
@@ -34,6 +32,7 @@ const CampaignRecord: React.FC<CampaignRecordProps> = (
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse?.data?.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchNextPage = async () => {
     if (!getNextPage || !scrollRef.current || isLoading) return;
@@ -183,10 +182,6 @@ const CampaignRecord: React.FC<CampaignRecordProps> = (
             </table>
           </div>
         </div>
-        {/* 
-        <button className="mt-4 w-full rounded-lg bg-blue-500 p-2 text-white">
-          캠페인 테스트 버튼
-        </button> */}
       </div>
     </BigModal>
   );
