@@ -67,23 +67,31 @@ const Login = (context: GetServerSidePropsContext) => {
     if (!loading) {
       setLoading(true);
       if (infoCheck(loginInfo)) {
-        const result = await postLogin(loginInfo);
-        if (result.success) {
-          deleteCookies();
-          const access: string = result.data?.access || "";
-          const refresh: string = result.data?.refresh || "";
-          const shop_id: string = result.data?.shop_id || "";
+        try {
+          const result = await postLogin(loginInfo);
+          if (result.success) {
+            deleteCookies();
+            const {
+              access = "",
+              refresh = "",
+              shop_id = "",
+            } = result.data || {};
+            await Promise.all([
+              setAccessTokenToCookies(context, access),
+              setRefreshTokenToCookies(context, refresh),
+              setShopIdTokenToCookies(context, shop_id),
+            ]);
 
-          setAccessTokenToCookies(context, access);
-          setRefreshTokenToCookies(context, refresh);
-          setShopIdTokenToCookies(context, shop_id);
-          router.push("/dashboard");
-        } else {
-          alert(result.message);
-          setLoading(false);
+            router.push("/dashboard");
+          } else {
+            console.log("login error: ", result.message);
+            alert("로그인에 실패하였습니다.");
+            setLoading(false);
+          }
+        } catch (e) {
+          alert("로그인에 실패하였습니다.");
+          console.error("error: ", e);
         }
-      } else {
-        alert("로그인에 실패하였습니다.");
       }
     }
     setLoading(false);
