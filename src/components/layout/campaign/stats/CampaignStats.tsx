@@ -3,6 +3,7 @@ import CampaignTable from "@/components/layout/campaign/stats/CampaignTable";
 import { StatsApiResponse, StatsList } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 import { GetServerSidePropsContext } from "next";
+import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 
 interface CampaignStatsProps {
   startDate: string;
@@ -14,7 +15,6 @@ interface CampaignStatsProps {
   setPeriod: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   apiResponse: StatsApiResponse;
-  resetTrigger: boolean;
 }
 
 const CampaignStats: React.FC<CampaignStatsProps> = (
@@ -28,7 +28,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
     setPeriod,
     setLoading,
     apiResponse,
-    resetTrigger,
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -41,100 +40,69 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
     apiResponse?.result ?? [],
   );
 
-  const fetchCampaignStats = async (
-    start: string,
-    end: string,
-    pgSize: string,
-    pgNum: string,
-  ): Promise<StatsApiResponse> => {
-    setLoading(true);
+  // 무한 스크롤
+  const { isBottom, scrollRef } = useScrollPosition(true);
+  const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+  const [totalCount, setTotalCount] = useState(apiResponse.total_count || 0);
+  const getNextPage = totalCount > stackedDataAmount;
+  const [isLoading, setIsLoading] = useState(false);
+  const fetchNextPage = async () => {
+    console.log("totalCount", totalCount);
+    console.log("stackedDataAmount", stackedDataAmount);
+    console.log("getNextPage", getNextPage);
+    console.log("isLoading", isLoading);
+    if (!getNextPage || !scrollRef.current || isLoading) return;
+    setIsLoading(true); // Track page-specific loading state
+    const nextPage = (parseInt(pageNum) + 1).toString(); // Calculate next page number
     try {
       const response = await fetchGetCampaignStats(
-        start,
-        end,
-        pgNum,
-        pgSize,
+        startDate,
+        endDate,
+        nextPage,
+        pageSize,
         context,
       );
-      return response;
+      if (response?.result) {
+        setCampaigns((prev) => [...prev, ...response.result]);
+        setPageNum(nextPage); // Immediately update pageNum to prevent race conditions
+      }
     } catch (error) {
       console.error("Failed to fetch campaign stats:", error);
-      throw error;
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  };
-
-  const useScrollPosition = (elementId: string) => {
-    const [isBottom, setIsBottom] = useState(false);
-    useEffect(() => {
-      const element = document.getElementById(elementId);
-      if (!element) return;
-
-      const handleScroll = () => {
-        const isAtBottom =
-          element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
-        setIsBottom(isAtBottom);
-      };
-
-      element.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        element.removeEventListener("scroll", handleScroll);
-      };
-    }, []);
-    console.log("isBottom", isBottom);
-    return isBottom;
-  };
-  const scrollPosition = useScrollPosition("tableDiv");
-  const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  const [totalCount, setTotalCount] = useState(apiResponse?.total_count || 0);
-  const getNextPage = () => {
-    console.log(
-      "stackedDataAmount ",
-      stackedDataAmount,
-      "totalCount ",
-      totalCount,
-    );
-    if (totalCount >= stackedDataAmount) {
-      return true;
-    }
-    return false;
   };
 
   useEffect(() => {
-    const isNextPage = getNextPage();
-    const nextPageNum = (parseInt(pageNum) + 1).toString();
+    if (isBottom) {
+      fetchNextPage();
+    }
+  }, [isBottom]);
 
-    console.log(
-      "isNextPage",
-      isNextPage,
-      "scrollPosition ",
-      scrollPosition,
-      "pageSize: ",
-      pageSize,
-      "nextPageNum: ",
-      nextPageNum,
-    );
-    if (isNextPage && scrollPosition) {
-      setLoading(true);
+  useEffect(() => {
+    setPageNum("1");
+    setCampaigns([]);
+    setLoading(true);
+    const fetchNewData = async () => {
       try {
-        fetchCampaignStats(startDate, endDate, pageSize, nextPageNum).then(
-          (newData) => {
-            setCampaigns((prev) => [...prev, ...(newData.result || [])]); // Append results
-            setPageNum(nextPageNum);
-          },
+        const response = await fetchGetCampaignStats(
+          startDate,
+          endDate,
+          "1",
+          pageSize,
+          context,
         );
+        setCampaigns(response?.result || []);
+        setTotalCount(response?.total_count || 0);
+      } catch (error) {
+        console.error("Error fetching new campaign stats:", error);
       } finally {
+        console.log("camapigns", campaigns);
         setLoading(false);
       }
-    }
-  }, [scrollPosition, startDate]);
-
-  useEffect(() => {
-    setCampaigns(apiResponse?.result || []);
-    setTotalCount(apiResponse?.total_count || 0);
-    setPageNum("1");
-  }, [resetTrigger]);
+    };
+    fetchNewData();
+  }, [startDate]);
 
   return (
     <div style={{ maxHeight: "70vh" }}>
@@ -149,6 +117,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
         </div>
       </div>
       <div
+        ref={scrollRef}
         id="tableDiv"
         className="h-full max-h-[calc(100%-100px)] w-full overflow-y-auto overflow-x-hidden py-2"
       >
@@ -168,7 +137,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
           </thead>
           <tbody>
             <CampaignTable tbodyStyle={tbodyStyle} campaigns={campaigns} />
-            {getNextPage() ? (
+            {getNextPage ? (
               <tr>
                 <td colSpan={9} className="py-4 text-center">
                   스크롤하면 더 많은 캠페인 통계를 보실 수 있습니다.

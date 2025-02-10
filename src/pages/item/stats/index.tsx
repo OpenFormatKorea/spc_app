@@ -73,8 +73,6 @@ const StatsItem = (
   const [loading, setLoading] = useState(false);
   const pageSize = page_size;
 
-  const [resetTrigger, setResetTrigger] = useState(false);
-
   const fetchData = async (newPeriod: string) => {
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
@@ -97,7 +95,6 @@ const StatsItem = (
         context,
       );
       setNewApiResponse(data);
-      setResetTrigger((prev) => !prev);
     } catch (e) {
       console.error("Error fetching data:", e);
     } finally {
@@ -141,7 +138,6 @@ const StatsItem = (
             period={period}
             setLoading={setLoading}
             setPeriod={setPeriod}
-            resetTrigger={resetTrigger}
           />
         </ContentsContainer>
       </DashboardContainer>

@@ -1,4 +1,5 @@
 import ItemTable from "@/components/layout/item/item/stats/ItemTable";
+import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { fetchGetItemStats } from "@/lib/item/apis";
 import { StatsApiResponse, StatsList } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
@@ -13,12 +14,10 @@ interface ItemStatsProps {
   pageNum: string;
   campaign_id: string;
   period: string;
-
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
   setPeriod: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   apiResponse: StatsApiResponse;
-  resetTrigger: boolean;
 }
 
 const ItemStats: React.FC<ItemStatsProps> = (
@@ -35,7 +34,6 @@ const ItemStats: React.FC<ItemStatsProps> = (
     setPeriod,
     setLoading,
     apiResponse,
-    resetTrigger,
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -65,71 +63,67 @@ const ItemStats: React.FC<ItemStatsProps> = (
   };
 
   const [items, setItems] = useState<StatsList[]>(apiResponse?.result ?? []);
-
-  const useScrollPosition = (elementId: string) => {
-    const [isBottom, setIsBottom] = useState(false);
-
-    useEffect(() => {
-      const element = document.getElementById(elementId);
-      if (!element) return;
-
-      const handleScroll = () => {
-        const isAtBottom =
-          element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
-        setIsBottom(isAtBottom);
-      };
-
-      element.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        element.removeEventListener("scroll", handleScroll);
-      };
-    }, []);
-    console.log("isBottom", isBottom);
-    return isBottom;
-  };
-
-  const scrollPosition = useScrollPosition("tableDiv");
+  // 무한 스크롤
+  const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  const [totalCount, setTotalCount] = useState(apiResponse?.total_count || 0);
-  const getNextPage = () => {
-    if (totalCount >= stackedDataAmount) {
-      return true;
+  const [totalCount, setTotalCount] = useState(apiResponse.total_count || 0);
+  const getNextPage = totalCount > stackedDataAmount;
+  const [isLoading, setIsLoading] = useState(false);
+  const fetchNextPage = async () => {
+    if (!getNextPage || !scrollRef.current || isLoading) return;
+    setIsLoading(true);
+    const nextPage = (parseInt(pageNum) + 1).toString();
+    try {
+      const response = await fetchGetItemStats(
+        startDate,
+        endDate,
+        nextPage,
+        pageSize,
+        campaign_id,
+        context,
+      );
+      if (response?.result) {
+        setItems((prev) => [...prev, ...response.result]);
+        setPageNum(nextPage);
+      }
+    } catch (error) {
+      console.error("Failed to fetch campaign stats:", error);
+    } finally {
+      setIsLoading(false);
     }
-    return false;
   };
 
   useEffect(() => {
-    const isNextPage = getNextPage();
-    const nextPageNum = (parseInt(pageNum) + 1).toString();
-    if (isNextPage && scrollPosition) {
-      console.log(
-        "isNextPage ",
-        isNextPage,
-        "pageSize: ",
-        pageSize,
-        "nextPageNum: ",
-        nextPageNum,
-      );
+    if (isBottom) {
+      fetchNextPage();
+    }
+  }, [isBottom]);
 
-      setLoading(true);
+  useEffect(() => {
+    setPageNum("1");
+    setItems([]);
+    setLoading(true);
+    const fetchNewData = async () => {
       try {
-        fetchItemsStats(startDate, endDate, pageSize, nextPageNum).then(
-          (newData) => {
-            setItems((prev) => [...prev, ...(newData.result || [])]);
-            setPageNum(nextPageNum);
-          },
+        const response = await fetchGetItemStats(
+          startDate,
+          endDate,
+          "1",
+          pageSize,
+          campaign_id,
+          context,
         );
+        setItems(response?.result || []);
+        setTotalCount(response?.total_count || 0);
+      } catch (error) {
+        console.error("Error fetching new campaign stats:", error);
       } finally {
+        console.log("items", items);
         setLoading(false);
       }
-    }
-  }, [scrollPosition, startDate]);
-
-  useEffect(() => {
-    setItems(apiResponse?.result || []);
-    setTotalCount(apiResponse?.total_count || 0);
-    setPageNum("1");
-  }, [resetTrigger]);
+    };
+    fetchNewData();
+  }, [startDate]);
 
   return (
     <div style={{ maxHeight: "70vh" }}>
@@ -144,6 +138,7 @@ const ItemStats: React.FC<ItemStatsProps> = (
         </div>
       </div>
       <div
+        ref={scrollRef}
         id="tableDiv"
         className="h-full max-h-[calc(100%-100px)] w-full overflow-y-auto overflow-x-hidden py-2"
       >
@@ -161,7 +156,7 @@ const ItemStats: React.FC<ItemStatsProps> = (
           </thead>
           <tbody>
             <ItemTable items={items} tbodyStyle={tbodyStyle} />
-            {getNextPage() ? (
+            {getNextPage ? (
               <tr>
                 <td colSpan={9} className="py-4 text-center">
                   스크롤하면 더 많은 아이템 통계를 보실 수 있습니다.

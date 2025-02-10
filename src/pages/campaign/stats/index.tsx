@@ -51,8 +51,6 @@ const StatsCampaign = (
   const [loading, setLoading] = useState(false);
   const pageSize = page_size;
 
-  const [resetTrigger, setResetTrigger] = useState(false);
-
   const fetchData = async (newPeriod: string) => {
     console.log("newPeriod", newPeriod);
     const newStartDate = new Date();
@@ -76,7 +74,6 @@ const StatsCampaign = (
         context,
       );
       setNewApiResponse(data);
-      setResetTrigger((prev) => !prev); // Toggle to trigger campaign reset
     } catch (e) {
       console.error("Error fetching data:", e);
     } finally {
@@ -113,7 +110,6 @@ const StatsCampaign = (
             period={period}
             setLoading={setLoading}
             setPeriod={setPeriod}
-            resetTrigger={resetTrigger}
           />
         </ContentsContainer>
       </DashboardContainer>
