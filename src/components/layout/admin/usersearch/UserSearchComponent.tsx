@@ -36,7 +36,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+    "px-3 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -47,26 +47,8 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
   const [userSearchResults, setUserSearchResults] = useState<UserSearchList[]>(
     apiResponse?.result ?? [],
   );
-  // const useScrollPosition = (elementId: string) => {
-  //   const [isBottom, setIsBottom] = useState(false);
-  //   useEffect(() => {
-  //     const element = document.getElementById(elementId);
-  //     if (!element) return;
-  //     const handleScroll = () => {
-  //       const isAtBottom =
-  //         element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
-  //       setIsBottom(isAtBottom);
-  //     };
-  //     element.addEventListener("scroll", handleScroll, { passive: true });
-  //     return () => {
-  //       element.removeEventListener("scroll", handleScroll);
-  //     };
-  //   }, []);
 
-  //   return isBottom;
-  // };
   const { isBottom, scrollRef } = useScrollPosition(true);
-  console.log(scrollRef);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;
