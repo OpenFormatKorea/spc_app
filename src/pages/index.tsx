@@ -1,15 +1,14 @@
 // src/pages/index.tsx
 //redirect to home when hits /index
-import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 const Index = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/auth/login");
+  }, [router]);
+
   return null;
 };
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return {
-    redirect: {
-      destination: "/auth/login",
-      permanent: false,
-    },
-  };
-};
+
 export default Index;
