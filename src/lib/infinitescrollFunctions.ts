@@ -18,6 +18,5 @@ export const useScrollPosition = (isOpen: boolean) => {
       element.removeEventListener("scroll", handleScroll);
     };
   }, [isOpen]);
-  console.log(isBottom);
   return { isBottom, scrollRef };
 };

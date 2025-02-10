@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
+import { handleGoBack } from "@/lib/common";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
@@ -139,8 +140,6 @@ const DetailsCampaign = (
       } else {
         alert(`캠페인 수정을 실패 하였습니다. 상태 코드: ${result.status}`);
       }
-    } else if (id === "cancel_modify_campaign") {
-      router.push("/campaign");
     } else if (
       id === "delete_campaign" &&
       confirm("캠페인을 정말 삭제 하시겠습니까?")
@@ -214,11 +213,10 @@ const DetailsCampaign = (
           <div className="button-container flex w-full justify-end">
             <button
               className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
-              onClick={handleSubmit}
-              id="cancel_modify_campaign"
+              onClick={() => handleGoBack(router)}
             >
               <ArrowBackIosIcon fontSize="small" />
-              <span className="ml-1 sm:hidden">뒤로가기</span>
+              <span className="hidden lg:ml-1 lg:block">뒤로가기</span>
             </button>
           </div>
         </div>

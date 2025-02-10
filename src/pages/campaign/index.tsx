@@ -2,7 +2,7 @@ import DashboardContainer from "@/components/layout/dashboard/DashboardContainer
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import CampaignList from "@/components/layout/campaign/CampaignList";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CampaignListApiResponse } from "@/lib/campaign/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import AddIcon from "@mui/icons-material/Add";

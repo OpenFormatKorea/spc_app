@@ -9,6 +9,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import CampaignNew from "@/components/layout/campaign/CampaignNew";
+import { handleGoBack } from "@/lib/common";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
@@ -73,14 +74,10 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
     active,
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
-    const { id } = event.currentTarget;
-    if (
-      id === "create_campaign" &&
-      confirm("새로운 캠페인을 생성하시곘습니까?")
-    ) {
-      if (loading == false) {
-        setLoading(true);
+  const handleSubmit = async () => {
+    if (!loading && confirm("새로운 캠페인을 생성하시곘습니까?")) {
+      setLoading(true);
+      try {
         if (isCampaignInfoValid(campaignArgs)) {
           const result = await fetchCreateCampaign(campaignArgs, context);
           if (result.status === 200) {
@@ -92,10 +89,11 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
             alert(`캠페인 생성을 실패 하였습니다. 상태 코드: ${result.status}`);
           }
         }
+      } catch (error) {
+        console.error("Error creating campaign:", error);
+      } finally {
+        setLoading(false);
       }
-    } else if (id === "cancel_modify_campaign") {
-      setLoading(false);
-      router.push("/campaign");
     }
     setLoading(false);
   };
@@ -115,8 +113,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
           <div className="button-container flex w-full justify-end">
             <button
               className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
-              onClick={handleSubmit}
-              id="cancel_modify_campaign"
+              onClick={() => handleGoBack(router)}
             >
               <ArrowBackIosIcon fontSize="small" />
               <span className="hidden lg:ml-1 lg:block">뒤로가기</span>

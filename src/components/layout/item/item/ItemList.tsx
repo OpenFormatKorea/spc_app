@@ -81,7 +81,7 @@ const ItemList: React.FC<ItemListProps> = (
 
   const handleItemClick = (itemId: string) => {
     if (router.pathname.includes("/campaign/details")) {
-      router.replace({
+      router.push({
         pathname: "/item/details",
         query: { campaign_id, item_id: itemId },
       });

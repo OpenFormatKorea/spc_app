@@ -1,6 +1,6 @@
 import { deleteCookies } from "@/lib/helper";
 import { getCookie } from "cookies-next";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 export const handleSignOut = async (event?: React.FormEvent) => {
@@ -31,6 +31,10 @@ export function hasWhiteSpace(s: string) {
 export function removeWhiteSpace(s: string) {
   return s.replace(/\s/g, "");
 }
+
+export const handleGoBack = (router: ReturnType<typeof useRouter>) => {
+  router.back();
+};
 
 export const S3AuthUpload = async (path: string, file: File) => {
   const response = await fetch("/api/s3-presigned-url.internal-api", {

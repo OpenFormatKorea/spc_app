@@ -71,7 +71,6 @@ const CampaignList: React.FC<CampaignListProps> = (
         pageSize,
         context,
       );
-      console.log(newData);
       if (newData?.result && newData.result.length > 0) {
         setCampaigns((prev) => [...prev, ...newData.result]);
       }
@@ -90,7 +89,7 @@ const CampaignList: React.FC<CampaignListProps> = (
 
   const handleCampaignClick = (event: React.MouseEvent<HTMLElement>) => {
     setLoading(true);
-    router.replace(`/campaign/details?campaign_id=${event.currentTarget.id}`);
+    router.push(`/campaign/details?campaign_id=${event.currentTarget.id}`);
   };
 
   const toggleCampaignActiveStatus = (
