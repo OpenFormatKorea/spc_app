@@ -1,7 +1,8 @@
 import UserSearchTable from "@/components/layout/admin/usersearch/UserSearchTable";
 import { UserDataApiResponse, UserSearchList } from "@/lib/admin/types";
 import { removeWhiteSpace } from "@/lib/common";
-import { useState, useEffect, useRef, KeyboardEvent } from "react";
+import { useScrollPosition } from "@/lib/infinitescrollFunctions";
+import { useState, useRef, KeyboardEvent, useEffect } from "react";
 
 interface UserSearchComponentProps {
   handleSearch: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -46,59 +47,61 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
   const [userSearchResults, setUserSearchResults] = useState<UserSearchList[]>(
     apiResponse?.result ?? [],
   );
-  const useScrollPosition = (elementId: string) => {
-    const [isBottom, setIsBottom] = useState(false);
-    useEffect(() => {
-      const element = document.getElementById(elementId);
-      if (!element) return;
-      const handleScroll = () => {
-        const isAtBottom =
-          element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
-        setIsBottom(isAtBottom);
-      };
-      element.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        element.removeEventListener("scroll", handleScroll);
-      };
-    }, []);
+  // const useScrollPosition = (elementId: string) => {
+  //   const [isBottom, setIsBottom] = useState(false);
+  //   useEffect(() => {
+  //     const element = document.getElementById(elementId);
+  //     if (!element) return;
+  //     const handleScroll = () => {
+  //       const isAtBottom =
+  //         element.scrollTop + element.clientHeight >= element.scrollHeight - 5;
+  //       setIsBottom(isAtBottom);
+  //     };
+  //     element.addEventListener("scroll", handleScroll, { passive: true });
+  //     return () => {
+  //       element.removeEventListener("scroll", handleScroll);
+  //     };
+  //   }, []);
 
-    return isBottom;
-  };
-  const scrollPosition = useScrollPosition("tableDiv");
+  //   return isBottom;
+  // };
+  const { isBottom, scrollRef } = useScrollPosition(true);
+  console.log(scrollRef);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse.total_count || 0;
-  const getNextPage = () => totalCount >= stackedDataAmount;
+  const getNextPage = totalCount > stackedDataAmount;
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const isNextPage = getNextPage();
-    const nextPageNum = (parseInt(pageNum) + 1).toString();
+  const fetchNextPage = async () => {
+    if (!getNextPage || !scrollRef.current || isLoading) return;
+    setIsLoading(true);
+    const currentPage = (parseInt(pageNum) + 1).toString();
 
-    if (isNextPage && scrollPosition) {
-      setLoading(true);
-      try {
-        fetchUserSearch(userId, pageNum, pageSize).then((newData) => {
-          setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
-          setPageNum(nextPageNum);
-        });
-      } finally {
-        setLoading(false);
+    try {
+      const newData = await fetchUserSearch(userId, pageNum, pageSize);
+      if (newData.result && newData.result.length > 0) {
+        setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
       }
+      setPageNum(currentPage);
+    } catch (error) {
+      console.error("Failed to fetch next page:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [scrollPosition]);
+  };
+
   useEffect(() => {
     setUserId(removeWhiteSpace(userId));
   }, [userId]);
 
   useEffect(() => {
-    return setUserSearchResults(apiResponse.result ?? []);
-  }, [apiResponse]);
+    if (isBottom) {
+      fetchNextPage();
+    }
+  }, [isBottom]);
 
   return (
-    <div
-      id="tableDiv"
-      className="overflow-y-auto"
-      style={{ maxHeight: "70vh" }}
-    >
+    <>
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
@@ -109,58 +112,56 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
           </div>
         </div>
       </div>
-      <div className="searchInputClass">
-        <div className="flex w-full items-center justify-end gap-2">
-          <input
-            type="text"
-            id="userId"
-            placeholder="유저 아이디를 적어주세요"
-            value={userId}
-            className="input-class w-full flex-grow border-b-[1px] py-2 text-sm lg:max-w-[450px]"
-            onChange={(e) => setUserId(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <button
-            ref={buttonRef}
-            className="min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 p-1 text-center text-white"
-            onClick={handleSearch}
-          >
-            검색
-          </button>
-        </div>
-        <div className="h-full w-full py-2">
-          <table className="h-full min-h-full w-full border border-gray-100 text-center">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className={theadStyle}>ID No.</th>
-                <th className={theadStyle}>유저 ID</th>
-                <th className={theadStyle}>활성화</th>
-                <th className={theadStyle}>리워드 지급 조건</th>
-                <th className={theadStyle}>샵 ID</th>
-              </tr>
-            </thead>
-            <tbody className="h-full">
-              <UserSearchTable
-                userSearchResults={userSearchResults}
-                handleUserDetail={handleUserDetail}
-                tbodyStyle={tbodyStyle}
-              />
-              {getNextPage() ? (
-                <tr>
-                  <td colSpan={5}>
-                    <div className="flex h-full items-center justify-center gap-4 py-2 text-center">
-                      <label>
-                        스크롤하면 더 많은 유저 정보를 보실 수 있습니다.
-                      </label>
-                    </div>
-                  </td>
-                </tr>
-              ) : null}
-            </tbody>
-          </table>
-        </div>
+      <div className="mb-[10px] flex w-full items-center justify-end gap-2">
+        <input
+          type="text"
+          id="userId"
+          placeholder="유저 아이디를 적어주세요"
+          value={userId}
+          className="input-class w-full flex-grow border-b-[1px] py-2 text-sm lg:max-w-[450px]"
+          onChange={(e) => setUserId(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button
+          ref={buttonRef}
+          className="min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 text-center text-white"
+          onClick={handleSearch}
+        >
+          검색
+        </button>
       </div>
-    </div>
+      <div ref={scrollRef} className="h-full w-full overflow-y-auto py-2">
+        <table className="w-full border border-gray-100 text-center lg:table">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className={theadStyle}>ID No.</th>
+              <th className={theadStyle}>유저 ID</th>
+              <th className={theadStyle}>활성화</th>
+              <th className={theadStyle}>리워드 지급 조건</th>
+              <th className={theadStyle}>샵 ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <UserSearchTable
+              userSearchResults={userSearchResults}
+              handleUserDetail={handleUserDetail}
+              tbodyStyle={tbodyStyle}
+            />
+            {getNextPage ? (
+              <tr>
+                <td colSpan={5}>
+                  <div className="flex h-full items-center justify-center gap-4 py-2 text-center">
+                    <label>
+                      스크롤하면 더 많은 유저 정보를 보실 수 있습니다.
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            ) : null}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 
