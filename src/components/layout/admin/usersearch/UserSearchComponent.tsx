@@ -50,27 +50,60 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
 
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  const totalCount = apiResponse.total_count || 0;
+  const [totalCount, setTotalCount] = useState<number>(
+    apiResponse.total_count || 0,
+  );
+  const totalCountRef = useRef<number>(apiResponse.total_count || 0);
   const getNextPage = totalCount > stackedDataAmount;
   const [isLoading, setIsLoading] = useState(false);
 
+  // **Update userSearchResults when newApiResponse changes**
+  useEffect(() => {
+    setUserSearchResults(apiResponse?.result ?? []);
+  }, [apiResponse]);
+
   const fetchNextPage = async () => {
     if (!getNextPage || !scrollRef.current || isLoading) return;
+
     setIsLoading(true);
-    const currentPage = (parseInt(pageNum) + 1).toString();
+    const nextPageNum = (parseInt(pageNum) + 1).toString(); // 현재 페이지 +1 계산
 
     try {
-      const newData = await fetchUserSearch(userId, pageNum, pageSize);
+      const newData = await fetchUserSearch(userId, nextPageNum, pageSize); // 새로운 페이지 데이터를 fetch
+
       if (newData.result && newData.result.length > 0) {
-        setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
+        setUserSearchResults((prev) => [...prev, ...(newData.result || [])]); // 새로운 데이터를 기존 데이터에 추가
+        setPageNum(nextPageNum); // 페이지 넘버 업데이트
       }
-      setPageNum(currentPage);
+
+      // total_count가 서버 응답에 포함되었다면 업데이트
+      if (newData.total_count) {
+        totalCountRef.current = newData.total_count; // 또는 상태로 관리하고 싶다면 setTotalCount 사용
+      }
     } catch (error) {
       console.error("Failed to fetch next page:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  // const fetchNextPage = async () => {
+  //   if (!getNextPage || !scrollRef.current || isLoading) return;
+  //   setIsLoading(true);
+  //   const currentPage = (parseInt(pageNum) + 1).toString();
+
+  //   try {
+  //     const newData = await fetchUserSearch(userId, pageNum, pageSize);
+  //     if (newData.result && newData.result.length > 0) {
+  //       setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
+  //     }
+  //     setPageNum(currentPage);
+  //   } catch (error) {
+  //     console.error("Failed to fetch next page:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     setUserId(removeWhiteSpace(userId));

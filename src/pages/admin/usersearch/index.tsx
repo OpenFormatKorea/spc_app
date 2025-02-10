@@ -10,6 +10,7 @@ import {
   UserDataApiResponse,
   UserSearchList,
 } from "@/lib/admin/types";
+import { setLoading } from "@/lib/helper";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 
@@ -45,8 +46,13 @@ const UserSearch = (
 
   const handleSearch = async () => {
     setLoading(true);
+    setPageNum("1"); // Reset to page 1 on a new search
+    setLoading(true);
+    console.log("userId", userId);
+
     try {
-      const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);
+      const data = await fetchGetUserSearch(userId, "1", "25", context);
+      console.log("data", data);
       setNewApiResponse(data as UserDataApiResponse);
     } catch (error) {
       console.error("Error:", error);
@@ -74,6 +80,8 @@ const UserSearch = (
     pageNum: string,
     pageSize: string,
   ): Promise<UserDataApiResponse> => {
+    console.log("pageNum", pageNum);
+    console.log("pageSize", pageSize);
     setLoading(true);
     try {
       const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);

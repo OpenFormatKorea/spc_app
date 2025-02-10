@@ -28,7 +28,7 @@ export async function fetchGetUserSearch(
         pageNum +
         "&page_size=" +
         pageSize);
-
+  console.log("apiUrl", apiUrl);
   try {
     const response = await fetchAPI(context, apiUrl, "GET", {});
     return response.data;
