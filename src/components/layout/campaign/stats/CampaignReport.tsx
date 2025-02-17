@@ -47,15 +47,6 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
       </div>
       <div className="h-full max-h-[calc(100%-80px)] w-full overflow-x-hidden overflow-y-hidden py-2">
         <div className="h-full w-full gap-[20px] rounded-lg border border-gray-100 bg-gray-100 p-[10px] text-center">
-          <div className="flex w-fit flex-col items-start gap-[10px] rounded-lg bg-white p-[5px] text-gray-500">
-            <div className="flex w-fit gap-[10px] rounded-lg bg-white">
-              <a className="text-[20px] font-semibold">리포트 기간</a>
-            </div>
-            <div className="flex w-fit gap-[10px] rounded-lg bg-white text-gray-500">
-              <a className="text-[12px] font-semibold">시작일: {startDate}</a>
-              <a className="text-[12px] font-semibold">종료일: {endDate}</a>
-            </div>
-          </div>
           <div className="mt-[10px] flex h-full w-full min-w-[50%] flex-col gap-[20px] overflow-y-auto">
             <div className="flex h-full max-h-[400px] w-full min-w-[50%] gap-[20px]">
               <ReferralHistoryChart
@@ -72,7 +63,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
           </div>
         </div>
       </div>
-      <div className="mt-[12px] flex h-fit w-full">
+      <div className="mt-[12px] flex h-fit w-fit rounded-xl bg-gray-100">
         <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
           <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">
             <label className="font-bold">내역기간</label>
@@ -87,6 +78,12 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
             <option value="90">90일 전</option>
             <option value="120">120일 전</option>
           </select>
+        </div>
+        <div className="flex w-fit flex-col items-center justify-center rounded-lg bg-gray-100 p-[5px] text-gray-500">
+          <div className="flex w-fit gap-[10px]">
+            <a className="text-[12px] font-semibold">시작일: {startDate}</a>
+            <a className="text-[12px] font-semibold">종료일: {endDate}</a>
+          </div>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { generateLabels } from "@/lib/campaign/charts";
 import { ReportResponse, SignUpResponse } from "@/lib/campaign/reporttypes";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Tooltip, CardActions, CircularProgress } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import {
   Chart as ChartJS,
   LineElement,
