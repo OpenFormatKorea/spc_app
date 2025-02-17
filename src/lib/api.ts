@@ -15,10 +15,16 @@ export type fetchAPIType = (
   relative_url: string,
   method: string,
   data: { [key: string]: any },
-  params?: { [key: string]: any }
+  params?: { [key: string]: any },
 ) => Promise<AxiosResponse["data"]>;
 
-export const fetchAPI: fetchAPIType = async (context, relative_url, method = "GET", data, params = {}) => {
+export const fetchAPI: fetchAPIType = async (
+  context,
+  relative_url,
+  method = "GET",
+  data,
+  params = {},
+) => {
   const api = await getAxiosInstanceServer(context);
 
   if (!api) return;

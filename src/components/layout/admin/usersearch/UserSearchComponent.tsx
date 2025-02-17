@@ -76,9 +76,8 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
         setPageNum(nextPageNum); // 페이지 넘버 업데이트
       }
 
-      // total_count가 서버 응답에 포함되었다면 업데이트
       if (newData.total_count) {
-        totalCountRef.current = newData.total_count; // 또는 상태로 관리하고 싶다면 setTotalCount 사용
+        totalCountRef.current = newData.total_count;
       }
     } catch (error) {
       console.error("Failed to fetch next page:", error);

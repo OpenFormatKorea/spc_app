@@ -1,6 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { GetServerSidePropsContext } from "next";
-import { deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import {
   getAccessTokenFromCookies,
   getRefreshTokenFromCookies,
@@ -8,6 +8,72 @@ import {
   setRefreshTokenToCookies,
 } from "@/lib/helper";
 import { jwtDecode } from "jwt-decode";
+const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER_API;
+
+// const axiosInstance = axios.create({
+//   baseURL: API_BASE_URL,
+// });
+
+// axiosInstance.interceptors.request.use(
+//   async (config) => {
+//     let accessToken = getCookie("access_standalone") as string;
+//     // let refresh = getCookie("refresh_standalone") as string;
+
+//     if (!accessToken || isTokenExpired(accessToken)) {
+//       accessToken = await refreshAccessToken();
+//       if (!accessToken) {
+//         return Promise.reject("Token expired");
+//       }
+//     }
+
+//     config.headers.Authorization = `Bearer ${accessToken}`;
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   },
+// );
+
+// const refreshAccessToken = async () => {
+//   const refresh = getCookie("refresh");
+//   if (!refresh || isTokenExpired(refresh as string)) {
+//     handleExpiredTokens();
+//     return null;
+//   }
+
+//   try {
+//     const response = await axios.post(
+//       `${API_BASE_URL}/v1/account/token/refresh/`,
+//       {
+//         refresh,
+//       },
+//     );
+
+//     setCookie("access_standalone", response.data.access);
+//     setCookie("refresh_standalone", response.data.refresh);
+
+//     return response.data.access;
+//   } catch (error) {
+//     handleExpiredTokens();
+//     return null;
+//   }
+// };
+// function isTokenExpired(token: string): boolean {
+//   try {
+//     const { exp } = jwtDecode<{ exp: number }>(token);
+//     return exp * 1000 < new Date().getTime();
+//   } catch {
+//     return true;
+//   }
+// }
+
+// function handleExpiredTokens() {
+//   deleteCookie("access");
+//   deleteCookie("refresh");
+//   if (typeof window !== "undefined") {
+//     window.location.href = "/login";
+//   }
+// }
 
 export const getAxiosInstanceServer = async (
   context: GetServerSidePropsContext,

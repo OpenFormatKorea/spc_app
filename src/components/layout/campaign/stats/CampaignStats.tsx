@@ -43,7 +43,7 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  const [totalCount, setTotalCount] = useState(apiResponse.total_count || 0);
+  const [totalCount, setTotalCount] = useState(apiResponse?.total_count || 0);
   const getNextPage = totalCount > stackedDataAmount;
   const [isLoading, setIsLoading] = useState(false);
   const fetchNextPage = async () => {
