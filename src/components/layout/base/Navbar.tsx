@@ -148,6 +148,14 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
               - 캠페인 상세 리포트
             </a>
           </div>
+          <div className="flex w-full px-10 pb-2 text-sm text-white">
+            <a
+              href="/campaign/rewards"
+              className={`w-full text-sm ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
+            >
+              - 캠페인 리워드
+            </a>
+          </div>
         </div>
         <div className="py-4 pl-4 text-sm text-white">setting</div>
         <div className="main-menu pl-3">

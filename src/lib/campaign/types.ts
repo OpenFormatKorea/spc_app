@@ -53,18 +53,60 @@ export interface CampaignRecordBody {
   end_date: string;
 }
 
-export interface CampaignRecordsProps {
-  result: any;
-  id: string;
-  base_user_id: string;
-  shop_id: string;
+// export interface CampaignRecordsProps {
+//   result: any;
+//   id: string;
+//   base_user_id: string;
+//   shop_id: string;
+//   reward_trigger: string;
+//   reward_target: string;
+//   order_number: string;
+//   status: string;
+//   message: string;
+//   processed_by: string;
+//   created_at: string;
+//   total_count: number;
+//   total_pages: number;
+// }
+
+// new reward type
+
+export interface RewardProps {
   reward_trigger: string;
-  reward_target: string;
-  order_number: string;
-  status: string;
-  message: string;
-  processed_by: string;
-  created_at: string;
-  total_count: number;
-  total_pages: number;
+  id: number;
+  reward_type: string;
+  reward_value: number | string;
+  payment_timing: {
+    type: "IMMEDIATE" | "DELAYED";
+    delay_days: number | null;
+  };
+  status: string | null;
 }
+
+export interface RewardUserProps {
+  base_user_id: string;
+  rewards: RewardProps[];
+}
+
+export interface ReferralItem {
+  referral_item_id: string;
+  referee: RewardUserProps;
+  referrer: RewardUserProps;
+  created_at: string;
+  signup_id: string;
+}
+
+export interface CampaignRecordsProps {
+  total_count: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  data?: any;
+  result: ReferralItem[];
+}
+// export interface ApiResponse {
+//   status: string | number;
+//   message: string;
+//   error?: string;
+//   data?: any;
+// }

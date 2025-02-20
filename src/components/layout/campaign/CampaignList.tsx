@@ -38,7 +38,7 @@ const CampaignList: React.FC<CampaignListProps> = (
 
   const [isLoading, setIsLoading] = useState(false);
   const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
-    apiResponse.result ?? [],
+    apiResponse?.result ?? [],
   );
 
   const [activeStatusMap, setActiveStatusMap] = useState<{
@@ -58,7 +58,7 @@ const CampaignList: React.FC<CampaignListProps> = (
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  const totalCount = apiResponse.total_count || 0;
+  const totalCount = apiResponse?.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;
 
   const fetchNextPage = async () => {

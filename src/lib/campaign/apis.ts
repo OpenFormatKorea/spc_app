@@ -149,7 +149,8 @@ export async function fetchGetCampaignList(
     const response = await fetchAPI(context, final_url, "GET", {});
     return response.data;
   } catch (error) {
-    return null;
+    console.error("error:", error);
+    return;
   }
 }
 
@@ -248,39 +249,21 @@ export async function fetchPostCampaignRecords(
 ) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/share/records-by-campaign`;
   const shop_id = getShopIdFromCookies(context);
+
   const dataObj = {
     shop_id: shop_id,
     campaign_id: campaign_id,
     page: page,
     page_size: page_size,
-    start_date: start_date,
+    start_date: "2025-02-01",
+    //  start_date: start_date,
     end_date: end_date,
   };
-
+  console.log("dataObj", dataObj);
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
-
-    if (response.status === "200" && response.message === "success") {
-      return {
-        status: 200,
-        success: true,
-        message: "캠페인 지급 레코드 호출을 성공하였습니다.",
-        data: response.data,
-      };
-    } else {
-      return {
-        status: response.status || 400,
-        success: false,
-        message: "내용을 다시 확인 해 주세요",
-      };
-    }
-  } catch (error) {
-    console.error("Error: ", error);
-    return {
-      status: 500,
-      success: false,
-      message: "내용을 다시 확인 해 주세요",
-      error: error,
-    };
+    return response;
+  } catch (e) {
+    console.log("error:", e);
   }
 }
