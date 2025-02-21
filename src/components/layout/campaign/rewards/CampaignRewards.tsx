@@ -44,6 +44,7 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
     error: undefined,
     data: [],
   };
+
   const [campaignRewardDetailResponse, setCampaignRewardDetailResponse] =
     useState<ApiResponse>(defaultApiResponse);
   useEffect(() => {

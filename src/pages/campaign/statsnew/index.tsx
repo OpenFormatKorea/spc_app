@@ -65,7 +65,6 @@ const StatsCampaignNew = (
     setStartDate(formattedStartDate);
     setPageNum("1");
     setLoading(true);
-
     try {
       const data = await fetchGetCampaignStats(
         formattedStartDate,

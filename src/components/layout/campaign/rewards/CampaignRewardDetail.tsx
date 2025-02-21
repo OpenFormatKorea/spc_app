@@ -62,7 +62,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
   const theadStyle =
-    "px-[15px] py-[10px] border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
+    "px-[15px] py-[10px] border-b border-gray-200 text-left text-sm font-semibold text-gray-700 text-center";
   const tbodyStyle =
     "px-[12px] py-[8px] justify-center text-[12px] border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
@@ -175,15 +175,15 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                         </div>
                       </td>
                       <td className={tbodyStyle}>
-                        <div className="flex w-full flex-col items-center justify-center">
-                          <div className="w-[180px] text-left text-[12px] font-semibold">
+                        <div className="flex w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-[4px]">
+                          <div className="w-full p-[5px] text-left text-[12px] font-semibold">
                             <a>유저 ID: </a>
                             <a className="font-normal">
                               {record.referrer.base_user_id}
                             </a>
                           </div>
-                          <div className="flex w-[180px] flex-col items-center justify-center rounded-xl border p-[5px]">
-                            <div className="flex w-full max-w-[180px] flex-col gap-[5px]">
+                          <div className="flex min-w-[180px] items-center justify-center rounded-xl border p-[5px]">
+                            <div className="flex min-w-[200px] gap-[5px]">
                               {record.referrer.rewards.map(
                                 (reward: RewardProps, i: number) => (
                                   <div
@@ -192,7 +192,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                                   >
                                     <div
                                       className={
-                                        `flex h-fit w-fit min-w-[60px] items-center justify-center rounded-md text-white ` +
+                                        `flex h-fit w-[160px] max-w-[160px] items-center justify-center rounded-md text-white ` +
                                         `${
                                           reward.reward_trigger === "SIGNUP"
                                             ? "bg-green-500"
@@ -201,7 +201,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                                       }
                                     >
                                       <div className="flex h-fit w-fit flex-col p-[5px] font-bold">
-                                        <div>
+                                        <div className="w-[75px]">
                                           {reward.reward_trigger === "SIGNUP"
                                             ? "회원가입"
                                             : "구매 "}
@@ -210,9 +210,20 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                                           reward.payment_timing.type ===
                                             "DELAYED"
                                             ? `${reward.payment_timing.delay_days}일 후`
-                                            : ""}
+                                            : " 즉시"}
                                         </div>
-                                        <div>{reward.reward_type}</div>
+                                        {!reward.status ? (
+                                          <div className="rounded-sm bg-red-500 text-white">
+                                            {reward.reward_type === "COUPON"
+                                              ? "쿠폰"
+                                              : "포인트"}{" "}
+                                            미지급
+                                          </div>
+                                        ) : (
+                                          <div className="rounded-sm bg-blue-500 text-white">
+                                            지급완료
+                                          </div>
+                                        )}
                                       </div>
                                       <div className="flex w-fit gap-[5px] p-[5px]">
                                         <a className="font-bold">
@@ -239,15 +250,15 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                         </div>
                       </td>
                       <td className={tbodyStyle}>
-                        <div className="flex w-full flex-col items-center justify-center">
-                          <div className="w-[180px] text-left text-[12px] font-semibold">
+                        <div className="flex w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-[4px]">
+                          <div className="w-full p-[5px] text-left text-[12px] font-semibold">
                             <a>유저 ID: </a>{" "}
                             <a className="font-normal">
                               {record.referee.base_user_id}
                             </a>
                           </div>
-                          <div className="flex w-[180px] flex-col items-center justify-center rounded-xl border p-[5px]">
-                            <div className="flex w-full max-w-[180px] flex-col gap-[5px]">
+                          <div className="flex min-w-[180px] items-center justify-center rounded-xl border p-[5px]">
+                            <div className="flex min-w-[200px] gap-[5px]">
                               {record.referee.rewards.map(
                                 (reward: RewardProps, i: number) => (
                                   <div
@@ -256,7 +267,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                                   >
                                     <div
                                       className={
-                                        `flex h-fit w-fit min-w-[60px] items-center justify-center rounded-md text-white ` +
+                                        `flex h-fit w-[160px] max-w-[160px] items-center justify-center rounded-md text-white ` +
                                         `${
                                           reward.reward_trigger === "SIGNUP"
                                             ? "bg-green-500"
@@ -276,7 +287,18 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                                             ? `${reward.payment_timing.delay_days}일 후`
                                             : ""}
                                         </div>
-                                        <div>{reward.reward_type}</div>
+                                        {!reward.status ? (
+                                          <div className="rounded-sm bg-red-500 text-white">
+                                            {reward.reward_type === "COUPON"
+                                              ? "쿠폰"
+                                              : "포인트"}{" "}
+                                            미지급
+                                          </div>
+                                        ) : (
+                                          <div className="rounded-sm bg-blue-500 text-white">
+                                            지급완료
+                                          </div>
+                                        )}
                                       </div>
                                       <div className="flex w-fit gap-[5px] p-[5px]">
                                         <a className="font-bold">
