@@ -16,7 +16,6 @@ interface CampaignRewardsProps {
   pageSize: string;
   period: string;
   setPeriod: (value: string) => void;
-  loading: boolean;
   setLoading: (value: boolean) => void;
 }
 
@@ -27,7 +26,6 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
     endDate,
     apiResponse,
     setPeriod,
-    loading,
     setLoading,
     pageNum,
     pageSize,
@@ -39,12 +37,12 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
   const [campaignId, setCampaignId] = useState("");
   const [campaignName, setCampaignName] = useState("");
   const [detailPageNum, setDetailPageNum] = useState("1");
-  const [detailPageSize, setDetailPageSize] = useState("10");
+  const detailPageSize = "10";
   const defaultApiResponse: ApiResponse = {
-    status: "", // Default empty string or "200" if you expect a successful response
+    status: "",
     message: "",
     error: undefined,
-    data: [], // Or an empty object {} if needed
+    data: [],
   };
   const [campaignRewardDetailResponse, setCampaignRewardDetailResponse] =
     useState<ApiResponse>(defaultApiResponse);
@@ -55,23 +53,26 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
   }, [apiResponse]);
 
   const getNewCampaignRewardRecord = async () => {
-    try {
-      const response = await fetchPostCampaignRecords(
-        campaignId,
-        detailPageNum,
-        detailPageSize,
-        startDate,
-        endDate,
-        context,
-      );
-      setCampaignRewardDetailResponse(response);
-    } catch (error) {
-      console.error("Error fetching campaign reward records:", error);
-    }
+    const response = await fetchPostCampaignRecords(
+      campaignId,
+      detailPageNum,
+      detailPageSize,
+      startDate,
+      endDate,
+      context,
+    );
+    setCampaignRewardDetailResponse(response);
   };
   useEffect(() => {
     if (campaignId || campaignId !== "") {
-      getNewCampaignRewardRecord();
+      setIsRewardLoading(true);
+      try {
+        setDetailPageNum("1");
+        getNewCampaignRewardRecord();
+      } catch (e) {
+        console.error("Error fetching campaign reward records:", e);
+      }
+      setIsRewardLoading(false);
     }
   }, [campaignId]);
   return (
@@ -79,7 +80,7 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
       <div style={{ maxHeight: "70vh" }}>
         <div className="mb-2 w-full pb-2">
           <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
-            <div className="w-[80%]">
+            <div className="w-full">
               <div className="text-xl">캠페인 리워드 내역</div>
               <div className="text-sm font-normal text-gray-500">
                 캠페인 리워드 내역입니다.
@@ -87,53 +88,41 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
             </div>
           </div>
         </div>
-        {/* <div className="h-[calc(100%-80px)] w-full gap-[20px] rounded-lg border border-gray-100 bg-gray-100 p-[20px]"> */}
         <div className="flex h-[calc(100%-80px)] min-h-[430px] w-full gap-[20px]">
           <div className="flex h-full w-[300px] flex-col gap-[10px] rounded-xl bg-gray-100 p-[10px]">
             <div className="w-full text-left text-[14px] font-semibold">
-              리워드 확인을 원하는
-              <br />
-              캠페인을 선택해주세요
+              리워드를 확인할 캠페인을 선택해주세요
             </div>
             <CampaignListTable
               apiResponse={apiResponse}
               pageSize={pageSize}
               pageNum={pageNum}
-              campaignId={campaignId}
               setCampaignId={setCampaignId}
               setCampaignName={setCampaignName}
-              setPageNum={setDetailPageNum}
-              setLoading={setLoading}
-              setIsRewardLoading={setIsRewardLoading}
+              setPageNum={setPageNum}
             />
           </div>
           <div className="relative flex h-full w-full min-w-[50%] flex-col overflow-hidden rounded-xl bg-gray-100 p-[10px]">
-            {isRewardLoading && (
-              <div className="absolute inset-0 z-50 flex items-center justify-center rounded-xl bg-black bg-opacity-10">
-                <LoadingSpinner />
-              </div>
-            )}
-            <h1 className="w-full text-left text-xl font-bold">
+            <div className="w-full pb-[8px] text-left text-xl font-bold">
               {campaignName} 리워드 지급내역
-            </h1>
-            <div className="mt-[10px] flex h-full flex-col items-start justify-center overflow-hidden rounded-xl bg-white p-[20px] text-center">
+            </div>
+            <div className="flex h-full flex-col items-start justify-center overflow-hidden rounded-xl bg-white p-[20px] text-center">
               <div className="flex h-full w-full flex-col items-center justify-center text-center">
                 <CampaignRewardDetail
                   apiResponse={campaignRewardDetailResponse}
-                  campaignId={campaignId}
                   pageSize={detailPageSize}
                   pageNum={detailPageNum}
                   startDate={startDate}
                   endDate={endDate}
-                  campaignName={campaignName}
+                  campaignId={campaignId}
+                  isRewardLoading={isRewardLoading}
                   setPageNum={setDetailPageNum}
-                  setIsRewardLoading={setLoading}
+                  setIsRewardLoading={setIsRewardLoading}
                 />
               </div>
             </div>
           </div>
         </div>
-        {/* </div> */}
         <div className="mt-[12px] flex h-fit w-fit rounded-xl bg-gray-100">
           <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
             <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">

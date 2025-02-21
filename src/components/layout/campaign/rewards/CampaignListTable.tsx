@@ -3,18 +3,14 @@ import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import { CampaignArgs, CampaignListApiResponse } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 interface CampaignListTableProps {
   apiResponse: CampaignListApiResponse;
   pageSize: string;
   pageNum: string;
-  campaignId: string;
   setCampaignName: (value: string) => void;
   setCampaignId: (value: string) => void;
   setPageNum: (value: string) => void;
-  setLoading: (value: boolean) => void;
-  setIsRewardLoading: (value: boolean) => void;
 }
 
 const CampaignListTable: React.FC<CampaignListTableProps> = (
@@ -22,16 +18,12 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
     apiResponse,
     pageSize,
     pageNum,
-    campaignId,
     setCampaignName,
     setCampaignId,
     setPageNum,
-    setLoading,
-    setIsRewardLoading,
   },
   context: GetServerSidePropsContext,
 ) => {
-  const router = useRouter();
   const [isListLoading, setIsListLoading] = useState(false);
   const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
     apiResponse?.result ?? [],
@@ -63,43 +55,40 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
       setIsListLoading(false);
     }
   };
+
   useEffect(() => {
     if (isBottom) {
       fetchNextPage();
     }
   }, [isBottom]);
 
-  const handleCampaignClick = (
+  const handleCampaignClick = async (
     event: React.MouseEvent<HTMLElement>,
     title: string,
   ) => {
     const id = event.currentTarget.id;
-    setIsRewardLoading(true);
     try {
       setCampaignId(id);
       setCampaignName(title);
     } catch (e) {
       console.error("error: ", e);
-    } finally {
-      setIsRewardLoading(false);
     }
   };
-
   return (
     <>
       <div
         ref={scrollRef}
-        className="flex h-full w-full flex-col overflow-y-auto rounded-xl bg-white p-[10px]"
+        className="relative flex h-full w-full flex-col overflow-y-auto rounded-xl bg-white p-[10px]"
       >
-        {isListLoading && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center rounded-xl bg-black bg-opacity-10">
-            <LoadingSpinner />
-          </div>
-        )}
         <div className="flex h-full w-full flex-col">
+          {isListLoading && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center rounded-xl bg-black bg-opacity-10">
+              <LoadingSpinner />
+            </div>
+          )}
           <div
             key={35}
-            className="mb-[4px] w-full cursor-pointer gap-[5px] border bg-white p-4 text-gray-600"
+            className="text-gray-60e0 mb-[4px] w-full cursor-pointer gap-[5px] border bg-white p-4"
             id={`${35}`}
             onClick={(event) => handleCampaignClick(event, "테스트용 목업")}
           >

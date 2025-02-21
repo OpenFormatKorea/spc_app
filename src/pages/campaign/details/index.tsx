@@ -22,7 +22,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
-import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
+// import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
 import { handleGoBack } from "@/lib/common";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -34,14 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     shop_id,
     context,
   );
-  const campaignRecordApiResponse = await fetchPostCampaignRecords(
-    campaign_id,
-    "1",
-    "25",
-    "",
-    "",
-    context,
-  );
+
   if (!cDetailApiResponse || cDetailApiResponse.shop_id !== shop_id) {
     return {
       redirect: {
@@ -55,7 +48,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       itemListApiResponse,
       cDetailApiResponse,
-      campaignRecordApiResponse,
       campaign_id,
     },
   };
@@ -66,12 +58,10 @@ const DetailsCampaign = (
     campaign_id,
     itemListApiResponse,
     cDetailApiResponse,
-    campaignRecordApiResponse,
   }: {
     campaign_id: string;
     itemListApiResponse: ApiResponse;
     cDetailApiResponse: CampaignArgs;
-    campaignRecordApiResponse: CampaignApiResponse;
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -265,16 +255,6 @@ const DetailsCampaign = (
           </button>
         </div>
       </DashboardContainer>
-      <CampaignRecord
-        apiResponse={campaignRecordApiResponse}
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        campaign_id={campaign_id}
-        pageSize={pageSize}
-        pageNum={pageNum}
-        setPageNum={setPageNum}
-        setLoading={setLoading}
-      />
     </>
   );
 };

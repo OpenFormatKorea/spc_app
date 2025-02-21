@@ -14,12 +14,11 @@ import { CampaignListApiResponse } from "@/lib/campaign/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const today = new Date();
-  // const end_date = today.toISOString().split("T")[0];
-  // const start_date = new Date(today.setDate(today.getDate() - 30))
-  //   .toISOString()
-  //   .split("T")[0];
-  const end_date = "2025-02-14";
-  const start_date = "2025-02-01";
+  const end_date = today.toISOString().split("T")[0];
+  const start_date = new Date(today.setDate(today.getDate() - 30))
+    .toISOString()
+    .split("T")[0];
+
   const campaignListResponse = await fetchGetCampaignList("1", "25", context);
   console.log("campaign LIST Response", campaignListResponse);
   return {
@@ -51,8 +50,8 @@ const RewardsCampaign = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<CampaignListApiResponse>(campaignListResponse);
-  //    const [period, setPeriod] = useState("30");
-  const [period, setPeriod] = useState("13");
+  const [period, setPeriod] = useState("30");
+  //const [period, setPeriod] = useState("13");
   const [startDate, setStartDate] = useState(start_date);
   const endDate = end_date;
   const [pageNum, setPageNum] = useState(page);
@@ -71,7 +70,6 @@ const RewardsCampaign = (
     setStartDate(formattedStartDate);
     setPageNum("1");
     setLoading(true);
-
     try {
       const data = await fetchGetCampaignStats(
         formattedStartDate,
@@ -87,7 +85,6 @@ const RewardsCampaign = (
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData(period);
   }, [period]);
@@ -115,7 +112,6 @@ const RewardsCampaign = (
             endDate={endDate}
             pageSize={pageSize}
             period={period}
-            loading={loading}
             setLoading={setLoading}
             setPeriod={setPeriod}
           />
