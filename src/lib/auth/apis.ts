@@ -86,9 +86,10 @@ export async function fetchGenerateTempPW(info: AuthArgs) {
 export async function fetchResetPW(info: AuthArgs) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/account/reset_password/`;
   const username = info.username;
-  const email = info.email;
+  // const email = info.email;
   try {
-    const response = await axios.post(apiUrl, { username, email });
+    // const response = await axios.post(apiUrl, { username, email });
+    const response = await axios.post(apiUrl, { username });
     const { data, status } = response;
     return {
       success: true,

@@ -1252,6 +1252,21 @@
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+"@nivo/funnel@^0.88.0":
+  version "0.88.0"
+  resolved "https://registry.yarnpkg.com/@nivo/funnel/-/funnel-0.88.0.tgz#b085af0eade1c3a7f38d01ade2515f3d4ce45d0f"
+  integrity sha512-kgG9BKUy6m8iKEBvzgc2cqK9UUxcoXw3NbkdHC1zWRhkRdTkTVoLdzUBX/YzFFWneacP75GTllgNF36ElIeNOA==
+  dependencies:
+    "@nivo/annotations" "0.88.0"
+    "@nivo/colors" "0.88.0"
+    "@nivo/core" "0.88.0"
+    "@nivo/tooltip" "0.88.0"
+    "@react-spring/web" "9.4.5 || ^9.7.2"
+    "@types/d3-scale" "^4.0.8"
+    "@types/d3-shape" "^3.1.6"
+    d3-scale "^4.0.2"
+    d3-shape "^3.2.0"
+
 "@nivo/legends@0.88.0":
   version "0.88.0"
   resolved "https://registry.yarnpkg.com/@nivo/legends/-/legends-0.88.0.tgz#a6007492048358a14bd061472a117ed34e7b0c81"

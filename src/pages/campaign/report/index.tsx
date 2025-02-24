@@ -5,9 +5,15 @@ import { useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
 import {
   fetchHourlySignUpGraph,
+  fetchMyFunnelGraph,
   fetchSignUpGraph,
 } from "@/lib/campaign/reportapis";
-import { ReportResponse } from "@/lib/campaign/reporttypes";
+import {
+  HourlySignups,
+  myFunnelResponse,
+  ReportResponse,
+  SignUpResponse,
+} from "@/lib/campaign/reporttypes";
 import CampaignReport from "@/components/layout/campaign/stats/CampaignReport";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -28,11 +34,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       end_date,
       context,
     );
+    const myFunnelApiResponse = await fetchMyFunnelGraph(
+      start_date,
+      end_date,
+      context,
+    );
     // Ensure the response is serializable
     return {
       props: {
         signUpApiResponse,
         hourlysignUpApiResponse,
+        myFunnelApiResponse,
         start_date,
         end_date,
       },
@@ -60,19 +72,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const ReportCampaign = ({
   signUpApiResponse,
   hourlysignUpApiResponse,
+  myFunnelApiResponse,
   start_date,
   end_date,
 }: {
-  signUpApiResponse: ReportResponse;
-  hourlysignUpApiResponse: ReportResponse;
+  signUpApiResponse: SignUpResponse[];
+  hourlysignUpApiResponse: HourlySignups;
+  myFunnelApiResponse: myFunnelResponse;
   start_date: string;
   end_date: string;
 }) => {
   const [newSignUpApiResponse, setNewSignUpApiResponse] =
-    useState<ReportResponse>(signUpApiResponse);
-  console.log("newSignUpApiResponse", newSignUpApiResponse);
+    useState<SignUpResponse[]>(signUpApiResponse);
   const [newHourlysignUpApiResponse, setNewHourlySignUpApiResponse] =
-    useState<ReportResponse>(hourlysignUpApiResponse);
+    useState<HourlySignups>(hourlysignUpApiResponse);
+  const [newMyFunnelApiResponse, setNewMyFunnelApiResponse] =
+    useState<myFunnelResponse>(myFunnelApiResponse);
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(start_date);
   const [endDate, setEndDate] = useState(end_date);
@@ -91,6 +106,7 @@ const ReportCampaign = ({
           <CampaignReport
             signUpApiResponse={newSignUpApiResponse}
             hourlysignUpApiResponse={newHourlysignUpApiResponse}
+            myFunnelApiResponse={newMyFunnelApiResponse}
             startDate={startDate}
             endDate={endDate}
             period={period}

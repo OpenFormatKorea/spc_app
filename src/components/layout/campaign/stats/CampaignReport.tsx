@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { ReportResponse } from "@/lib/campaign/reporttypes";
+import {
+  HourlySignups,
+  myFunnelResponse,
+  SignUpResponse,
+} from "@/lib/campaign/reporttypes";
 import HourlySignupsBarChart from "@/components/layout/campaign/report/HourlySignupsBarChart";
 import ReferralHistoryChart from "@/components/layout/campaign/report/ReferralHistoryChart";
+import MyFunnelChart from "@/components/layout/campaign/report/MyfunnelChart";
 
 interface CampaignReportProps {
   startDate: string;
   endDate: string;
   period: string;
-  signUpApiResponse: ReportResponse;
-  hourlysignUpApiResponse: ReportResponse;
+  signUpApiResponse: SignUpResponse[];
+  hourlysignUpApiResponse: HourlySignups;
+  myFunnelApiResponse: myFunnelResponse;
   setPeriod: (value: string) => void;
 }
 
@@ -18,10 +24,12 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
   endDate,
   signUpApiResponse,
   hourlysignUpApiResponse,
+  myFunnelApiResponse,
   setPeriod,
 }) => {
   const [shopReportLoading, setShopReportLoading] = useState(true);
   const [hourlyLoading, setHourlyLoading] = useState(true);
+  const [funnelLoading, setFunnelLoading] = useState(true);
   useEffect(() => {
     if (
       hourlysignUpApiResponse &&
@@ -31,6 +39,9 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
     }
     if (signUpApiResponse && Object.keys(signUpApiResponse).length > 0) {
       setShopReportLoading(false);
+    }
+    if (myFunnelApiResponse && Object.keys(myFunnelApiResponse).length > 0) {
+      setFunnelLoading(false);
     }
   }, [hourlysignUpApiResponse]);
   return (
@@ -46,7 +57,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
         </div>
       </div>
       <div className="h-full max-h-[calc(100%-80px)] w-full overflow-x-hidden overflow-y-hidden py-2">
-        <div className="h-full w-full gap-[20px] rounded-lg border border-gray-100 bg-gray-100 p-[10px] text-center">
+        <div className="h-full w-full min-w-[500px] gap-[20px] rounded-lg border border-gray-100 bg-gray-100 p-[10px] text-center">
           <div className="mt-[10px] flex h-full w-full min-w-[50%] flex-col gap-[20px] overflow-y-auto">
             <div className="flex h-full max-h-[400px] w-full min-w-[50%] gap-[20px]">
               <ReferralHistoryChart
@@ -59,6 +70,12 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
                 data={hourlysignUpApiResponse}
                 isLoading={hourlyLoading}
               />
+            </div>
+            <div className="flex h-full max-h-[400px] w-full min-w-[50%] gap-[20px]">
+              <MyFunnelChart
+                data={myFunnelApiResponse}
+                isLoading={funnelLoading}
+              />{" "}
             </div>
           </div>
         </div>

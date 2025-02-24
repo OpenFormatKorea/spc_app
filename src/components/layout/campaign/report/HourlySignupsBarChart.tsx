@@ -11,15 +11,14 @@ const ResponsiveBar = dynamic(
   },
 );
 interface HourlySignupsBarChartProps {
-  data: ReportResponse;
+  data: HourlySignups;
   isLoading: boolean;
 }
 const HourlySignupsBarChart = ({
   data,
   isLoading,
 }: HourlySignupsBarChartProps) => {
-  const barChartData: HourlySignups = data.data;
-
+  const barChartData: HourlySignups = data;
   const handleDownload = () => {
     const csvData = Object.entries(barChartData)
       .map(([hour, signup_count]) => `${hour},${signup_count}`)
@@ -52,7 +51,7 @@ const HourlySignupsBarChart = ({
 
   return (
     <>
-      <div className="h-full w-[50%] rounded-2xl bg-white p-[16px]">
+      <div className="h-full rounded-2xl bg-white p-[16px] lg:w-[50%]">
         <div className="flex flex-row justify-between">
           <p className="text-[20px] font-semibold text-[#6c757d]">
             시간 별 가입자 수

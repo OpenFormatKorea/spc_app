@@ -1,7 +1,7 @@
 // This line graph named "날짜 별 가입자 수" shows daily kakao message share and sign up stats.
 
 import { generateLabels } from "@/lib/campaign/charts";
-import { ReportResponse, SignUpResponse } from "@/lib/campaign/reporttypes";
+import { SignUpResponse } from "@/lib/campaign/reporttypes";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Tooltip, CardActions, CircularProgress } from "@mui/material";
 import React from "react";
@@ -29,18 +29,28 @@ export default function ReferralHistoryChart({
   start_date,
   end_date,
 }: {
-  report: ReportResponse;
+  report: SignUpResponse[];
   isLoading?: boolean;
   start_date: string;
   end_date: string;
 }) {
-  if (!report || !report.data) {
+  if (!report || !report) {
     return <p>No data available</p>;
   }
 
-  const graphData: SignUpResponse[] = report.data;
-  const shareCountArray = graphData.map((item) => item.share_count);
-  const signUpArray = graphData.map((item) => item.signup_count);
+  const graphData: SignUpResponse[] = report || [
+    {
+      date: "",
+      share_count: 0,
+      signup_count: 0,
+    },
+  ];
+  const shareCountArray = graphData.map(
+    (item: SignUpResponse) => item.share_count,
+  );
+  const signUpArray = graphData.map(
+    (item: SignUpResponse) => item.signup_count,
+  );
 
   function prepareMessageSharesData() {
     const today = new Date();
@@ -98,53 +108,48 @@ export default function ReferralHistoryChart({
   };
 
   return (
-    <>
-      <div className="h-full w-[50%] rounded-2xl bg-white p-[16px]">
-        <div className="flex flex-row justify-between">
-          <p className="text-[20px] font-semibold text-[#6c757d]">
-            날짜 별 가입자 수
-          </p>
-          <Tooltip title="CSV로 다운받기">
-            <CardActions>
-              <FileDownloadOutlinedIcon
-                onClick={handleDownload}
-                sx={{
-                  width: "25px",
-                  "&:active": {
-                    transform: "scale(0.75)",
-                  },
-                  "&:hover": {
-                    color: "primary.light",
-                  },
-                  transition: "transform 0.2s",
-                  color: "primary.main",
-                }}
-              />
-            </CardActions>
-          </Tooltip>
-        </div>
-
-        <div className="relative h-full w-full">
-          {/* Loading State */}
-          {(isLoading || !report) && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white bg-opacity-50">
-              <CircularProgress />
-            </div>
-          )}
-          {/* Chart */}
-          {report && (
-            <div className="flex w-full flex-col items-center justify-center overflow-hidden rounded-xl">
-              <div className="h-[320px] w-full p-[10px]">
-                <Line
-                  options={lineOptions()}
-                  data={prepareMessageSharesData()}
-                />
-              </div>
-            </div>
-          )}
-        </div>
+    <div className="h-full w-[50%] rounded-2xl bg-white p-[16px]">
+      <div className="flex flex-row justify-between">
+        <p className="text-[20px] font-semibold text-[#6c757d]">
+          날짜 별 가입자 수
+        </p>
+        <Tooltip title="CSV로 다운받기">
+          <CardActions>
+            <FileDownloadOutlinedIcon
+              onClick={handleDownload}
+              sx={{
+                width: "25px",
+                "&:active": {
+                  transform: "scale(0.75)",
+                },
+                "&:hover": {
+                  color: "primary.light",
+                },
+                transition: "transform 0.2s",
+                color: "primary.main",
+              }}
+            />
+          </CardActions>
+        </Tooltip>
       </div>
-    </>
+
+      <div className="relative h-full w-full">
+        {/* Loading State */}
+        {(isLoading || !report) && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white bg-opacity-50">
+            <CircularProgress />
+          </div>
+        )}
+        {/* Chart */}
+        {report && (
+          <div className="flex w-full flex-col items-center justify-center overflow-hidden rounded-xl">
+            <div className="h-[320px] w-full p-[10px]">
+              <Line options={lineOptions()} data={prepareMessageSharesData()} />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
