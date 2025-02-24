@@ -159,7 +159,13 @@ const ItemStats: React.FC<ItemStatsProps> = (
             {getNextPage ? (
               <tr>
                 <td colSpan={9} className="py-4 text-center">
-                  스크롤하면 더 많은 아이템 통계를 보실 수 있습니다.
+                  스크롤하면 더 많은 아이템 통계를 보실 수 있습니다.{" "}
+                  <button
+                    onClick={() => fetchNextPage()}
+                    className="items-center justify-center rounded-lg border bg-blue-500 px-[6px] py-[4px] text-white hover:bg-blue-700"
+                  >
+                    더보기
+                  </button>
                 </td>
               </tr>
             ) : (

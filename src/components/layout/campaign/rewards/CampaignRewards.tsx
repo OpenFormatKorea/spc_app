@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { CampaignListApiResponse } from "@/lib/campaign/types";
 import CampaignListTable from "@/components/layout/campaign/rewards/CampaignListTable";
 import { fetchPostCampaignRecords } from "@/lib/campaign/apis";
@@ -14,18 +13,15 @@ interface CampaignRewardsProps {
   startDate: string;
   endDate: string;
   pageSize: string;
-  period: string;
-  setPeriod: (value: string) => void;
+
   setLoading: (value: boolean) => void;
 }
 
 const CampaignRewards: React.FC<CampaignRewardsProps> = (
   {
-    period,
     startDate,
     endDate,
     apiResponse,
-    setPeriod,
     setLoading,
     pageNum,
     pageSize,
@@ -44,9 +40,9 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
     error: undefined,
     data: [],
   };
-
   const [campaignRewardDetailResponse, setCampaignRewardDetailResponse] =
     useState<ApiResponse>(defaultApiResponse);
+  const [currentDataNum, setCurrentDataNum] = useState(0);
   useEffect(() => {
     if (apiResponse && Object.keys(apiResponse).length > 0) {
       setLoading(false);
@@ -104,8 +100,11 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
             />
           </div>
           <div className="relative flex h-full w-full min-w-[50%] flex-col overflow-hidden rounded-xl bg-gray-100 p-[10px]">
-            <div className="w-full pb-[8px] text-left text-xl font-bold">
-              {campaignName} 리워드 지급내역
+            <div className="w-full text-left text-xl font-bold">
+              리워드 지급내역
+            </div>
+            <div className="w-full pb-[8px] text-[15px] font-semibold">
+              캠페인: <a className="font-normal">{campaignName}</a>
             </div>
             <div className="flex h-full flex-col items-start justify-center overflow-hidden rounded-xl bg-white p-[20px] text-center">
               <div className="flex h-full w-full flex-col items-center justify-center text-center">
@@ -125,21 +124,6 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
           </div>
         </div>
         <div className="mt-[12px] flex h-fit w-fit rounded-xl bg-gray-100">
-          <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-            <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">
-              <label className="font-bold">내역기간</label>
-            </div>
-            <select
-              className="font-sm"
-              value={period}
-              onChange={(e) => setPeriod(e.target.value)}
-            >
-              <option value="30">30일 전</option>
-              <option value="60">60일 전</option>
-              <option value="90">90일 전</option>
-              <option value="120">120일 전</option>
-            </select>
-          </div>
           <div className="flex w-fit flex-col items-center justify-center rounded-lg bg-gray-100 p-[5px] text-gray-500">
             <div className="flex w-fit gap-[10px]">
               <a className="text-[12px] font-semibold">시작일: {startDate}</a>

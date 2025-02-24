@@ -163,12 +163,14 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
             />
             {getNextPage ? (
               <tr>
-                <td colSpan={5}>
-                  <div className="flex h-full items-center justify-center gap-4 py-2 text-center">
-                    <label>
-                      스크롤하면 더 많은 유저 정보를 보실 수 있습니다.
-                    </label>
-                  </div>
+                <td colSpan={5} className="p-[10px] text-center">
+                  스크롤하면 더 많은 유저리스트를 보실 수 있습니다.{" "}
+                  <button
+                    onClick={() => fetchNextPage()}
+                    className="items-center justify-center rounded-lg border bg-blue-500 px-[6px] py-[4px] text-white hover:bg-blue-700"
+                  >
+                    더보기
+                  </button>
                 </td>
               </tr>
             ) : null}

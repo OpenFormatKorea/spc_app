@@ -192,7 +192,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                                   >
                                     <div
                                       className={
-                                        `flex h-fit w-[160px] max-w-[160px] items-center justify-center rounded-md text-white ` +
+                                        `flex h-fit w-[160px] max-w-[160px] items-center justify-center rounded-md border border-white text-white ` +
                                         `${
                                           reward.reward_trigger === "SIGNUP"
                                             ? "bg-green-500"
@@ -267,7 +267,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                                   >
                                     <div
                                       className={
-                                        `flex h-fit w-[160px] max-w-[160px] items-center justify-center rounded-md text-white ` +
+                                        `flex h-fit w-[160px] max-w-[160px] items-center justify-center rounded-md border border-white text-white ` +
                                         `${
                                           reward.reward_trigger === "SIGNUP"
                                             ? "bg-green-500"
@@ -349,7 +349,13 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
             {getNextPage && (
               <tr>
                 <td colSpan={5} className="p-[10px] text-center">
-                  스크롤하면 더 많은 캠페인 통계를 보실 수 있습니다.
+                  스크롤하면 더 많은 리워드 지급내역을 보실 수 있습니다.{" "}
+                  <button
+                    onClick={() => fetchNextPage()}
+                    className="items-center justify-center rounded-lg border bg-blue-500 px-[6px] py-[4px] text-white hover:bg-blue-700"
+                  >
+                    더보기
+                  </button>
                 </td>
               </tr>
             )}

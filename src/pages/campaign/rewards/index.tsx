@@ -50,8 +50,7 @@ const RewardsCampaign = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<CampaignListApiResponse>(campaignListResponse);
-  const [period, setPeriod] = useState("30");
-  //const [period, setPeriod] = useState("13");
+
   const [startDate, setStartDate] = useState(start_date);
   const endDate = end_date;
   const [pageNum, setPageNum] = useState(page);
@@ -85,9 +84,6 @@ const RewardsCampaign = (
       setLoading(false);
     }
   };
-  useEffect(() => {
-    fetchData(period);
-  }, [period]);
 
   return (
     <>
@@ -111,9 +107,7 @@ const RewardsCampaign = (
             startDate={startDate}
             endDate={endDate}
             pageSize={pageSize}
-            period={period}
             setLoading={setLoading}
-            setPeriod={setPeriod}
           />
         </ContentsContainer>
       </DashboardContainer>

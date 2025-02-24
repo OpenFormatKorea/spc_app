@@ -188,15 +188,20 @@ const CampaignList: React.FC<CampaignListProps> = (
                 </td>
               </tr>
             ))}
-            {!getNextPage || (campaigns.length === 0 && !isLoading) ? (
+
+            {getNextPage && (
               <tr>
-                <td colSpan={5} className="py-4 text-center text-gray-500">
-                  {campaigns.length === 0 && !isLoading
-                    ? "생성된 캠페인이 없어요. 새로운 캠페인을 생성해주세요."
-                    : "모든 데이터를 불러왔습니다."}
+                <td colSpan={5} className="p-[10px] text-center">
+                  스크롤하면 더 많은 리워드 지급내역을 보실 수 있습니다.{" "}
+                  <button
+                    onClick={() => fetchNextPage()}
+                    className="items-center justify-center rounded-lg border bg-blue-500 px-[6px] py-[4px] text-white hover:bg-blue-700"
+                  >
+                    더보기
+                  </button>
                 </td>
               </tr>
-            ) : null}
+            )}
           </tbody>
         </table>
         {/* Mobile-friendly layout */}
