@@ -49,7 +49,6 @@ const UserSearch = (
     setLoading(true);
     setPageNum("1"); // Reset to page 1 on a new search
     setLoading(true);
-    console.log("userId", userId);
 
     try {
       const data = await fetchGetUserSearch(userId, "1", "25", context);

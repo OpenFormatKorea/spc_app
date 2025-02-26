@@ -215,7 +215,6 @@ const NewItem = (
       } else {
         setShop_logo_result(previewUrl);
       }
-      console.log("url", url);
       return url;
     } catch (error) {
       console.error("Image Upload Failed:", error);

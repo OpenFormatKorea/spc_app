@@ -14,7 +14,6 @@ if (isProduction) {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   };
-  console.log("isProduction true credentials", credentials);
 } else {
   credentials = fromIni({ profile: "dashboard" });
 }
@@ -36,7 +35,6 @@ export default async function handler(
       const uploadURL = await getSignedUrl(s3Client, command, {
         expiresIn: 180,
       });
-      console.log(" upload URL:", uploadURL);
       return res.status(200).json({ uploadURL });
       //삭제
     } else if (action === "delete") {
@@ -44,7 +42,6 @@ export default async function handler(
         Bucket: bucketName,
         Key: key,
       });
-      console.log("delete command:", command);
       const response = await s3Client.send(command);
       return res
         .status(200)

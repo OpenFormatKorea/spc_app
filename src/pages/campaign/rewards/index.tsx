@@ -20,7 +20,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .split("T")[0];
 
   const campaignListResponse = await fetchGetCampaignList("1", "25", context);
-  console.log("campaign LIST Response", campaignListResponse);
   return {
     props: {
       campaignListResponse,

@@ -84,7 +84,7 @@ const Login = (context: GetServerSidePropsContext) => {
 
             router.push("/dashboard");
           } else {
-            console.log("login error: ", result.message);
+            console.error("login error: ", result.message);
             alert("로그인에 실패하였습니다.");
             setLoading(false);
           }

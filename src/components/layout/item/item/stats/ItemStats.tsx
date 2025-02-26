@@ -118,7 +118,6 @@ const ItemStats: React.FC<ItemStatsProps> = (
       } catch (error) {
         console.error("Error fetching new campaign stats:", error);
       } finally {
-        console.log("items", items);
         setLoading(false);
       }
     };

@@ -28,7 +28,6 @@ export async function fetchGetUserSearch(
         pageNum +
         "&page_size=" +
         pageSize);
-  console.log("apiUrl", apiUrl);
   try {
     const response = await fetchAPI(context, apiUrl, "GET", {});
     return response.data;
@@ -86,7 +85,6 @@ export async function fetchPutReWardEligibility(
 
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", data);
-    console.log("response", response);
     return response.data;
   } catch (error) {
     console.error("Error: ", error);

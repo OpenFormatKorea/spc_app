@@ -225,7 +225,6 @@ const DetailsItem = (
       } else {
         setShop_logo_result(previewUrl);
       }
-      console.log("url", url);
 
       return url;
     } catch (error) {

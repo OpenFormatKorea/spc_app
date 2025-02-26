@@ -72,7 +72,6 @@ export const S3AuthDelete = async (path: string) => {
   const correctedKey = key_path.startsWith("/")
     ? key_path.substring(1)
     : key_path;
-  console.log("correctedKey: ", correctedKey);
   try {
     const response = await fetch("/api/s3-presigned-url.internal-api", {
       method: "POST",
@@ -81,7 +80,6 @@ export const S3AuthDelete = async (path: string) => {
       },
       body: JSON.stringify({ key: correctedKey, action: "delete" }),
     });
-    console.log("S3AuthDelete response", response);
     if (!response.ok) {
       const errorText = await response.text(); // Log raw error
       console.error("Failed to Delete:", errorText);

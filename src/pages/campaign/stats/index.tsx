@@ -52,7 +52,6 @@ const StatsCampaign = (
   const pageSize = page_size;
 
   const fetchData = async (newPeriod: string) => {
-    console.log("newPeriod", newPeriod);
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
 

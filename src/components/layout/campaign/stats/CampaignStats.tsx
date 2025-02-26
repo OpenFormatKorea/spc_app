@@ -47,10 +47,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   const getNextPage = totalCount > stackedDataAmount;
   const [isLoading, setIsLoading] = useState(false);
   const fetchNextPage = async () => {
-    console.log("totalCount", totalCount);
-    console.log("stackedDataAmount", stackedDataAmount);
-    console.log("getNextPage", getNextPage);
-    console.log("isLoading", isLoading);
     if (!getNextPage || !scrollRef.current || isLoading) return;
     setIsLoading(true); // Track page-specific loading state
     const nextPage = (parseInt(pageNum) + 1).toString(); // Calculate next page number
@@ -97,7 +93,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
       } catch (error) {
         console.error("Error fetching new campaign stats:", error);
       } finally {
-        console.log("camapigns", campaigns);
         setLoading(false);
       }
     };

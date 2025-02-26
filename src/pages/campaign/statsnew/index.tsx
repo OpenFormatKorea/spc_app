@@ -21,7 +21,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     "25",
     context,
   );
-  console.log("apiResponse", apiResponse);
   return {
     props: { apiResponse, start_date, end_date, page: "1", page_size: "25" },
   };
@@ -53,7 +52,6 @@ const StatsCampaignNew = (
   const pageSize = page_size;
 
   const fetchData = async (newPeriod: string) => {
-    console.log("newPeriod", newPeriod);
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
 

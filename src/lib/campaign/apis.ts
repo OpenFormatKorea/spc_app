@@ -267,13 +267,10 @@ export async function fetchPostCampaignRecords(
         start_date: "2025-01-01",
         end_date: "2025-02-14",
       });
-  console.log("dataObj", dataObj);
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
-    console.log("response", response);
-
     return response;
   } catch (e) {
-    console.log("error:", e);
+    console.error("error:", e);
   }
 }

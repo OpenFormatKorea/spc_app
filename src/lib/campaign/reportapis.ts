@@ -68,7 +68,6 @@ export async function fetchMyFunnelGraph(
       {},
       { shop_id, start_date, end_date },
     );
-    console.log("funnel: ", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching campaign funnel graph:", error);

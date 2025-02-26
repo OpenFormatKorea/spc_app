@@ -24,7 +24,6 @@
 //   { apiResponse, isOpen, onClose, campaign_id, pageSize, pageNum, setPageNum },
 //   context: GetServerSidePropsContext,
 // ) => {
-//   console.log("campaignRecords apiresponse,", apiResponse);
 
 //   const [campaignRecords, setCampaignRecords] = useState<
 //     CampaignRecordsProps[]
