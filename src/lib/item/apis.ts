@@ -388,22 +388,18 @@ export async function fetchGetItemStats(
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
-  const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/campaign?shop_id=` +
-    shop_id +
-    "&start_date=" +
-    start_date +
-    "&end_date=" +
-    end_date +
-    "&page=" +
-    page +
-    "&page_size=" +
-    page_size +
-    "&campaign_id=" +
-    campaign_id;
+  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/campaign`;
+  const params = {
+    shop_id,
+    start_date,
+    end_date,
+    page,
+    page_size,
+    campaign_id,
+  };
 
   try {
-    const response = await fetchAPI(context, final_url, "GET", {});
+    const response = await fetchAPI(context, final_url, "GET", {}, params);
     return response.data;
   } catch (error) {
     console.error("error", error);

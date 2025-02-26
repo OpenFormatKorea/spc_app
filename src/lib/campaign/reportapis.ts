@@ -9,15 +9,10 @@ export async function fetchSignUpGraph(
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
-
+  const url = `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/signup`;
+  const param = { shop_id, start_date, end_date };
   try {
-    const response = await fetchAPI(
-      context,
-      `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/signup`,
-      "GET",
-      {},
-      { shop_id, start_date, end_date },
-    );
+    const response = await fetchAPI(context, url, "GET", {}, param);
     return response.data;
   } catch (error) {
     console.error("Error fetching campaign signup report:", error);
@@ -30,15 +25,10 @@ export async function fetchHourlySignUpGraph(
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
+  const url = `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/signup-hours`;
+  const param = { shop_id, start_date, end_date };
   try {
-    const response = await fetchAPI(
-      context,
-      `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/signup-hours`,
-      "GET",
-      {},
-      { shop_id, start_date, end_date },
-    );
-
+    const response = await fetchAPI(context, url, "GET", {}, param);
     return response.data;
   } catch (error) {
     console.error("Error fetching campaign hourly signup report:", error);
@@ -51,23 +41,10 @@ export async function fetchMyFunnelGraph(
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context) as string;
-
-  const url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/funnel-graph/shop?shop_id=` +
-    shop_id +
-    "&start_date=" +
-    start_date +
-    "&end_date=" +
-    end_date;
-
+  const url = `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/funnel-graph/shop`;
+  const param = { shop_id, start_date, end_date };
   try {
-    const response = await fetchAPI(
-      context,
-      url,
-      "GET",
-      {},
-      { shop_id, start_date, end_date },
-    );
+    const response = await fetchAPI(context, url, "GET", {}, param);
     return response.data;
   } catch (error) {
     console.error("Error fetching campaign funnel graph:", error);

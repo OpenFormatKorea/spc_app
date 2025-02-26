@@ -4,58 +4,44 @@ import { getShopIdFromCookies } from "@/lib/helper";
 import { GetServerSidePropsContext } from "next";
 
 export async function fetchGetUserSearch(
-  userId: string,
-  pageNum: string,
-  pageSize: string,
+  user_id: string,
+  page_num: string,
+  page_size: string,
   context: GetServerSidePropsContext,
 ) {
-  const shop_id = getShopIdFromCookies(context);
-  let apiUrl = "";
-  userId !== "" || null
-    ? (apiUrl =
-        `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user?shop_id=` +
-        shop_id +
-        "&user_id=" +
-        userId +
-        "&page=" +
-        pageNum +
-        "&page_size=" +
-        pageSize)
-    : (apiUrl =
-        `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user?shop_id=` +
-        shop_id +
-        "&page=" +
-        pageNum +
-        "&page_size=" +
-        pageSize);
+  const shop_id = getShopIdFromCookies(context) as string;
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user`;
+
+  const params =
+    user_id && user_id !== ""
+      ? { shop_id, user_id, page_num, page_size }
+      : { shop_id, page_num, page_size };
+
   try {
-    const response = await fetchAPI(context, apiUrl, "GET", {});
+    const response = await fetchAPI(context, apiUrl, "GET", {}, params);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error: ", error);
+
     return {
       status: 500,
       success: false,
       message: "검색어를 다시 확인 해 주세요",
-      error: error,
+      error: error.message || JSON.stringify(error), // JSON 직렬화 가능하도록 변환
     };
   }
 }
 
 export async function fetchGetUserDetail(
-  userId: string,
-
+  base_user_id: string,
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
-  const apiUrl =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user-details?shop_id=` +
-    shop_id +
-    "&base_user_id=" +
-    userId;
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/user/find-user-details?shop_id=`;
+  const params = { shop_id, base_user_id };
 
   try {
-    const response = await fetchAPI(context, apiUrl, "GET", {});
+    const response = await fetchAPI(context, apiUrl, "GET", {}, params);
     return response.data;
   } catch (error) {
     console.error("Error: ", error);

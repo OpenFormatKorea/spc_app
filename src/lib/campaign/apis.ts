@@ -139,14 +139,12 @@ export async function fetchGetCampaignList(
 ) {
   const shop_id = getShopIdFromCookies(context);
   const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns/` +
-    shop_id +
-    "?page=" +
-    page +
-    "&page_size=" +
-    page_size;
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaigns/` + shop_id;
+
+  const params = { page, page_size };
+
   try {
-    const response = await fetchAPI(context, final_url, "GET", {});
+    const response = await fetchAPI(context, final_url, "GET", {}, params);
     return response.data;
   } catch (error) {
     console.error("error:", error);
@@ -162,19 +160,10 @@ export async function fetchGetCampaignStats(
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
-  const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/shop?shop_id=` +
-    shop_id +
-    "&start_date=" +
-    start_date +
-    "&end_date=" +
-    end_date +
-    "&page=" +
-    page +
-    "&page_size=" +
-    page_size;
+  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/shop`;
+  const params = { shop_id, start_date, end_date, page, page_size };
   try {
-    const response = await fetchAPI(context, final_url, "GET", {});
+    const response = await fetchAPI(context, final_url, "GET", {}, params);
     return response.data;
   } catch (error) {
     console.error("error", error);
@@ -188,13 +177,10 @@ export async function fetchGetCampaignDetails(
   context: GetServerSidePropsContext,
 ) {
   const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign/` +
-    campaign_id +
-    "?shop_id=" +
-    shop_id;
-
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign/` + campaign_id;
+  const params = { shop_id };
   try {
-    const response = await fetchAPI(context, final_url, "GET", {});
+    const response = await fetchAPI(context, final_url, "GET", {}, params);
     return response.data;
   } catch (error) {
     console.error("Error fetching campaign details:", error);
@@ -208,13 +194,10 @@ export async function fetchDeleteItem(
   context: GetServerSidePropsContext,
 ) {
   const apiUrl =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-delete/` +
-    item_id +
-    "?shop_id=" +
-    shop_id;
-
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/item-delete/` + item_id;
+  const params = { shop_id };
   try {
-    const response = await fetchAPI(context, apiUrl, "DELETE", {});
+    const response = await fetchAPI(context, apiUrl, "DELETE", {}, params);
 
     if (response.status === "200" && response.message === "success") {
       return {
