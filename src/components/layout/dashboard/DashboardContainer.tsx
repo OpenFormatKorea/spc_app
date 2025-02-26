@@ -29,13 +29,6 @@ const DashboardContainer: React.FC<DashboardContainerProps> = (
       <Header shop_id={shop_id} />
       <DashboardMain>{children}</DashboardMain>
     </div>
-    // <div className="flex flex-col bg-gradient-to-b from-gray-400 to-gray-500">
-    //   <div className="h-full overflow-y-auto">
-    //     <Navbar shop_id={shop_id} />
-    //     <Header shop_id={shop_id} />
-    //     <DashboardMain>{children}</DashboardMain>
-    //   </div>
-    // </div>
   );
 };
 

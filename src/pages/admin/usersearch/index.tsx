@@ -10,7 +10,6 @@ import {
   UserDataApiResponse,
   UserSearchList,
 } from "@/lib/admin/types";
-import { setLoading } from "@/lib/helper";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 
@@ -27,14 +26,16 @@ const UserSearch = (
 ) => {
   const [newApiResponse, setNewApiResponse] =
     useState<UserDataApiResponse>(apiResponse);
+
+  const defaultUserDetails = {
+    id: "",
+    user_id: "",
+    shop: "",
+    status: "",
+    reward_eligibility: RewardEligibilityType.ALL,
+  };
   const [userDetailsResponse, setUserDetailsResponse] =
-    useState<UserSearchList>({
-      id: "",
-      user_id: "",
-      shop: "",
-      status: "",
-      reward_eligibility: RewardEligibilityType.ALL,
-    });
+    useState<UserSearchList>(defaultUserDetails);
 
   const [userId, setUserId] = useState<string>("");
   const [pageNum, setPageNum] = useState<string>("1");
@@ -52,7 +53,6 @@ const UserSearch = (
 
     try {
       const data = await fetchGetUserSearch(userId, "1", "25", context);
-      console.log("data", data);
       setNewApiResponse(data as UserDataApiResponse);
     } catch (error) {
       console.error("Error:", error);
@@ -80,8 +80,6 @@ const UserSearch = (
     pageNum: string,
     pageSize: string,
   ): Promise<UserDataApiResponse> => {
-    console.log("pageNum", pageNum);
-    console.log("pageSize", pageSize);
     setLoading(true);
     try {
       const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Define protected routes (e.g., /dashboard)
-const protectedRoutes = ["/dashboard", "/mypage", "/item", "/campaign"];
+const protectedRoutes = ["/dashboard", "/admin/mypage", "/item", "/campaign"];
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("access_standalone");
@@ -23,5 +23,5 @@ export function middleware(req: NextRequest) {
 
 // Optional: Define which paths this middleware applies to
 export const config = {
-  matcher: ["/dashboard", "/mypage", "/item", "/campaign"], // Add your protected routes here
+  matcher: ["/dashboard", "/admin/mypage", "/item", "/campaign"], // Add your protected routes here
 };

@@ -59,7 +59,6 @@ const UserDetailsModal: React.FC<UserDetailsProps> = (
   useEffect(() => {
     setRewardEligibility(campaignRecord.reward_eligibility);
     setStatus(campaignRecord.status);
-    console.log("rewardEligibility", rewardEligibility);
   }, [isOpen]);
 
   return (

@@ -186,20 +186,20 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
         {/* My Page */}
         <div
           className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
-          onClick={() => handleClick("/mypage")}
+          onClick={() => handleClick("/admin/mypage")}
           onMouseEnter={() => handleMouseEnter("마이 페이지")}
           onMouseLeave={handleMouseLeave}
         >
           <div
             className={`flex items-center justify-center rounded-xl p-2 transition-all duration-300 ${
-              isActive("/mypage")
+              isActive("/admin/mypage")
                 ? "w-[95%] bg-gray-500"
                 : isHovered === "마이 페이지"
                   ? "w-[90%] opacity-85"
                   : "h-[55px] w-[100%] p-4"
             }`}
           >
-            {renderIcon("마이 페이지", isActive("/mypage"))}
+            {renderIcon("마이 페이지", isActive("/admin/mypage"))}
             <div className="w-full pl-3 text-left">
               <span>마이 페이지</span>
             </div>

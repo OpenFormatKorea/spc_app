@@ -56,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ shop_id }) => {
           <div className="my-2 w-full border-t border-white"></div>
 
           <Navmenu menutitle="유저검색" link="/admin/usersearch" />
-          <Navmenu menutitle="마이 페이지" link="/mypage" />
+          <Navmenu menutitle="마이 페이지" link="/admin/mypage" />
 
           <div
             className={`text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300`}

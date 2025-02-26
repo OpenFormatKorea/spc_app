@@ -22,3 +22,10 @@ export enum RewardEligibilityType {
   REFEREE = "REFEREE_ONLY",
   NONE = "NONE",
 }
+
+export interface UserInfoProps {
+  data: {
+    username: string;
+    email: string;
+  };
+}
