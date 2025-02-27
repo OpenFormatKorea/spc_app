@@ -1,6 +1,5 @@
 import { fetchAPI } from "@/lib/api";
 import { getShopIdFromCookies } from "@/lib/helper";
-import { getCookie } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
 
 export async function fetchSignUpGraph(

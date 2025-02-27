@@ -232,24 +232,24 @@ export async function fetchPostCampaignRecords(
 ) {
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/share/records-by-campaign`;
   const shop_id = getShopIdFromCookies(context);
-  let dataObj = {};
-  campaign_id !== "35"
-    ? (dataObj = {
-        shop_id: shop_id,
-        campaign_id: campaign_id,
-        page: page,
-        page_size: page_size,
-        start_date: start_date,
-        end_date: end_date,
-      })
-    : (dataObj = {
-        shop_id: shop_id,
-        campaign_id: campaign_id,
-        page: page,
-        page_size: page_size,
-        start_date: "2025-01-01",
-        end_date: "2025-02-14",
-      });
+  let dataObj =
+    campaign_id !== "35"
+      ? {
+          shop_id: shop_id,
+          campaign_id: campaign_id,
+          page: page,
+          page_size: page_size,
+          start_date: start_date,
+          end_date: end_date,
+        }
+      : {
+          shop_id: shop_id,
+          campaign_id: campaign_id,
+          page: page,
+          page_size: page_size,
+          start_date: "2025-01-01",
+          end_date: "2025-02-14",
+        };
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
     return response;

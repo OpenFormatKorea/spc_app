@@ -1,27 +1,25 @@
+import LoadingSpinner from "@/components/base/LoadingSpinner";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import CampaignDetails from "@/components/layout/campaign/CampaignDetails";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ItemList from "@/components/layout/item/item/ItemList";
+import { withAuth } from "@/hoc/withAuth";
 import {
-  fetchGetCampaignDetails,
-  fetchModifyCampaign,
   fetchDeleteCampaign,
-  fetchPostCampaignRecords,
+  fetchGetCampaignDetails,
+  fetchModifyCampaign
 } from "@/lib/campaign/apis";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import {
   CampaignArgs,
-  CampaignApiResponse,
-  PeriodType,
+  PeriodType
 } from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetItemList } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { withAuth } from "@/hoc/withAuth";
-import LoadingSpinner from "@/components/base/LoadingSpinner";
 // import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
 import { handleGoBack } from "@/lib/common";
 

@@ -88,6 +88,7 @@ export async function fetchCreateItem(
     };
   }
 }
+
 export async function fetchModifyItem(
   itemModifyArgs: ItemModifyArgs,
   campaign_id: string,
@@ -201,9 +202,9 @@ export async function fetchModifyItem(
 }
 
 export async function fetchSearchCoupon(
-  searchKeyword: string,
+  name: string,
   searchFilter: string,
-  setSearchSort: string,
+  sort: string,
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
@@ -219,33 +220,13 @@ export async function fetchSearchCoupon(
 
   const page = 1;
   const size = 10;
-  let final_url;
-  searchFilter === "name"
-    ? (final_url =
-        `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` +
-        page +
-        "&size=" +
-        size +
-        "&name=" +
-        searchKeyword +
-        "&shop_id=" +
-        shop_id +
-        "&sort=" +
-        searchFilter)
-    : (final_url =
-        `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` +
-        page +
-        "&size=" +
-        size +
-        "&cpn_id=" +
-        searchKeyword +
-        "&shop_id=" +
-        shop_id +
-        "&sort=" +
-        searchFilter);
-
+  const url = `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=`;
+  const param =
+    searchFilter === "name"
+      ? { page: page, size: size, name: name, shop_id: shop_id, sort: sort }
+      : { page: page, size: size, cpn_id: name, shop_id: shop_id, sort: sort };
   try {
-    const response = await fetchAPI(context, final_url, "GET", {});
+    const response = await fetchAPI(context, url, "GET", {}, param);
     return response.data;
   } catch (error) {
     console.error("error", error);

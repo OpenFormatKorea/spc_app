@@ -42,7 +42,6 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
   };
   const [campaignRewardDetailResponse, setCampaignRewardDetailResponse] =
     useState<ApiResponse>(defaultApiResponse);
-  const [currentDataNum, setCurrentDataNum] = useState(0);
   useEffect(() => {
     if (apiResponse && Object.keys(apiResponse).length > 0) {
       setLoading(false);
