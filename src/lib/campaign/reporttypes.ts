@@ -31,3 +31,18 @@ export interface myFunnelRate {
   kakao_share_to_registration: float;
   registration_to_pickup_complete: float;
 }
+
+export interface referralLeaderboardTableResponse {
+  total_count: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  result: leaderboardTableTypes[];
+}
+
+export interface leaderboardTableTypes {
+  base_user_id: string;
+  referrer_id: string;
+  total_signup_count: number;
+  total_order_count: number;
+}

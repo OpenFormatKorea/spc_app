@@ -104,7 +104,7 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
   const percentages = calculatePercentages(funnel_data);
 
   return (
-    <div className="h-full rounded-2xl bg-white p-[16px] lg:w-[50%]">
+    <div className="h-full max-h-[400px] w-full rounded-2xl bg-white p-[16px]">
       <div className="flex flex-col items-start justify-start">
         <p className="text-[20px] font-semibold text-[#6c757d]">
           리퍼럴 유저 고객 여정

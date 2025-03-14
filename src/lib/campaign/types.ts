@@ -104,9 +104,9 @@ export interface CampaignRecordsProps {
   data?: any;
   result: ReferralItem[];
 }
-// export interface ApiResponse {
-//   status: string | number;
-//   message: string;
-//   error?: string;
-//   data?: any;
-// }
+
+export enum sortDirection {
+  D = "desc",
+  A = "asc",
+  N = "none",
+}

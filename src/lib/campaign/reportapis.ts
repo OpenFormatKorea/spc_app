@@ -1,5 +1,6 @@
 import { fetchAPI } from "@/lib/api";
 import { getShopIdFromCookies } from "@/lib/helper";
+import { StatusString } from "aws-sdk/clients/redshiftdata";
 import { GetServerSidePropsContext } from "next";
 
 export async function fetchSignUpGraph(
@@ -44,6 +45,37 @@ export async function fetchMyFunnelGraph(
   const param = { shop_id, start_date, end_date };
   try {
     const response = await fetchAPI(context, url, "GET", {}, param);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching campaign funnel graph:", error);
+  }
+}
+
+export async function fetchReferralLeaderboardTable(
+  start_date: string,
+  end_date: string,
+  page: string,
+  page_size: string,
+  sort_field: string,
+  direction: string,
+  user_id: string,
+  context: GetServerSidePropsContext,
+) {
+  const shop_id = getShopIdFromCookies(context) as string;
+  const url = `${process.env.NEXT_PUBLIC_SERVER_API}/statistics/referral/shop/referrer-signup-purchase-metrics`;
+  const param = {
+    shop_id,
+    start_date,
+    end_date,
+    page,
+    page_size,
+    sort_field,
+    direction,
+    user_id,
+  };
+  try {
+    const response = await fetchAPI(context, url, "GET", {}, param);
+    console.log("response", response);
     return response.data;
   } catch (error) {
     console.error("Error fetching campaign funnel graph:", error);

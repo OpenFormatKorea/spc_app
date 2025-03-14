@@ -2,29 +2,48 @@ import React, { useEffect, useState } from "react";
 import {
   HourlySignups,
   myFunnelResponse,
+  referralLeaderboardTableResponse,
   SignUpResponse,
 } from "@/lib/campaign/reporttypes";
 import HourlySignupsBarChart from "@/components/layout/campaign/report/HourlySignupsBarChart";
 import ReferralHistoryChart from "@/components/layout/campaign/report/ReferralHistoryChart";
 import MyFunnelChart from "@/components/layout/campaign/report/MyfunnelChart";
+import ReferralLeaderboardTable from "@/components/layout/campaign/report/ReferralLeaderboardTable";
+import { sortDirection } from "@/lib/campaign/types";
 
 interface CampaignReportProps {
   startDate: string;
   endDate: string;
-  period: string;
+
   signUpApiResponse: SignUpResponse[];
   hourlysignUpApiResponse: HourlySignups;
   myFunnelApiResponse: myFunnelResponse;
+  RefferralLeaderBoardTableResponse: referralLeaderboardTableResponse;
+  sortField:
+    | "first_time_signup_count"
+    | "pickup_order_count"
+    | "pre_order_count";
+  setDirection: (value: sortDirection) => void;
+  direction: sortDirection;
+  setSortField: (
+    value: "first_time_signup_count" | "pickup_order_count" | "pre_order_count",
+  ) => void;
+  period: string;
   setPeriod: (value: string) => void;
 }
 
 const CampaignReport: React.FC<CampaignReportProps> = ({
-  period,
   startDate,
   endDate,
   signUpApiResponse,
   hourlysignUpApiResponse,
   myFunnelApiResponse,
+  RefferralLeaderBoardTableResponse,
+  direction,
+  setDirection,
+  sortField,
+  setSortField,
+  period,
   setPeriod,
 }) => {
   const [shopReportLoading, setShopReportLoading] = useState(true);
@@ -57,9 +76,21 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
         </div>
       </div>
       <div className="h-full max-h-[calc(100%-80px)] w-full overflow-x-hidden overflow-y-hidden py-2">
-        <div className="h-full w-full min-w-[500px] gap-[20px] rounded-lg border border-gray-100 bg-gray-100 p-[10px] text-center">
-          <div className="mt-[10px] flex h-full w-full min-w-[50%] flex-col gap-[20px] overflow-y-auto">
-            <div className="flex h-full max-h-[400px] w-full min-w-[50%] gap-[20px]">
+        <div className="h-full w-full gap-[20px] rounded-lg border border-gray-100 bg-gray-100 p-[10px] text-center">
+          <div className="flex h-full w-full min-w-[50%] flex-col gap-[20px] overflow-y-auto">
+            <div className="grid w-full gap-[20px] overflow-auto sm:grid-cols-1 md:grid-cols-2">
+              <MyFunnelChart
+                data={myFunnelApiResponse}
+                isLoading={funnelLoading}
+              />
+              <ReferralLeaderboardTable
+                data={RefferralLeaderBoardTableResponse}
+                isLoading={funnelLoading}
+                direction={direction}
+                setDirection={setDirection}
+                sortField={sortField}
+                setSortField={setSortField}
+              />
               <ReferralHistoryChart
                 report={signUpApiResponse}
                 isLoading={shopReportLoading}
@@ -70,12 +101,6 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
                 data={hourlysignUpApiResponse}
                 isLoading={hourlyLoading}
               />
-            </div>
-            <div className="flex h-full max-h-[400px] w-full min-w-[50%] gap-[20px]">
-              <MyFunnelChart
-                data={myFunnelApiResponse}
-                isLoading={funnelLoading}
-              />{" "}
             </div>
           </div>
         </div>

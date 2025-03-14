@@ -108,7 +108,7 @@ export default function ReferralHistoryChart({
   };
 
   return (
-    <div className="h-full w-[50%] rounded-2xl bg-white p-[16px]">
+    <div className="h-full w-full rounded-2xl bg-white p-[16px]">
       <div className="flex flex-row justify-between">
         <p className="text-[20px] font-semibold text-[#6c757d]">
           날짜 별 가입자 수

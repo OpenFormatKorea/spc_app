@@ -51,7 +51,7 @@ const HourlySignupsBarChart = ({
 
   return (
     <>
-      <div className="h-full rounded-2xl bg-white p-[16px] lg:w-[50%]">
+      <div className="h-full w-full rounded-2xl bg-white p-[16px]">
         <div className="flex flex-row justify-between">
           <p className="text-[20px] font-semibold text-[#6c757d]">
             시간 별 가입자 수
