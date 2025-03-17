@@ -74,14 +74,14 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
                 ? "캠페인 상세 정보"
                 : "캠페인 옵션 추가"}
             </div>
-            {page_type === "DETAILS" && (
+            {/* {page_type === "DETAILS" && (
               <button
                 className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 text-sm text-white"
                 onClick={openModal}
               >
                 리워드내역
               </button>
-            )}
+            )} */}
           </div>
 
           {page_type === "DETAILS" && (

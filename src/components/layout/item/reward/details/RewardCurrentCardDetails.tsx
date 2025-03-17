@@ -108,7 +108,9 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
               <span className="text-base font-semibold">
                 {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
                 {reward.reward_type === "COUPON"
-                  ? reward.coupon_code
+                  ? reward.coupon_name
+                    ? `${reward.coupon_code} | ${reward.coupon_name}`
+                    : `${reward.coupon_code} | 쿠폰명 없음`
                   : `${(reward.point_amount ?? 0).toLocaleString()} 포인트`}
               </span>
             </div>

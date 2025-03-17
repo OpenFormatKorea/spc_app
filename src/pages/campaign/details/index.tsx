@@ -7,12 +7,9 @@ import { withAuth } from "@/hoc/withAuth";
 import {
   fetchDeleteCampaign,
   fetchGetCampaignDetails,
-  fetchModifyCampaign
+  fetchModifyCampaign,
 } from "@/lib/campaign/apis";
-import {
-  CampaignArgs,
-  PeriodType
-} from "@/lib/campaign/types";
+import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetItemList } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
@@ -201,7 +198,7 @@ const DetailsCampaign = (
           <div className="button-container flex w-full justify-end">
             <button
               className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
-              onClick={() => handleGoBack(router)}
+              onClick={() => router.push("/campaign")}
             >
               <ArrowBackIosIcon fontSize="small" />
               <span className="hidden lg:ml-1 lg:block">뒤로가기</span>

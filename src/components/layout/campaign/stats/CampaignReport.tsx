@@ -14,11 +14,16 @@ import { sortDirection } from "@/lib/campaign/types";
 interface CampaignReportProps {
   startDate: string;
   endDate: string;
-
+  pageNum: string;
+  setPageNum: (value: string) => void;
+  pageSize: string;
   signUpApiResponse: SignUpResponse[];
   hourlysignUpApiResponse: HourlySignups;
   myFunnelApiResponse: myFunnelResponse;
   RefferralLeaderBoardTableResponse: referralLeaderboardTableResponse;
+  setNewRefferralLeaderBoardTableResponse: (
+    value: referralLeaderboardTableResponse,
+  ) => void;
   sortField:
     | "first_time_signup_count"
     | "pickup_order_count"
@@ -30,21 +35,29 @@ interface CampaignReportProps {
   ) => void;
   period: string;
   setPeriod: (value: string) => void;
+  userId: string;
+  setUserId: (value: string) => void;
 }
 
 const CampaignReport: React.FC<CampaignReportProps> = ({
   startDate,
   endDate,
+  pageNum,
+  setPageNum,
+  pageSize,
   signUpApiResponse,
   hourlysignUpApiResponse,
   myFunnelApiResponse,
   RefferralLeaderBoardTableResponse,
+  setNewRefferralLeaderBoardTableResponse,
   direction,
   setDirection,
   sortField,
   setSortField,
   period,
   setPeriod,
+  userId,
+  setUserId,
 }) => {
   const [shopReportLoading, setShopReportLoading] = useState(true);
   const [hourlyLoading, setHourlyLoading] = useState(true);
@@ -75,7 +88,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
           </div>
         </div>
       </div>
-      <div className="h-full max-h-[calc(100%-80px)] w-full overflow-x-hidden overflow-y-hidden py-2">
+      <div className="h-full max-h-[calc(100%-80px)] w-full overflow-x-hidden overflow-y-hidden">
         <div className="h-full w-full gap-[20px] rounded-lg border border-gray-100 bg-gray-100 p-[10px] text-center">
           <div className="flex h-full w-full min-w-[50%] flex-col gap-[20px] overflow-y-auto">
             <div className="grid w-full gap-[20px] overflow-auto sm:grid-cols-1 md:grid-cols-2">
@@ -85,11 +98,18 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
               />
               <ReferralLeaderboardTable
                 data={RefferralLeaderBoardTableResponse}
-                isLoading={funnelLoading}
+                setData={setNewRefferralLeaderBoardTableResponse}
+                startDate={startDate}
+                endDate={endDate}
+                pageNum={pageNum}
+                setPageNum={setPageNum}
+                pageSize={pageSize}
                 direction={direction}
                 setDirection={setDirection}
                 sortField={sortField}
                 setSortField={setSortField}
+                userId={userId}
+                setUserId={setUserId}
               />
               <ReferralHistoryChart
                 report={signUpApiResponse}

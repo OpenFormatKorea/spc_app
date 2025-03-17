@@ -94,7 +94,6 @@ const ReportCampaign = (
     page,
     page_size,
     sort_field,
-    sort_direction,
   }: {
     signUpApiResponse: SignUpResponse[];
     hourlysignUpApiResponse: HourlySignups;
@@ -108,7 +107,6 @@ const ReportCampaign = (
       | "first_time_signup_count"
       | "pickup_order_count"
       | "pre_order_count";
-    sort_direction: string;
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -125,13 +123,9 @@ const ReportCampaign = (
     RefferralLeaderBoardTableResponse,
   );
   const [userId, setUserId] = useState("");
-  console.log(
-    "newRefferralLeaderBoardTableResponse",
-    newRefferralLeaderBoardTableResponse,
-  );
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(start_date);
-  const [endDate, setEndDate] = useState(end_date);
+  const endDate = end_date;
   const [period, setPeriod] = useState("30");
   const [pageNum, setPageNum] = useState("1");
   const [direction, setDirection] = useState<sortDirection>(sortDirection.D);
@@ -242,6 +236,9 @@ const ReportCampaign = (
             RefferralLeaderBoardTableResponse={
               newRefferralLeaderBoardTableResponse
             }
+            setNewRefferralLeaderBoardTableResponse={
+              setNewRefferralLeaderBoardTableResponse
+            }
             startDate={startDate}
             endDate={endDate}
             direction={direction}
@@ -250,6 +247,8 @@ const ReportCampaign = (
             setSortField={setSortField}
             period={period}
             setPeriod={setPeriod}
+            userId={userId}
+            setUserId={setUserId}
           />
         </ContentsContainer>
       </DashboardContainer>

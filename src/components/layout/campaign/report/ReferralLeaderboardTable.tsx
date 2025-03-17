@@ -1,32 +1,55 @@
-import { referralLeaderboardTableResponse } from "@/lib/campaign/reporttypes";
+import {
+  leaderboardTableTypes,
+  referralLeaderboardTableResponse,
+} from "@/lib/campaign/reporttypes";
 import { sortDirection } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Tooltip, CardActions, CircularProgress } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-export default function ReferralLeaderboardTable({
-  data,
-  isLoading,
-  direction,
-  sortField,
-  setDirection,
-  setSortField,
-}: {
-  data: referralLeaderboardTableResponse;
-  isLoading?: boolean;
+import { fetchReferralLeaderboardTable } from "@/lib/campaign/reportapis";
+import { GetServerSidePropsContext } from "next";
 
+interface ReferralLeaderboardTableProps {
+  data: referralLeaderboardTableResponse;
+  setData: (value: referralLeaderboardTableResponse) => void;
+  startDate: string;
+  endDate: string;
+  pageNum: string;
+  setPageNum: (value: string) => void;
+  pageSize: string;
   direction: sortDirection;
+  setDirection: (value: sortDirection) => void;
   sortField:
     | "first_time_signup_count"
     | "pickup_order_count"
     | "pre_order_count";
-  setDirection: (value: sortDirection) => void;
   setSortField: (
     value: "first_time_signup_count" | "pickup_order_count" | "pre_order_count",
   ) => void;
-}) {
+  userId: string;
+  setUserId: (value: string) => void;
+}
+export default function ReferralLeaderboardTable(
+  {
+    data,
+    setData,
+    startDate,
+    endDate,
+    pageNum,
+    setPageNum,
+    pageSize,
+    direction,
+    sortField,
+    setDirection,
+    setSortField,
+    userId,
+    setUserId,
+  }: ReferralLeaderboardTableProps,
+  context: GetServerSidePropsContext,
+) {
   // Handle CSV Download
   const handleDownload = () => {
     const chartData = data || {};
@@ -48,12 +71,51 @@ export default function ReferralLeaderboardTable({
     link.click();
     document.body.removeChild(link);
   };
-
+  const [newTableData, setNewTableData] = useState<leaderboardTableTypes[]>(
+    data.result || [],
+  );
+  console.log("newTableData", newTableData);
   const theadStyle =
     "px-6 py-3 border-b border-gray-200 text-sm font-medium text-gray-700 text-center";
   const tbodyStyle =
     "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+  const [isLoading, setIsLoading] = useState(false);
   const { isBottom, scrollRef } = useScrollPosition(true);
+  const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+  const totalCount = data?.total_count || 0;
+  const getNextPage = totalCount > stackedDataAmount;
+
+  const fetchNextPage = async () => {
+    if (!getNextPage || !scrollRef.current || isLoading) return;
+    setIsLoading(true);
+    const currentPage = (parseInt(pageNum) + 1).toString();
+    try {
+      const newData = await fetchReferralLeaderboardTable(
+        startDate,
+        endDate,
+        pageNum,
+        pageSize,
+        sortField,
+        direction,
+        userId,
+        context,
+      );
+      console.log("newData", newData);
+      if (newData?.result && newData.result.length > 0) {
+        setNewTableData((prev) => [...prev, ...newData.result]);
+      }
+      setPageNum(currentPage);
+    } catch (error) {
+      console.error("Failed to fetch next page:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (isBottom) {
+      fetchNextPage();
+    }
+  }, [isBottom]);
 
   return (
     <div className="h-full max-h-[400px] w-full rounded-2xl bg-white p-[16px]">
@@ -140,7 +202,7 @@ export default function ReferralLeaderboardTable({
                 </tr>
               </thead>
               <tbody>
-                {data.result.map((resultRow, index) => (
+                {newTableData.map((resultRow, index) => (
                   <tr className={tbodyStyle}>
                     <td>
                       <input type="checkbox" id={index.toString()} />
