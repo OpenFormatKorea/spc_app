@@ -12,11 +12,6 @@ import ReferralLeaderboardTable from "@/components/layout/campaign/report/Referr
 import { sortDirection } from "@/lib/campaign/types";
 
 interface CampaignReportProps {
-  startDate: string;
-  endDate: string;
-  pageNum: string;
-  setPageNum: (value: string) => void;
-  pageSize: string;
   signUpApiResponse: SignUpResponse[];
   hourlysignUpApiResponse: HourlySignups;
   myFunnelApiResponse: myFunnelResponse;
@@ -24,12 +19,17 @@ interface CampaignReportProps {
   setNewRefferralLeaderBoardTableResponse: (
     value: referralLeaderboardTableResponse,
   ) => void;
+  startDate: string;
+  endDate: string;
+  setPageNum: (value: string) => void;
+  direction: sortDirection;
+  setDirection: (value: sortDirection) => void;
+  pageNum: string;
+  pageSize: string;
   sortField:
     | "first_time_signup_count"
     | "pickup_order_count"
     | "pre_order_count";
-  setDirection: (value: sortDirection) => void;
-  direction: sortDirection;
   setSortField: (
     value: "first_time_signup_count" | "pickup_order_count" | "pre_order_count",
   ) => void;

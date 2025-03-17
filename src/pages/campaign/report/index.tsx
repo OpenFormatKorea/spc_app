@@ -127,7 +127,7 @@ const ReportCampaign = (
   const [startDate, setStartDate] = useState(start_date);
   const endDate = end_date;
   const [period, setPeriod] = useState("30");
-  const [pageNum, setPageNum] = useState("1");
+  const [pageNum, setPageNum] = useState(page);
   const [direction, setDirection] = useState<sortDirection>(sortDirection.D);
   const [sortField, setSortField] = useState<
     "first_time_signup_count" | "pickup_order_count" | "pre_order_count"
@@ -241,6 +241,9 @@ const ReportCampaign = (
             }
             startDate={startDate}
             endDate={endDate}
+            pageNum={pageNum}
+            setPageNum={setPageNum}
+            pageSize={page_size}
             direction={direction}
             setDirection={setDirection}
             sortField={sortField}
