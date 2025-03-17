@@ -1,4 +1,5 @@
 import ItemTable from "@/components/layout/item/item/stats/ItemTable";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { fetchGetItemStats } from "@/lib/item/apis";
 import { StatsApiResponse, StatsList } from "@/lib/types";
@@ -6,8 +7,6 @@ import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 
 interface ItemStatsProps {
-  theadStyle: string;
-  tbodyStyle: string;
   startDate: string;
   endDate: string;
   pageSize: string;
@@ -22,8 +21,6 @@ interface ItemStatsProps {
 
 const ItemStats: React.FC<ItemStatsProps> = (
   {
-    theadStyle,
-    tbodyStyle,
     startDate,
     endDate,
     pageSize,

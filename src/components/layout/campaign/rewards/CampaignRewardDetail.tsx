@@ -1,4 +1,5 @@
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 import { fetchPostCampaignRecords } from "@/lib/campaign/apis";
 import {
   CampaignRecordsProps,
@@ -61,10 +62,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   );
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
-  const theadStyle =
-    "px-[15px] py-[10px] border-b border-gray-200 text-left text-sm font-semibold text-gray-700 text-center";
-  const tbodyStyle =
-    "px-[12px] py-[8px] justify-center text-[12px] border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse?.data.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;

@@ -5,6 +5,7 @@ import Modal from "@/components/layout/base/Modal";
 import InputTextBox from "@/components/base/InputText";
 import { fetchSearchCoupon } from "@/lib/item/apis";
 import { GetServerSidePropsContext } from "next";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 
 interface CouponListProps {
   apiResponse: ApiResponse;
@@ -149,11 +150,6 @@ const NewCouponList: React.FC<CouponListProps> = (
         console.error("검색 중 오류가 생겼습니다:", error);
       });
   };
-
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm text-gray-700 text-center cursor-pointer";
-  const tbodyStyle =
-    "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
   const labelClass = "text-xs pt-4 text-gray-500";
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

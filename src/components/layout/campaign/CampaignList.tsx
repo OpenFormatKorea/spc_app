@@ -1,4 +1,5 @@
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import { CampaignArgs, CampaignListApiResponse } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
@@ -6,8 +7,6 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 interface CampaignListProps {
-  theadStyle: string;
-  tbodyStyle: string;
   apiResponse: CampaignListApiResponse;
   pageSize: string;
   pageNum: string;
@@ -17,16 +16,7 @@ interface CampaignListProps {
 }
 
 const CampaignList: React.FC<CampaignListProps> = (
-  {
-    theadStyle,
-    tbodyStyle,
-    apiResponse,
-    pageSize,
-    pageNum,
-    handleButton,
-    setPageNum,
-    setLoading,
-  },
+  { apiResponse, pageSize, pageNum, handleButton, setPageNum, setLoading },
   context: GetServerSidePropsContext,
 ) => {
   const router = useRouter();
@@ -40,12 +30,13 @@ const CampaignList: React.FC<CampaignListProps> = (
   const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
     apiResponse?.result ?? [],
   );
-
   const [activeStatusMap, setActiveStatusMap] = useState<{
     [key: string]: boolean;
   }>({});
 
   useEffect(() => {
+    console.log("campaigns", campaigns);
+
     const initialStatusMap: { [key: string]: boolean } = {};
     campaigns.forEach((campaign) => {
       if (campaign.id !== undefined) {
@@ -127,6 +118,8 @@ const CampaignList: React.FC<CampaignListProps> = (
               <th className={theadStyle}>캠페인 ID</th>
               <th className={theadStyle}>캠페인 명</th>
               <th className={theadStyle}>타입</th>
+              {/* <th className={theadStyle}>캠페인 등록일</th>
+              <th className={theadStyle}>계정 ID</th> */}
               <th className={theadStyle}>캠페인 기간</th>
               <th className={theadStyle}>활성화</th>
             </tr>
@@ -156,6 +149,9 @@ const CampaignList: React.FC<CampaignListProps> = (
                     </div>
                   </div>
                 </td>
+                {/* <td className={tbodyStyle}>{campaign.start_date}</td>
+
+                <td className={tbodyStyle}>{campaign.shop_id}</td> */}
                 <td className={tbodyStyle}>
                   {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
                     year: "numeric",

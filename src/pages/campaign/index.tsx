@@ -30,10 +30,6 @@ const Campaign: React.FC<{
   const pageSize = page_size;
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   const handleButton = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     if (id === "new_campaign") {
@@ -69,8 +65,6 @@ const Campaign: React.FC<{
           <div className="contents-container w-full justify-center sm:space-y-4 lg:space-x-4">
             <ContentsContainer variant="dashboard">
               <CampaignList
-                theadStyle={theadStyle}
-                tbodyStyle={tbodyStyle}
                 apiResponse={apiResponse}
                 pageNum={pageNum}
                 pageSize={pageSize}

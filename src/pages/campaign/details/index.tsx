@@ -224,8 +224,6 @@ const DetailsCampaign = (
           <ContentsContainer variant="campaign">
             <div className="mb-3 flex h-full w-full flex-col items-center justify-between overflow-y-auto">
               <ItemList
-                theadStyle="px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center"
-                tbodyStyle="px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center"
                 apiResponse={itemListApiResponse}
                 handleButton={handleButton}
                 campaign_id={campaign_id}

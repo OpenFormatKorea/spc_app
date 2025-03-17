@@ -5,17 +5,16 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import ItemActiveButton from "@/components/layout/item/item/ItemActiveButton";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 
 interface ItemListProps {
-  theadStyle: string;
-  tbodyStyle: string;
   apiResponse: ApiResponse;
   campaign_id: string;
   handleButton: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const ItemList: React.FC<ItemListProps> = (
-  { theadStyle, tbodyStyle, apiResponse, handleButton, campaign_id },
+  { apiResponse, handleButton, campaign_id },
   context: GetServerSidePropsContext,
 ) => {
   const router = useRouter();

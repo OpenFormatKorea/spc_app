@@ -4,6 +4,7 @@ import { StatsApiResponse, StatsList } from "@/lib/types";
 import { fetchGetCampaignStats } from "@/lib/campaign/apis";
 import { GetServerSidePropsContext } from "next";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 
 interface CampaignStatsProps {
   startDate: string;
@@ -31,11 +32,6 @@ const CampaignStats: React.FC<CampaignStatsProps> = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
-
   const [campaigns, setCampaigns] = useState<StatsList[]>(
     apiResponse?.result ?? [],
   );

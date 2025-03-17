@@ -1,13 +1,12 @@
+import { tbodyStyle } from "@/interfaces/tailwindCss";
 import { UserSearchList } from "@/lib/admin/types";
 
 interface UserSearchTableProps {
-  tbodyStyle: string;
   userSearchResults: UserSearchList[];
   handleUserDetail: (userId: string) => void;
 }
 
 const UserSearchTable: React.FC<UserSearchTableProps> = ({
-  tbodyStyle,
   userSearchResults,
   handleUserDetail,
 }) => {

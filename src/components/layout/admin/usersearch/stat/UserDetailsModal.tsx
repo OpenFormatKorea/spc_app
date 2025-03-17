@@ -4,6 +4,7 @@ import InputRadioBox from "@/components/base/InputRadio";
 import { useEffect, useState } from "react";
 import { fetchPutReWardEligibility } from "@/lib/admin/apis";
 import { GetServerSidePropsContext } from "next";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 
 interface UserDetailsProps {
   apiResponse: UserSearchList;
@@ -23,10 +24,6 @@ const UserDetailsModal: React.FC<UserDetailsProps> = (
   const id = campaignRecord.id ?? "";
   const user_id = campaignRecord.user_id ?? "";
   const shop_id = campaignRecord.shop ?? "";
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-center text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 text-sm border-b justify-center border-gray-200 whitespace-normal break-words break-all text-center h-full";
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setRewardEligibility(e.target.value as RewardEligibilityType);

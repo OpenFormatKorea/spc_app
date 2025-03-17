@@ -1,4 +1,5 @@
 import UserSearchTable from "@/components/layout/admin/usersearch/UserSearchTable";
+import { theadStyle } from "@/interfaces/tailwindCss";
 import { UserDataApiResponse, UserSearchList } from "@/lib/admin/types";
 import { removeWhiteSpace } from "@/lib/common";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
@@ -13,7 +14,6 @@ interface UserSearchComponentProps {
   pageSize: string;
   pageNum: string;
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   fetchUserSearch: (
     userId: string,
     pageNum: string,
@@ -30,13 +30,8 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
   pageSize,
   pageNum,
   setPageNum,
-  setLoading,
   fetchUserSearch,
 }) => {
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -85,24 +80,6 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
       setIsLoading(false);
     }
   };
-
-  // const fetchNextPage = async () => {
-  //   if (!getNextPage || !scrollRef.current || isLoading) return;
-  //   setIsLoading(true);
-  //   const currentPage = (parseInt(pageNum) + 1).toString();
-
-  //   try {
-  //     const newData = await fetchUserSearch(userId, pageNum, pageSize);
-  //     if (newData.result && newData.result.length > 0) {
-  //       setUserSearchResults((prev) => [...prev, ...(newData.result || [])]);
-  //     }
-  //     setPageNum(currentPage);
-  //   } catch (error) {
-  //     console.error("Failed to fetch next page:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   useEffect(() => {
     setUserId(removeWhiteSpace(userId));
@@ -159,7 +136,6 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
             <UserSearchTable
               userSearchResults={userSearchResults}
               handleUserDetail={handleUserDetail}
-              tbodyStyle={tbodyStyle}
             />
             {getNextPage ? (
               <tr>

@@ -49,11 +49,6 @@ const Dashboard: React.FC<DashboardProps> = ({
       return () => clearTimeout(timer);
     }
   }, [apiResponse]);
-
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
   return (
     <>
       {loading && (
@@ -70,8 +65,6 @@ const Dashboard: React.FC<DashboardProps> = ({
         <div className="contents-container w-full justify-center">
           <ContentsContainer variant="dashboard">
             <CampaignList
-              theadStyle={theadStyle}
-              tbodyStyle={tbodyStyle}
               apiResponse={apiResponse}
               pageNum={pageNum}
               pageSize={pageSize}

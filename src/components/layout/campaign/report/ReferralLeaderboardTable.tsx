@@ -11,6 +11,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { fetchReferralLeaderboardTable } from "@/lib/campaign/reportapis";
 import { GetServerSidePropsContext } from "next";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 
 interface ReferralLeaderboardTableProps {
   data: referralLeaderboardTableResponse;
@@ -74,11 +75,7 @@ export default function ReferralLeaderboardTable(
   const [newTableData, setNewTableData] = useState<leaderboardTableTypes[]>(
     data.result || [],
   );
-  console.log("newTableData", newTableData);
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words break-all text-center items-center";
+
   const [isLoading, setIsLoading] = useState(false);
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);

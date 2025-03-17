@@ -106,11 +106,6 @@ const StatsItem = (
     fetchData(period);
   }, [period]);
 
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 border-b border-gray-200 whitespace-normal break-words text-center";
-
   return (
     <>
       {loading && (
@@ -126,8 +121,6 @@ const StatsItem = (
         </div>
         <ContentsContainer variant="dashboard">
           <ItemStats
-            theadStyle={theadStyle}
-            tbodyStyle={tbodyStyle}
             apiResponse={newApiResponse}
             campaign_id={campaign_id}
             pageNum={pageNum}
