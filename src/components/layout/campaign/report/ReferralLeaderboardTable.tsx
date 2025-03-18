@@ -170,7 +170,7 @@ export default function ReferralLeaderboardTable(
                   </th>
                   <th className={theadStyle}>
                     <div className="flex w-full items-center justify-center gap-[5px]">
-                      <span>총 주문 수</span>
+                      <span>리퍼럴 가입한 피추천인 수</span>
                       {direction === "asc" &&
                       sortField === "pickup_order_count" ? (
                         <div
@@ -195,7 +195,9 @@ export default function ReferralLeaderboardTable(
                       )}
                     </div>
                   </th>
-                  <th className={theadStyle}>총 주문 금액</th>
+                  <th className={theadStyle}>
+                    피추천인 가입자 기준 구매완료 수
+                  </th>
                 </tr>
               </thead>
               <tbody>
