@@ -27,7 +27,7 @@ const ItemActiveButton: React.FC<ItemActiveButtonProps> = (
   };
 
   return (
-    <div className="flex w-full justify-end text-center">
+    <div className="flex w-full justify-center text-center">
       <input
         type="checkbox"
         id={`${view}-item-activation-${item_id}`}
