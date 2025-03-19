@@ -26,13 +26,8 @@ interface CampaignReportProps {
   setDirection: (value: sortDirection) => void;
   pageNum: string;
   pageSize: string;
-  sortField:
-    | "first_time_signup_count"
-    | "pickup_order_count"
-    | "pre_order_count";
-  setSortField: (
-    value: "first_time_signup_count" | "pickup_order_count" | "pre_order_count",
-  ) => void;
+  sortField: "total_signup_count" | "total_order_count";
+  setSortField: (value: "total_signup_count" | "total_order_count") => void;
   period: string;
   setPeriod: (value: string) => void;
   userId: string;

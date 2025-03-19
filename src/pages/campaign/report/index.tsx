@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       .split("T")[0];
     const page_size = "10";
     const page = "1";
-    const sort_field = "first_time_signup_count";
+    const sort_field = "total_signup_count";
     const sort_direction = sortDirection.D;
     const user_id = "";
     const signUpApiResponse = await fetchSignUpGraph(
@@ -103,10 +103,7 @@ const ReportCampaign = (
     end_date: string;
     page: string;
     page_size: string;
-    sort_field:
-      | "first_time_signup_count"
-      | "pickup_order_count"
-      | "pre_order_count";
+    sort_field: "total_signup_count" | "total_order_count";
   },
   context: GetServerSidePropsContext,
 ) => {
@@ -130,7 +127,7 @@ const ReportCampaign = (
   const [pageNum, setPageNum] = useState(page);
   const [direction, setDirection] = useState<sortDirection>(sortDirection.D);
   const [sortField, setSortField] = useState<
-    "first_time_signup_count" | "pickup_order_count" | "pre_order_count"
+    "total_signup_count" | "total_order_count"
   >(sort_field);
 
   const fetchPeriodData = async (newPeriod: string) => {
@@ -199,10 +196,6 @@ const ReportCampaign = (
           context,
         );
 
-      console.log(
-        "referralLeaderboardTableResponse",
-        referralLeaderboardTableResponse,
-      );
       setNewRefferralLeaderBoardTableResponse(referralLeaderboardTableResponse);
     } catch (e) {
       console.error("Error fetching data:", e);

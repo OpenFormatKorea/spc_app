@@ -23,13 +23,8 @@ interface ReferralLeaderboardTableProps {
   pageSize: string;
   direction: sortDirection;
   setDirection: (value: sortDirection) => void;
-  sortField:
-    | "first_time_signup_count"
-    | "pickup_order_count"
-    | "pre_order_count";
-  setSortField: (
-    value: "first_time_signup_count" | "pickup_order_count" | "pre_order_count",
-  ) => void;
+  sortField: "total_signup_count" | "total_order_count";
+  setSortField: (value: "total_signup_count" | "total_order_count") => void;
   userId: string;
   setUserId: (value: string) => void;
 }
@@ -172,12 +167,12 @@ export default function ReferralLeaderboardTable(
                     <div className="flex w-full items-center justify-center gap-[5px]">
                       <span>리퍼럴 가입한 피추천인 수</span>
                       {direction === "asc" &&
-                      sortField === "pickup_order_count" ? (
+                      sortField === "total_signup_count" ? (
                         <div
                           className="cursor-pointer font-semibold"
                           onClick={(e) => {
                             setDirection(sortDirection.D);
-                            setSortField("pickup_order_count");
+                            setSortField("total_signup_count");
                           }}
                         >
                           <ArrowDropUpIcon />
@@ -187,7 +182,7 @@ export default function ReferralLeaderboardTable(
                           className="cursor-pointer font-semibold"
                           onClick={(e) => {
                             setDirection(sortDirection.A);
-                            setSortField("pickup_order_count");
+                            setSortField("total_signup_count");
                           }}
                         >
                           <ArrowDropDownIcon />
