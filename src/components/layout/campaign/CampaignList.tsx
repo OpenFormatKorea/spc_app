@@ -35,8 +35,6 @@ const CampaignList: React.FC<CampaignListProps> = (
   }>({});
 
   useEffect(() => {
-    console.log("campaigns", campaigns);
-
     const initialStatusMap: { [key: string]: boolean } = {};
     campaigns.forEach((campaign) => {
       if (campaign.id !== undefined) {
@@ -117,11 +115,11 @@ const CampaignList: React.FC<CampaignListProps> = (
             <tr className="bg-gray-100">
               <th className={theadStyle}>캠페인 ID</th>
               <th className={theadStyle}>캠페인 명</th>
+              <th className={theadStyle}>캠페인 등록 계정 ID</th>
               <th className={theadStyle}>타입</th>
-              {/* <th className={theadStyle}>캠페인 등록일</th>
-              <th className={theadStyle}>계정 ID</th> */}
               <th className={theadStyle}>캠페인 기간</th>
               <th className={theadStyle}>활성화</th>
+              <th className={theadStyle}>캠페인 등록일</th>
             </tr>
           </thead>
           <tbody>
@@ -134,6 +132,7 @@ const CampaignList: React.FC<CampaignListProps> = (
               >
                 <td className={tbodyStyle}>{campaign.id}</td>
                 <td className={tbodyStyle}>{campaign.title}</td>
+                <td className={tbodyStyle}>{campaign.created_by_username}</td>
                 <td className={tbodyStyle}>
                   <div className="flex w-full justify-center">
                     <div
@@ -149,9 +148,6 @@ const CampaignList: React.FC<CampaignListProps> = (
                     </div>
                   </div>
                 </td>
-                {/* <td className={tbodyStyle}>{campaign.start_date}</td>
-
-                <td className={tbodyStyle}>{campaign.shop_id}</td> */}
                 <td className={tbodyStyle}>
                   {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
                     year: "numeric",
@@ -181,6 +177,13 @@ const CampaignList: React.FC<CampaignListProps> = (
                     }
                     toggleCampaignActiveStatus={toggleCampaignActiveStatus}
                   />
+                </td>
+                <td className={tbodyStyle}>
+                  {new Date(campaign.created_at).toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </td>
               </tr>
             ))}

@@ -8,7 +8,13 @@ export interface CampaignArgs {
   newStart_date?: Date;
   newEnd_date?: Date;
   active: boolean;
+  shop_id: string;
+  created_by_username: string;
+  updated_by_username?: string | null;
+  created_at: Date;
+  updated_at?: Date;
 }
+
 export interface CampaignInfoProps {
   campaignInfo: CampaignArgs[];
 }
