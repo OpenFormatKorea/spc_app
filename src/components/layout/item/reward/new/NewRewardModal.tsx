@@ -212,7 +212,8 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
                                         key={inputCoupon.coupon_code}
                                         className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
                                       >
-                                        {inputCoupon.coupon_name}
+                                        {inputCoupon.coupon_code} -{" "}
+                                        {inputCoupon.coupon_title}
                                       </div>
                                     )
                                   );

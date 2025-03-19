@@ -1,13 +1,15 @@
-import React, { useState, KeyboardEvent, useEffect } from "react";
+import React, { useState, KeyboardEvent } from "react";
 import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import { ApiResponse } from "@/lib/types";
 import InputNumberTextBox from "@/components/base/InputNumberText";
 import NewRewardModal from "@/components/layout/item/reward/new/NewRewardModal";
-import NewCouponList from "@/components/layout/item/modal/new/NewCouponList";
+import CouponList from "@/components/layout/item/modal/CouponList";
 
 interface NewRewardComponentProps {
   apiResponse: ApiResponse;
+  page: number;
+  page_size: number;
   selectedCouponItems: CouponsArgs[];
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   couponInputs: CouponsArgs[];
@@ -21,6 +23,8 @@ interface NewRewardComponentProps {
 
 const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   apiResponse,
+  page,
+  page_size,
   setSelectedCouponItems,
   selectedCouponItems,
   couponInputs,
@@ -101,6 +105,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
                             key={inputCoupon.coupon_code}
                             className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
                           >
+                            {inputCoupon.coupon_code} -{" "}
                             {inputCoupon.coupon_name}
                           </div>
                         )
@@ -150,7 +155,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
           )}
         </div>
       </div>
-      <NewCouponList
+      <CouponList
         apiResponse={apiResponse}
         setSelectedCouponItems={setSelectedCouponItems}
         setCouponInputs={setCouponInputs}
@@ -158,6 +163,8 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
         onClose={closeModal}
         isOpen={isModalOpen}
         setAddReward={setAddReward}
+        page={page}
+        page_size={page_size}
       />
       {disableInput === false && (
         <>

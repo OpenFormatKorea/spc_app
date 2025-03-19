@@ -206,7 +206,7 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
                             key={coupon.coupon_code}
                             className="mr-1 mt-1 rounded-md bg-blue-300 p-1 text-sm text-white"
                           >
-                            {coupon.coupon_name}
+                            {coupon.coupon_code} - {coupon.coupon_name}
                           </div>
                         ))
                       ) : (

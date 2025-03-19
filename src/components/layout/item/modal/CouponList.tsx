@@ -1,96 +1,62 @@
 import { ApiResponse } from "@/lib/types";
 import { useMemo, useState, useEffect, useRef, KeyboardEvent } from "react";
-import { CouponListArgs, CouponsArgs, RewardsArgs } from "@/lib/item/types";
+import { CouponListArgs, CouponsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
 import InputTextBox from "@/components/base/InputText";
 import { fetchSearchCoupon } from "@/lib/item/apis";
 import { GetServerSidePropsContext } from "next";
-import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
+import { theadStyle, tbodyStyle, labelClass } from "@/interfaces/tailwindCss";
+import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 
 interface CouponListProps {
-  apiResponse?: ApiResponse;
+  apiResponse: ApiResponse;
+  page: number;
+  page_size: number;
   couponInputs: CouponsArgs[];
   setCouponInputs: (value: CouponsArgs[]) => void;
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   isOpen: boolean;
-  onClose: () => void;
   setAddReward: (value: Boolean) => void;
-  rewards: RewardsArgs[];
+  onClose: () => void;
 }
 
 const CouponList: React.FC<CouponListProps> = (
   {
     apiResponse,
+    page,
+    page_size,
     couponInputs,
     setCouponInputs,
     setSelectedCouponItems,
     isOpen,
     onClose,
     setAddReward,
-    rewards,
   },
   context: GetServerSidePropsContext,
 ) => {
-  const [couponResponse, setCouponResponse] = useState<ApiResponse | undefined>(
-    apiResponse,
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
+
+  const [newResponse, setNewResponse] = useState<ApiResponse>(apiResponse);
+  console.log("newResponse", newResponse);
+  const [pageNum, setPageNum] = useState<number>(page);
+  const [searchOption, setSearchOption] = useState("name");
+
+  const [coupons, setCoupons] = useState<CouponListArgs[]>(
+    newResponse.data?.content || [],
   );
-  const coupons = useMemo(() => {
-    try {
-      if (Array.isArray(couponResponse?.data.data.content)) {
-        return couponResponse.data.data.content.filter(
-          (coupon: CouponListArgs) =>
-            !rewards.some(
-              (reward: RewardsArgs) =>
-                reward.coupon_code === coupon.cpnId.toString(),
-            ),
-        );
-      }
-      return [];
-    } catch (error) {
-      console.error("Error filtering coupons:", error);
-      return [];
-    }
-  }, [couponResponse, rewards]);
 
   const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchFilter, setSearchFilter] = useState("name");
   const [searchSort, setSearchSort] = useState("");
 
   useEffect(() => {
-    const matchedCoupons = coupons.filter((coupon: CouponListArgs) =>
-      rewards.some(
-        (reward: RewardsArgs) => reward.coupon_code === coupon.cpnId.toString(),
-      ),
-    );
-
-    const matchedCouponIds = matchedCoupons.map(
-      (coupon: CouponListArgs) => coupon.cpnId,
-    );
-
-    setSelectedItemList(matchedCouponIds);
-
-    const selectedCouponInputs = matchedCoupons.map(
-      (coupon: CouponListArgs) => ({
-        coupon_code: coupon.cpnId,
-        coupon_name: coupon.name,
-      }),
-    );
-
-    setCouponInputs(selectedCouponInputs);
-  }, [coupons, rewards, setCouponInputs]);
-
-  useEffect(() => {
-    setSelectAll(
-      selectedItemList.length === coupons.length && coupons.length > 0,
-    );
+    if (selectedItemList.length === coupons.length && coupons.length > 0) {
+      setSelectAll(true);
+    } else {
+      setSelectAll(false);
+    }
   }, [selectedItemList, coupons]);
-
-  useEffect(() => {
-    setSearchKeyword("");
-    setSearchSort("name");
-  }, [isOpen]);
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
@@ -99,6 +65,7 @@ const CouponList: React.FC<CouponListProps> = (
       const allProducts = coupons.map((coupon: CouponListArgs) => ({
         coupon_code: coupon.cpnId,
         coupon_name: coupon.name,
+        coupon_title: coupon.name,
       }));
       setCouponInputs(allProducts);
       setSelectedItemList(
@@ -108,6 +75,7 @@ const CouponList: React.FC<CouponListProps> = (
       setCouponInputs([]);
       setSelectedItemList([]);
     }
+    setSelectAll(isChecked);
   };
 
   const handleCheckboxChange =
@@ -138,7 +106,7 @@ const CouponList: React.FC<CouponListProps> = (
 
   const handleAction = async () => {
     if (couponInputs.length === 0) {
-      alert("선택된 쿠폰이 없습니다. 쿠폰을 선택해 주세요.");
+      alert("선택된 쿠폰이 없습니다. 쿠폰을 선택해 주세요. ");
       return;
     }
     if (confirm("해당 쿠폰을 선택 하시겠어요?")) {
@@ -148,58 +116,54 @@ const CouponList: React.FC<CouponListProps> = (
     }
   };
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      buttonRef.current?.click();
+  const { isBottom, scrollRef } = useScrollPosition(isOpen);
+  const [getNextPage, setGetNextPage] = useState(
+    !newResponse.data.last || false,
+  );
+
+  const fetchCoupons = async (reset = false) => {
+    if (!getNextPage && !reset) return;
+    setIsLoading(true);
+
+    try {
+      const currentPage = reset ? 1 : pageNum + (pageNum === 0 ? 2 : 1);
+      console.log("currentPage: ", currentPage);
+      const response = await fetchSearchCoupon(
+        currentPage,
+        page_size,
+        searchKeyword,
+        searchOption,
+        searchSort,
+        context,
+      );
+
+      if (response.data) {
+        setNewResponse(response);
+        setGetNextPage(!response.data.last);
+        setCoupons((prev) =>
+          reset ? response.data.content : [...prev, ...response.data.content],
+        );
+        setPageNum(currentPage);
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+  const fetchforSearch = () => fetchCoupons(true); // 검색
+  const fetchNextPage = () => fetchCoupons(); // 다음 무한 스크롤 페이지
 
-  const handleSearch = () => {
-    const searchResponse = fetchSearchCoupon(
-      searchKeyword,
-      searchFilter,
-      searchSort,
-      context,
-    );
-    searchResponse
-      .then((response) => {
-        setCouponResponse(response);
-      })
-      .catch((error) => {
-        console.error("검색 중 오류가 생겼습니다:", error);
-      });
-  };
-
-  const handleSort = async (event: React.MouseEvent<HTMLElement>) => {
-    const { id } = event.currentTarget;
-    id === "name_sort" ? setSearchSort("name") : setSearchSort("cpn_id");
-    const searchResponse = fetchSearchCoupon(
-      searchKeyword,
-      searchFilter,
-      searchSort,
-      context,
-    );
-    searchResponse
-      .then((response) => {
-        setCouponResponse(response);
-      })
-      .catch((error) => {
-        console.error("검색 중 오류가 생겼습니다:", error);
-      });
-  };
-  const labelClass = "text-xs pt-4 text-gray-500";
+  useEffect(() => {
+    if (isBottom) fetchNextPage();
+  }, [isBottom]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      {isOpen}
       <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="w-full pb-2 text-left text-xl font-bold">
-          현재 추가 가능한 쿠폰 선택
-        </h1>
+        <h1 className="w-full pb-2 text-left text-xl font-bold">쿠폰 선택</h1>
 
-        <div className="my-2 flex max-h-[550px] w-full max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
+        <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">
           <div className="flex w-full flex-col rounded-lg bg-white p-3">
             <h1 className="text-md w-full pb-2 text-left font-semibold text-gray-500">
               쿠폰을 선택해 주세요
@@ -208,10 +172,10 @@ const CouponList: React.FC<CouponListProps> = (
               <select
                 name="coupon"
                 id="coupon"
-                value={searchFilter}
-                onChange={(e) => setSearchFilter(e.target.value)}
+                value={searchOption}
+                onChange={(e) => setSearchOption(e.target.value)}
               >
-                <option value="cpn_id">아이디</option>
+                <option value="cpnId">아이디</option>
                 <option value="name">이름</option>
               </select>
               <InputTextBox
@@ -221,16 +185,23 @@ const CouponList: React.FC<CouponListProps> = (
                 placeholder="검색어를 입력해주세요"
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
-                onKeyDown={handleKeyDown}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    fetchforSearch();
+                  }
+                }}
               />
               <button
                 className="w-[60px] rounded-lg bg-blue-500 p-2 text-white"
-                onClick={handleSearch}
+                onClick={fetchforSearch}
               >
                 검색
               </button>
             </div>
-            <div className="block w-full py-3">
+            <div
+              ref={scrollRef}
+              className="block h-[400px] w-full overflow-y-scroll"
+            >
               <table className="table w-full border border-gray-100 text-center">
                 <thead>
                   <tr className="bg-gray-100">
@@ -246,14 +217,12 @@ const CouponList: React.FC<CouponListProps> = (
                     <th
                       className={`${theadStyle} ${searchSort === "name" ? "font-bold" : "font-normal"}`}
                       id="name_sort"
-                      onClick={handleSort}
                     >
                       쿠폰 ID
                     </th>
                     <th
                       className={`${theadStyle} ${searchSort === "cpn_id" ? "font-bold" : "font-normal"}`}
                       id="cpn_id_sort"
-                      onClick={handleSort}
                     >
                       쿠폰 명
                     </th>
@@ -271,7 +240,9 @@ const CouponList: React.FC<CouponListProps> = (
                           onChange={handleCheckboxChange(coupon.cpnId)}
                         />
                       </td>
-                      <td className={tbodyStyle}>{coupon.cpnId}</td>
+                      <td className={tbodyStyle}>
+                        {coupon.cpnId.toLocaleString()}
+                      </td>
                       <td className={tbodyStyle}>{coupon.name}</td>
                     </tr>
                   ))}
@@ -279,6 +250,12 @@ const CouponList: React.FC<CouponListProps> = (
                     <tr>
                       <td className={tbodyStyle} colSpan={6}>
                         현재 등록가능한 쿠폰이 없어요.
+                        <button
+                          className="w-[60px] rounded-lg bg-blue-500 p-2 text-white"
+                          onClick={fetchforSearch}
+                        >
+                          페이지 추가
+                        </button>
                       </td>
                     </tr>
                   )}
@@ -304,7 +281,7 @@ const CouponList: React.FC<CouponListProps> = (
                         key={coupon.cpnId}
                         className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
                       >
-                        {coupon.name}
+                        {coupon.cpnId} - {coupon.name}
                       </div>
                     )
                   );

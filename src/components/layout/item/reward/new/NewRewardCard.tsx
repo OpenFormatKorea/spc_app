@@ -60,7 +60,7 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
             <div className="text-base font-semibold">
               {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
               {reward.reward_type === "COUPON"
-                ? reward.coupon_code
+                ? `${reward.coupon_code} | ${reward.coupon_title} `
                 : `${reward.point_amount} 포인트`}
             </div>
           </h1>

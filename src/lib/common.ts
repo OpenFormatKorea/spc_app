@@ -1,7 +1,7 @@
 import { deleteCookies } from "@/lib/helper";
 import { getCookie } from "cookies-next";
 import router, { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import React, { KeyboardEvent } from "react";
 
 export const handleSignOut = async (event?: React.FormEvent) => {
   if (event) event.preventDefault();
@@ -16,6 +16,13 @@ export const handleSignOut = async (event?: React.FormEvent) => {
     router.push("/auth/login");
   }
 };
+
+// export const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+//   if (e.key === "Enter") {
+//     e.preventDefault();
+//     buttonRef.current?.click();
+//   }
+// };
 
 export const handleLogo = () => {
   router.push("/dashboard");
