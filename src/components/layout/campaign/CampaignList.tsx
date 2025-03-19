@@ -179,11 +179,16 @@ const CampaignList: React.FC<CampaignListProps> = (
                   />
                 </td>
                 <td className={tbodyStyle}>
-                  {new Date(campaign.created_at).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  {campaign.created_at
+                    ? new Date(campaign.created_at).toLocaleDateString(
+                        "ko-KR",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        },
+                      )
+                    : ""}
                 </td>
               </tr>
             ))}

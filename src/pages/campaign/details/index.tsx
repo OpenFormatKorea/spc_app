@@ -72,9 +72,7 @@ const DetailsCampaign = (
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
   const [active, setActive] = useState(cDetailApiResponse.active);
   const [shopId, setShopId] = useState(cDetailApiResponse.shop_id || "");
-  const [createdAt, setCreatedAt] = useState(
-    cDetailApiResponse.created_at || "",
-  );
+  const [createdAt, setCreatedAt] = useState(cDetailApiResponse.created_at);
   const [createdByUserName, setCreatedByUserName] = useState(
     cDetailApiResponse.created_by_username || "",
   );
