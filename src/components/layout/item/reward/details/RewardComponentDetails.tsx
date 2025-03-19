@@ -1,9 +1,7 @@
-import React, { useState, KeyboardEvent } from "react";
-import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
+import React from "react";
+import { RewardsArgs } from "@/lib/item/types";
 import { ApiResponse } from "@/lib/types";
-import RewardModalDetails from "@/components/layout/item/reward/details/RewardModalDetails";
 import RewardCurrentCardDetails from "@/components/layout/item/reward/details/RewardCurrentCardDetails";
-import CouponListDetails from "@/components/layout/item/modal/details/CouponListDetails";
 
 interface RewardComponentDetailsProps {
   apiResponse?: ApiResponse;
