@@ -257,3 +257,26 @@ export async function fetchPostCampaignRecords(
     console.error("error:", e);
   }
 }
+
+export async function fetchCampaignActiveButton(
+  campaign_id: string,
+  active: boolean,
+  context: GetServerSidePropsContext,
+) {
+  const apiUrl =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign-modify-active/` +
+    campaign_id;
+  const shop_id = getShopIdFromCookies(context);
+  let dataObj = {
+    shop_id,
+    active,
+  };
+
+  try {
+    const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
+    console.log("response", response);
+    return response;
+  } catch (e) {
+    console.error("error:", e);
+  }
+}

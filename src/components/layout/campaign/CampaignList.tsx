@@ -1,6 +1,9 @@
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
 import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
-import { fetchGetCampaignList } from "@/lib/campaign/apis";
+import {
+  fetchCampaignActiveButton,
+  fetchGetCampaignList,
+} from "@/lib/campaign/apis";
 import { CampaignArgs, CampaignListApiResponse } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { GetServerSidePropsContext } from "next";

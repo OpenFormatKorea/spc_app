@@ -1,4 +1,7 @@
-import { fetchModifyCampaign } from "@/lib/campaign/apis";
+import {
+  fetchCampaignActiveButton,
+  fetchModifyCampaign,
+} from "@/lib/campaign/apis";
 import { CampaignArgs } from "@/lib/campaign/types";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
@@ -27,20 +30,17 @@ const CampaignActiveButton: React.FC<CampaignActiveButtonProps> = (
     const newActiveStatus = !activeStatus;
 
     if (confirm("캠페인 활성화 상태를 변경하시겠어요?")) {
-      const updatedCampaign = { ...campaign, active: newActiveStatus };
-
-      const result = await fetchModifyCampaign(
-        campaign_id,
-        updatedCampaign,
-        context,
-      );
-      if (result.status === 200) {
+      try {
+        const result = await fetchCampaignActiveButton(
+          campaign_id,
+          newActiveStatus,
+          context,
+        );
         toggleCampaignActiveStatus(campaign_id, newActiveStatus);
         refreshPage();
-      } else {
-        alert(
-          `캠페인 활성화 상태를 변경 실패 하였습니다. 상태 코드: ${result.status}`,
-        );
+      } catch (e) {
+        alert(`캠페인 활성화 상태를 변경 실패 하였습니다. `);
+        console.error("error: ", e);
       }
     }
   };

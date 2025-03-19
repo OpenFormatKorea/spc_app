@@ -115,6 +115,23 @@ const ProductList: React.FC<ProductListProps> = (
     }
   };
 
+  // const handleNewCheckboxChange =
+  //   (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     const isChecked = e.target.checked;
+  //     console.log("productGid: ", productGid, " isChecked: ", isChecked);
+  //     console.log("selectedItemList: ", selectedItemList);
+  //     const isAlreadySelected =
+  //       Array.isArray(selectedProductItems) &&
+  //       selectedProductItems.some(
+  //         (item) => item.product_model_code === productGid,
+  //       );
+
+  //     const shouldAdd = isChecked && !isAlreadySelected;
+  //     console.log("isAlreadySelected: ", isAlreadySelected);
+
+  //     setSelectedItemList(isAlreadySelected);
+  //   };
+
   const handleCheckboxChange =
     (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = e.target.checked;
