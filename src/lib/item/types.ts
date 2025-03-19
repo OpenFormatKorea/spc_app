@@ -67,7 +67,7 @@ export interface RewardsArgs {
   id?: string;
   reward_type: RewardType;
   coupon_code?: string | undefined;
-  coupon_name?: string;
+  coupon_title?: string | undefined;
   point_amount?: string | undefined;
   referrer_conditions?: RewardPolicyArgs | null;
   referee_conditions?: RewardPolicyArgs | null;
@@ -120,11 +120,11 @@ export interface PBProductListArgs {
   empty: boolean;
 }
 
-export interface ProductListArgs {
-  gid: string;
-  name: string;
-  image: [{ posThumb: string | null }, { thumb: string | null }];
-}
+// export interface ProductListArgs {
+//   gid: string;
+//   name: string;
+//   image: [{ posThumb: string | null }, { thumb: string | null }];
+// }
 
 export interface PageableArgs {
   sort: PageNationSortArgs;

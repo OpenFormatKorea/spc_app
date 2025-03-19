@@ -71,6 +71,13 @@ const DetailsCampaign = (
   const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
   const [active, setActive] = useState(cDetailApiResponse.active);
+  const [shopId, setShopId] = useState(cDetailApiResponse.shop_id || "");
+  const [createdAt, setCreatedAt] = useState(
+    cDetailApiResponse.created_at || "",
+  );
+  const [createdByUserName, setCreatedByUserName] = useState(
+    cDetailApiResponse.created_by_username || "",
+  );
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => setIsModalOpen(false);
@@ -85,6 +92,9 @@ const DetailsCampaign = (
     start_date: start_date,
     end_date: end_date,
     active: active,
+    shop_id: shopId,
+    created_by_username: createdByUserName,
+    created_at: createdAt,
   };
 
   useEffect(() => {
