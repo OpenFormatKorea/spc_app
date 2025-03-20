@@ -261,6 +261,25 @@ const CampaignList: React.FC<CampaignListProps> = (
                       : ""}
                   </div>
                 </div>
+                <div className="flex pr-2 text-sm">
+                  <div className="w-[100px] font-semibold">등록 계정 ID:</div>
+                  {campaign.created_by_username}
+                </div>
+                <div className="flex pr-2 text-sm">
+                  <div className="w-[100px] font-semibold">캠페인 등록일:</div>
+                  <div>
+                    {campaign.created_at
+                      ? new Date(campaign.created_at).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )
+                      : ""}
+                  </div>
+                </div>
               </div>
             ))
           ) : (
