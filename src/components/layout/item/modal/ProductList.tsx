@@ -116,23 +116,6 @@ const ProductList: React.FC<ProductListProps> = (
     }
   };
 
-  // const handleNewCheckboxChange =
-  //   (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const isChecked = e.target.checked;
-  //     console.log("productGid: ", productGid, " isChecked: ", isChecked);
-  //     console.log("selectedItemList: ", selectedItemList);
-  //     const isAlreadySelected =
-  //       Array.isArray(selectedProductItems) &&
-  //       selectedProductItems.some(
-  //         (item) => item.product_model_code === productGid,
-  //       );
-
-  //     const shouldAdd = isChecked && !isAlreadySelected;
-  //     console.log("isAlreadySelected: ", isAlreadySelected);
-
-  //     setSelectedItemList(isAlreadySelected);
-  //   };
-
   const handleCheckboxChange =
     (productGid: string, productName: string) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -187,10 +170,9 @@ const ProductList: React.FC<ProductListProps> = (
         <h1 className="w-full pb-[5px] text-left text-[18px] font-bold">
           상품 선택
         </h1>
-
-        <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">
-          <div className="flex w-full flex-col rounded-lg bg-white p-[10px]">
-            <h1 className="w-full text-left text-[13px] font-semibold text-gray-500">
+        <div className="my-2 flex max-h-[550px] min-w-[350px] flex-col items-center lg:max-w-full">
+          <div className="flex w-[380px] flex-col rounded-lg bg-white p-[10px]">
+            <h1 className="w-full pb-[5px] text-left text-[13px] font-semibold text-gray-500">
               상품을 선택해 주세요
             </h1>
 
@@ -260,15 +242,17 @@ const ProductList: React.FC<ProductListProps> = (
                             )}
                           />
                         </td>
-                        <td className={tbodyStyle}>{product.gid}</td>
-                        <td className={tbodyStyle}>
+                        <td className={tbodyStyle + " w-[75px]"}>
+                          {product.gid}
+                        </td>
+                        <td className={tbodyStyle + " w-[85px]"}>
                           <div className="flex w-full items-center justify-center text-center">
                             <img
                               src={
                                 product.thumb ||
                                 "/images/kakao/kakaolink-no-logo-default.png"
                               }
-                              className="h-[50px] w-[50px] lg:h-[70px] lg:w-[70px]"
+                              className="h-[45px] w-[45px] lg:h-[60px] lg:w-[60px]"
                               alt="thumbnail"
                             />
                           </div>

@@ -162,14 +162,14 @@ const CouponList: React.FC<CouponListProps> = (
         <h1 className="w-full pb-[5px] text-left text-[18px] font-bold">
           쿠폰 선택
         </h1>
-
-        <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">
-          <div className="flex w-full flex-col rounded-lg bg-white p-[10px]">
+        <div className="my-2 flex max-h-[550px] min-w-[350px] flex-col items-center lg:max-w-full">
+          <div className="flex w-[380px] flex-col rounded-lg bg-white p-[10px]">
             <h1 className="w-full pb-[5px] text-left text-[13px] font-semibold text-gray-500">
               쿠폰을 선택해 주세요
             </h1>
-            <div className="items-bottom flex w-full justify-start gap-[10px] pb-[10px]">
+            <div className="flex w-full justify-start gap-[10px] pb-[10px]">
               <select
+                className="w-[100px] border-b border-b-gray-300 px-[10px] py-[5px] text-[14px] text-gray-600"
                 name="coupon"
                 id="coupon"
                 value={searchOption}
@@ -193,14 +193,14 @@ const CouponList: React.FC<CouponListProps> = (
               />
               <button
                 onClick={fetchforSearch}
-                className="w-[60px] rounded-lg bg-blue-500 px-2 py-1 text-center text-white hover:bg-blue-600"
+                className="w-[70px] rounded-lg bg-blue-500 px-2 py-1 text-center text-white hover:bg-blue-600"
               >
                 검색
               </button>
             </div>
             <div
               ref={scrollRef}
-              className="block h-[400px] w-full overflow-y-scroll"
+              className="block h-[400px] w-full overflow-y-scroll border border-gray-100"
             >
               <table className="table w-full border border-gray-100 text-center">
                 <thead>
@@ -243,7 +243,9 @@ const CouponList: React.FC<CouponListProps> = (
                       <td className={`${tbodyStyle} p-2`}>
                         {coupon.cpnId.toLocaleString()}
                       </td>
-                      <td className={`${tbodyStyle} p-2`}>{coupon.name}</td>
+                      <td className={`${tbodyStyle} max-w-[200px] p-2`}>
+                        {coupon.name}
+                      </td>
                     </tr>
                   ))}
                   {!coupons.length && (
@@ -269,10 +271,12 @@ const CouponList: React.FC<CouponListProps> = (
             </div>
           </div>
         </div>
-        <div className="flex h-fit w-[350px] flex-col lg:w-[450px]">
-          <div className="mb-2 flex w-full flex-col text-left">
-            <label className={labelClass}>선택된 쿠폰</label>
-            <div className="mt-2 flex h-[85px] w-[350px] flex-wrap justify-center overflow-y-auto break-words rounded-xl bg-white p-2 pb-3 text-[14px] lg:w-full">
+        <div className="flex h-fit w-[380px] flex-col items-center justify-center gap-[5px] lg:w-[450px]">
+          <div className="flex w-full flex-col items-center gap-[5px]">
+            <label className={labelClass + " flex w-full text-left"}>
+              선택된 쿠폰
+            </label>
+            <div className="flex h-[80px] w-full flex-wrap justify-start overflow-y-auto break-words rounded-lg bg-white p-[8px] text-[14px]">
               {couponInputs.length !== 0 ? (
                 couponInputs.map((inputCoupon) => {
                   const coupon = coupons.find(
@@ -283,7 +287,7 @@ const CouponList: React.FC<CouponListProps> = (
                     coupon && (
                       <div
                         key={coupon.cpnId}
-                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
+                        className="m-[2px] h-fit w-fit rounded-md bg-blue-300 p-[4px] text-[12px] text-white"
                       >
                         {coupon.cpnId} - {coupon.name}
                       </div>
