@@ -62,7 +62,7 @@ const Campaign: React.FC<{
           </div>
         </div>
         <div className="wrapper-container">
-          <div className="contents-container w-full justify-center gap-[10px]">
+          <div className="contents-container w-full justify-center gap-[8px]">
             <ContentsContainer variant="dashboard">
               <CampaignList
                 apiResponse={apiResponse}

@@ -88,7 +88,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           )}
         </div>
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pt-[5px] text-[12px] text-gray-500">
+          <label className="pt-[10px] text-[12px] text-gray-500">
             캠페인 명
           </label>
           <InputTextBox
@@ -103,7 +103,9 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         </div>
 
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pt-4 text-[12px] text-gray-500">캠페인 설명</label>
+          <label className="pt-[10px] text-[12px] text-gray-500">
+            캠페인 설명
+          </label>
           <InputTextBox
             type="text"
             id="description"
@@ -116,7 +118,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         </div>
 
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pb-[5px] pt-[5px] text-[12px] text-gray-500">
+          <label className="pt-[10px] text-[12px] text-gray-500">
             기간 종류
           </label>
           <div className="flex w-full justify-between md:w-[300px] lg:w-[300px]">
@@ -139,8 +141,10 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           </div>
         </div>
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pt-4 text-[12px] text-gray-500">캠페인 기간</label>
-          <div className="flex w-full flex-wrap items-center justify-center gap-2">
+          <label className="pt-[10px] text-[12px] text-gray-500">
+            캠페인 기간
+          </label>
+          <div className="flex w-full flex-wrap items-center justify-center gap-2 pt-[10px]">
             <DatePicker
               label="캠페인 시작일"
               value={campaignArgs.start_date}

@@ -239,7 +239,7 @@ const DetailsCampaign = (
             </div>
           </ContentsContainer>
         </div>
-        <div className="mt-[5px] flex items-center justify-end gap-x-2 gap-y-2">
+        <div className="flex items-center justify-end gap-[10px] p-[5px]">
           <button
             id="delete_campaign"
             className="w-full cursor-pointer rounded-lg border bg-red-500 p-2 text-white lg:w-fit"

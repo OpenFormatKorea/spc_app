@@ -142,7 +142,7 @@ const CampaignNew: React.FC<CampaignNewProps> = ({
           <label className="pt-[10px] text-[12px] text-gray-500">
             캠페인 기간
           </label>
-          <div className="flex w-full flex-wrap items-center justify-center gap-2">
+          <div className="flex w-full flex-wrap items-center justify-center gap-2 pt-[10px]">
             <DatePicker
               label="캠페인 시작일"
               value={campaignArgs.start_date}

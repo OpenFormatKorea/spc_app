@@ -209,12 +209,12 @@ const CampaignList: React.FC<CampaignListProps> = (
           </tbody>
         </table>
         {/* Mobile-friendly layout */}
-        <div className="block lg:hidden">
+        <div className="flex flex-col gap-[10px] lg:hidden">
           {campaigns.length > 0 ? (
             campaigns.map((campaign) => (
               <div
                 key={campaign.id}
-                className="mb-4 w-full cursor-pointer gap-[5px] rounded-xl bg-gray-100 p-4 text-gray-600"
+                className="w-full cursor-pointer gap-[5px] rounded-xl bg-gray-100 p-4 text-gray-600"
                 id={`${campaign.id}`}
                 onClick={handleCampaignClick}
               >
