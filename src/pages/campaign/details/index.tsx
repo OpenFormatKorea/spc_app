@@ -203,7 +203,6 @@ const DetailsCampaign = (
           <div className="subject-container flex w-full">
             <span className="text-2xl font-bold">캠페인 상세 정보</span>
           </div>
-
           <div className="button-container flex w-full justify-end">
             <button
               className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
@@ -214,7 +213,7 @@ const DetailsCampaign = (
             </button>
           </div>
         </div>
-        <div className="flex w-full flex-col md:flex-row md:space-x-4 lg:space-x-4">
+        <div className="flex w-full flex-col gap-[10px] md:flex-row">
           <ContentsContainer variant="campaign">
             <CampaignDetails
               page_type="DETAILS"

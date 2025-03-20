@@ -66,8 +66,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
 
   return (
     <>
-      <div className="mb-2 h-full pb-2">
-        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
+      <div className="mb-2 h-full pb-[5px]">
+        <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="flex w-full items-center gap-4">
             <div className="text-lg font-bold text-black">
               {page_type === "DETAILS"
@@ -114,7 +114,9 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
         </div>
 
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pb-2 pt-4 text-xs text-gray-500">기간 종류</label>
+          <label className="pb-[5px] pt-[5px] text-xs text-gray-500">
+            기간 종류
+          </label>
           <div className="flex w-full justify-between md:w-[300px] lg:w-[300px]">
             <InputRadioBox
               label="기간 제한"
@@ -158,7 +160,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
 
         {page_type === "NEW" && (
           <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-            <label className="pb-2 pt-4 text-xs text-gray-500">
+            <label className="pb-[5px] pt-4 text-xs text-gray-500">
               캠페인 활성화
             </label>
             <div className="flex w-[250px] justify-between lg:w-[300px]">
@@ -179,7 +181,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
                 disabled={true}
               />
             </div>
-            <label className="pb-2 pt-4 text-xs text-gray-400">
+            <label className="pt-[5px] text-xs text-gray-400">
               - 캠페인 생성 시에는 기본값이 비활성화로 지정됩니다.
             </label>
           </div>

@@ -319,7 +319,7 @@ const DetailsItem = (
             <span className="text-2xl font-bold">아이템 상세</span>
           </div>
         </div>
-        <div className="flex w-full flex-col justify-center lg:flex-row lg:space-x-4">
+        <div className="flex w-full flex-col justify-center gap-[10px] lg:flex-row">
           <ContentsContainer variant="campaign">
             <ItemDetails
               page_type="DETAILS"
@@ -354,7 +354,6 @@ const DetailsItem = (
               handleKeyDown={handleKeyDown}
               disableInput={false}
             />
-
             <RewardComponentDetails
               apiResponse={couponResponse}
               disableInput={false}

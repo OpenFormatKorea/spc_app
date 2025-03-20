@@ -93,8 +93,8 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
 
   return (
     <>
-      <div className="mb-2 w-full pb-2">
-        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
+      <div className="flex w-full pb-[5px]">
+        <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="w-[80%]">
             <div className="text-lg font-bold">유저 검색</div>
             <div className="text-sm font-normal text-gray-500">

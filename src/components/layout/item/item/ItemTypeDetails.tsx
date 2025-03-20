@@ -1,6 +1,10 @@
 import InputRadioBox from "@/components/base/InputRadio";
 import ItemTypeComponent from "@/components/layout/item/item/ItemTypeComponent";
 import {
+  inputFormClass,
+  radioButtonLabelClass,
+} from "@/interfaces/tailwindCss";
+import {
   ItemArgs,
   ProductsArgs,
   ItemType,
@@ -37,8 +41,6 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   handleKeyDown,
   openModal,
 }) => {
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
-  const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
   const handleItemTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -52,11 +54,11 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   }, [page_type]);
   return (
     <>
-      <h1 className="border-b-[1px] pb-2 text-xl font-bold">아이템 옵션</h1>
+      <h1 className="border-b-[1px] pb-[5px] text-xl font-bold">아이템 옵션</h1>
       <div className={inputFormClass}>
         <label className={radioButtonLabelClass}>아이템 종류</label>
-        <div className="flex h-[42px] w-full items-center">
-          <div className="flex w-full space-x-20 text-left lg:max-w-[458px]">
+        <div className="flex h-[42px] w-full items-center justify-between">
+          <div className="flex w-full gap-[10px] text-left">
             <InputRadioBox
               label="상품"
               name="item_type"

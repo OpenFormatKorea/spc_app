@@ -73,8 +73,8 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
   }, [hourlysignUpApiResponse]);
   return (
     <div style={{ maxHeight: "70vh" }}>
-      <div className="mb-2 w-full pb-2">
-        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
+      <div className="flex w-full pb-[5px]">
+        <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="w-[80%]">
             <div className="text-xl">캠페인 상세 리포트</div>
             <div className="text-sm font-normal text-gray-500">

@@ -352,7 +352,7 @@ const NewItem = (
             <span className="text-2xl font-bold">아이템 추가</span>
           </div>
         </div>
-        <div className="flex w-full flex-col justify-center lg:flex-row lg:space-x-4">
+        <div className="flex w-full flex-col justify-center gap-[10px] overflow-y-auto lg:flex-row">
           <ContentsContainer variant="campaign">
             <ItemDetails
               page_type="NEW"
@@ -406,7 +406,7 @@ const NewItem = (
           </ContentsContainer>
         </div>
         <div className="button-container flex w-full justify-between pt-[5px] lg:justify-end">
-          <div className="flex w-full space-x-2 lg:w-fit">
+          <div className="flex w-full gap-[10px] lg:w-fit">
             <button
               className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white lg:w-fit"
               onClick={handleSubmit}

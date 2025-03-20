@@ -73,7 +73,7 @@
 //   return (
 //     <BigModal isOpen={isOpen} onClose={onClose}>
 //       <div className="flex flex-col items-center justify-center text-center">
-//         <h1 className="w-full pb-2 text-left text-xl font-bold">
+//         <h1 className="w-full pb-[5px] text-left text-xl font-bold">
 //           리워드 지급내역
 //         </h1>
 //         <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">

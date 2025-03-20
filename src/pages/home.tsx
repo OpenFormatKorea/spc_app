@@ -22,7 +22,7 @@ const HomePage = () => {
             className="w-[180px]"
           />
         </div>
-        <div className="my-10 flex w-[50%] items-center justify-center space-x-6">
+        <div className="my-10 flex w-[50%] items-center justify-center gap-[20px]">
           <button
             id="auth/login"
             className={buttonClass}

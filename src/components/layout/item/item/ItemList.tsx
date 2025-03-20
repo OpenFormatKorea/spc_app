@@ -110,7 +110,7 @@ const ItemList: React.FC<ItemListProps> = (
   return (
     <>
       <div className="flex w-full">
-        <h1 className="mb-2 flex w-full items-center justify-between border-b pb-2 text-base font-bold">
+        <h1 className="mb-2 flex w-full items-center justify-between border-b pb-[5px] text-base font-bold">
           <div>
             <div className="text-xl">아이템</div>
             <div className="text-sm font-normal text-gray-500">
@@ -220,15 +220,15 @@ const ItemList: React.FC<ItemListProps> = (
           </table>
         </div>
         {/* Mobile-friendly layout */}
-        <div className="mt-2 block h-fit w-full p-[4px] lg:hidden">
+        <div className="flex h-fit w-full flex-col gap-[10px] p-[4px] lg:hidden">
           {items.map((item) => (
             <div
               key={item.id}
-              className="mb-4 w-full cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
+              className="flex w-full cursor-pointer flex-col gap-[4px] rounded-xl bg-gray-100 p-4 text-gray-600"
               onClick={() => handleItemClick(item.id)}
             >
               <div
-                className="mb-2 flex w-full justify-between border-b pb-1 font-bold text-black"
+                className="flex w-full justify-between border-b font-bold text-black"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="w-full">{item.title}</div>
@@ -288,7 +288,7 @@ const ItemList: React.FC<ItemListProps> = (
             </div>
           ))}
           {!items.length && (
-            <div className="p-3 text-center text-sm text-gray-500">
+            <div className="p-[5px] text-center text-sm text-gray-500">
               현재 사용중인 아이템이 없어요
               <br />
               새로운 아이템을 등록해 주세요.

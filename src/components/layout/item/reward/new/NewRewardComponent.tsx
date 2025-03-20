@@ -5,6 +5,11 @@ import { ApiResponse } from "@/lib/types";
 import InputNumberTextBox from "@/components/base/InputNumberText";
 import NewRewardModal from "@/components/layout/item/reward/new/NewRewardModal";
 import CouponList from "@/components/layout/item/modal/CouponList";
+import {
+  inputFormClass,
+  labelClass,
+  radioButtonLabelClass,
+} from "@/interfaces/tailwindCss";
 
 interface NewRewardComponentProps {
   apiResponse: ApiResponse;
@@ -35,9 +40,6 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   disableInput,
   handleKeyDown,
 }) => {
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
-  const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
-  const labelClass = "text-xs pt-4 text-gray-500";
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
@@ -55,11 +57,11 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
 
   return (
     <>
-      <h1 className="border-b-[1px] pb-2 text-xl font-bold">리워드</h1>
+      <h1 className="border-b-[1px] pb-[5px] text-xl font-bold">리워드</h1>
       <div className={inputFormClass}>
         <label className={radioButtonLabelClass}>리워드 종류</label>
-        <div className="flex h-[42px] w-full items-center">
-          <div className="flex w-full space-x-20 text-left lg:max-w-[458px]">
+        <div className="flex h-[42px] w-full items-center justify-between">
+          <div className="flex w-full gap-[10px] text-left">
             <InputRadioBox
               label="쿠폰"
               name="reward_type"

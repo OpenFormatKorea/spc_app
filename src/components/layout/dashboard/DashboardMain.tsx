@@ -13,8 +13,8 @@ const DashboardMain: React.FC<MainProps> = ({ children }) => {
     // </div>
 
     <div className="flex min-h-[calc(100vh-60px)] flex-col pt-[60px] lg:pl-[245px] lg:pt-[15px]">
-      <div className="absolute flex w-full flex-grow justify-center overflow-hidden lg:justify-start lg:px-[15px]">
-        <div className="dashboard-main-box mx-4 h-full w-full overflow-y-auto rounded-xl bg-gray-100 p-3 lg:fixed lg:mx-0 lg:h-[calc(100%-60px)] lg:w-[calc(100%-280px)] lg:overflow-hidden">
+      <div className="absolute flex w-full min-w-[350px] flex-grow justify-center overflow-hidden px-[10px] lg:justify-start lg:px-[15px]">
+        <div className="dashboard-main-box h-[calc(100%-250px)] w-full overflow-y-auto rounded-xl bg-gray-100 p-3 lg:fixed lg:mx-0 lg:h-[calc(100%-60px)] lg:w-[calc(100%-280px)] lg:overflow-hidden">
           {children}
         </div>
       </div>

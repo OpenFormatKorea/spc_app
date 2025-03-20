@@ -6,12 +6,12 @@ import {
   ItemConditions,
 } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
+import { inputFormClass, labelClass } from "@/interfaces/tailwindCss";
 
 interface ReferralConditionDetailsProps {
   trigger: string;
   target: string;
-  inputFormClass: string;
-  labelClass: string;
+
   rewardType: RewardType;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   itemConditions: ItemConditions;
@@ -23,8 +23,7 @@ interface ReferralConditionDetailsProps {
 const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
   trigger,
   target,
-  inputFormClass,
-  labelClass,
+
   rewardType,
   handleKeyDown,
   itemConditions,
@@ -79,7 +78,7 @@ const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
 
   return (
     <div className="w-full rounded-xl bg-white p-3 shadow-sm">
-      <div className="mb-1 flex items-center border-b-[1px] pb-2">
+      <div className="mb-1 flex items-center border-b-[1px] pb-[5px]">
         <label className="text-md flex w-full text-left font-bold text-gray-600">
           {target === "referrer" ? "추천인" : "피추천인"}
         </label>

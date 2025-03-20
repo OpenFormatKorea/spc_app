@@ -1,9 +1,6 @@
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
 import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
-import {
-  fetchCampaignActiveButton,
-  fetchGetCampaignList,
-} from "@/lib/campaign/apis";
+import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import { CampaignArgs, CampaignListApiResponse } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { GetServerSidePropsContext } from "next";
@@ -93,8 +90,8 @@ const CampaignList: React.FC<CampaignListProps> = (
 
   return (
     <>
-      <div className="mb-2 w-full pb-2">
-        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
+      <div className="flex w-full pb-[5px]">
+        <div className="flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="w-[80%]">
             <div className="text-lg font-bold">캠페인</div>
             <div className="text-sm font-normal text-gray-500">
@@ -217,7 +214,7 @@ const CampaignList: React.FC<CampaignListProps> = (
             campaigns.map((campaign) => (
               <div
                 key={campaign.id}
-                className="mb-4 w-full cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
+                className="mb-4 w-full cursor-pointer gap-[5px] rounded-xl bg-gray-100 p-4 text-gray-600"
                 id={`${campaign.id}`}
                 onClick={handleCampaignClick}
               >

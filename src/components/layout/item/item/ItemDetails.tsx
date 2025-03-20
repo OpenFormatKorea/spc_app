@@ -93,7 +93,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   return (
     <>
       <div className="contents-container w-full items-center justify-center">
-        <h1 className="flex items-center justify-between border-b-[1px] pb-2 text-xl font-bold">
+        <h1 className="flex items-center justify-between border-b-[1px] pb-[5px] text-xl font-bold">
           <div>아이템 옵션</div>
           {page_type === "DETAILS" && (
             <div>

@@ -116,7 +116,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
             </div>
           </div>
           {/* Campaign Submenus with Bold Active State */}
-          <div className="flex w-full px-10 pb-2 text-sm text-white">
+          <div className="flex w-full px-10 pb-[5px] text-sm text-white">
             <a
               href="/campaign"
               className={`w-full text-sm ${router.pathname === "/campaign" ? "font-bold" : ""}`}
@@ -124,7 +124,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
               - 캠페인 리스트
             </a>
           </div>
-          <div className="flex w-full px-10 pb-2 text-sm text-white">
+          <div className="flex w-full px-10 pb-[5px] text-sm text-white">
             <a
               href="/campaign/new"
               className={`w-full text-sm ${router.pathname === "/campaign/new" ? "font-bold" : ""}`}
@@ -132,7 +132,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
               - 캠페인 생성
             </a>
           </div>
-          {/* <div className="flex w-full px-10 pb-2 text-sm text-white">
+          {/* <div className="flex w-full px-10 pb-[5px] text-sm text-white">
             <a
               href="/campaign/stats"
               className={`w-full text-sm ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
@@ -140,7 +140,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
               - 캠페인 지표
             </a>
           </div> */}
-          <div className="flex w-full px-10 pb-2 text-sm text-white">
+          <div className="flex w-full px-10 pb-[5px] text-sm text-white">
             <a
               href="/campaign/report"
               className={`w-full text-sm ${router.pathname === "/campaign/report" ? "font-bold" : ""}`}
@@ -148,7 +148,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
               - 캠페인 상세 리포트
             </a>
           </div>
-          <div className="flex w-full px-10 pb-2 text-sm text-white">
+          <div className="flex w-full px-10 pb-[5px] text-sm text-white">
             <a
               href="/campaign/rewards"
               className={`w-full text-sm ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}

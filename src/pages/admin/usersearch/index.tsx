@@ -120,24 +120,19 @@ const UserSearch = (
             <span className="text-2xl font-bold">유저 검색</span>
           </div>
         </div>
-        <div className="wrapper-container">
-          <div className="contents-container w-full justify-center sm:space-y-4 lg:space-x-4">
-            <ContentsContainer variant="dashboard">
-              <UserSearchComponent
-                handleSearch={handleSearch}
-                handleUserDetail={handleUserDetail}
-                apiResponse={newApiResponse}
-                userId={userId}
-                setUserId={setUserId}
-                pageNum={pageNum}
-                setPageNum={setPageNum}
-                pageSize={pageSize}
-                fetchUserSearch={fetchUserSearch}
-              />
-              <div className="mt-4 flex gap-2"></div>
-            </ContentsContainer>
-          </div>
-        </div>
+        <ContentsContainer variant="dashboard">
+          <UserSearchComponent
+            handleSearch={handleSearch}
+            handleUserDetail={handleUserDetail}
+            apiResponse={newApiResponse}
+            userId={userId}
+            setUserId={setUserId}
+            pageNum={pageNum}
+            setPageNum={setPageNum}
+            pageSize={pageSize}
+            fetchUserSearch={fetchUserSearch}
+          />
+        </ContentsContainer>
       </DashboardContainer>
       <UserDetailsModal
         apiResponse={userDetailsResponse}

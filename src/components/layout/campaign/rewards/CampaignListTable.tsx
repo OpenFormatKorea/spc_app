@@ -86,7 +86,7 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
               <LoadingSpinner />
             </div>
           )}
-          <div
+          {/* <div
             key={35}
             className="text-gray-60e0 mb-[4px] w-full cursor-pointer gap-[5px] border bg-white p-4"
             id={`${35}`}
@@ -103,7 +103,7 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
                 <div>종료일: 2025년 2월 12일</div>
               </div>
             </div>
-          </div>
+          </div> */}
           {campaigns.length > 0 ? (
             campaigns.map((campaign) => (
               <div

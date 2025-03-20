@@ -62,7 +62,7 @@ const Campaign: React.FC<{
           </div>
         </div>
         <div className="wrapper-container">
-          <div className="contents-container w-full justify-center sm:space-y-4 lg:space-x-4">
+          <div className="contents-container w-full justify-center gap-[10px]">
             <ContentsContainer variant="dashboard">
               <CampaignList
                 apiResponse={apiResponse}
@@ -78,7 +78,7 @@ const Campaign: React.FC<{
                   onClick={handleButton}
                   id="new_campaign"
                 >
-                  <div className="flex items-center pr-2">
+                  <div className="flex items-center">
                     <AddIcon fontSize="small" />
                   </div>
                   새 캠페인

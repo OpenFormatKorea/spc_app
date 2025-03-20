@@ -1,4 +1,5 @@
 import InputTextBox from "@/components/base/InputText";
+import { inputFormClass } from "@/interfaces/tailwindCss";
 import { ItemArgs, ItemType, ProductsArgs } from "@/lib/item/types";
 import { useEffect, useState } from "react";
 
@@ -19,7 +20,6 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   setDescription,
   handleKeyDown,
 }) => {
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
   const labelClass = "text-xs pt-4 text-gray-500";
   const [disableInput, setDisableInput] = useState(page_type === "DETAILS");
 

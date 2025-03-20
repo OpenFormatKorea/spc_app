@@ -37,7 +37,7 @@ const DetailsMyPage = (data: UserInfoProps) => {
           </button>
         </div>
       </div>
-      <div className="flex w-full flex-col items-center justify-center sm:flex-row md:flex-row md:space-x-4 lg:space-x-4">
+      <div className="flex w-full flex-col items-center justify-center gap-[10px] sm:flex-row md:flex-row">
         <ContentsContainer variant="dashboard">
           <MyPageDetails
             username={userInfo.username}

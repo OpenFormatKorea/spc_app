@@ -66,7 +66,6 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
     useState<RewardPolicyArgs>(defaultPolicy);
 
   // Class name constants
-  const inputFormClass = "flex flex-col text-left w-full pb-2";
   const labelClass = "text-xs pt-2 text-gray-500";
 
   // Helper function to generate policy
@@ -168,7 +167,7 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center p-4 text-center">
-        <h1 className="w-full pb-2 text-left text-xl font-bold">
+        <h1 className="w-full pb-[5px] text-left text-xl font-bold">
           {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가 설정
         </h1>
 
@@ -223,8 +222,6 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
             </div>
 
             <RewardPolicySettingDetails
-              inputformClass={inputFormClass}
-              labelClass={labelClass}
               reward_type={reward_type}
               handleKeyDown={handleKeyDown}
               setReferrerState={setReferrerState}

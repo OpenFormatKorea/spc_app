@@ -10,6 +10,7 @@ import {
 import Modal from "@/components/layout/base/Modal";
 import NewRewardPolicySetting from "@/components/layout/item/reward/new/NewRewardPolicySetting";
 import InputNumberTextBox from "@/components/base/InputNumberText";
+import { labelClass } from "@/interfaces/tailwindCss";
 
 interface NewRewardModalProps {
   reward_type: RewardType;
@@ -59,8 +60,6 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
   const [refereeState, setRefereeState] =
     useState<RewardPolicyArgs>(defaultPolicy);
 
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
-  const labelClass = "text-xs pt-2 text-gray-500";
   const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => {
     return {
       SIGNUP: {
@@ -159,14 +158,14 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <div className="flex flex-col items-center justify-center text-center">
-          <h1 className="w-full pb-2 text-left text-xl font-bold">
+          <h1 className="w-full pb-[5px] text-left text-xl font-bold">
             {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가 설정
           </h1>
 
-          <div className="my-2 flex max-h-[550px] flex-col items-center overflow-y-scroll">
+          <div className="flex max-h-[550px] flex-col items-center overflow-y-scroll">
             <div className="flex w-full flex-col rounded-lg bg-white p-3">
-              <div className="mb-4 flex w-full flex-col items-center justify-center rounded-xl">
-                <div className="mb-2 flex w-full flex-col text-left">
+              <div className="flex w-full flex-col items-center justify-center rounded-xl">
+                <div className="flex w-full flex-col text-left">
                   <label className="font-gray-300 mb-2 text-sm font-semibold">
                     {reward_type === RewardType.CO
                       ? "쿠폰 코드"
@@ -236,8 +235,6 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
                 </div>
               </div>
               <NewRewardPolicySetting
-                inputformClass={inputFormClass}
-                labelClass={labelClass}
                 reward_type={reward_type}
                 handleKeyDown={handleKeyDown}
                 setReferrerState={setReferrerState}

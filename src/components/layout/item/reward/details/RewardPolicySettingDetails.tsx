@@ -9,8 +9,6 @@ import {
 import RewardPolicyDetails from "@/components/layout/item/reward/details/RewardPolicyDetails";
 
 interface RewardPolicySettingDetailsProps {
-  inputformClass: string;
-  labelClass: string;
   reward_type: RewardType;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   setReferrerState: React.Dispatch<React.SetStateAction<RewardPolicyArgs>>;
@@ -18,8 +16,6 @@ interface RewardPolicySettingDetailsProps {
 }
 
 const RewardPolicySettingDetails: React.FC<RewardPolicySettingDetailsProps> = ({
-  inputformClass,
-  labelClass,
   reward_type,
   handleKeyDown,
   setReferrerState,
@@ -77,8 +73,6 @@ const RewardPolicySettingDetails: React.FC<RewardPolicySettingDetailsProps> = ({
         <RewardPolicyDetails
           defaultConditions={defaultConditions}
           trigger="SIGNUP"
-          inputformClass={inputformClass}
-          labelClass={labelClass}
           rewardType={reward_type}
           handleKeyDown={handleKeyDown}
           usePolicy={useSignUpPolicy}
@@ -97,8 +91,6 @@ const RewardPolicySettingDetails: React.FC<RewardPolicySettingDetailsProps> = ({
         <RewardPolicyDetails
           defaultConditions={defaultConditions}
           trigger="PURCHASE"
-          inputformClass={inputformClass}
-          labelClass={labelClass}
           rewardType={reward_type}
           handleKeyDown={handleKeyDown}
           usePolicy={usePurchasePolicy}

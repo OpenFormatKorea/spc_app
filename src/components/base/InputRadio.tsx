@@ -15,7 +15,7 @@ const InputRadioBox: React.FC<InputRadioBoxProps> = ({
   checked,
   onChange,
 }) => (
-  <div className="mr-5 flex cursor-pointer items-center justify-center space-x-2 text-gray-500">
+  <div className="mr-5 flex cursor-pointer items-center justify-center gap-[10px] text-gray-500">
     <input
       type="radio"
       name={name}
