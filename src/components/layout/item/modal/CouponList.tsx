@@ -230,8 +230,7 @@ const CouponList: React.FC<CouponListProps> = (
                 </thead>
                 <tbody>
                   {coupons.map((coupon: CouponListArgs) => (
-                    <tr key={coupon.cpnId}>
-                      <td className={`${tbodyStyle} px-2`}>
+                      <td className={`${tbodyStyle} p-2`}>
                         <input
                           type="checkbox"
                           id={`item_${coupon.cpnId}`}
@@ -240,10 +239,10 @@ const CouponList: React.FC<CouponListProps> = (
                           onChange={handleCheckboxChange(coupon.cpnId)}
                         />
                       </td>
-                      <td className={tbodyStyle}>
+                      <td className={`${tbodyStyle} p-2`}>
                         {coupon.cpnId.toLocaleString()}
                       </td>
-                      <td className={tbodyStyle}>{coupon.name}</td>
+                      <td className={`${tbodyStyle} p-2`}>{coupon.name}</td>
                     </tr>
                   ))}
                   {!coupons.length && (
