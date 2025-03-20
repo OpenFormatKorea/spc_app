@@ -7,6 +7,7 @@ import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { fetchGetProductCodeList } from "@/lib/item/apis";
 import { GetServerSidePropsContext } from "next";
 import { CircularProgress } from "@mui/material";
+import InputTextBox from "@/components/base/InputText";
 
 interface ProductListProps {
   apiResponse: PBApiResponse;
@@ -196,9 +197,11 @@ const ProductList: React.FC<ProductListProps> = (
                 <option value={searchType.G}>상품코드</option>
                 <option value={searchType.N}>상품명</option>
               </select>
-              <input
-                className="w-[50%] border-b border-b-gray-300 px-[10px] py-[5px] text-[14px]"
-                placeholder="코드 또는 상품명을 검색해주세요"
+              <InputTextBox
+                disabled={false}
+                type="text"
+                id="coupon_id"
+                placeholder="검색어를 입력해주세요"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={(e) => {
@@ -207,9 +210,10 @@ const ProductList: React.FC<ProductListProps> = (
                   }
                 }}
               />
+
               <button
                 onClick={fetchforSearch}
-                className="rounded-lg bg-blue-500 px-2 py-1 text-center text-white hover:bg-blue-600"
+                className="w-[60px] rounded-lg bg-blue-500 px-2 py-1 text-center text-white hover:bg-blue-600"
               >
                 검색
               </button>

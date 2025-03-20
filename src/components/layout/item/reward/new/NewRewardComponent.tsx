@@ -41,7 +41,6 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
-  const [addReward, setAddReward] = useState<Boolean>(false);
 
   const handleRewardTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -162,7 +161,6 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
         couponInputs={couponInputs}
         onClose={closeModal}
         isOpen={isModalOpen}
-        setAddReward={setAddReward}
         page={page}
         page_size={page_size}
       />

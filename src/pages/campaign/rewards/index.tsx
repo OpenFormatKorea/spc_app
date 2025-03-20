@@ -1,7 +1,7 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 
