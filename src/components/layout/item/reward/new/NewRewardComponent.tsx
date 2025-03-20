@@ -97,7 +97,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
             <div className="flex h-fit w-full flex-col">
               <div className="mb-2 flex w-full flex-col text-left">
                 <label className={labelClass}>선택된 쿠폰</label>
-                <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-[14px]">
+                <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-lg bg-gray-100 p-2 pb-3 text-[14px]">
                   {selectedCouponItems.length !== 0 ? (
                     couponInputs.map((inputCoupon) => {
                       return (

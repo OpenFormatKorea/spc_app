@@ -79,7 +79,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
     };
 
   return (
-    <div className="flex flex-col gap-[10px] rounded-xl border border-gray-100 bg-gray-100 p-[10px]">
+    <div className="flex flex-col gap-[10px] rounded-lg border border-gray-100 bg-gray-100 p-[10px]">
       <div className="flex items-center justify-between">
         <span className="text-[16px] font-bold text-gray-600">
           현재 세팅 된 리워드
@@ -87,7 +87,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
       </div>
       {rewards.map((reward, index) => (
         <div
-          className="flex flex-col gap-[10px] rounded-xl bg-gray-200 p-[8px] text-[14px]"
+          className="flex flex-col gap-[10px] rounded-lg bg-gray-200 p-[8px] text-[14px]"
           key={reward.id}
           id={`rewards_${reward.id}`}
         >
