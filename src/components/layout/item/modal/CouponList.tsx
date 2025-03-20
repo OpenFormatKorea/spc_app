@@ -230,7 +230,8 @@ const CouponList: React.FC<CouponListProps> = (
                 </thead>
                 <tbody>
                   {coupons.map((coupon: CouponListArgs) => (
-                      <td className={`${tbodyStyle} p-2`}>
+                    <tr>
+                      <td className={tbodyStyle}>
                         <input
                           type="checkbox"
                           id={`item_${coupon.cpnId}`}
