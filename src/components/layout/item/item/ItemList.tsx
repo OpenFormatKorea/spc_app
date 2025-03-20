@@ -164,7 +164,7 @@ const ItemList: React.FC<ItemListProps> = (
                   </td>
                   <td className={tbodyStyle}>{item.title}</td>
                   <td className={tbodyStyle}>
-                    <div className="flex w-full justify-center">
+                    <div className="flex w-full justify-center p-[4px]">
                       <div
                         className={`w-fit rounded-md px-2 py-1 text-[14px] font-semibold ${
                           item.item_type === "PRODUCT"
