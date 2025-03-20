@@ -319,7 +319,7 @@ const ItemList: React.FC<ItemListProps> = (
         </div>
         <div
           id="create_item"
-          className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-blue-500 p-2 lg:w-fit"
+          className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-blue-500 p-2 text-[14px] lg:w-fit"
           onClick={handleButton}
         >
           <AddIcon fontSize="small" />

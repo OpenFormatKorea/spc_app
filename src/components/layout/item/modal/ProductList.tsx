@@ -134,7 +134,8 @@ const ProductList: React.FC<ProductListProps> = (
   //   };
 
   const handleCheckboxChange =
-    (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    (productGid: string, productName: string) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = e.target.checked;
 
       setSelectedItemList((prevSelected) => {
@@ -151,6 +152,7 @@ const ProductList: React.FC<ProductListProps> = (
         const updatedSelectedItems = shouldAdd
           ? [...prevSelected, productGid] // Add only the GID
           : prevSelected.filter((gid) => gid !== productGid);
+        console.log("updatedSelectedItems", updatedSelectedItems);
 
         const updatedProducts: ProductsArgs[] = products
           .filter((product) => updatedSelectedItems.includes(product.gid))
@@ -162,6 +164,8 @@ const ProductList: React.FC<ProductListProps> = (
               { thumb: product.thumb || "" },
             ],
           }));
+
+        console.log("updatedProducts", updatedProducts);
 
         setProductInputs(updatedProducts);
         setSelectAll(updatedSelectedItems.length === products.length);
@@ -186,7 +190,7 @@ const ProductList: React.FC<ProductListProps> = (
 
         <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">
           <div className="flex w-full flex-col rounded-lg bg-white p-[10px]">
-            <h1 className="w-full pb-[5px] text-left text-[13px] font-semibold text-gray-500">
+            <h1 className="w-full text-left text-[13px] font-semibold text-gray-500">
               상품을 선택해 주세요
             </h1>
 
@@ -215,7 +219,7 @@ const ProductList: React.FC<ProductListProps> = (
 
               <button
                 onClick={fetchforSearch}
-                className="w-[60px] rounded-lg bg-blue-500 px-2 py-1 text-center text-white hover:bg-blue-600"
+                className="w-[70px] rounded-lg bg-blue-500 px-2 py-1 text-center text-white hover:bg-blue-600"
               >
                 검색
               </button>
@@ -250,7 +254,10 @@ const ProductList: React.FC<ProductListProps> = (
                             type="checkbox"
                             id={`item_${product.gid}`}
                             checked={selectedItemList.includes(product.gid)}
-                            onChange={handleCheckboxChange(product.gid)}
+                            onChange={handleCheckboxChange(
+                              product.gid,
+                              product.name,
+                            )}
                           />
                         </td>
                         <td className={tbodyStyle}>{product.gid}</td>

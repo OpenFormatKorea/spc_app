@@ -263,7 +263,7 @@ const NewItem = (
       infoCheck() &&
       confirm("아이템을 추가하시겠습니까?")
     ) {
-      if (loading == false) {
+      if (loading === false) {
         setLoading(true);
         try {
           let updatedImage = image;

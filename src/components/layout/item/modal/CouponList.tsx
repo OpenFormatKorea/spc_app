@@ -137,6 +137,7 @@ const CouponList: React.FC<CouponListProps> = (
           .map((coupon: CouponListArgs) => ({
             coupon_code: coupon.cpnId,
             coupon_name: coupon.name,
+            coupon_title: coupon.name,
           }));
         setCouponInputs(updatedCoupons);
         setSelectAll(updatedSelectedItems.length === coupons.length);

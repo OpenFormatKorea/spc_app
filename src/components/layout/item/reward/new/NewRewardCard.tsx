@@ -15,6 +15,7 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
   rewards,
   setRewards,
 }) => {
+  console.log("rewardsrewards", rewards);
   const triggerTypes = ["SIGNUP", "PURCHASE"] as const;
   const conditionTypes = ["referrer_conditions", "referee_conditions"] as const;
   const handleDeleteRewards = (indexToDelete: number) => {

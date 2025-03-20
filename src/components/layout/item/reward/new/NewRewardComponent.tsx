@@ -107,7 +107,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
                             className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
                           >
                             {inputCoupon.coupon_code} -{" "}
-                            {inputCoupon.coupon_name}
+                            {inputCoupon.coupon_title}
                           </div>
                         )
                       );

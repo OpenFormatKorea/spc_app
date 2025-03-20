@@ -139,7 +139,11 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
       const rewardConditionsArgs: RewardsArgs = {
         reward_type,
         ...(reward_type === RewardType.CO
-          ? { coupon_code: String(inputCoupon.coupon_code) }
+          ? {
+              coupon_code: String(inputCoupon.coupon_code),
+              coupon_name: String(inputCoupon.coupon_name),
+              coupon_title: String(inputCoupon.coupon_title),
+            }
           : {}),
         referrer_conditions: generatePolicy(referrerState),
         referee_conditions: generatePolicy(refereeState),
