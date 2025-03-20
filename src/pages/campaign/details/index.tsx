@@ -60,6 +60,7 @@ const DetailsCampaign = (
   },
   context: GetServerSidePropsContext,
 ) => {
+  console.log("cDetailApiResponse,", cDetailApiResponse);
   const router = useRouter();
   const [title, setTitle] = useState(cDetailApiResponse.title);
   const [description, setDescription] = useState(

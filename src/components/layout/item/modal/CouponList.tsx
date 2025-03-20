@@ -87,10 +87,6 @@ const CouponList: React.FC<CouponListProps> = (
   const fetchNextPage = () => fetchCoupons(); // 다음 무한 스크롤 페이지
 
   useEffect(() => {
-    console.log("isBottom,", isBottom);
-    console.log("pageNum,", pageNum);
-    console.log("pageize,", page_size);
-    console.log(newResponse);
     if (isBottom) fetchNextPage();
   }, [isBottom]);
 

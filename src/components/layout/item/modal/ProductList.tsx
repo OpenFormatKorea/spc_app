@@ -284,7 +284,6 @@ const ProductList: React.FC<ProductListProps> = (
             </div>
           </div>
         </div>
-
         <button
           className="mt-4 w-full rounded-lg bg-blue-500 p-2 text-white"
           onClick={handleAction}

@@ -60,7 +60,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       buttonRef.current?.click();
     }
   };
-  const openModal = () => setIsOpen(true);
+  // const openModal = () => setIsOpen(true);
   const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) =>
     setActiveStatus(newStatus);
 
