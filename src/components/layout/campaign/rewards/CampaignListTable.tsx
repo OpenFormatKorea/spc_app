@@ -92,11 +92,11 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
             id={`${35}`}
             onClick={(event) => handleCampaignClick(event, "테스트용 목업")}
           >
-            <div className="mb-[5px] flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-sm">
+            <div className="mb-[5px] flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-[14px]">
               <div className="w-[100px] font-semibold">캠페인명</div>
               <div>{"테스트용 목업"}</div>
             </div>
-            <div className="flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-sm">
+            <div className="flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-[14px]">
               <div className="w-[100px] font-semibold">활성 기간:</div>
               <div className="flex flex-col">
                 <div>시작일: 2025년 2월 11일</div>
@@ -112,11 +112,11 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
                 id={`${campaign.id}`}
                 onClick={(event) => handleCampaignClick(event, campaign.title)}
               >
-                <div className="mb-[5px] flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-sm">
+                <div className="mb-[5px] flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-[14px]">
                   <div className="w-[100px] font-semibold">캠페인명</div>
                   <div>{campaign.title}</div>
                 </div>
-                <div className="flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-sm">
+                <div className="flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-[14px]">
                   <div className="w-[100px] font-semibold">활성 기간:</div>
                   <div className="flex flex-col">
                     <div>

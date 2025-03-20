@@ -20,7 +20,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   setDescription,
   handleKeyDown,
 }) => {
-  const labelClass = "text-xs pt-4 text-gray-500";
+  const labelClass = "text-[12px] pt-4 text-gray-500";
   const [disableInput, setDisableInput] = useState(page_type === "DETAILS");
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
         <div className="flex h-fit w-full flex-col">
           <div className="mb-2 flex w-full flex-col text-left">
             <label className={labelClass}>상품 모델 코드</label>
-            <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-sm">
+            <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-[14px]">
               {!selectedProductItems.length ? (
                 <div className="flex h-full w-full items-center justify-center text-center text-gray-600">
                   선택된 상품이 없습니다.
@@ -44,7 +44,7 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
                 selectedProductItems.map((inputProduct) => (
                   <div
                     key={inputProduct.product_model_code}
-                    className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
+                    className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
                   >
                     {inputProduct.product_model_code} -{" "}
                     {inputProduct.product_model_name}

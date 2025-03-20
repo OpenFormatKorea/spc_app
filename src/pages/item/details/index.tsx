@@ -316,7 +316,7 @@ const DetailsItem = (
       <DashboardContainer>
         <div className="flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <span className="text-2xl font-bold">아이템 상세</span>
+            <span className="text-[24px] font-bold">아이템 상세</span>
           </div>
         </div>
         <div className="flex w-full flex-col justify-center gap-[10px] lg:flex-row">

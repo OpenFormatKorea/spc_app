@@ -55,17 +55,17 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
           id={`rewards_${index}`}
         >
           <h1 className="flex w-full items-center justify-between pb-[5px]">
-            <div className="text-base font-semibold">
+            <div className="text-[12px] font-semibold">
               {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
               {reward.reward_type === "COUPON"
                 ? `${reward.coupon_code} | ${reward.coupon_title} `
                 : `${reward.point_amount} 포인트`}
             </div>
           </h1>
-          <div className="flex w-full flex-col gap-[10px] rounded-xl bg-white lg:flex-row">
+          <div className="flex w-full flex-col gap-[10px] rounded-xl bg-white p-[10px] lg:flex-row">
             {triggerTypes.map((trigger) => (
               <div key={trigger} className="flex w-full flex-col gap-[10px]">
-                <div className="w-full text-base font-bold">
+                <div className="w-full text-[12px] font-bold">
                   {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
                 </div>
                 <div className="flex flex-col gap-[10px]">

@@ -27,7 +27,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ tbodyStyle, items }) => {
       ))}
       {!items.length && (
         <tr>
-          <td className="p-3 text-center text-sm text-gray-500" colSpan={8}>
+          <td className="p-3 text-center text-[14px] text-gray-500" colSpan={8}>
             현재 아이템 통계 정보가 없습니다.
           </td>
         </tr>

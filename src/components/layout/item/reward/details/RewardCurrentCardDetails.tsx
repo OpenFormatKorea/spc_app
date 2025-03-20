@@ -81,13 +81,13 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
   return (
     <div className="flex flex-col gap-[10px] rounded-xl border border-gray-100 bg-gray-100 p-[10px]">
       <div className="flex items-center justify-between">
-        <span className="text-lg font-bold text-gray-600">
+        <span className="text-[16px] font-bold text-gray-600">
           현재 세팅 된 리워드
         </span>
       </div>
       {rewards.map((reward, index) => (
         <div
-          className="flex flex-col gap-[10px] rounded-xl bg-gray-200 p-[8px] text-sm"
+          className="flex flex-col gap-[10px] rounded-xl bg-gray-200 p-[8px] text-[14px]"
           key={reward.id}
           id={`rewards_${reward.id}`}
         >
@@ -140,7 +140,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                     key={trigger}
                     className="flex w-full flex-col gap-[10px]"
                   >
-                    <div className="w-full text-base font-bold">
+                    <div className="w-full text-[12px] font-bold">
                       {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
                     </div>
                     {conditionTypes.map((type) => {

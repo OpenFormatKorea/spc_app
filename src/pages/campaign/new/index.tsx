@@ -108,7 +108,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
       <DashboardContainer>
         <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <span className="text-2xl font-bold">새 캠페인 생성</span>
+            <span className="text-[24px] font-bold">새 캠페인 생성</span>
           </div>
           <div className="button-container flex w-full justify-end">
             <button

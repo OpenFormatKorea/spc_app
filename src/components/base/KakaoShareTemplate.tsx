@@ -32,7 +32,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   onChangeImage,
   handleTempImageDelete,
 }) => {
-  const labelClass = "text-xs pt-4 text-gray-500";
+  const labelClass = "text-[12px] pt-4 text-gray-500";
   const imageFileInput = useRef<HTMLInputElement>(null);
   const shopLogoFileInput = useRef<HTMLInputElement>(null);
   const [shop_name, setShop_name] = useState(kakaoShareArgs.shop_name);
@@ -201,7 +201,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                     style={{ borderRadius: "35%" }}
                                   />
                                 </div>
-                                <p className="text-xs text-gray-400">
+                                <p className="text-[12px] text-gray-400">
                                   {shop_name}
                                 </p>
                               </div>

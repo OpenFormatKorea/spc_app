@@ -54,7 +54,9 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   }, [page_type]);
   return (
     <>
-      <h1 className="border-b-[1px] pb-[5px] text-xl font-bold">아이템 옵션</h1>
+      <h1 className="border-b-[1px] pb-[5px] text-[18px] font-bold">
+        아이템 옵션
+      </h1>
       <div className={inputFormClass}>
         <label className={radioButtonLabelClass}>아이템 종류</label>
         <div className="flex h-[42px] w-full items-center justify-between">

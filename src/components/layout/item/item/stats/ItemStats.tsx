@@ -126,8 +126,8 @@ const ItemStats: React.FC<ItemStatsProps> = (
       <div className="flex w-full pb-[5px]">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="w-[80%]">
-            <div className="text-xl">아이템 통계</div>
-            <div className="text-sm font-normal text-gray-500">
+            <div className="text-[18px]">아이템 통계</div>
+            <div className="text-[14px] font-normal text-gray-500">
               현재 사용중인 아이템 통계 내역이에요.
             </div>
           </div>

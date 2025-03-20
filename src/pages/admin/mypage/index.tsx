@@ -23,7 +23,7 @@ const DetailsMyPage = (data: UserInfoProps) => {
     <DashboardContainer>
       <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
         <div className="subject-container flex w-full">
-          <div className="text-2xl font-bold">마이 페이지</div>
+          <div className="text-[24px] font-bold">마이 페이지</div>
         </div>
 
         <div className="button-container flex w-full justify-end">

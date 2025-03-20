@@ -105,7 +105,7 @@ const RewardPolicyDetails: React.FC<RewardPolicyDetailsProps> = ({
   return (
     <div className="w-full min-w-[320px] rounded-lg bg-gray-100 p-4">
       <div className="flex w-full items-center border-b pb-[5px] lg:flex-row">
-        <label className="w-full text-left text-lg font-bold">
+        <label className="w-full text-left text-[16px] font-bold">
           {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
         </label>
         <div className="mr-2 flex w-full justify-end">

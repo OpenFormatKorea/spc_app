@@ -93,7 +93,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   return (
     <>
       <div className="contents-container w-full items-center justify-center">
-        <h1 className="flex items-center justify-between border-b-[1px] pb-[5px] text-xl font-bold">
+        <h1 className="flex items-center justify-between border-b-[1px] pb-[5px] text-[18px] font-bold">
           <div>아이템 옵션</div>
           {page_type === "DETAILS" && (
             <div>
@@ -115,7 +115,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
           )}
         </h1>
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pt-4 text-xs text-gray-500">아이템 명</label>
+          <label className="pt-4 text-[12px] text-gray-500">아이템 명</label>
           <InputTextBox
             type="text"
             id="title"

@@ -96,8 +96,8 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
       <div className="flex w-full pb-[5px]">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="w-[80%]">
-            <div className="text-lg font-bold">유저 검색</div>
-            <div className="text-sm font-normal text-gray-500">
+            <div className="text-[16px] font-bold">유저 검색</div>
+            <div className="text-[14px] font-normal text-gray-500">
               유저 검색을 할 수 있어요.
             </div>
           </div>
@@ -109,7 +109,7 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
           id="userId"
           placeholder="유저 아이디를 적어주세요"
           value={userId}
-          className="input-class w-full flex-grow border-b-[1px] py-2 text-sm lg:max-w-[450px]"
+          className="input-class w-full flex-grow border-b-[1px] py-2 text-[14px] lg:max-w-[450px]"
           onChange={(e) => setUserId(e.target.value)}
           onKeyDown={handleKeyDown}
         />

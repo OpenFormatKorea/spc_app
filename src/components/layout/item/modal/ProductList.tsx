@@ -180,13 +180,13 @@ const ProductList: React.FC<ProductListProps> = (
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="w-full pb-[5px] text-left text-xl font-bold">
+        <h1 className="w-full pb-[5px] text-left text-[18px] font-bold">
           상품 선택
         </h1>
 
         <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">
           <div className="flex w-full flex-col rounded-lg bg-white p-[10px]">
-            <h1 className="text-md w-full pb-[5px] text-left font-semibold text-gray-500">
+            <h1 className="w-full pb-[5px] text-left text-[13px] font-semibold text-gray-500">
               상품을 선택해 주세요
             </h1>
 

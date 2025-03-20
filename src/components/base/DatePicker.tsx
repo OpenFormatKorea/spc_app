@@ -56,7 +56,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
   return (
     <div className="m-[5px] flex w-fit flex-col rounded-xl bg-gray-200 p-[8px] pb-[8px]">
-      <label className="pb-[5px] text-xs text-gray-500">{label}</label>
+      <label className="pb-[5px] text-[12px] text-gray-500">{label}</label>
       <div className="flex-col items-center rounded-md bg-white p-2">
         <div className="flex gap-[5px]">
           <div className="flex h-full items-center gap-[5px] bg-white">

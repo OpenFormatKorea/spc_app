@@ -5,7 +5,7 @@ const Footer = () => {
       style={{ width: "calc(100% - 200px)" }}
     >
       <div className="flex h-[50px] items-center px-4">
-        <div className="mr-auto min-w-[150px] text-lg">This is Footer</div>
+        <div className="mr-auto min-w-[150px] text-[16px]">This is Footer</div>
       </div>
     </footer>
   );

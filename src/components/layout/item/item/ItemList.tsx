@@ -110,10 +110,10 @@ const ItemList: React.FC<ItemListProps> = (
   return (
     <>
       <div className="flex w-full">
-        <h1 className="mb-2 flex w-full items-center justify-between border-b pb-[5px] text-base font-bold">
+        <h1 className="mb-2 flex w-full items-center justify-between border-b pb-[5px] text-[12px] font-bold">
           <div>
-            <div className="text-xl">아이템</div>
-            <div className="text-sm font-normal text-gray-500">
+            <div className="text-[18px]">아이템</div>
+            <div className="text-[14px] font-normal text-gray-500">
               현재 사용중인 아이템 목록이에요.
             </div>
           </div>
@@ -166,7 +166,7 @@ const ItemList: React.FC<ItemListProps> = (
                   <td className={tbodyStyle}>
                     <div className="flex w-full justify-center">
                       <div
-                        className={`w-fit rounded-md px-2 py-1 text-sm font-semibold ${
+                        className={`w-fit rounded-md px-2 py-1 text-[14px] font-semibold ${
                           item.item_type === "PRODUCT"
                             ? "bg-blue-200 text-blue-600"
                             : "bg-orange-200 text-orange-600"
@@ -207,7 +207,7 @@ const ItemList: React.FC<ItemListProps> = (
               {!items.length && (
                 <tr>
                   <td
-                    className="p-3 text-center text-sm text-gray-500"
+                    className="p-3 text-center text-[14px] text-gray-500"
                     colSpan={6}
                   >
                     현재 사용중인 아이템이 없어요
@@ -240,12 +240,12 @@ const ItemList: React.FC<ItemListProps> = (
                   toggleItemActiveStatus={toggleItemActiveStatus}
                 />
               </div>
-              <div className="flex items-center pr-2 text-sm">
+              <div className="flex items-center pr-2 text-[14px]">
                 <div className="w-[100px]">
                   <strong>아이템 종류: </strong>
                 </div>
                 <div
-                  className={`w-fit rounded-md px-2 py-1 text-sm font-semibold ${
+                  className={`w-fit rounded-md px-2 py-1 text-[14px] font-semibold ${
                     item.item_type === "PRODUCT"
                       ? "bg-blue-200 text-blue-600"
                       : "bg-orange-200 text-orange-600"
@@ -254,7 +254,7 @@ const ItemList: React.FC<ItemListProps> = (
                   {item.item_type === "PRODUCT" ? "상품" : "프로모션"}
                 </div>
               </div>
-              <div className="flex items-center pr-2 text-sm">
+              <div className="flex items-center pr-2 text-[14px]">
                 <div className="w-[100px]">
                   <strong>생성일: </strong>
                 </div>
@@ -264,7 +264,7 @@ const ItemList: React.FC<ItemListProps> = (
                   day: "numeric",
                 })}
               </div>
-              <div className="flex items-center pr-2 text-sm">
+              <div className="flex items-center pr-2 text-[14px]">
                 <div className="w-[100px]">
                   <strong>캠페인 수정일: </strong>
                 </div>
@@ -276,7 +276,7 @@ const ItemList: React.FC<ItemListProps> = (
               </div>
               <div className="flex w-full justify-end">
                 <button
-                  className="w-[60px] rounded-md bg-red-500 p-2 text-sm text-white"
+                  className="w-[60px] rounded-md bg-red-500 p-2 text-[14px] text-white"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleAction("delete", item.id);
@@ -288,7 +288,7 @@ const ItemList: React.FC<ItemListProps> = (
             </div>
           ))}
           {!items.length && (
-            <div className="p-[5px] text-center text-sm text-gray-500">
+            <div className="p-[5px] text-center text-[14px] text-gray-500">
               현재 사용중인 아이템이 없어요
               <br />
               새로운 아이템을 등록해 주세요.
@@ -302,7 +302,7 @@ const ItemList: React.FC<ItemListProps> = (
             ""
           ) : selectedItemIds.length ? (
             <button
-              className="cursor-pointer rounded-md bg-red-500 px-2 py-2 text-xs text-white"
+              className="cursor-pointer rounded-md bg-red-500 px-2 py-2 text-[12px] text-white"
               id="delete_items"
               onClick={() => handleAction("delete")}
             >
@@ -310,7 +310,7 @@ const ItemList: React.FC<ItemListProps> = (
             </button>
           ) : (
             <button
-              className="cursor-not-allowed rounded-md bg-gray-400 px-2 py-2 text-xs text-white"
+              className="cursor-not-allowed rounded-md bg-gray-400 px-2 py-2 text-[12px] text-white"
               id="delete_items"
             >
               선택삭제

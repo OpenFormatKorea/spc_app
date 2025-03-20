@@ -14,24 +14,26 @@ const MyPageDetails: React.FC<MyPageProps> = (
   return (
     <div className="contents-container w-full items-center justify-center">
       <div className="">
-        <span className="text-2xl font-bold">{username}님, 안녕하세요!</span>
+        <span className="text-[24px] font-bold">{username}님, 안녕하세요!</span>
       </div>
       <div className="py-1">
-        <span className="text-sm text-gray-500">* 내 정보를 확인해보세요</span>
+        <span className="text-[14px] text-gray-500">
+          * 내 정보를 확인해보세요
+        </span>
       </div>
       <div className="rounded-lg bg-gray-100 p-4">
         <div className="">
-          <span className="text-lg font-bold">내 정보</span>
+          <span className="text-[16px] font-bold">내 정보</span>
         </div>
         <div className="py-2">
-          <label className="mr-2 text-xs text-gray-500">이메일</label>
-          <span className="flex min-h-[40px] max-w-[350px] items-center bg-white p-2 text-sm text-gray-600">
+          <label className="mr-2 text-[12px] text-gray-500">이메일</label>
+          <span className="flex min-h-[40px] max-w-[350px] items-center bg-white p-2 text-[14px] text-gray-600">
             {email}
           </span>
         </div>
         <div className="py-2">
-          <label className="mr-2 text-xs text-gray-500">SHOP ID:</label>
-          <span className="flex min-h-[40px] max-w-[350px] items-center bg-white p-2 text-sm text-gray-600">
+          <label className="mr-2 text-[12px] text-gray-500">SHOP ID:</label>
+          <span className="flex min-h-[40px] max-w-[350px] items-center bg-white p-2 text-[14px] text-gray-600">
             {shop_id}
           </span>
         </div>

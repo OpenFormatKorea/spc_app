@@ -16,10 +16,10 @@ const ErrorPage = ({ statusCode, message }: ErrorPageProps) => {
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-gray-200 to-gray-300 text-gray-700">
       <main className="rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 p-10 text-center shadow-md">
         <h1 className="text-6xl font-bold">{statusCode || "오류"}</h1>
-        <p className="mt-4 text-xl text-gray-600">
+        <p className="mt-4 text-[18px] text-gray-600">
           {message || defaultMessage}
         </p>
-        <p className="mt-4 text-lg">
+        <p className="mt-4 text-[16px]">
           {statusCode ? `오류 코드: ${statusCode}` : "알 수 없는 오류"}
         </p>
         <a

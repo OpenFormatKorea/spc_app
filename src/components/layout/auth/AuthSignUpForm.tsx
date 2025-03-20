@@ -46,7 +46,9 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
 }) => {
   return (
     <div className="flex min-h-[380px] min-w-[380px] flex-col items-center justify-center rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 p-6 text-center">
-      <div className="m-2 w-full text-left text-xl font-semibold">회원가입</div>
+      <div className="m-2 w-full text-left text-[18px] font-semibold">
+        회원가입
+      </div>
       <div className="flex w-full flex-col items-start justify-between">
         <AuthInputBox
           label="아이디"
@@ -84,7 +86,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
           onChange={handlePasswordChange}
           onKeyDown={handleKeyDown}
         />
-        <div className="mt-2 flex w-full justify-between text-left text-xs">
+        <div className="mt-2 flex w-full justify-between text-left text-[12px]">
           <p className="text-gray-500">
             *비밀번호는 최소 8자, 대문자, 특수기호 포함
           </p>
@@ -113,7 +115,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
             onKeyDown={handleKeyDown}
           />
           <button
-            className="mb-[5px] ml-2 cursor-pointer border bg-white p-1 text-xs"
+            className="mb-[5px] ml-2 cursor-pointer border bg-white p-1 text-[12px]"
             onClick={() => setShowPw(!showPW)}
           >
             {showPW ? (
@@ -124,7 +126,7 @@ const AuthSignUpForm: React.FC<AuthSignUpFormProps> = ({
           </button>
         </div>
       </div>
-      <div className="mt-2 flex w-full justify-between text-left text-xs">
+      <div className="mt-2 flex w-full justify-between text-left text-[12px]">
         <p className="w-full text-right">
           [
           <span style={{ color: instantPWChk ? "green" : "red" }}>

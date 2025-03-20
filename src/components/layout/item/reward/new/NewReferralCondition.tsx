@@ -84,7 +84,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
   return (
     <div className="w-full rounded-xl bg-white p-3 shadow-sm">
       <div className="mb-1 flex items-center border-b-[1px] pb-[5px]">
-        <label className="font-gray-600 text-md flex w-full text-left font-bold">
+        <label className="font-gray-600 flex w-full text-left text-[13px] font-bold">
           {target === "referrer" ? "추천인" : "피추천인"}
         </label>
         <div className="flex items-center">
@@ -115,7 +115,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
           <label className={labelClass}>
             {rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 시점
           </label>
-          <div className="mt-2 flex w-full justify-between text-sm">
+          <div className="mt-2 flex w-full justify-between text-[14px]">
             <InputRadioBox
               label="즉시 지급"
               name={`${target}_${trigger}_payment_timing_type`}
@@ -145,7 +145,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
           <div
             className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_timing.type === PaymentTimingType.DEL ? "max-h-screen opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
           >
-            <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
+            <div className="flex w-[120px] items-end text-left text-[14px] text-gray-500">
               <style jsx>{`
                 input[type="number"]::-webkit-outer-spin-button,
                 input[type="number"]::-webkit-inner-spin-button {
@@ -161,7 +161,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
                 id={`${target}_${trigger}_delay_days`}
                 placeholder=""
                 value={itemConditions.payment_timing.delay_days ?? ""}
-                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-sm lg:max-w-[450px]"
+                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-[14px] lg:max-w-[450px]"
                 onChange={(e) =>
                   handleTimingChange("delay_days", Number(e.target.value))
                 }
@@ -177,7 +177,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
           <label className={labelClass}>
             {rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 횟수
           </label>
-          <div className="mt-2 flex w-full justify-between text-sm">
+          <div className="mt-2 flex w-full justify-between text-[14px]">
             <InputRadioBox
               label="한번만"
               name={`${target}_${trigger}_payment_frequency_type`}
@@ -222,7 +222,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
           <div
             className={`transition-opacity duration-300 ease-in-out ${itemConditions.payment_frequency.type === PaymentFrequencyType.REP ? "max-h-screen opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
           >
-            <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
+            <div className="flex w-[120px] items-end text-left text-[14px] text-gray-500">
               <div className="mr-2 flex min-w-fit items-center">최대</div>
               <style jsx>{`
                 input[type="number"]::-webkit-outer-spin-button,
@@ -238,7 +238,7 @@ const NewReferralCondition: React.FC<NewReferralConditionProps> = ({
                 type="number"
                 id={`${target}_${trigger}_repeat_count`}
                 placeholder=""
-                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-sm lg:max-w-[450px]"
+                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-[14px] lg:max-w-[450px]"
                 value={itemConditions.payment_frequency.repeat_count || ""}
                 onChange={(e) =>
                   handleFrequencyChange("repeat_count", Number(e.target.value))

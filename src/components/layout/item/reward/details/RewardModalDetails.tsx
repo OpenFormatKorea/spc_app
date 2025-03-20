@@ -66,7 +66,7 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
     useState<RewardPolicyArgs>(defaultPolicy);
 
   // Class name constants
-  const labelClass = "text-xs pt-2 text-gray-500";
+  const labelClass = "text-[12px] pt-2 text-gray-500";
 
   // Helper function to generate policy
   const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => ({
@@ -167,14 +167,14 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center p-4 text-center">
-        <h1 className="w-full pb-[5px] text-left text-xl font-bold">
+        <h1 className="w-full pb-[5px] text-left text-[18px] font-bold">
           {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가 설정
         </h1>
 
         <div className="my-2 flex max-h-[550px] w-full flex-col items-center overflow-y-scroll">
           <div className="flex w-full flex-col rounded-lg bg-white p-3">
             <div className="mb-4 flex w-full flex-col text-left">
-              <label className="mb-2 text-sm font-semibold text-gray-300">
+              <label className="mb-2 text-[14px] font-semibold text-gray-300">
                 {reward_type === RewardType.CO
                   ? "쿠폰 코드"
                   : "지급 포인트 금액"}
@@ -191,19 +191,19 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
                       onKeyDown={handleKeyDown}
                       disabled={true}
                     />
-                    <label className="ml-2 text-sm font-semibold text-gray-500">
+                    <label className="ml-2 text-[14px] font-semibold text-gray-500">
                       포인트
                     </label>
                   </>
                 ) : (
                   <div className="flex w-full flex-col">
                     <label className={labelClass}>선택된 쿠폰</label>
-                    <div className="mt-2 flex flex-wrap justify-center rounded-xl bg-gray-100 p-2 pb-3 text-sm">
+                    <div className="mt-2 flex flex-wrap justify-center rounded-xl bg-gray-100 p-2 pb-3 text-[14px]">
                       {couponInputs.length > 0 ? (
                         couponInputs.map((coupon) => (
                           <div
                             key={coupon.coupon_code}
-                            className="mr-1 mt-1 rounded-md bg-blue-300 p-1 text-sm text-white"
+                            className="mr-1 mt-1 rounded-md bg-blue-300 p-1 text-[14px] text-white"
                           >
                             {coupon.coupon_code} - {coupon.coupon_name}
                           </div>

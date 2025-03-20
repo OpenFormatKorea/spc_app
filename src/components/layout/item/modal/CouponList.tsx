@@ -158,13 +158,13 @@ const CouponList: React.FC<CouponListProps> = (
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="w-full pb-[5px] text-left text-xl font-bold">
+        <h1 className="w-full pb-[5px] text-left text-[18px] font-bold">
           쿠폰 선택
         </h1>
 
         <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">
           <div className="flex w-full flex-col rounded-lg bg-white p-[10px]">
-            <h1 className="text-md w-full pb-[5px] text-left font-semibold text-gray-500">
+            <h1 className="w-full pb-[5px] text-left text-[13px] font-semibold text-gray-500">
               쿠폰을 선택해 주세요
             </h1>
             <div className="items-bottom flex w-full justify-start gap-[10px] pb-[10px]">
@@ -271,7 +271,7 @@ const CouponList: React.FC<CouponListProps> = (
         <div className="flex h-fit w-[350px] flex-col lg:w-[450px]">
           <div className="mb-2 flex w-full flex-col text-left">
             <label className={labelClass}>선택된 쿠폰</label>
-            <div className="mt-2 flex h-[85px] w-[350px] flex-wrap justify-center overflow-y-auto break-words rounded-xl bg-white p-2 pb-3 text-sm lg:w-full">
+            <div className="mt-2 flex h-[85px] w-[350px] flex-wrap justify-center overflow-y-auto break-words rounded-xl bg-white p-2 pb-3 text-[14px] lg:w-full">
               {couponInputs.length !== 0 ? (
                 couponInputs.map((inputCoupon) => {
                   const coupon = coupons.find(
@@ -282,7 +282,7 @@ const CouponList: React.FC<CouponListProps> = (
                     coupon && (
                       <div
                         key={coupon.cpnId}
-                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
+                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
                       >
                         {coupon.cpnId} - {coupon.name}
                       </div>

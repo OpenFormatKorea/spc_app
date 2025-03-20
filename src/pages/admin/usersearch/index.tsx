@@ -117,7 +117,7 @@ const UserSearch = (
       <DashboardContainer>
         <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <span className="text-2xl font-bold">유저 검색</span>
+            <span className="text-[24px] font-bold">유저 검색</span>
           </div>
         </div>
         <ContentsContainer variant="dashboard">

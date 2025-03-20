@@ -77,8 +77,8 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
         <div className="flex w-full pb-[5px]">
           <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
             <div className="w-full">
-              <div className="text-xl">캠페인 리워드 내역</div>
-              <div className="text-sm font-normal text-gray-500">
+              <div className="text-[18px]">캠페인 리워드 내역</div>
+              <div className="text-[14px] font-normal text-gray-500">
                 캠페인 리워드 내역입니다.
               </div>
             </div>
@@ -99,7 +99,7 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
             />
           </div>
           <div className="relative flex h-full w-full min-w-[50%] flex-col overflow-hidden rounded-xl bg-gray-100 p-[10px]">
-            <div className="w-full text-left text-xl font-bold">
+            <div className="w-full text-left text-[18px] font-bold">
               리워드 지급내역
             </div>
             <div className="w-full pb-[8px] text-[15px] font-semibold">

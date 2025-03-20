@@ -109,7 +109,7 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
         <p className="text-[20px] font-semibold text-[#6c757d]">
           리퍼럴 유저 고객 여정
         </p>
-        <p className="py-1 text-xs text-[#6c757d]">
+        <p className="py-1 text-[12px] text-[#6c757d]">
           *각 섹션 위로 마우스를 올려 보세요.
         </p>
       </div>
@@ -120,7 +120,7 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
             <CircularProgress />
           </div>
         )}
-        <div className="mt-8 flex w-[22%] flex-col text-xs text-[#6c757d]">
+        <div className="mt-8 flex w-[22%] flex-col text-[12px] text-[#6c757d]">
           {funnel_data.map((item, index) => (
             <p key={index} className="min-h-[19%] pt-[15%] lg:min-h-[22%]">
               {item.label}
@@ -147,8 +147,8 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
             motionConfig="wobbly"
           />
         </div>
-        <div className="mt-[12px] flex w-[15%] flex-col text-xs">
-          <p className="stext-sm ml-1 min-h-[17%] text-[#6c757d] lg:min-h-[19%]"></p>
+        <div className="mt-[12px] flex w-[15%] flex-col text-[12px]">
+          <p className="stext-[14px] ml-1 min-h-[17%] text-[#6c757d] lg:min-h-[19%]"></p>
           {percentages.map((stage, index) => (
             <p
               key={index}
