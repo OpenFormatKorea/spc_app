@@ -91,7 +91,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
                 data={myFunnelApiResponse}
                 isLoading={funnelLoading}
               />
-              <ReferralLeaderboardTable
+              {/* <ReferralLeaderboardTable
                 data={RefferralLeaderBoardTableResponse}
                 setData={setNewRefferralLeaderBoardTableResponse}
                 startDate={startDate}
@@ -105,7 +105,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
                 setSortField={setSortField}
                 userId={userId}
                 setUserId={setUserId}
-              />
+              /> */}
               <ReferralHistoryChart
                 report={signUpApiResponse}
                 isLoading={shopReportLoading}
