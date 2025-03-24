@@ -73,6 +73,7 @@ export async function fetchReferralLeaderboardTable(
     direction,
     user_id,
   };
+  console.log("param", param);
   try {
     const response = await fetchAPI(context, url, "GET", {}, param);
     console.log("response", response);

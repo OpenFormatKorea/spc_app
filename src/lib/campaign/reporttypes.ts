@@ -1,5 +1,4 @@
 import { float } from "aws-sdk/clients/cloudfront";
-import { count } from "console";
 
 export interface ReportResponse {
   status: string;
