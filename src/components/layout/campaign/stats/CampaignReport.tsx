@@ -71,6 +71,9 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
     if (myFunnelApiResponse && Object.keys(myFunnelApiResponse).length > 0) {
       setFunnelLoading(false);
     }
+    if (RefferralLeaderBoardTableResponse) {
+      setLeaderboardLoading(false);
+    }
   }, [hourlysignUpApiResponse]);
   return (
     <div style={{ maxHeight: "70vh" }}>
