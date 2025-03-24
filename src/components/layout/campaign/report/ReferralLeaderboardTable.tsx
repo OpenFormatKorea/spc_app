@@ -6,7 +6,7 @@ import { sortDirection } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Tooltip, CardActions, CircularProgress } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { fetchReferralLeaderboardTable } from "@/lib/campaign/reportapis";
@@ -27,8 +27,6 @@ interface ReferralLeaderboardTableProps {
   setSortField: (value: "total_signup_count" | "total_order_count") => void;
   userId: string;
   setUserId: (value: string) => void;
-  isLoading: boolean;
-  setIsLoading: (value: boolean) => void;
 }
 export default function ReferralLeaderboardTable(
   {
@@ -45,8 +43,6 @@ export default function ReferralLeaderboardTable(
     setSortField,
     userId,
     setUserId,
-    isLoading,
-    setIsLoading,
   }: ReferralLeaderboardTableProps,
   context: GetServerSidePropsContext,
 ) {
@@ -67,6 +63,7 @@ export default function ReferralLeaderboardTable(
     // Add UTF-8 BOM prefix to support Korean characters
     const BOM = "\uFEFF";
     const csvContent = BOM + csvHeader + "\n" + csvRows;
+
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
     const link = document.createElement("a");
@@ -78,7 +75,7 @@ export default function ReferralLeaderboardTable(
     document.body.removeChild(link);
   };
 
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { isBottom, scrollRef } = useScrollPosition(true);
   let stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
 
@@ -122,6 +119,7 @@ export default function ReferralLeaderboardTable(
   const fetchNewSort = async () => {
     if (isLoading) return;
     setIsLoading(true);
+    console.log("oldTable Data", newTableData);
     try {
       const newData = await fetchReferralLeaderboardTable(
         startDate,
@@ -136,6 +134,7 @@ export default function ReferralLeaderboardTable(
       console.log("newData", newData);
       setData(newData);
       setNewTableData(newData?.result || []);
+      console.log("updated newTableData", newTableData);
     } catch (error) {
       console.error("Failed to fetch sorted data:", error);
     } finally {

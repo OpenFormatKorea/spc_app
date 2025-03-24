@@ -57,7 +57,6 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
   const [shopReportLoading, setShopReportLoading] = useState(true);
   const [hourlyLoading, setHourlyLoading] = useState(true);
   const [funnelLoading, setFunnelLoading] = useState(true);
-  const [leaderboardLoading, setLeaderboardLoading] = useState(true);
   useEffect(() => {
     if (
       hourlysignUpApiResponse &&
@@ -71,17 +70,14 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
     if (myFunnelApiResponse && Object.keys(myFunnelApiResponse).length > 0) {
       setFunnelLoading(false);
     }
-    if (RefferralLeaderBoardTableResponse) {
-      setLeaderboardLoading(false);
-    }
   }, [hourlysignUpApiResponse]);
   return (
     <div style={{ maxHeight: "70vh" }}>
-      <div className="flex w-full pb-[5px]">
-        <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
+      <div className="mb-2 w-full pb-2">
+        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">
-            <div className="text-[18px]">캠페인 상세 리포트</div>
-            <div className="text-[14px] font-normal text-gray-500">
+            <div className="text-xl">캠페인 상세 리포트</div>
+            <div className="text-sm font-normal text-gray-500">
               캠페인 상세 리포트입니다.
             </div>
           </div>
@@ -109,8 +105,6 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
                 setSortField={setSortField}
                 userId={userId}
                 setUserId={setUserId}
-                isLoading={leaderboardLoading}
-                setIsLoading={setLeaderboardLoading}
               />
               <ReferralHistoryChart
                 report={signUpApiResponse}
@@ -128,7 +122,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
       </div>
       <div className="mt-[12px] flex h-fit w-fit rounded-xl bg-gray-100">
         <div className="pageOption flex w-fit items-center justify-center rounded-lg bg-gray-100 p-2">
-          <div className="flex min-w-[70px] items-center gap-2 text-left text-[14px]">
+          <div className="flex min-w-[70px] items-center gap-2 text-left text-sm">
             <label className="font-bold">내역기간</label>
           </div>
           <select
