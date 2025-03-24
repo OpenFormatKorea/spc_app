@@ -208,7 +208,6 @@ const ReportCampaign = (
   }, [period]);
 
   useEffect(() => {
-    console.log("direction", direction);
     fetchSortData();
   }, [direction]);
   return (

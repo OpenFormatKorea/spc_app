@@ -57,6 +57,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
   const [shopReportLoading, setShopReportLoading] = useState(true);
   const [hourlyLoading, setHourlyLoading] = useState(true);
   const [funnelLoading, setFunnelLoading] = useState(true);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(true);
   useEffect(() => {
     if (
       hourlysignUpApiResponse &&
@@ -105,6 +106,8 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
                 setSortField={setSortField}
                 userId={userId}
                 setUserId={setUserId}
+                isLoading={leaderboardLoading}
+                setIsLoading={setLeaderboardLoading}
               />
               <ReferralHistoryChart
                 report={signUpApiResponse}
