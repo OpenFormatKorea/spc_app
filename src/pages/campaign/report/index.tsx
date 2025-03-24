@@ -133,7 +133,6 @@ const ReportCampaign = (
   const fetchPeriodData = async (newPeriod: string) => {
     const newStartDate = new Date();
     newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
-
     const year = newStartDate.getFullYear();
     const month = String(newStartDate.getMonth() + 1).padStart(2, "0");
     const day = String(newStartDate.getDate()).padStart(2, "0");
@@ -144,23 +143,23 @@ const ReportCampaign = (
     setLoading(true);
     try {
       const signUpApiResponse = await fetchSignUpGraph(
-        start_date,
+        formattedStartDate,
         end_date,
         context,
       );
       const hourlysignUpApiResponse = await fetchHourlySignUpGraph(
-        start_date,
+        formattedStartDate,
         end_date,
         context,
       );
       const myFunnelApiResponse = await fetchMyFunnelGraph(
-        start_date,
+        formattedStartDate,
         end_date,
         context,
       );
       const referralLeaderboardTableResponse =
         await fetchReferralLeaderboardTable(
-          start_date,
+          formattedStartDate,
           end_date,
           page,
           page_size,
