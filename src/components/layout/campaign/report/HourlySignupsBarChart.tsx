@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { CardActions, Tooltip } from "@mui/material";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { CircularProgress } from "@mui/material";
-import { HourlySignups, ReportResponse } from "@/lib/campaign/reporttypes";
+import { HourlySignups } from "@/lib/campaign/reporttypes";
 const ResponsiveBar = dynamic(
   () => import("@nivo/bar").then((m) => m.ResponsiveBar),
   {
@@ -18,12 +18,16 @@ const HourlySignupsBarChart = ({
   data,
   isLoading,
 }: HourlySignupsBarChartProps) => {
-  const barChartData: HourlySignups = data;
+  const barChartNewData: HourlySignups = data;
   const handleDownload = () => {
-    const csvData = Object.entries(barChartData)
-      .map(([hour, signup_count]) => `${hour},${signup_count}`)
+    const csvData = Object.entries(barChartNewData)
+      .map(
+        ([hour, { signup_count, new_user_count }]) =>
+          `${hour},${signup_count},${new_user_count}`,
+      )
       .join("\n");
-    const csvHeader = "hour_of_day,signup_count\n";
+    console.log("csvData", csvData);
+    const csvHeader = "시간,회원가입수,새로운유저\n";
     const BOM = "\uFEFF";
     const csvContent = BOM + csvHeader + csvData;
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -40,13 +44,15 @@ const HourlySignupsBarChart = ({
     return Array.from({ length: 24 }, (v, i) => ({
       hour_of_day: i,
       signup_count: 0,
+      new_user_count: 0,
     }));
   };
 
-  const chartData = Object.entries(barChartData || {}).map(
-    ([hour, signup_count]) => ({
+  const chartData = Object.entries(barChartNewData || {}).map(
+    ([hour, { signup_count, new_user_count }]) => ({
       hour_of_day: hour.toString(),
       signup_count: Number(signup_count),
+      new_user_count: Number(new_user_count),
     }),
   );
 
@@ -90,11 +96,11 @@ const HourlySignupsBarChart = ({
                 <div className="h-[350px] w-full">
                   <ResponsiveBar
                     data={chartData}
-                    keys={["signup_count"]}
+                    keys={["signup_count", "new_user_count"]}
                     indexBy="hour_of_day"
                     margin={{ top: 20, right: 20, bottom: 100, left: 60 }}
                     padding={0.3}
-                    colors={["rgb(15, 116, 237)"]}
+                    colors={["rgb(15, 116, 237)", "rgb(15, 0, 237)"]}
                     defs={[
                       {
                         id: "dots",
@@ -121,7 +127,7 @@ const HourlySignupsBarChart = ({
                       tickSize: 2,
                       tickPadding: 5,
                       tickRotation: 0,
-                      legend: "시간",
+                      legend: "시각",
                       legendPosition: "middle",
                       legendOffset: 32,
                     }}
@@ -129,16 +135,13 @@ const HourlySignupsBarChart = ({
                       tickSize: 5,
                       tickPadding: 5,
                       tickRotation: 0,
-                      legend: "가입자",
+                      legend: "유입 이용자 수",
                       legendPosition: "middle",
                       legendOffset: -40,
                     }}
                     labelSkipWidth={12}
                     labelSkipHeight={12}
-                    labelTextColor={{
-                      from: "color",
-                      modifiers: [["brighter", 2.6]],
-                    }}
+                    labelTextColor="#ffffff"
                     animate={true}
                   />
                 </div>

@@ -43,6 +43,7 @@ export default function ReferralHistoryChart({
       date: "",
       share_count: 0,
       signup_count: 0,
+      new_user_count: 0,
     },
   ];
   const shareCountArray = graphData.map(
@@ -50,6 +51,9 @@ export default function ReferralHistoryChart({
   );
   const signUpArray = graphData.map(
     (item: SignUpResponse) => item.signup_count,
+  );
+  const newUserArray = graphData.map(
+    (item: SignUpResponse) => item.new_user_count,
   );
 
   function prepareMessageSharesData() {
@@ -64,23 +68,33 @@ export default function ReferralHistoryChart({
         {
           label: "카톡 추천 횟수",
           data: shareCountArray,
-          borderColor: "rgb(15, 116, 237)", // Line color
-          backgroundColor: "rgb(15, 116, 237)", // Fill color under the line
-          borderWidth: 1.5, //line width
+          borderColor: "rgb(15, 116, 237)", // Blue
+          backgroundColor: "rgba(15, 116, 237, 0.3)",
+          borderWidth: 1.5,
           pointStyle: "circle",
           pointRadius: 2.5,
-          pointBorderColor: "rgba(30, 144, 255, 1)",
-          pointBackgroundColor: "rgb(15, 116, 237",
+          pointBorderColor: "rgb(15, 116, 237)",
+          pointBackgroundColor: "rgb(15, 116, 237)",
         },
         {
           label: "추천 통해 가입",
           data: signUpArray,
-          borderColor: "rgb(248, 113, 113)",
+          borderColor: "rgb(239, 68, 68)", // Red
+          backgroundColor: "rgba(239, 68, 68, 0.3)",
           borderWidth: 1.5,
-          backgroundColor: "rgb(248, 113, 113)",
           pointRadius: 2.5,
-          pointBorderColor: "rgb(248, 113, 113)",
-          pointBackgroundColor: "rgb(248, 113, 113)", //point fill color
+          pointBorderColor: "rgb(239, 68, 68)",
+          pointBackgroundColor: "rgb(239, 68, 68)",
+        },
+        {
+          label: "신규 이용자",
+          data: newUserArray,
+          borderColor: "rgb(34, 197, 94)", // Green
+          backgroundColor: "rgba(34, 197, 94, 0.3)",
+          borderWidth: 1.5,
+          pointRadius: 2.5,
+          pointBorderColor: "rgb(34, 197, 94)",
+          pointBackgroundColor: "rgb(34, 197, 94)",
         },
       ],
     };
@@ -88,10 +102,10 @@ export default function ReferralHistoryChart({
   // Handle CSV Download
   const handleDownload = () => {
     const chartData = prepareMessageSharesData();
-    const csvHeader = "Date,Kakao messages sent,가입\n";
+    const csvHeader = "날짜,카톡_추천_횟수,추천_통해_가입,신규_이용자\n";
     const csvRows = chartData.labels
       .map((label, index) => {
-        return `${label},${chartData.datasets[0].data[index]},${chartData.datasets[1].data[index]}`;
+        return `${label},${chartData.datasets[0].data[index]},${chartData.datasets[1].data[index]},${chartData.datasets[2].data[index]}`;
       })
       .join("\n");
 

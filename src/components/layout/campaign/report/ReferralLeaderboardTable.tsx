@@ -49,14 +49,16 @@ export default function ReferralLeaderboardTable(
   const [newTableData, setNewTableData] = useState<leaderboardTableTypes[]>(
     data.result || [],
   );
+
   // Handle CSV Download
   const handleDownload = () => {
     const chartData = newTableData || {};
-    const csvHeader = "추천인 ID,가입,총 주문 수,총 주문 금액";
+    const csvHeader =
+      "추천인_ID,리퍼럴_가입한_피추천인_수,피추천인_가입자_기준_구매완료_수";
 
     const csvRows = chartData
       .map((resultRow) => {
-        return `${resultRow.referrer_id},${resultRow.base_user_id},${resultRow.total_order_count},${resultRow.total_signup_count}`;
+        return `${resultRow.base_user_id},${resultRow.total_signup_count},${resultRow.total_order_count}`;
       })
       .join("\n");
 
@@ -118,7 +120,6 @@ export default function ReferralLeaderboardTable(
   const fetchNewSort = async () => {
     if (isLoading) return;
     setIsLoading(true);
-    console.log("oldTable Data", newTableData);
     try {
       const newData = await fetchReferralLeaderboardTable(
         startDate,
@@ -130,10 +131,8 @@ export default function ReferralLeaderboardTable(
         userId,
         context,
       );
-      console.log("newData", newData);
       setData(newData);
       setNewTableData(newData?.result || []);
-      console.log("updated newTableData", newTableData);
     } catch (error) {
       console.error("Failed to fetch sorted data:", error);
     } finally {
@@ -148,7 +147,10 @@ export default function ReferralLeaderboardTable(
   useEffect(() => {
     resetTableAndFetchSortedData();
   }, [direction, sortField]);
-
+  // useEffect(() => {
+  //   console.log("data", data);
+  //   console.log("newTableData", newTableData);
+  // }, [data]);
   return (
     <div className="h-full max-h-[400px] w-full rounded-2xl bg-white p-[16px]">
       <div className="flex flex-row justify-between">

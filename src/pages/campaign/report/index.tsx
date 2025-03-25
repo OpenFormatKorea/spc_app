@@ -56,7 +56,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         user_id,
         context,
       );
-
     // Ensure the response is serializable
     return {
       props: {
@@ -74,8 +73,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   } catch (error) {
     console.error("Error in getServerSideProps:", error);
-
-    // Return a valid `props` object even in case of an error
     return {
       props: {
         error: "Failed to fetch data",

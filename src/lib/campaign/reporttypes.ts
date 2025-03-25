@@ -9,9 +9,11 @@ export interface SignUpResponse {
   date: string;
   share_count: number;
   signup_count: number;
+  new_user_count: number;
 }
 export interface HourlySignups {
-  [hour: number]: number;
+  //  [hour: number]: number;
+  [hour: number]: { signup_count: number; new_user_count: number };
 }
 
 export interface myFunnelResponse {
@@ -24,10 +26,12 @@ export interface myFunnelCount {
   total_kakao_share_count: number;
   total_new_registration_user_count: number;
   total_pickup_complete_count: number;
+  total_accepted_share_count: number;
 }
 export interface myFunnelRate {
   share_click_to_kakao_share: float;
   kakao_share_to_registration: float;
+  registration_to_new_user: float;
   registration_to_pickup_complete: float;
 }
 
