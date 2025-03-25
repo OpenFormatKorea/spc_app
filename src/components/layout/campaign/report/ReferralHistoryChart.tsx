@@ -95,7 +95,8 @@ export default function ReferralHistoryChart({
       })
       .join("\n");
 
-    const csvContent = csvHeader + csvRows;
+    const BOM = "\uFEFF";
+    const csvContent = BOM + csvHeader + "\n" + csvRows;
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
     const link = document.createElement("a");

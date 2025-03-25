@@ -51,10 +51,10 @@ export default function ReferralLeaderboardTable(
   );
   // Handle CSV Download
   const handleDownload = () => {
-    const chartData = data || {};
+    const chartData = newTableData || {};
     const csvHeader = "추천인 ID,가입,총 주문 수,총 주문 금액";
 
-    const csvRows = chartData.result
+    const csvRows = chartData
       .map((resultRow) => {
         return `${resultRow.referrer_id},${resultRow.base_user_id},${resultRow.total_order_count},${resultRow.total_signup_count}`;
       })
@@ -65,7 +65,6 @@ export default function ReferralLeaderboardTable(
     const csvContent = BOM + csvHeader + "\n" + csvRows;
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);

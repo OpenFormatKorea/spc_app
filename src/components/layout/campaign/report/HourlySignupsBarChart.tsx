@@ -24,7 +24,8 @@ const HourlySignupsBarChart = ({
       .map(([hour, signup_count]) => `${hour},${signup_count}`)
       .join("\n");
     const csvHeader = "hour_of_day,signup_count\n";
-    const csvContent = csvHeader + csvData;
+    const BOM = "\uFEFF";
+    const csvContent = BOM + csvHeader + csvData;
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
