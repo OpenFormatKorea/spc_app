@@ -27,14 +27,14 @@ const HourlySignupsBarChart = ({
       )
       .join("\n");
     console.log("csvData", csvData);
-    const csvHeader = "시간,회원가입수,새로운유저\n";
+    const csvHeader = "시간,유저_유입,신규가입자\n";
     const BOM = "\uFEFF";
     const csvContent = BOM + csvHeader + csvData;
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", "시간 별 가입자 수.csv");
+    link.setAttribute("download", "시간 별 유입자 수.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -61,7 +61,7 @@ const HourlySignupsBarChart = ({
       <div className="h-full w-full rounded-2xl bg-white p-[16px]">
         <div className="flex flex-row justify-between">
           <p className="text-[20px] font-semibold text-[#6c757d]">
-            시간 별 가입자 수
+            시간 별 유입자 수
           </p>
           <Tooltip title="CSV로 다운받기" className="w-fit">
             <CardActions>
@@ -100,7 +100,7 @@ const HourlySignupsBarChart = ({
                     indexBy="hour_of_day"
                     margin={{ top: 20, right: 20, bottom: 100, left: 60 }}
                     padding={0.3}
-                    colors={["rgb(15, 116, 237)", "rgb(15, 0, 237)"]}
+                    colors={["rgb(46, 134, 193)", "rgb(80, 200, 120)"]}
                     defs={[
                       {
                         id: "dots",

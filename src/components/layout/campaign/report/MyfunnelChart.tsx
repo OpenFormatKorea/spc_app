@@ -68,15 +68,11 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
       value: funnelCount.total_kakao_share_count,
       label: "총 카카오 공유 횟수",
     },
-    // {
-    //   id: "referral_attempt",
-    //   value: funnelCount.total_new_registration_user_count,
-    //   label: "총 회원가입 횟수",
-    // },
+
     {
       id: "referral_attempt",
       value: funnelCount.total_new_registration_user_count,
-      label: `총 가입 횟수 (신규유입: ${funnelCount.total_accepted_share_count})`,
+      label: `총 유입 횟수 (신규유입: ${funnelCount.total_accepted_share_count})`,
     },
     {
       id: "total_pickup_complete_count",

@@ -1,4 +1,4 @@
-// This line graph named "날짜 별 가입자 수" shows daily kakao message share and sign up stats.
+// This line graph named "날짜 별 유입자 수" shows daily kakao message share and sign up stats.
 
 import { generateLabels } from "@/lib/campaign/charts";
 import { SignUpResponse } from "@/lib/campaign/reporttypes";
@@ -77,7 +77,7 @@ export default function ReferralHistoryChart({
           pointBackgroundColor: "rgb(15, 116, 237)",
         },
         {
-          label: "추천 통해 가입",
+          label: "신규 유입",
           data: signUpArray,
           borderColor: "rgb(239, 68, 68)", // Red
           backgroundColor: "rgba(239, 68, 68, 0.3)",
@@ -87,7 +87,7 @@ export default function ReferralHistoryChart({
           pointBackgroundColor: "rgb(239, 68, 68)",
         },
         {
-          label: "신규 이용자",
+          label: "신규 가입자",
           data: newUserArray,
           borderColor: "rgb(34, 197, 94)", // Green
           backgroundColor: "rgba(34, 197, 94, 0.3)",
@@ -102,7 +102,7 @@ export default function ReferralHistoryChart({
   // Handle CSV Download
   const handleDownload = () => {
     const chartData = prepareMessageSharesData();
-    const csvHeader = "날짜,카톡_추천_횟수,추천_통해_가입,신규_이용자\n";
+    const csvHeader = "날짜,카톡추천횟수,신규_유입,신규가입자\n";
     const csvRows = chartData.labels
       .map((label, index) => {
         return `${label},${chartData.datasets[0].data[index]},${chartData.datasets[1].data[index]},${chartData.datasets[2].data[index]}`;
@@ -116,7 +116,7 @@ export default function ReferralHistoryChart({
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", "날짜 별 가입자 수.csv");
+    link.setAttribute("download", "날짜 별 유입자 수.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -126,7 +126,7 @@ export default function ReferralHistoryChart({
     <div className="h-full w-full rounded-2xl bg-white p-[16px]">
       <div className="flex flex-row justify-between">
         <p className="text-[20px] font-semibold text-[#6c757d]">
-          날짜 별 가입자 수
+          날짜 별 유입자 수
         </p>
         <Tooltip title="CSV로 다운받기">
           <CardActions>
