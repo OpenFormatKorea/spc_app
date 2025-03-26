@@ -17,8 +17,6 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-// import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
-import { handleGoBack } from "@/lib/common";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
@@ -60,7 +58,6 @@ const DetailsCampaign = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  console.log("cDetailApiResponse,", cDetailApiResponse);
   const router = useRouter();
   const [title, setTitle] = useState(cDetailApiResponse.title);
   const [description, setDescription] = useState(

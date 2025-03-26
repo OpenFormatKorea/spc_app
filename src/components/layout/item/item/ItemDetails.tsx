@@ -23,7 +23,9 @@ interface ItemDetailsProps {
   setKakaoShareArgs: (kakaoShareArgs: KakaoShareArgs) => void;
   setItem_type: (value: ItemType) => void;
   setTitle: (value: string) => void;
-  setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>;
+  setCurrentProductItemList: React.Dispatch<
+    React.SetStateAction<ProductsArgs[]>
+  >;
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>;
   setActive?: (value: boolean) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -46,7 +48,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     disableInput,
     setKakaoShareArgs,
     setTitle,
-    setProductInputs,
+    setCurrentProductItemList,
     setPromotionInputs,
     setActive,
     handleKeyDown,
@@ -58,14 +60,14 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
 ) => {
   useEffect(() => {
     if (page_type === "DETAILS") {
-      setProductInputs(itemArgs.products);
+      setCurrentProductItemList(itemArgs.products);
       setPromotionInputs(itemArgs.promotions);
     }
   }, [
     page_type,
     itemArgs.products,
     itemArgs.promotions,
-    setProductInputs,
+    setCurrentProductItemList,
     setPromotionInputs,
   ]);
 

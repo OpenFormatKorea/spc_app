@@ -22,15 +22,15 @@ const ItemList: React.FC<ItemListProps> = (
     () => (Array.isArray(apiResponse) ? apiResponse : []),
     [apiResponse],
   );
-  const [selectedProductItems, setSelectedProductItems] = useState<{
+  const [currentProductItemList, setCurrentProductItemList] = useState<{
     [key: string]: boolean;
   }>({});
   const [selectAll, setSelectAll] = useState(false);
   const [activeStatusMap, setActiveStatusMap] = useState<{
     [key: string]: boolean;
   }>({});
-  const selectedItemIds = Object.keys(selectedProductItems).filter(
-    (key) => selectedProductItems[key],
+  const selectedItemIds = Object.keys(currentProductItemList).filter(
+    (key) => currentProductItemList[key],
   );
 
   useEffect(() => {
@@ -94,13 +94,13 @@ const ItemList: React.FC<ItemListProps> = (
       (acc, item) => ({ ...acc, [item.id]: isChecked }),
       {} as { [key: string]: boolean },
     );
-    setSelectedProductItems(updatedSelectedItems);
+    setCurrentProductItemList(updatedSelectedItems);
   };
 
   const handleCheckboxChange =
     (itemId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = e.target.checked;
-      setSelectedProductItems((prev) => {
+      setCurrentProductItemList((prev) => {
         const updatedItems = { ...prev, [itemId]: isChecked };
         setSelectAll(items.every((item) => updatedItems[item.id]));
         return updatedItems;
@@ -158,7 +158,7 @@ const ItemList: React.FC<ItemListProps> = (
                       type="checkbox"
                       id={`item_${item.id}`}
                       name={`item_${item.id}`}
-                      checked={selectedProductItems[item.id] || false}
+                      checked={currentProductItemList[item.id] || false}
                       onChange={handleCheckboxChange(item.id)}
                     />
                   </td>

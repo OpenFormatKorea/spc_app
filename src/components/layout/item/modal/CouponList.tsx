@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/lib/types";
-import { useMemo, useState, useEffect, useRef, KeyboardEvent } from "react";
+import { useState, useEffect } from "react";
 import { CouponListArgs, CouponsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
 import InputTextBox from "@/components/base/InputText";

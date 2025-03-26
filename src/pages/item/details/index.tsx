@@ -72,14 +72,20 @@ const DetailsItem = (
 ) => {
   const router = useRouter();
   const [title, setTitle] = useState(apiResponse.title);
-  const [productInputs, setProductInputs] = useState<ProductsArgs[]>(
-    apiResponse.products || [
-      {
-        product_model_code: "",
-        product_model_name: "",
-        images: [{ posThumb: "" }, { thumb: "" }],
-      },
-    ],
+  const [currentProductItemList, setCurrentProductItemList] = useState<
+    ProductsArgs[]
+  >(
+    Array.isArray(apiResponse.products)
+      ? apiResponse.products
+      : [
+          {
+            product_model_code: apiResponse.products?.product_model_code || "",
+            product_model_name:
+              apiResponse.products?.product_model_name ||
+              apiResponse.products?.model_name ||
+              "",
+          },
+        ],
   );
   const [description, setDescription] = useState<string>(
     apiResponse.promotions?.description || "",
@@ -88,18 +94,6 @@ const DetailsItem = (
     apiResponse.promotions || [{ id: "", description: "" }],
   );
 
-  const selectedProductItems = [
-    {
-      product_model_code:
-        apiResponse.products?.product_model_code ||
-        apiResponse.products?.model_name ||
-        "",
-      product_model_name:
-        apiResponse.products?.product_model_name ||
-        apiResponse.products?.model_name ||
-        "",
-    },
-  ];
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>(
     apiResponse.kakao_args,
   );
@@ -129,7 +123,7 @@ const DetailsItem = (
     title,
     item_type,
     kakao_args: kakaoShareArgs,
-    products: productInputs,
+    products: currentProductItemList,
     promotions: promotionInputs,
     rewards,
     active,
@@ -141,7 +135,7 @@ const DetailsItem = (
     title,
     item_type,
     kakao_args: kakaoShareArgs,
-    product: productInputs,
+    product: currentProductItemList,
     promotion: promotionInputs,
     current_rewards: selectedRewards,
     active,
@@ -328,7 +322,7 @@ const DetailsItem = (
               setItem_type={setItem_type}
               setTitle={setTitle}
               setKakaoShareArgs={setKakaoShareArgs}
-              setProductInputs={setProductInputs}
+              setCurrentProductItemList={setCurrentProductItemList}
               setPromotionInputs={setPromotionInputs}
               handleKeyDown={handleKeyDown}
               image={image}
@@ -346,11 +340,11 @@ const DetailsItem = (
               item_type={item_type}
               itemArgs={itemArgs}
               description={description}
-              selectedProductItems={selectedProductItems}
+              currentProductItemList={currentProductItemList}
               setPromotionInputs={setPromotionInputs}
               setDescription={setDescription}
               setItem_type={setItem_type}
-              setProductInputs={setProductInputs}
+              setCurrentProductItemList={setCurrentProductItemList}
               handleKeyDown={handleKeyDown}
               disableInput={false}
             />

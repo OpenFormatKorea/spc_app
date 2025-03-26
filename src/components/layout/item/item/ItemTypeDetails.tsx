@@ -16,11 +16,13 @@ interface ItemTypeDetailsProps {
   page_type: "DETAILS" | "NEW";
   item_type: ItemType;
   itemArgs: ItemArgs;
-  selectedProductItems: ProductsArgs[];
+  currentProductItemList: ProductsArgs[];
+  setCurrentProductItemList: React.Dispatch<
+    React.SetStateAction<ProductsArgs[]>
+  >;
   disableInput: boolean;
   description: string;
   setItem_type: (value: ItemType) => void;
-  setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>;
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>;
   setDescription: (value: string) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -32,10 +34,10 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   item_type,
   itemArgs,
   disableInput,
-  selectedProductItems,
+  currentProductItemList,
+  setCurrentProductItemList,
   description,
   setItem_type,
-  setProductInputs,
   setPromotionInputs,
   setDescription,
   handleKeyDown,
@@ -48,7 +50,7 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   };
   useEffect(() => {
     if (page_type === "DETAILS") {
-      setProductInputs(itemArgs.products);
+      setCurrentProductItemList(itemArgs.products);
       setPromotionInputs(itemArgs.promotions);
     }
   }, [page_type]);
@@ -82,7 +84,7 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
             <button
               id="create_item_container"
               className={`border p-1 ${
-                disableInput
+                page_type === "DETAILS"
                   ? "cursor-not-allowed bg-gray-400"
                   : "cursor-pointer bg-blue-500"
               } min-w-[45px] rounded-lg text-center text-white`}
@@ -98,7 +100,7 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
           page_type={page_type}
           description={description}
           setDescription={setDescription}
-          selectedProductItems={selectedProductItems}
+          currentProductItemList={currentProductItemList}
           handleKeyDown={handleKeyDown}
         />
       </div>

@@ -71,6 +71,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
       setFunnelLoading(false);
     }
   }, [hourlysignUpApiResponse]);
+
   return (
     <div style={{ maxHeight: "70vh" }}>
       <div className="mb-2 w-full pb-2">

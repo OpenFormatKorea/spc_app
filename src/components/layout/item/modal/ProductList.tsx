@@ -1,22 +1,21 @@
-import { PBApiResponse } from "@/lib/types";
-import { useEffect, useState } from "react";
 import { ProductListArgs, ProductsArgs } from "@/lib/item/types";
-import Modal from "@/components/layout/base/Modal";
 import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { fetchGetProductCodeList } from "@/lib/item/apis";
+import InputTextBox from "@/components/base/InputText";
+import Modal from "@/components/layout/base/Modal";
 import { GetServerSidePropsContext } from "next";
 import { CircularProgress } from "@mui/material";
-import InputTextBox from "@/components/base/InputText";
+import { PBApiResponse } from "@/lib/types";
+import { useEffect, useState } from "react";
 
 interface ProductListProps {
-  apiResponse: PBApiResponse;
   page: number;
   page_size: number;
-  productInputs: ProductsArgs[];
-  selectedProductItems: ProductsArgs[];
-  setProductInputs: (value: ProductsArgs[]) => void;
-  setSelectedProductItems: (value: ProductsArgs[]) => void;
+  apiResponse: PBApiResponse;
+  currentProductItemList: ProductsArgs[];
+  newProductItemList: ProductsArgs[];
+  setNewProductItemList: React.Dispatch<React.SetStateAction<ProductsArgs[]>>;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -28,13 +27,12 @@ enum searchType {
 
 const ProductList: React.FC<ProductListProps> = (
   {
-    apiResponse,
     page,
     page_size,
-    productInputs,
-    setProductInputs,
-    selectedProductItems,
-    setSelectedProductItems,
+    apiResponse,
+    currentProductItemList,
+    newProductItemList,
+    setNewProductItemList,
     isOpen,
     onClose,
   },
@@ -48,8 +46,10 @@ const ProductList: React.FC<ProductListProps> = (
   const [pageNum, setPageNum] = useState<number>(page);
   const [searchOption, setSearchOption] = useState<searchType>(searchType.G);
   const [search, setSearch] = useState("");
-  const [selectedItemList, setSelectedItemList] = useState<string[]>([]); // before update the products
 
+  const [beforeAddingItemList, setBeforeAddingItemList] = useState<
+    ProductsArgs[]
+  >(currentProductItemList); // before update the products
   const [products, setProducts] = useState<ProductListArgs[]>(
     newResponse.data?.content || [],
   );
@@ -95,6 +95,12 @@ const ProductList: React.FC<ProductListProps> = (
     if (isBottom) fetchNextPage();
   }, [isBottom]);
 
+  useEffect(() => {
+    if (isOpen) {
+      setBeforeAddingItemList(currentProductItemList);
+    }
+  }, [isOpen]);
+
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
@@ -108,61 +114,61 @@ const ProductList: React.FC<ProductListProps> = (
           { thumb: product.thumb || "" },
         ],
       }));
-      setProductInputs(allProducts);
-      setSelectedItemList(products.map((product) => product.gid));
+      setBeforeAddingItemList((prev) => [...prev, ...allProducts]);
     } else {
-      setProductInputs([]);
-      setSelectedItemList([]);
+      setBeforeAddingItemList([]);
     }
   };
 
   const handleCheckboxChange =
-    (productGid: string, productName: string) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = e.target.checked;
+      const product = products.find((p) => p.gid === productGid);
+      if (!product) return;
 
-      setSelectedItemList((prevSelected) => {
-        // Ensure `selectedProductItems` is always an array before using `.some()`
-        const isAlreadySelected =
-          Array.isArray(selectedProductItems) &&
-          selectedProductItems.some(
-            (item) => item.product_model_code === productGid,
-          );
+      const productData: ProductsArgs = {
+        product_model_code: product.gid,
+        product_model_name: product.name,
+        images: [
+          { posThumb: product.posThumb || "" },
+          { thumb: product.thumb || "" },
+        ],
+      };
 
-        // Ensure that the product is added only if it's checked and NOT already in selectedProductItems
-        const shouldAdd = isChecked && !isAlreadySelected;
-
-        const updatedSelectedItems = shouldAdd
-          ? [...prevSelected, productGid] // Add only the GID
-          : prevSelected.filter((gid) => gid !== productGid);
-        console.log("updatedSelectedItems", updatedSelectedItems);
-
-        const updatedProducts: ProductsArgs[] = products
-          .filter((product) => updatedSelectedItems.includes(product.gid))
-          .map((product) => ({
-            product_model_code: product.gid,
-            product_model_name: product.name,
-            images: [
-              { posThumb: product.posThumb || "" },
-              { thumb: product.thumb || "" },
-            ],
-          }));
-
-        console.log("updatedProducts", updatedProducts);
-
-        setProductInputs(updatedProducts);
-        setSelectAll(updatedSelectedItems.length === products.length);
-
-        return updatedSelectedItems;
-      });
+      setBeforeAddingItemList((prev) =>
+        isChecked
+          ? prev.some((item) => item.product_model_code === productGid)
+            ? prev
+            : [...prev, productData]
+          : prev.filter((item) => item.product_model_code !== productGid),
+      );
     };
 
   const handleAction = () => {
     if (confirm("해당 상품을 선택 하시겠어요?")) {
-      setSelectedProductItems(productInputs);
+      setNewProductItemList(beforeAddingItemList);
+      setBeforeAddingItemList([]);
       onClose();
     }
   };
+
+  useEffect(() => {
+    if (
+      !Array.isArray(currentProductItemList) ||
+      !Array.isArray(newProductItemList)
+    )
+      return;
+
+    const combinedItems = [...currentProductItemList];
+    const uniqueItemsMap = new Map<string, ProductsArgs>();
+    combinedItems.forEach((item) => {
+      uniqueItemsMap.set(item.product_model_code, item);
+    });
+
+    const mergedUniqueItems = Array.from(uniqueItemsMap.values());
+
+    setBeforeAddingItemList(mergedUniqueItems);
+  }, [newProductItemList]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -235,11 +241,10 @@ const ProductList: React.FC<ProductListProps> = (
                           <input
                             type="checkbox"
                             id={`item_${product.gid}`}
-                            checked={selectedItemList.includes(product.gid)}
-                            onChange={handleCheckboxChange(
-                              product.gid,
-                              product.name,
+                            checked={beforeAddingItemList.some(
+                              (item) => item.product_model_code === product.gid,
                             )}
+                            onChange={handleCheckboxChange(product.gid)}
                           />
                         </td>
                         <td className={tbodyStyle + " w-[75px]"}>
@@ -275,6 +280,52 @@ const ProductList: React.FC<ProductListProps> = (
                 </div>
               )}
             </div>
+          </div>
+        </div>
+        <div className="w-full gap-[5px] text-left">
+          <p className="text-[12px]">
+            최종 선택된 상품
+            <div className="mb-1 text-[11px] text-gray-600">
+              <span className="inline-block rounded-md bg-blue-200 px-1">
+                이전 선택
+              </span>
+              {"   "}
+              <span className="inline-block rounded-md bg-green-200 px-1">
+                신규 선택
+              </span>
+            </div>
+          </p>
+          <div className="flex h-[100px] w-[380px] flex-wrap gap-[5px] overflow-y-auto rounded-lg border border-gray-400 bg-gray-100 p-[5px]">
+            {beforeAddingItemList.map((item) => {
+              const isFromCurrent = currentProductItemList.some(
+                (curr) => curr.product_model_code === item.product_model_code,
+              );
+
+              return (
+                <div
+                  key={item.product_model_code}
+                  className={`flex h-fit items-center justify-center gap-[5px] rounded-lg border p-[5px] text-[10px] ${
+                    isFromCurrent ? "bg-blue-200" : "bg-green-200"
+                  }`}
+                >
+                  <p>{item.product_model_code}</p>
+                  <button
+                    onClick={() =>
+                      setBeforeAddingItemList((prev) =>
+                        prev.filter(
+                          (product) =>
+                            product.product_model_code !==
+                            item.product_model_code,
+                        ),
+                      )
+                    }
+                    className="flex h-[15px] w-[15px] items-center justify-center rounded bg-blue-400 text-center text-white"
+                  >
+                    <p>X</p>
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
         <button

@@ -1,19 +1,18 @@
+import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
+import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
 import ItemTypeDetails from "@/components/layout/item/item/ItemTypeDetails";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import ProductList from "@/components/layout/item/modal/ProductList";
 import ItemDetails from "@/components/layout/item/item/ItemDetails";
 import { useRef, useEffect, KeyboardEvent, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
+import { ApiResponse, PBApiResponse } from "@/lib/types";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { withAuth } from "@/hoc/withAuth";
-import { ApiResponse, PBApiResponse } from "@/lib/types";
 import { useRouter } from "next/router";
-import {
-  fetchGetProductCodeList,
-  fetchGetCouponCodeList,
-  fetchCreateItem,
-} from "@/lib/item/apis";
 import {
   ProductsArgs,
   PromotionsArgs,
@@ -24,10 +23,11 @@ import {
   RewardType,
   ItemArgs,
 } from "@/lib/item/types";
-import NewRewardComponent from "@/components/layout/item/reward/new/NewRewardComponent";
-import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
-import ProductList from "@/components/layout/item/modal/ProductList";
-import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
+import {
+  fetchGetProductCodeList,
+  fetchGetCouponCodeList,
+  fetchCreateItem,
+} from "@/lib/item/apis";
 
 interface NewItemProps {
   shop_id: string;
@@ -82,22 +82,11 @@ const NewItem = (
   }: NewItemProps,
   context: GetServerSidePropsContext,
 ) => {
-  const [couPageNum, setCouPageNum] = useState(page);
-  const [couPageSize, setCouProdPageSize] = useState(page_size);
   const router = useRouter();
+
   const [title, setTitle] = useState("");
-  const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
   const [description, setDescription] = useState("");
-  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
-    { description: description },
-  ]);
-  const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
-  const [selectedProductItems, setSelectedProductItems] = useState<
-    ProductsArgs[]
-  >([]);
-  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>(
-    [],
-  );
+
   const [kakaoShareArgs, setKakaoShareArgs] = useState<KakaoShareArgs>({
     shop_name: "",
     image: "",
@@ -115,6 +104,24 @@ const NewItem = (
   const [shop_logo, setShop_logo] = useState<string>(kakaoShareArgs.shop_logo);
   const [shop_logo_result, setShop_logo_result] = useState<string>("");
   const [imageLogoFile, setImageLogoFile] = useState<File>();
+
+  const [currentProductItemList, setCurrentProductItemList] = useState<
+    ProductsArgs[]
+  >([]); // 가장 마지막 업데이트 - > 이거 이후로 final로 데이터 넘어감
+
+  const [newProductItemList, setNewProductItemList] = useState<ProductsArgs[]>(
+    [],
+  ); // new product Item array
+
+  const [promotionInputs, setPromotionInputs] = useState<PromotionsArgs[]>([
+    { description: description },
+  ]);
+
+  const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
+  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>(
+    [],
+  );
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -126,7 +133,7 @@ const NewItem = (
     title,
     item_type,
     kakao_args: kakaoShareArgs,
-    products: productInputs,
+    products: currentProductItemList,
     promotions: promotionInputs,
     rewards,
     campaign_id,
@@ -139,12 +146,12 @@ const NewItem = (
       return false;
     }
     if (item_type === ItemType.PD) {
-      if (!productInputs.length) {
+      if (!currentProductItemList.length) {
         alert("아이템 적용을 원하시는 상품을 추가해주세요.");
         return false;
       }
       if (
-        productInputs.some(
+        currentProductItemList.some(
           (p) => !p.product_model_code || !p.product_model_name,
         )
       ) {
@@ -176,11 +183,13 @@ const NewItem = (
     return true;
   };
 
+  // 표시 이미지 변경
   const handleImageChange = (imgType: string, file: File, result: string) => {
     imgType === "image" ? setImageFile(file) : setImageLogoFile(file);
     imgType === "image" ? setImage_result(result) : setShop_logo_result(result);
   };
 
+  //이미지 파일 선택
   const onChangeImage =
     (imgType: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -196,6 +205,7 @@ const NewItem = (
       reader.readAsDataURL(file);
     };
 
+  //이미지 삭제
   const handleImageDelete = async (
     previousFilePath: string,
     imgType: string,
@@ -207,6 +217,8 @@ const NewItem = (
       console.error("Failed to delete previous file:", error);
     }
   };
+
+  // 임시 이미지 삭제
   const handleTempImageDelete = (imgType: string) => {
     if (imgType === "image") {
       setImage("");
@@ -218,6 +230,8 @@ const NewItem = (
       setShop_logo_result("");
     }
   };
+
+  // 이미지 업로드
   const uploadImage = async (
     file: File,
     imgType: string,
@@ -249,8 +263,8 @@ const NewItem = (
 
   const handleSubmit = async (event: React.FormEvent) => {
     const { id } = event.currentTarget;
-    if (item_type === ItemType.PM && productInputs.length === 0) {
-      setProductInputs([
+    if (item_type === ItemType.PM && currentProductItemList.length === 0) {
+      setCurrentProductItemList([
         {
           product_model_code: "",
           product_model_name: "",
@@ -332,13 +346,16 @@ const NewItem = (
       setSelectedCouponItems([]);
       setDescription("");
     } else if (item_type === ItemType.PM) {
-      setProductInputs([]);
-      setSelectedProductItems([]);
+      setCurrentProductItemList([]);
     }
   }, [item_type]);
   useEffect(() => {
     setPromotionInputs([{ description: description }]);
   }, [description]);
+  useEffect(() => {
+    if (!Array.isArray(newProductItemList)) return;
+    setCurrentProductItemList(newProductItemList);
+  }, [newProductItemList]);
   return (
     <>
       {loading && (
@@ -361,7 +378,7 @@ const NewItem = (
               setItem_type={setItem_type}
               setTitle={setTitle}
               setKakaoShareArgs={setKakaoShareArgs}
-              setProductInputs={setProductInputs}
+              setCurrentProductItemList={setCurrentProductItemList}
               setPromotionInputs={setPromotionInputs}
               handleKeyDown={handleKeyDown}
               image={image}
@@ -378,12 +395,12 @@ const NewItem = (
               page_type="NEW"
               item_type={item_type}
               itemArgs={itemArgs}
-              selectedProductItems={selectedProductItems}
+              currentProductItemList={currentProductItemList}
+              setCurrentProductItemList={setCurrentProductItemList}
               description={description}
               setPromotionInputs={setPromotionInputs}
               setDescription={setDescription}
               setItem_type={setItem_type}
-              setProductInputs={setProductInputs}
               openModal={openModal}
               handleKeyDown={handleKeyDown}
               disableInput={false}
@@ -424,13 +441,12 @@ const NewItem = (
           </div>
         </div>
         <ProductList
-          apiResponse={productResponse}
-          productInputs={productInputs}
-          selectedProductItems={selectedProductItems}
-          setSelectedProductItems={setSelectedProductItems}
-          setProductInputs={setProductInputs}
           page={page}
           page_size={page_size}
+          apiResponse={productResponse}
+          currentProductItemList={currentProductItemList}
+          newProductItemList={newProductItemList}
+          setNewProductItemList={setNewProductItemList}
           onClose={closeModal}
           isOpen={isModalOpen}
         />

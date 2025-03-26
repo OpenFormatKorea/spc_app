@@ -1,12 +1,12 @@
 import InputTextBox from "@/components/base/InputText";
 import { inputFormClass } from "@/interfaces/tailwindCss";
-import { ItemArgs, ItemType, ProductsArgs } from "@/lib/item/types";
+import { ItemType, ProductsArgs } from "@/lib/item/types";
 import { useEffect, useState } from "react";
 
 interface ItemTypeComponentProps {
   page_type: "DETAILS" | "NEW";
   item_type: ItemType;
-  selectedProductItems: ProductsArgs[];
+  currentProductItemList: ProductsArgs[];
   description: string;
   setDescription: (value: string) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -15,7 +15,7 @@ interface ItemTypeComponentProps {
 const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
   page_type,
   item_type,
-  selectedProductItems,
+  currentProductItemList,
   description,
   setDescription,
   handleKeyDown,
@@ -33,18 +33,18 @@ const ItemTypeComponent: React.FC<ItemTypeComponentProps> = ({
         <div className="flex h-fit w-full flex-col">
           <div className="mb-2 flex w-full flex-col text-left">
             <label className={labelClass}>상품 모델 코드</label>
-            <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-lg bg-gray-100 p-2 pb-3 text-[14px]">
-              {!selectedProductItems.length ? (
+            <div className="flex h-fit max-h-[250px] w-full flex-wrap justify-center overflow-y-auto break-words rounded-lg bg-gray-100 p-[10px] text-[12px]">
+              {!currentProductItemList.length ? (
                 <div className="flex h-full w-full items-center justify-center text-center text-gray-600">
                   선택된 상품이 없습니다.
                   <br />
                   상품을 선택해주세요.
                 </div>
               ) : (
-                selectedProductItems.map((inputProduct) => (
+                currentProductItemList.map((inputProduct) => (
                   <div
                     key={inputProduct.product_model_code}
-                    className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
+                    className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[12px] text-white"
                   >
                     {inputProduct.product_model_code} -{" "}
                     {inputProduct.product_model_name}
