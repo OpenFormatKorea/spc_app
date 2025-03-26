@@ -49,13 +49,20 @@ const HourlySignupsBarChart = ({
   };
 
   const chartData = Object.entries(barChartNewData || {}).map(
-    ([hour, { signup_count, new_user_count }]) => ({
-      hour_of_day: hour.toString(),
-      signup_count: Number(signup_count),
-      new_user_count: Number(new_user_count),
-    }),
+    ([hour, { signup_count, new_user_count }]) => {
+      const adjustedSignUpCount = Math.max(
+        Number(signup_count) - Number(new_user_count),
+        0,
+      );
+      return {
+        hour_of_day: hour.toString(),
+        signup_count: adjustedSignUpCount,
+        new_user_count: Number(new_user_count),
+      };
+    },
   );
-
+  console.log("barChartNewData", barChartNewData);
+  console.log("chartData", chartData);
   return (
     <>
       <div className="h-full w-full rounded-2xl bg-white p-[16px]">
