@@ -71,8 +71,8 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
 
     {
       id: "referral_attempt",
-      value: funnelCount.total_new_registration_user_count,
-      label: `총 유입 횟수 (신규유입: ${funnelCount.total_accepted_share_count})`,
+      value: funnelCount.total_accepted_share_count,
+      label: `총 유입 횟수 (신규유입: ${funnelCount.total_new_registration_user_count})`,
     },
     {
       id: "total_pickup_complete_count",
@@ -84,6 +84,7 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
   const registration_to_new_user_rate = (
     FunnelRate.registration_to_new_user * 100
   ).toFixed(2);
+  console.log("FunnelRate", FunnelRate);
   const percentage_aggregates = [
     (FunnelRate.share_click_to_kakao_share * 100).toFixed(2),
     (FunnelRate.kakao_share_to_registration * 100).toFixed(2),
