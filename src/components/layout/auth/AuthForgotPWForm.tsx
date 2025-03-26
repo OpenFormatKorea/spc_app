@@ -22,7 +22,7 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
   return (
     <AuthContainer>
       <div className="flex min-h-[320px] min-w-[380px] flex-col items-center justify-center rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 p-6 text-center">
-        <div className="m-2 w-full text-left text-xl font-semibold">
+        <div className="m-2 w-full text-left text-[18px] font-semibold">
           비밀번호 찾기
         </div>
         <div className="flex w-full flex-col items-start justify-between">
@@ -43,13 +43,13 @@ const AuthForgotPW: React.FC<AuthForgotPWProps> = ({
           onClick={handleSubmit}
         />
         <div className="passwordDiv m-1 flex w-full items-center justify-center p-1 text-left">
-          <div className="ml-2 mr-2 cursor-pointer text-sm">
+          <div className="ml-2 mr-2 cursor-pointer text-[14px]">
             <button id="signup" onClick={handleButton}>
               회원가입
             </button>
           </div>
           <div>|</div>
-          <div className="ml-2 mr-2 cursor-pointer text-sm">
+          <div className="ml-2 mr-2 cursor-pointer text-[14px]">
             <button id="login" onClick={handleButton}>
               로그인
             </button>

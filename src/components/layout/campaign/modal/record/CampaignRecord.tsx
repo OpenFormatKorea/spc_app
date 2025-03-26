@@ -67,13 +67,13 @@
 //   // }, [isBottom]);
 
 //   const theadStyle =
-//     "px-6 py-3 border-b border-gray-200 text-center text-sm font-medium text-gray-700 text-center";
+//     "px-6 py-3 border-b border-gray-200 text-center text-[14px] font-medium text-gray-700 text-center";
 //   const tbodyStyle =
-//     "px-3 py-2 text-sm border-b justify-center border-gray-200 whitespace-normal break-words break-all text-center h-full";
+//     "px-3 py-2 text-[14px] border-b justify-center border-gray-200 whitespace-normal break-words break-all text-center h-full";
 //   return (
 //     <BigModal isOpen={isOpen} onClose={onClose}>
 //       <div className="flex flex-col items-center justify-center text-center">
-//         <h1 className="w-full pb-2 text-left text-xl font-bold">
+//         <h1 className="w-full pb-[5px] text-left text-[18px] font-bold">
 //           리워드 지급내역
 //         </h1>
 //         <div className="my-2 flex max-h-[550px] w-full flex-col items-center lg:max-w-full">

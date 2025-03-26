@@ -69,11 +69,11 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
         </a>
       </div>
       <div className="pt-4">
-        <div className="pb-4 pl-4 text-sm text-white">main</div>
+        <div className="pb-4 pl-4 text-[14px] text-white">main</div>
         <div className="main-menu pl-3">
           {/* Dashboard */}
           <div
-            className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
+            className="mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-[13px] text-white transition-all duration-300"
             onClick={() => handleClick("/dashboard")}
             onMouseEnter={() => handleMouseEnter("대시보드")}
             onMouseLeave={handleMouseLeave}
@@ -95,7 +95,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
           </div>
           {/* Campaign */}
           <div
-            className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
+            className="mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-[13px] text-white transition-all duration-300"
             onClick={() => handleClick("/campaign")}
             onMouseEnter={() => handleMouseEnter("캠페인")}
             onMouseLeave={handleMouseLeave}
@@ -116,51 +116,51 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
             </div>
           </div>
           {/* Campaign Submenus with Bold Active State */}
-          <div className="flex w-full px-10 pb-2 text-sm text-white">
+          <div className="flex w-full px-10 pb-[5px] text-[14px] text-white">
             <a
               href="/campaign"
-              className={`w-full text-sm ${router.pathname === "/campaign" ? "font-bold" : ""}`}
+              className={`w-full text-[14px] ${router.pathname === "/campaign" ? "font-bold" : ""}`}
             >
               - 캠페인 리스트
             </a>
           </div>
-          <div className="flex w-full px-10 pb-2 text-sm text-white">
+          <div className="flex w-full px-10 pb-[5px] text-[14px] text-white">
             <a
               href="/campaign/new"
-              className={`w-full text-sm ${router.pathname === "/campaign/new" ? "font-bold" : ""}`}
+              className={`w-full text-[14px] ${router.pathname === "/campaign/new" ? "font-bold" : ""}`}
             >
               - 캠페인 생성
             </a>
           </div>
-          {/* <div className="flex w-full px-10 pb-2 text-sm text-white">
+          {/* <div className="flex w-full px-10 pb-[5px] text-[14px] text-white">
             <a
               href="/campaign/stats"
-              className={`w-full text-sm ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
+              className={`w-full text-[14px] ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
             >
               - 캠페인 지표
             </a>
           </div> */}
-          <div className="flex w-full px-10 pb-2 text-sm text-white">
+          <div className="flex w-full px-10 pb-[5px] text-[14px] text-white">
             <a
               href="/campaign/report"
-              className={`w-full text-sm ${router.pathname === "/campaign/report" ? "font-bold" : ""}`}
+              className={`w-full text-[14px] ${router.pathname === "/campaign/report" ? "font-bold" : ""}`}
             >
               - 캠페인 상세 리포트
             </a>
           </div>
-          <div className="flex w-full px-10 pb-2 text-sm text-white">
+          <div className="flex w-full px-10 pb-[5px] text-[14px] text-white">
             <a
               href="/campaign/rewards"
-              className={`w-full text-sm ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
+              className={`w-full text-[14px] ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
             >
               - 캠페인 리워드
             </a>
           </div>
         </div>
-        <div className="py-4 pl-4 text-sm text-white">setting</div>
+        <div className="py-4 pl-4 text-[14px] text-white">setting</div>
         <div className="main-menu pl-3">
           <div
-            className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
+            className="mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-[13px] text-white transition-all duration-300"
             onClick={() => handleClick("/admin/usersearch")}
             onMouseEnter={() => handleMouseEnter("유저검색")}
             onMouseLeave={handleMouseLeave}
@@ -185,7 +185,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
       <div className="main-menu pl-3">
         {/* My Page */}
         <div
-          className="text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300"
+          className="mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-[13px] text-white transition-all duration-300"
           onClick={() => handleClick("/admin/mypage")}
           onMouseEnter={() => handleMouseEnter("마이 페이지")}
           onMouseLeave={handleMouseLeave}
@@ -208,16 +208,16 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
 
         <div className="setting-menu absolute bottom-[5%] w-full">
           <div className="flex w-full flex-col justify-center p-3">
-            <label className="text-xs font-bold text-white">SHOP ID</label>
-            <label className="text-xs text-white">{shop_id}</label>
+            <label className="text-[12px] font-bold text-white">SHOP ID</label>
+            <label className="text-[12px] text-white">{shop_id}</label>
           </div>
           <div
-            className="text-md flex h-[55px] w-full cursor-pointer items-center p-4 text-white transition-all duration-300"
+            className="flex h-[55px] w-full cursor-pointer items-center p-4 text-[13px] text-white transition-all duration-300"
             onClick={handleSignOut}
           >
             <div className="flex items-center pl-2">
               <LogoutIcon fontSize="small" />
-              <div className="text-md w-full pl-3 text-left">
+              <div className="w-full pl-3 text-left text-[13px]">
                 <span>로그아웃</span>
               </div>
             </div>

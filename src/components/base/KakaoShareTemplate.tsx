@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import InputTextBox from "@/components/base/InputText";
 import { KakaoShareArgs } from "@/lib/item/types";
+import { inputFormClass } from "@/interfaces/tailwindCss";
 
 interface KakaoShareProps {
   page_type: string;
@@ -31,8 +32,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
   onChangeImage,
   handleTempImageDelete,
 }) => {
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-4";
-  const labelClass = "text-xs pt-4 text-gray-500";
+  const labelClass = "text-[12px] pt-4 text-gray-500";
   const imageFileInput = useRef<HTMLInputElement>(null);
   const shopLogoFileInput = useRef<HTMLInputElement>(null);
   const [shop_name, setShop_name] = useState(kakaoShareArgs.shop_name);
@@ -201,7 +201,7 @@ const KakaoShareTemplate: React.FC<KakaoShareProps> = ({
                                     style={{ borderRadius: "35%" }}
                                   />
                                 </div>
-                                <p className="text-xs text-gray-400">
+                                <p className="text-[12px] text-gray-400">
                                   {shop_name}
                                 </p>
                               </div>

@@ -1,38 +1,106 @@
-import { ApiResponse } from "@/lib/types";
-import { useEffect, useMemo, useState } from "react";
+import { PBApiResponse } from "@/lib/types";
+import { useEffect, useState } from "react";
 import { ProductListArgs, ProductsArgs } from "@/lib/item/types";
 import Modal from "@/components/layout/base/Modal";
+import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
+import { useScrollPosition } from "@/lib/infinitescrollFunctions";
+import { fetchGetProductCodeList } from "@/lib/item/apis";
+import { GetServerSidePropsContext } from "next";
+import { CircularProgress } from "@mui/material";
+import InputTextBox from "@/components/base/InputText";
 
 interface ProductListProps {
-  apiResponse: ApiResponse;
+  apiResponse: PBApiResponse;
+  page: number;
+  page_size: number;
   productInputs: ProductsArgs[];
-
+  selectedProductItems: ProductsArgs[];
   setProductInputs: (value: ProductsArgs[]) => void;
   setSelectedProductItems: (value: ProductsArgs[]) => void;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ProductList: React.FC<ProductListProps> = ({
-  apiResponse,
-  productInputs,
-  setProductInputs,
-  setSelectedProductItems,
-  isOpen,
-  onClose,
-}) => {
-  const products = useMemo(
-    () =>
-      Array.isArray(apiResponse.data.content) ? apiResponse.data.content : [],
-    [apiResponse],
+enum searchType {
+  N = "name",
+  G = "gid",
+}
+
+const ProductList: React.FC<ProductListProps> = (
+  {
+    apiResponse,
+    page,
+    page_size,
+    productInputs,
+    setProductInputs,
+    selectedProductItems,
+    setSelectedProductItems,
+    isOpen,
+    onClose,
+  },
+  context: GetServerSidePropsContext,
+) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
+
+  const [newResponse, setNewResponse] = useState<PBApiResponse>(apiResponse);
+
+  const [pageNum, setPageNum] = useState<number>(page);
+  const [searchOption, setSearchOption] = useState<searchType>(searchType.G);
+  const [search, setSearch] = useState("");
+  const [selectedItemList, setSelectedItemList] = useState<string[]>([]); // before update the products
+
+  const [products, setProducts] = useState<ProductListArgs[]>(
+    newResponse.data?.content || [],
   );
-  const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
-  const [selectAll, setSelectAll] = useState<boolean>(false);
+
+  // infinite scroll + search
+  const { isBottom, scrollRef } = useScrollPosition(isOpen);
+  const [getNextPage, setGetNextPage] = useState(
+    !newResponse.data.last || false,
+  );
+
+  const fetchProducts = async (reset = false) => {
+    if (!getNextPage && !reset) return;
+    setIsLoading(true);
+
+    try {
+      const currentPage = reset ? 1 : pageNum + (pageNum === 0 ? 2 : 1);
+      const response = await fetchGetProductCodeList(
+        currentPage,
+        page_size,
+        searchOption,
+        search,
+        context,
+      );
+
+      if (response.data) {
+        setNewResponse(response);
+        setGetNextPage(!response.data.last);
+        setProducts((prev) =>
+          reset ? response.data.content : [...prev, ...response.data.content],
+        );
+        setPageNum(currentPage);
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const fetchforSearch = () => fetchProducts(true); // 검색
+  const fetchNextPage = () => fetchProducts(); // 다음 무한 스크롤 페이지
+
+  useEffect(() => {
+    if (isBottom) fetchNextPage();
+  }, [isBottom]);
+
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
+
     if (isChecked) {
-      const allProducts = products.map((product: ProductListArgs) => ({
+      const allProducts: ProductsArgs[] = products.map((product) => ({
         product_model_code: product.gid,
         product_model_name: product.name,
         images: [
@@ -41,9 +109,7 @@ const ProductList: React.FC<ProductListProps> = ({
         ],
       }));
       setProductInputs(allProducts);
-      setSelectedItemList(
-        products.map((product: ProductListArgs) => product.gid),
-      );
+      setSelectedItemList(products.map((product) => product.gid));
     } else {
       setProductInputs([]);
       setSelectedItemList([]);
@@ -51,22 +117,29 @@ const ProductList: React.FC<ProductListProps> = ({
   };
 
   const handleCheckboxChange =
-    (productGid: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    (productGid: string, productName: string) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = e.target.checked;
+
       setSelectedItemList((prevSelected) => {
-        let updatedSelectedItems;
-        if (isChecked) {
-          updatedSelectedItems = [...prevSelected, productGid];
-        } else {
-          updatedSelectedItems = prevSelected.filter(
-            (gid) => gid !== productGid,
+        // Ensure `selectedProductItems` is always an array before using `.some()`
+        const isAlreadySelected =
+          Array.isArray(selectedProductItems) &&
+          selectedProductItems.some(
+            (item) => item.product_model_code === productGid,
           );
-        }
-        const updatedProducts = products
-          .filter((product: ProductListArgs) =>
-            updatedSelectedItems.includes(product.gid),
-          )
-          .map((product: ProductListArgs) => ({
+
+        // Ensure that the product is added only if it's checked and NOT already in selectedProductItems
+        const shouldAdd = isChecked && !isAlreadySelected;
+
+        const updatedSelectedItems = shouldAdd
+          ? [...prevSelected, productGid] // Add only the GID
+          : prevSelected.filter((gid) => gid !== productGid);
+        console.log("updatedSelectedItems", updatedSelectedItems);
+
+        const updatedProducts: ProductsArgs[] = products
+          .filter((product) => updatedSelectedItems.includes(product.gid))
+          .map((product) => ({
             product_model_code: product.gid,
             product_model_name: product.name,
             images: [
@@ -74,42 +147,70 @@ const ProductList: React.FC<ProductListProps> = ({
               { thumb: product.thumb || "" },
             ],
           }));
+
+        console.log("updatedProducts", updatedProducts);
+
         setProductInputs(updatedProducts);
         setSelectAll(updatedSelectedItems.length === products.length);
+
         return updatedSelectedItems;
       });
     };
 
-  const handleAction = async () => {
+  const handleAction = () => {
     if (confirm("해당 상품을 선택 하시겠어요?")) {
       setSelectedProductItems(productInputs);
       onClose();
     }
   };
 
-  // useEffect(() => {
-  //   if (selectedItemList.length === 0) {
-  //     setSelectAll(false);
-  //   }
-  // }, [selectedItemList]);
-
-  const theadStyle =
-    "px-6 py-3 border-b border-gray-200 text-left text-sm font-medium text-gray-700 text-center";
-  const tbodyStyle =
-    "px-3 py-2 text-sm border-b border-gray-200 whitespace-normal break-words break-all text-center";
-  const labelClass = "text-xs pt-4 text-gray-500";
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="w-full pb-2 text-left text-xl font-bold">상품 선택</h1>
-
-        <div className="my-2 flex max-h-[550px] max-w-[370px] flex-col items-center overflow-y-scroll lg:max-w-full">
-          <div className="flex w-full flex-col rounded-lg bg-white p-3">
-            <h1 className="text-md w-full pb-2 text-left font-semibold text-gray-500">
+        <h1 className="w-full pb-[5px] text-left text-[18px] font-bold">
+          상품 선택
+        </h1>
+        <div className="my-2 flex max-h-[550px] min-w-[350px] flex-col items-center lg:max-w-full">
+          <div className="flex w-[380px] flex-col rounded-lg bg-white p-[10px]">
+            <h1 className="w-full pb-[5px] text-left text-[13px] font-semibold text-gray-500">
               상품을 선택해 주세요
             </h1>
 
-            <div className="block w-full py-3">
+            <div className="items-bottom flex w-full justify-start gap-[10px] pb-[10px]">
+              <select
+                className="w-[100px] border-b border-b-gray-300 px-[10px] py-[5px] text-[14px] text-gray-600"
+                value={searchOption}
+                onChange={(e) => setSearchOption(e.target.value as searchType)}
+              >
+                <option value={searchType.G}>상품코드</option>
+                <option value={searchType.N}>상품명</option>
+              </select>
+              <InputTextBox
+                disabled={false}
+                type="text"
+                id="coupon_id"
+                placeholder="검색어를 입력해주세요"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    fetchforSearch();
+                  }
+                }}
+              />
+
+              <button
+                onClick={fetchforSearch}
+                className="w-[70px] rounded-lg bg-blue-500 px-2 py-1 text-center text-white hover:bg-blue-600"
+              >
+                검색
+              </button>
+            </div>
+
+            <div
+              ref={scrollRef}
+              className="block h-[400px] w-full overflow-y-scroll"
+            >
               <table className="table w-full border border-gray-100 text-center">
                 <thead>
                   <tr className="bg-gray-100">
@@ -117,47 +218,49 @@ const ProductList: React.FC<ProductListProps> = ({
                       <input
                         type="checkbox"
                         id="item_all"
-                        name="item_all"
                         checked={selectAll}
                         onChange={handleSelectAll}
                       />
                     </th>
                     <th className={theadStyle}>상품 ID</th>
-
                     <th className={theadStyle}>POS 썸네일</th>
                     <th className={theadStyle}>상품명</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product: ProductListArgs) => (
-                    <tr key={product.gid}>
-                      <td className={`${tbodyStyle} px-2`}>
-                        <input
-                          type="checkbox"
-                          id={`item_${product.gid}`}
-                          name={`item_${product.gid}`}
-                          checked={selectedItemList.includes(product.gid)}
-                          onChange={handleCheckboxChange(product.gid)}
-                        />
-                      </td>
-                      <td className={tbodyStyle}>{product.gid}</td>
-
-                      <td className={tbodyStyle}>
-                        <div className="flex w-full items-center justify-center text-center">
-                          <img
-                            src={
-                              product.thumb ||
-                              "/images/kakao/kakaolink-no-logo-default.png"
-                            }
-                            className="h-[50px] w-[50px] lg:h-[70px] lg:w-[70px]"
-                            alt="thumbnail"
+                  {products.length > 0 ? (
+                    products.map((product) => (
+                      <tr key={product.gid}>
+                        <td className={`${tbodyStyle} px-2`}>
+                          <input
+                            type="checkbox"
+                            id={`item_${product.gid}`}
+                            checked={selectedItemList.includes(product.gid)}
+                            onChange={handleCheckboxChange(
+                              product.gid,
+                              product.name,
+                            )}
                           />
-                        </div>
-                      </td>
-                      <td className={tbodyStyle}>{product.name}</td>
-                    </tr>
-                  ))}
-                  {!products.length && (
+                        </td>
+                        <td className={tbodyStyle + " w-[75px]"}>
+                          {product.gid}
+                        </td>
+                        <td className={tbodyStyle + " w-[85px]"}>
+                          <div className="flex w-full items-center justify-center text-center">
+                            <img
+                              src={
+                                product.thumb ||
+                                "/images/kakao/kakaolink-no-logo-default.png"
+                              }
+                              className="h-[45px] w-[45px] lg:h-[60px] lg:w-[60px]"
+                              alt="thumbnail"
+                            />
+                          </div>
+                        </td>
+                        <td className={tbodyStyle}>{product.name}</td>
+                      </tr>
+                    ))
+                  ) : (
                     <tr>
                       <td className={tbodyStyle} colSpan={4}>
                         현재 추가가능한 상품이 없어요.
@@ -166,44 +269,14 @@ const ProductList: React.FC<ProductListProps> = ({
                   )}
                 </tbody>
               </table>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex h-fit w-[350px] flex-col lg:w-[450px]">
-          <div className="mb-2 flex w-full flex-col text-left">
-            <label className={labelClass}>선택된 상품</label>
-            <div className="mt-2 flex h-[85px] w-[350px] flex-wrap justify-center overflow-y-auto break-words rounded-xl bg-white p-2 pb-3 text-sm lg:w-full">
-              {productInputs.length !== 0 ? (
-                productInputs.map((inputProduct) => {
-                  const product = products.find(
-                    (product: ProductListArgs) =>
-                      product.gid === inputProduct.product_model_code,
-                  );
-                  return (
-                    product && (
-                      <div
-                        key={product.gid}
-                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
-                      >
-                        {product.name}
-                      </div>
-                    )
-                  );
-                })
-              ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <div className="text-center text-gray-600">
-                    선택된 상품이 없습니다.
-                    <br />
-                    상품을 선택해주세요.
-                  </div>
+              {isLoading && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-black bg-opacity-10">
+                  <CircularProgress />
                 </div>
               )}
             </div>
           </div>
         </div>
-
         <button
           className="mt-4 w-full rounded-lg bg-blue-500 p-2 text-white"
           onClick={handleAction}

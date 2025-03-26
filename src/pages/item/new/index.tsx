@@ -7,7 +7,7 @@ import { useRef, useEffect, KeyboardEvent, useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { withAuth } from "@/hoc/withAuth";
-import { ApiResponse } from "@/lib/types";
+import { ApiResponse, PBApiResponse } from "@/lib/types";
 import { useRouter } from "next/router";
 import {
   fetchGetProductCodeList,
@@ -29,17 +29,45 @@ import NewRewardCard from "@/components/layout/item/reward/new/NewRewardCard";
 import ProductList from "@/components/layout/item/modal/ProductList";
 import { S3AuthDelete, S3AuthUpload } from "@/lib/common";
 
+interface NewItemProps {
+  shop_id: string;
+  campaign_id: string;
+  productResponse: PBApiResponse;
+  couponResponse: ApiResponse;
+  page: number;
+  page_size: number;
+}
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop_id = getShopIdFromCookies(context);
   const campaign_id = context.query.campaign_id;
-
-  const productResponse = await fetchGetProductCodeList(context);
-  const couponResponse = await fetchGetCouponCodeList("1", "25", context);
+  const page = 1;
+  const page_size = 25;
+  const productResponse = await fetchGetProductCodeList(
+    page,
+    page_size,
+    "name",
+    "",
+    context,
+  );
+  const couponResponse = await fetchGetCouponCodeList(
+    page,
+    page_size,
+    "",
+    context,
+  );
   if (!shop_id || !campaign_id) {
     return { redirect: { destination: "auth/login", permanent: false } };
   }
   return {
-    props: { shop_id, campaign_id, productResponse, couponResponse },
+    props: {
+      shop_id,
+      campaign_id,
+      productResponse,
+      couponResponse,
+      page,
+      page_size,
+    },
   };
 };
 
@@ -49,16 +77,13 @@ const NewItem = (
     campaign_id,
     productResponse,
     couponResponse,
-  }: {
-    shop_id: string;
-    campaign_id: string;
-    productResponse: ApiResponse;
-    couponResponse: ApiResponse;
-  },
+    page,
+    page_size,
+  }: NewItemProps,
   context: GetServerSidePropsContext,
 ) => {
-  // const [pageNum, setPageNum] = useState("1");
-  // const [pageSize, setPageSize] = useState("25");
+  const [couPageNum, setCouPageNum] = useState(page);
+  const [couPageSize, setCouProdPageSize] = useState(page_size);
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [productInputs, setProductInputs] = useState<ProductsArgs[]>([]);
@@ -238,7 +263,7 @@ const NewItem = (
       infoCheck() &&
       confirm("아이템을 추가하시겠습니까?")
     ) {
-      if (loading == false) {
+      if (loading === false) {
         setLoading(true);
         try {
           let updatedImage = image;
@@ -324,10 +349,10 @@ const NewItem = (
       <DashboardContainer>
         <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <span className="text-2xl font-bold">아이템 추가</span>
+            <span className="text-[24px] font-bold">아이템 추가</span>
           </div>
         </div>
-        <div className="flex w-full flex-col justify-center lg:flex-row lg:space-x-4">
+        <div className="flex w-full flex-col justify-center gap-[10px] overflow-y-auto lg:flex-row">
           <ContentsContainer variant="campaign">
             <ItemDetails
               page_type="NEW"
@@ -374,12 +399,14 @@ const NewItem = (
               apiResponse={couponResponse}
               setSelectedCouponItems={setSelectedCouponItems}
               setCouponInputs={setCouponInputs}
+              page={page}
+              page_size={page_size}
             />
             <NewRewardCard rewards={rewards} setRewards={setRewards} />
           </ContentsContainer>
         </div>
         <div className="button-container flex w-full justify-between pt-[5px] lg:justify-end">
-          <div className="flex w-full space-x-2 lg:w-fit">
+          <div className="flex w-full gap-[10px] lg:w-fit">
             <button
               className="flex w-full cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white lg:w-fit"
               onClick={handleSubmit}
@@ -399,8 +426,11 @@ const NewItem = (
         <ProductList
           apiResponse={productResponse}
           productInputs={productInputs}
+          selectedProductItems={selectedProductItems}
           setSelectedProductItems={setSelectedProductItems}
           setProductInputs={setProductInputs}
+          page={page}
+          page_size={page_size}
           onClose={closeModal}
           isOpen={isModalOpen}
         />

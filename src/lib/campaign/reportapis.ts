@@ -75,7 +75,6 @@ export async function fetchReferralLeaderboardTable(
   };
   try {
     const response = await fetchAPI(context, url, "GET", {}, param);
-    console.log("response", response);
     return response.data;
   } catch (error) {
     console.error("Error fetching campaign funnel graph:", error);

@@ -55,83 +55,77 @@ const DatePicker: React.FC<DatePickerProps> = ({
   );
 
   return (
-    <div className="m-[5px] flex w-fit flex-col rounded-xl bg-gray-200 p-[8px] pb-[8px]">
-      <label className="pb-[5px] text-xs text-gray-500">{label}</label>
-      <div className="flex-col items-center rounded-md bg-white p-2">
-        <div className="flex gap-[5px]">
-          <div className="flex h-full items-center gap-[5px] bg-white">
-            <select
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              disabled={disabled}
-              className="rounded-md border border-gray-300 p-[4px]"
-            >
-              {years.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-            년
-          </div>
-          <div className="flex items-center gap-2 bg-white">
-            <select
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              disabled={disabled}
-              className="rounded-md border border-gray-300 p-1"
-            >
-              {months.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-            월
-            <select
-              value={day}
-              onChange={(e) => setDay(e.target.value)}
-              disabled={disabled}
-              className="rounded-md border border-gray-300 p-1"
-            >
-              {days.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-            일
-          </div>
+    <div className="flex w-fit flex-col rounded-lg bg-gray-200 p-[8px]">
+      <label className="pb-[5px] text-[12px] text-gray-500">{label}</label>
+      <div className="flex flex-col items-center gap-[5px] rounded-md bg-white p-[8px]">
+        <div className="flex h-full items-center gap-[5px] bg-white">
+          <select
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            disabled={disabled}
+            className="rounded-md border border-gray-300 p-[4px]"
+          >
+            {years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+          년
+          <select
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            disabled={disabled}
+            className="rounded-md border border-gray-300 p-[4px]"
+          >
+            {months.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+          월
+          <select
+            value={day}
+            onChange={(e) => setDay(e.target.value)}
+            disabled={disabled}
+            className="rounded-md border border-gray-300 p-[4px]"
+          >
+            {days.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+          일
         </div>
-        <div className="m-2 flex gap-2">
-          <div className="flex items-center gap-2 bg-white">
-            <select
-              value={hour}
-              onChange={(e) => setHour(e.target.value)}
-              disabled={disabled}
-              className="border-gra-300 rounded-md border p-1"
-            >
-              {hours.map((h) => (
-                <option key={h} value={h}>
-                  {h}
-                </option>
-              ))}
-            </select>
-            시
-            <select
-              value={minute}
-              onChange={(e) => setMinute(e.target.value)}
-              disabled={disabled}
-              className="rounded-md border border-gray-300 p-1"
-            >
-              {minutes.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-            분
-          </div>
+        <div className="flex h-full items-center gap-[5px] bg-white">
+          <select
+            value={hour}
+            onChange={(e) => setHour(e.target.value)}
+            disabled={disabled}
+            className="rounded-md border border-gray-300 p-[4px]"
+          >
+            {hours.map((h) => (
+              <option key={h} value={h}>
+                {h}
+              </option>
+            ))}
+          </select>
+          시
+          <select
+            value={minute}
+            onChange={(e) => setMinute(e.target.value)}
+            disabled={disabled}
+            className="rounded-md border border-gray-300 p-[4px]"
+          >
+            {minutes.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+          분
         </div>
       </div>
     </div>

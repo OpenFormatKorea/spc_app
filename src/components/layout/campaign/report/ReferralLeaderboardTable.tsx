@@ -6,7 +6,7 @@ import { sortDirection } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Tooltip, CardActions, CircularProgress } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { fetchReferralLeaderboardTable } from "@/lib/campaign/reportapis";
@@ -46,19 +46,27 @@ export default function ReferralLeaderboardTable(
   }: ReferralLeaderboardTableProps,
   context: GetServerSidePropsContext,
 ) {
+  const [newTableData, setNewTableData] = useState<leaderboardTableTypes[]>(
+    data.result || [],
+  );
+
   // Handle CSV Download
   const handleDownload = () => {
-    const chartData = data || {};
-    const csvHeader = "추천인 ID,가입, 총 주문 수,총 주문 금액";
-    const csvRows = chartData.result
+    const chartData = newTableData || {};
+    const csvHeader =
+      "추천인_ID,리퍼럴_가입한_피추천인_수,피추천인_가입자_기준_구매완료_수";
+
+    const csvRows = chartData
       .map((resultRow) => {
-        return `${resultRow.referrer_id},${resultRow.base_user_id},${resultRow.total_order_count},${resultRow.total_signup_count}`;
+        return `${resultRow.base_user_id},${resultRow.total_signup_count},${resultRow.total_order_count}`;
       })
       .join("\n");
 
-    const csvContent = csvHeader + csvRows;
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    // Add UTF-8 BOM prefix to support Korean characters
+    const BOM = "\uFEFF";
+    const csvContent = BOM + csvHeader + "\n" + csvRows;
 
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
@@ -67,13 +75,11 @@ export default function ReferralLeaderboardTable(
     link.click();
     document.body.removeChild(link);
   };
-  const [newTableData, setNewTableData] = useState<leaderboardTableTypes[]>(
-    data.result || [],
-  );
 
   const [isLoading, setIsLoading] = useState(false);
   const { isBottom, scrollRef } = useScrollPosition(true);
-  const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+  let stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
+
   const totalCount = data?.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;
 
@@ -85,15 +91,15 @@ export default function ReferralLeaderboardTable(
       const newData = await fetchReferralLeaderboardTable(
         startDate,
         endDate,
-        pageNum,
+        currentPage,
         pageSize,
         sortField,
         direction,
         userId,
         context,
       );
-      console.log("newData", newData);
       if (newData?.result && newData.result.length > 0) {
+        setData(newData);
         setNewTableData((prev) => [...prev, ...newData.result]);
       }
       setPageNum(currentPage);
@@ -103,12 +109,48 @@ export default function ReferralLeaderboardTable(
       setIsLoading(false);
     }
   };
+  const resetTableAndFetchSortedData = async () => {
+    setNewTableData([]);
+    stackedDataAmount = 0;
+    setPageNum("1");
+
+    await fetchNewSort(); // fetches with page 1
+  };
+
+  const fetchNewSort = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      const newData = await fetchReferralLeaderboardTable(
+        startDate,
+        endDate,
+        "1",
+        pageSize,
+        sortField,
+        direction,
+        userId,
+        context,
+      );
+      setData(newData);
+      setNewTableData(newData?.result || []);
+    } catch (error) {
+      console.error("Failed to fetch sorted data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
     if (isBottom) {
       fetchNextPage();
     }
   }, [isBottom]);
-
+  useEffect(() => {
+    resetTableAndFetchSortedData();
+  }, [direction, sortField]);
+  // useEffect(() => {
+  //   console.log("data", data);
+  //   console.log("newTableData", newTableData);
+  // }, [data]);
   return (
     <div className="h-full max-h-[400px] w-full rounded-2xl bg-white p-[16px]">
       <div className="flex flex-row justify-between">
@@ -117,7 +159,7 @@ export default function ReferralLeaderboardTable(
             최다 가입자 유치 추천인 순위
           </p>
           <span className="text-[12px] text-[#6c757d]">
-            추천인을 통한 총 주문 건수 및 주문 금액
+            추천인 유입 가입자 수 및 피추천인의 구매 완료 수 기준
           </span>
         </div>
         <Tooltip title="CSV로 다운받기">
@@ -205,10 +247,10 @@ export default function ReferralLeaderboardTable(
                       {resultRow.base_user_id}
                     </td>
                     <td className={tbodyStyle}>
-                      {resultRow.total_order_count}
+                      {resultRow.total_signup_count}
                     </td>
                     <td className={tbodyStyle}>
-                      {resultRow.total_signup_count}
+                      {resultRow.total_order_count}
                     </td>
                   </tr>
                 ))}

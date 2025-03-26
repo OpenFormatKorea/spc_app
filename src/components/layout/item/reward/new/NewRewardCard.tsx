@@ -4,6 +4,7 @@ import {
   PaymentTimingType,
   RewardsArgs,
 } from "@/lib/item/types";
+import { labelClass, inputFormClass } from "@/interfaces/tailwindCss";
 
 interface NewRewardCardProps {
   rewards: RewardsArgs[];
@@ -14,11 +15,9 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
   rewards,
   setRewards,
 }) => {
+  console.log("rewardsrewards", rewards);
   const triggerTypes = ["SIGNUP", "PURCHASE"] as const;
   const conditionTypes = ["referrer_conditions", "referee_conditions"] as const;
-  const labelClass =
-    "labelClass flex items-center text-sm text-left text-gray-500 w-[100px]";
-  const inputFormClass = "inputForm flex items-center text-sm";
   const handleDeleteRewards = (indexToDelete: number) => {
     if (confirm("리워드를 삭제하시겠습니까?")) {
       setRewards((prevRewards) =>
@@ -52,25 +51,25 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
     <>
       {rewards.map((reward, index) => (
         <div
-          className="mb-4 rounded-xl bg-gray-100 p-4 text-sm"
+          className="rounded-xl bg-gray-100 p-[10px] text-[12px]"
           key={index}
           id={`rewards_${index}`}
         >
-          <h1 className="mb-2 flex w-full items-center justify-between">
-            <div className="text-base font-semibold">
+          <h1 className="flex w-full items-center justify-between pb-[5px]">
+            <div className="text-[12px] font-semibold">
               {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
               {reward.reward_type === "COUPON"
-                ? reward.coupon_code
+                ? `${reward.coupon_code} | ${reward.coupon_title} `
                 : `${reward.point_amount} 포인트`}
             </div>
           </h1>
-          <div className="flex w-full flex-col rounded-xl bg-white lg:flex-row">
+          <div className="flex w-full flex-col gap-[10px] rounded-xl bg-white p-[10px] lg:flex-row">
             {triggerTypes.map((trigger) => (
-              <div key={trigger} className="flex w-full flex-col p-3">
-                <div className="mb-2 w-full text-base font-bold">
+              <div key={trigger} className="flex w-full flex-col gap-[10px]">
+                <div className="w-full text-[12px] font-bold">
                   {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
                 </div>
-                <div className="flex flex-col space-y-4">
+                <div className="flex flex-col gap-[10px]">
                   {conditionTypes.map((type) => {
                     const conditions =
                       type === "referrer_conditions"
@@ -84,22 +83,22 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
                     return (
                       <div
                         key={type}
-                        className="min-h-[145px] w-full space-y-1 bg-gray-100 p-2"
+                        className="min-h-[145px] w-full gap-[10px] bg-gray-100 p-2"
                       >
-                        <div className="mb-2 w-full border-b pb-1 text-base">
+                        <div className="w-full border-b text-[16px]">
                           {type === "referrer_conditions"
                             ? "추천인"
                             : "피추천인"}
                         </div>
-                        <div className="flex">
-                          <div className={labelClass}>지급 시점:</div>
-                          <div className={inputFormClass}>
+                        <div className="flex w-full gap-[10px] p-[5px]">
+                          <div className="w-fit text-gray-600">지급 시점:</div>
+                          <div className="w-fit">
                             {renderPaymentTiming(policy?.payment_timing.type)}
                           </div>
                         </div>
                         {policy?.payment_timing.delay_days != null && (
-                          <div className="flex">
-                            <div className={labelClass}>
+                          <div className="flex w-full gap-[10px] p-[5px]">
+                            <div className="w-fit">
                               {trigger === "SIGNUP" ? "회원가입 후" : "구매 후"}{" "}
                               제공 일:
                             </div>
@@ -108,18 +107,18 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
                             </div>
                           </div>
                         )}
-                        <div className="flex">
-                          <div className={labelClass}>지급 방식:</div>
-                          <div className={inputFormClass}>
+                        <div className="flex w-full gap-[10px] p-[5px]">
+                          <div className="w-fit">지급 방식:</div>
+                          <div className="w-fit">
                             {renderPaymentFrequency(
                               policy?.payment_frequency.type,
                             )}
                           </div>
                         </div>
                         {policy?.payment_frequency.repeat_count != null && (
-                          <div className="flex">
-                            <div className={labelClass}>최대 지급 횟수:</div>
-                            <div className={inputFormClass}>
+                          <div className="flex w-full gap-[10px] p-[5px]">
+                            <div className="w-fit">최대 지급 횟수:</div>
+                            <div className="w-fit">
                               {policy.payment_frequency.repeat_count}번
                             </div>
                           </div>
@@ -131,9 +130,9 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
               </div>
             ))}
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-[10px]">
             <button
-              className="mt-2 min-w-[45px] cursor-pointer rounded-lg bg-red-500 p-1 text-white"
+              className="min-w-[45px] cursor-pointer rounded-lg bg-red-500 p-1 text-white"
               onClick={() => handleDeleteRewards(index)}
             >
               삭제

@@ -9,8 +9,6 @@ import {
 import NewRewardPolicy from "@/components/layout/item/reward/new/NewRewardPolicy";
 
 interface NewRewardPolicySettingProps {
-  inputformClass: string;
-  labelClass: string;
   reward_type: RewardType;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   setReferrerState: React.Dispatch<React.SetStateAction<RewardPolicyArgs>>;
@@ -18,8 +16,6 @@ interface NewRewardPolicySettingProps {
 }
 
 const NewRewardPolicySetting: React.FC<NewRewardPolicySettingProps> = ({
-  inputformClass,
-  labelClass,
   reward_type,
   handleKeyDown,
   setReferrerState,
@@ -72,47 +68,40 @@ const NewRewardPolicySetting: React.FC<NewRewardPolicySettingProps> = ({
   }, [signUpRefereeConditions, purchaseRefereeConditions]);
 
   return (
-    <div className="mb-3 flex flex-col items-center">
-      <div className="flex flex-col rounded-lg">
-        <NewRewardPolicy
-          defaultConditions={defaultConditions}
-          trigger="SIGNUP"
-          inputformClass={inputformClass}
-          labelClass={labelClass}
-          rewardType={reward_type}
-          handleKeyDown={handleKeyDown}
-          usePolicy={useSignUpPolicy}
-          setUsePolicy={setUseSignUpPolicy}
-          useReffererCondition={useSignUpReffererCondition}
-          setUseReffererCondition={setUseSignUpReffererCondition}
-          referrerConditions={signUpReferrerConditions}
-          setReferrerConditions={setSignUpReferrerConditions}
-          useRefereeCondition={useSignUpRefereeCondition}
-          setUseRefereeCondition={setUseSignUpRefereeCondition}
-          refereeConditions={signUpRefereeConditions}
-          setRefereeConditions={setSignUpRefereeConditions}
-        />
-      </div>
-      <div className="flex flex-col rounded-lg">
-        <NewRewardPolicy
-          defaultConditions={defaultConditions}
-          trigger="PURCHASE"
-          inputformClass={inputformClass}
-          labelClass={labelClass}
-          rewardType={reward_type}
-          handleKeyDown={handleKeyDown}
-          usePolicy={usePurchasePolicy}
-          setUsePolicy={setUsePurchasePolicy}
-          useReffererCondition={usePurchaseReffererCondition}
-          setUseReffererCondition={setUsePurchaseReffererCondition}
-          referrerConditions={purchaseReferrerConditions}
-          setReferrerConditions={setPurchaseReferrerConditions}
-          useRefereeCondition={usePurchaseRefereeCondition}
-          setUseRefereeCondition={setUsePurchaseRefereeCondition}
-          refereeConditions={purchaseRefereeConditions}
-          setRefereeConditions={setPurchaseRefereeConditions}
-        />
-      </div>
+    <div className="mb-3 flex flex-col items-center gap-[10px]">
+      <NewRewardPolicy
+        defaultConditions={defaultConditions}
+        trigger="SIGNUP"
+        rewardType={reward_type}
+        handleKeyDown={handleKeyDown}
+        usePolicy={useSignUpPolicy}
+        setUsePolicy={setUseSignUpPolicy}
+        useReffererCondition={useSignUpReffererCondition}
+        setUseReffererCondition={setUseSignUpReffererCondition}
+        referrerConditions={signUpReferrerConditions}
+        setReferrerConditions={setSignUpReferrerConditions}
+        useRefereeCondition={useSignUpRefereeCondition}
+        setUseRefereeCondition={setUseSignUpRefereeCondition}
+        refereeConditions={signUpRefereeConditions}
+        setRefereeConditions={setSignUpRefereeConditions}
+      />
+
+      <NewRewardPolicy
+        defaultConditions={defaultConditions}
+        trigger="PURCHASE"
+        rewardType={reward_type}
+        handleKeyDown={handleKeyDown}
+        usePolicy={usePurchasePolicy}
+        setUsePolicy={setUsePurchasePolicy}
+        useReffererCondition={usePurchaseReffererCondition}
+        setUseReffererCondition={setUsePurchaseReffererCondition}
+        referrerConditions={purchaseReferrerConditions}
+        setReferrerConditions={setPurchaseReferrerConditions}
+        useRefereeCondition={usePurchaseRefereeCondition}
+        setUseRefereeCondition={setUsePurchaseRefereeCondition}
+        refereeConditions={purchaseRefereeConditions}
+        setRefereeConditions={setPurchaseRefereeConditions}
+      />
     </div>
   );
 };

@@ -59,7 +59,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       <DashboardContainer>
         <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <span className="text-2xl font-bold">대시보드</span>
+            <span className="text-[24px] font-bold">대시보드</span>
           </div>
         </div>
         <div className="contents-container w-full justify-center">

@@ -64,10 +64,10 @@ const CampaignNew: React.FC<CampaignNewProps> = ({
 
   return (
     <>
-      <div className="mb-2 w-full pb-2">
-        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
+      <div className="w-full pb-[5px]">
+        <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="flex w-full items-center gap-4">
-            <div className="text-lg font-bold text-black">
+            <div className="text-[16px] font-bold text-black">
               {page_type === "DETAILS"
                 ? "캠페인 상세 정보"
                 : "캠페인 옵션 추가"}
@@ -86,7 +86,9 @@ const CampaignNew: React.FC<CampaignNewProps> = ({
           )}
         </div>
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pt-[5px] text-xs text-gray-500">캠페인 명</label>
+          <label className="pt-[5px] text-[12px] text-gray-500">
+            캠페인 명
+          </label>
           <InputTextBox
             type="text"
             id="title"
@@ -99,7 +101,9 @@ const CampaignNew: React.FC<CampaignNewProps> = ({
         </div>
 
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pt-4 text-xs text-gray-500">캠페인 설명</label>
+          <label className="pt-[10px] text-[12px] text-gray-500">
+            캠페인 설명
+          </label>
           <InputTextBox
             type="text"
             id="description"
@@ -112,7 +116,9 @@ const CampaignNew: React.FC<CampaignNewProps> = ({
         </div>
 
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pb-2 pt-4 text-xs text-gray-500">기간 종류</label>
+          <label className="py-[5px] text-[12px] text-gray-500">
+            기간 종류
+          </label>
           <div className="flex w-full justify-between md:w-[300px] lg:w-[300px]">
             <InputRadioBox
               label="기간 제한"
@@ -133,8 +139,10 @@ const CampaignNew: React.FC<CampaignNewProps> = ({
           </div>
         </div>
         <div className="inputForm flex w-full flex-col pb-[5px] text-left">
-          <label className="pt-4 text-xs text-gray-500">캠페인 기간</label>
-          <div className="flex w-full flex-wrap items-center justify-center gap-2">
+          <label className="pt-[10px] text-[12px] text-gray-500">
+            캠페인 기간
+          </label>
+          <div className="flex w-full flex-wrap items-center justify-center gap-2 pt-[10px]">
             <DatePicker
               label="캠페인 시작일"
               value={campaignArgs.start_date}
@@ -156,7 +164,7 @@ const CampaignNew: React.FC<CampaignNewProps> = ({
 
         {page_type === "NEW" && (
           <div className="inputForm flex w-full flex-col text-left">
-            <label className="pb-2 pt-4 text-xs text-gray-500">
+            <label className="pb-[5px] pt-[10px] text-[12px] text-gray-500">
               캠페인 활성화
             </label>
             <div className="flex w-[250px] justify-between lg:w-[300px]">
@@ -177,7 +185,7 @@ const CampaignNew: React.FC<CampaignNewProps> = ({
                 disabled={true}
               />
             </div>
-            <label className="pb-2 pt-4 text-xs text-gray-400">
+            <label className="pt-[5px] text-[12px] text-gray-400">
               - 캠페인 생성 시에는 기본값이 비활성화로 지정됩니다.
             </label>
           </div>

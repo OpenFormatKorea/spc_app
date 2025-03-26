@@ -24,7 +24,7 @@ const DashboardContainer: React.FC<DashboardContainerProps> = (
   if (!isHydrated) return null;
 
   return (
-    <div className="flex min-h-screen flex-col overflow-hidden bg-gradient-to-b from-gray-400 to-gray-500">
+    <div className="flex h-full min-h-screen flex-col overflow-hidden bg-gradient-to-b from-gray-400 to-gray-500">
       <Navbar shop_id={shop_id} />
       <Header shop_id={shop_id} />
       <DashboardMain>{children}</DashboardMain>

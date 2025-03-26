@@ -60,6 +60,7 @@ const DetailsCampaign = (
   },
   context: GetServerSidePropsContext,
 ) => {
+  console.log("cDetailApiResponse,", cDetailApiResponse);
   const router = useRouter();
   const [title, setTitle] = useState(cDetailApiResponse.title);
   const [description, setDescription] = useState(
@@ -71,8 +72,8 @@ const DetailsCampaign = (
   const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
   const [active, setActive] = useState(cDetailApiResponse.active);
-  const [shopId, setShopId] = useState(cDetailApiResponse.shop_id || "");
-  const [createdAt, setCreatedAt] = useState(cDetailApiResponse.created_at);
+  const shopId = cDetailApiResponse.shop_id || "";
+  const createdAt = cDetailApiResponse.created_at || "";
   const [createdByUserName, setCreatedByUserName] = useState(
     cDetailApiResponse.created_by_username || "",
   );
@@ -200,9 +201,8 @@ const DetailsCampaign = (
       <DashboardContainer>
         <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <span className="text-2xl font-bold">캠페인 상세 정보</span>
+            <span className="text-[24px] font-bold">캠페인 상세 정보</span>
           </div>
-
           <div className="button-container flex w-full justify-end">
             <button
               className="flex cursor-pointer items-center justify-center rounded-lg border bg-gray-400 p-2 text-white"
@@ -213,7 +213,7 @@ const DetailsCampaign = (
             </button>
           </div>
         </div>
-        <div className="flex w-full flex-col md:flex-row md:space-x-4 lg:space-x-4">
+        <div className="flex w-full flex-col gap-[10px] md:flex-row">
           <ContentsContainer variant="campaign">
             <CampaignDetails
               page_type="DETAILS"
@@ -239,7 +239,7 @@ const DetailsCampaign = (
             </div>
           </ContentsContainer>
         </div>
-        <div className="mt-[5px] flex items-center justify-end gap-x-2 gap-y-2">
+        <div className="flex items-center justify-end gap-[10px] p-[5px]">
           <button
             id="delete_campaign"
             className="w-full cursor-pointer rounded-lg border bg-red-500 p-2 text-white lg:w-fit"

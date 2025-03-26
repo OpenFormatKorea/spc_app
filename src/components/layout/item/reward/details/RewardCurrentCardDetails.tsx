@@ -79,15 +79,15 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
     };
 
   return (
-    <div className="mt-4 rounded-xl border border-gray-100 bg-gray-100 p-4">
-      <div className="flex items-center justify-between pb-2">
-        <span className="text-lg font-bold text-gray-600">
+    <div className="flex flex-col gap-[10px] rounded-lg border border-gray-100 bg-gray-100 p-[10px]">
+      <div className="flex items-center justify-between">
+        <span className="text-[16px] font-bold text-gray-600">
           현재 세팅 된 리워드
         </span>
       </div>
       {rewards.map((reward, index) => (
         <div
-          className="mb-4 rounded-xl bg-gray-300 p-4 text-sm"
+          className="flex flex-col gap-[10px] rounded-lg bg-gray-200 p-[8px] text-[14px]"
           key={reward.id}
           id={`rewards_${reward.id}`}
         >
@@ -95,7 +95,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
             className="flex items-center justify-between"
             onClick={() => toggleRewardDetails(index)}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-[10px]">
               <input
                 type="checkbox"
                 id={`reward_${reward.id}`}
@@ -105,11 +105,11 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                 className="h-4 w-4 rounded border-gray-300 text-blue-600"
                 disabled={true}
               />
-              <span className="text-base font-semibold">
+              <span className="text-[14px] font-semibold">
                 {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
                 {reward.reward_type === "COUPON"
                   ? reward.coupon_title
-                    ? `${reward.coupon_code} | ${reward.coupon_title}`
+                    ? `${reward.coupon_code} | ${reward.coupon_name ? reward.coupon_name : reward.coupon_title}`
                     : `${reward.coupon_code} | 쿠폰명 없음`
                   : `${(reward.point_amount ?? 0).toLocaleString()} 포인트`}
               </span>
@@ -128,7 +128,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
           </div>
 
           {visibleRewards[index] && (
-            <div className="mt-4 flex flex-col rounded-xl bg-white lg:flex-row">
+            <div className="flex w-full flex-col gap-[10px] rounded-xl bg-white p-[10px] lg:flex-row">
               {triggerTypes.map((trigger) => {
                 const conditions =
                   trigger === "SIGNUP"
@@ -136,10 +136,13 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                     : reward.referrer_conditions?.PURCHASE;
 
                 return (
-                  <div key={trigger} className="w-full p-3">
-                    <h4 className="mb-2 text-base font-bold">
+                  <div
+                    key={trigger}
+                    className="flex w-full flex-col gap-[10px]"
+                  >
+                    <div className="w-full text-[12px] font-bold">
                       {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
-                    </h4>
+                    </div>
                     {conditionTypes.map((type) => {
                       const policy =
                         type === "referrer_conditions"
@@ -151,49 +154,49 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                       return (
                         <div
                           key={type}
-                          className="min-h-[145px] w-full space-y-1 bg-gray-100 p-2"
+                          className="min-h-[165px] w-full gap-[10px] bg-gray-100 p-2"
                         >
-                          <div className="mb-2 border-b pb-1 text-base">
+                          <div className="w-full border-b text-[16px]">
                             {type === "referrer_conditions"
                               ? "추천인"
                               : "피추천인"}
                           </div>
-                          <div className="flex">
-                            <span className="flex w-[100px] items-center text-left text-sm text-gray-500">
+                          <div className="flex w-full gap-[10px] p-[5px]">
+                            <div className="w-fit text-gray-600">
                               지급 시점:
-                            </span>
-                            <span className="flex items-center text-sm">
+                            </div>
+                            <div className="w-fit">
                               {renderPaymentTiming(policy.payment_timing?.type)}
-                            </span>
+                            </div>
                           </div>
                           {policy.payment_timing?.delay_days != null && (
-                            <div className="flex">
-                              <span className="flex w-[100px] items-center text-left text-sm text-gray-500">
+                            <div className="flex w-full gap-[10px] p-[5px]">
+                              <div className="w-fit text-gray-600">
                                 제공 일:
-                              </span>
-                              <span className="flex items-center text-sm">
+                              </div>
+                              <div className="w-fit">
                                 {policy.payment_timing.delay_days} 일
-                              </span>
+                              </div>
                             </div>
                           )}
-                          <div className="flex">
-                            <span className="flex w-[100px] items-center text-left text-sm text-gray-500">
+                          <div className="flex w-full gap-[10px] p-[5px]">
+                            <div className="w-fit text-gray-600">
                               지급 방식:
-                            </span>
-                            <span className="flex items-center text-sm">
+                            </div>
+                            <div className="w-fit">
                               {renderPaymentFrequency(
                                 policy.payment_frequency?.type,
                               )}
-                            </span>
+                            </div>
                           </div>
                           {policy.payment_frequency?.repeat_count != null && (
-                            <div className="flex">
-                              <span className="flex w-[100px] items-center text-left text-sm text-gray-500">
+                            <div className="flex w-full gap-[10px] p-[5px]">
+                              <div className="w-fit text-gray-600">
                                 최대 지급 횟수:
-                              </span>
-                              <span className="flex items-center text-sm">
+                              </div>
+                              <div className="w-fit">
                                 {policy.payment_frequency.repeat_count} 번
-                              </span>
+                              </div>
                             </div>
                           )}
                         </div>

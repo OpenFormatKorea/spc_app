@@ -32,7 +32,9 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
   return (
     <AuthContainer>
       <div className="flex min-h-[380px] min-w-[380px] flex-col items-center justify-center rounded-xl bg-gradient-to-b from-blue-200 to-blue-300 p-6 text-center">
-        <div className="m-2 w-full text-left text-xl font-semibold">로그인</div>
+        <div className="m-2 w-full text-left text-[18px] font-semibold">
+          로그인
+        </div>
         <div className="flex w-full flex-col items-start justify-between">
           <AuthInputBox
             label="아이디"
@@ -54,7 +56,7 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
               onKeyDown={handleKeyDown}
             />
             <button
-              className="mb-[5px] ml-2 cursor-pointer border bg-white p-1 text-xs"
+              className="mb-[5px] ml-2 cursor-pointer border bg-white p-1 text-[12px]"
               onClick={() => setShowPw(!showPW)}
             >
               {showPW ? (
@@ -72,13 +74,13 @@ const AuthLogin: React.FC<AuthLoginFormProps> = ({
           onClick={handleSubmit}
         />
         <div className="passwordDiv m-1 flex w-full items-center justify-center p-1 text-left">
-          <div className="ml-2 mr-2 cursor-pointer text-sm">
+          <div className="ml-2 mr-2 cursor-pointer text-[14px]">
             <button id="signup" onClick={handleButton}>
               회원가입
             </button>
           </div>
           <div>|</div>
-          <div id="forgotpw" className="ml-2 mr-2 cursor-pointer text-sm">
+          <div id="forgotpw" className="ml-2 mr-2 cursor-pointer text-[14px]">
             <button id="forgotpw" onClick={handleButton}>
               비밀번호 찾기
             </button>

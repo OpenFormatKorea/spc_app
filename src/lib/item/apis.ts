@@ -202,6 +202,8 @@ export async function fetchModifyItem(
 }
 
 export async function fetchSearchCoupon(
+  page: number,
+  size: number,
   name: string,
   searchFilter: string,
   sort: string,
@@ -218,8 +220,6 @@ export async function fetchSearchCoupon(
     };
   }
 
-  const page = 1;
-  const size = 10;
   const url = `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=`;
   const param =
     searchFilter === "name"
@@ -431,6 +431,10 @@ export async function fetchGetItemDetails(
 }
 
 export async function fetchGetProductCodeList(
+  page: number,
+  size: number,
+  searchType: string,
+  search: string,
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
@@ -443,19 +447,13 @@ export async function fetchGetProductCodeList(
     };
   }
 
-  const page = 1;
-  const size = 10;
-  const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/platform/product-list?page=` +
-    page +
-    "&size=" +
-    size +
-    "&shop_id=" +
-    shop_id +
-    "&sort=name";
-
+  const param =
+    searchType == "name"
+      ? { page, size, name: search, shop_id }
+      : { page, size, gid: search, shop_id };
+  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/platform/product-list`;
   try {
-    const response = await fetchAPI(context, final_url, "GET", {});
+    const response = await fetchAPI(context, final_url, "GET", {}, param);
     return response.data;
   } catch (error) {
     console.error("Error fetching product list:", error);
@@ -484,8 +482,9 @@ export async function fetchGetProductCodeList(
 }
 
 export async function fetchGetCouponCodeList(
-  page: string,
-  size: string,
+  page: number,
+  size: number,
+  sort: string,
   context: GetServerSidePropsContext,
 ) {
   const shop_id = getShopIdFromCookies(context);
@@ -499,16 +498,15 @@ export async function fetchGetCouponCodeList(
     };
   }
 
-  const final_url =
-    `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?page=` +
-    page +
-    "&size=" +
-    size +
-    "&shop_id=" +
-    shop_id +
-    "&sort=name";
+  const final_url = `${process.env.NEXT_PUBLIC_SERVER_API}/platform/coupon-list?`;
   try {
-    const response = await fetchAPI(context, final_url, "GET", {});
+    const response = await fetchAPI(
+      context,
+      final_url,
+      "GET",
+      {},
+      { page, size, shop_id, sort },
+    );
     return response.data;
   } catch (error) {
     return {

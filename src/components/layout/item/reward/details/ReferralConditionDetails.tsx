@@ -6,12 +6,12 @@ import {
   ItemConditions,
 } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
+import { inputFormClass, labelClass } from "@/interfaces/tailwindCss";
 
 interface ReferralConditionDetailsProps {
   trigger: string;
   target: string;
-  inputFormClass: string;
-  labelClass: string;
+
   rewardType: RewardType;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   itemConditions: ItemConditions;
@@ -23,8 +23,7 @@ interface ReferralConditionDetailsProps {
 const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
   trigger,
   target,
-  inputFormClass,
-  labelClass,
+
   rewardType,
   handleKeyDown,
   itemConditions,
@@ -79,8 +78,8 @@ const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
 
   return (
     <div className="w-full rounded-xl bg-white p-3 shadow-sm">
-      <div className="mb-1 flex items-center border-b-[1px] pb-2">
-        <label className="text-md flex w-full text-left font-bold text-gray-600">
+      <div className="mb-1 flex items-center border-b-[1px] pb-[5px]">
+        <label className="flex w-full text-left text-[13px] font-bold text-gray-600">
           {target === "referrer" ? "추천인" : "피추천인"}
         </label>
         <div className="flex items-center">
@@ -111,7 +110,7 @@ const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
           <label className={labelClass}>
             {rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 시점
           </label>
-          <div className="mt-2 flex w-full justify-between text-sm">
+          <div className="mt-2 flex w-full justify-between text-[14px]">
             <InputRadioBox
               label="즉시 지급"
               name={`${target}_${trigger}_payment_timing_type`}
@@ -141,12 +140,12 @@ const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
                 : "max-h-0 overflow-hidden opacity-0"
             }`}
           >
-            <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
+            <div className="flex w-[120px] items-end text-left text-[14px] text-gray-500">
               <input
                 type="text"
                 id={`${target}_${trigger}_delay_days`}
                 value={itemConditions.payment_timing.delay_days ?? ""}
-                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-sm lg:max-w-[450px]"
+                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-[14px] lg:max-w-[450px]"
                 onChange={(e) =>
                   handleTimingChange("delay_days", Number(e.target.value))
                 }
@@ -161,7 +160,7 @@ const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
           <label className={labelClass}>
             {rewardType === RewardType.CO ? "쿠폰" : "포인트"} 지급 횟수
           </label>
-          <div className="mt-2 flex w-full justify-between text-sm">
+          <div className="mt-2 flex w-full justify-between text-[14px]">
             <InputRadioBox
               label="한번만"
               name={`${target}_${trigger}_payment_frequency_type`}
@@ -210,7 +209,7 @@ const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
                 : "max-h-0 overflow-hidden opacity-0"
             }`}
           >
-            <div className="flex w-[120px] items-end text-left text-sm text-gray-500">
+            <div className="flex w-[120px] items-end text-left text-[14px] text-gray-500">
               <div className="mr-2 flex min-w-fit items-center">최대</div>
               <style jsx>{`
                 input[type="number"]::-webkit-outer-spin-button,
@@ -225,7 +224,7 @@ const ReferralConditionDetails: React.FC<ReferralConditionDetailsProps> = ({
               <input
                 type="number"
                 id={`${target}_${trigger}_repeat_count`}
-                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-sm lg:max-w-[450px]"
+                className="input-class w-full flex-grow border-b-[1px] py-2 pb-0 pt-4 text-[14px] lg:max-w-[450px]"
                 value={itemConditions.payment_frequency.repeat_count || ""}
                 onChange={(e) =>
                   handleFrequencyChange("repeat_count", Number(e.target.value))

@@ -59,7 +59,7 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle, submenus }) => {
 
   return (
     <div
-      className="text-md mx-auto flex w-full flex-col text-white"
+      className="mx-auto flex w-full flex-col text-[13px] text-white"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -91,7 +91,7 @@ const Navmenu: React.FC<NavmenuProps> = ({ link, menutitle, submenus }) => {
             <a
               key={submenu.link}
               href={submenu.link}
-              className={`block w-full py-1 text-sm ${
+              className={`block w-full py-1 text-[14px] ${
                 router.pathname === submenu.link ? "font-bold" : "font-normal"
               }`}
             >

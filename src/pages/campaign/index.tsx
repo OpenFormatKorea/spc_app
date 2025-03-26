@@ -58,11 +58,11 @@ const Campaign: React.FC<{
       <DashboardContainer>
         <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
           <div className="subject-container flex w-full">
-            <span className="text-2xl font-bold">캠페인</span>
+            <span className="text-[24px] font-bold">캠페인</span>
           </div>
         </div>
         <div className="wrapper-container">
-          <div className="contents-container w-full justify-center sm:space-y-4 lg:space-x-4">
+          <div className="contents-container w-full justify-center gap-[8px]">
             <ContentsContainer variant="dashboard">
               <CampaignList
                 apiResponse={apiResponse}
@@ -78,7 +78,7 @@ const Campaign: React.FC<{
                   onClick={handleButton}
                   id="new_campaign"
                 >
-                  <div className="flex items-center pr-2">
+                  <div className="flex items-center">
                     <AddIcon fontSize="small" />
                   </div>
                   새 캠페인

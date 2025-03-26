@@ -15,7 +15,7 @@ const InputSelectBox: React.FC<InputSelectBoxArgs> = ({
     <select
       id={id}
       value={value}
-      className="input-class ml-2 w-[200px] rounded-md border p-3 text-xs"
+      className="input-class ml-2 w-[200px] rounded-md border p-3 text-[12px]"
       onChange={onChange}
     >
       <option key="1" value="1">

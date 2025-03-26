@@ -47,6 +47,7 @@ export interface PromotionsArgs {
 export interface CouponsArgs {
   coupon_code: string;
   coupon_name: string;
+  coupon_title?: string;
 }
 
 // for API returns
@@ -68,6 +69,7 @@ export interface RewardsArgs {
   reward_type: RewardType;
   coupon_code?: string | undefined;
   coupon_title?: string | undefined;
+  coupon_name?: string | undefined;
   point_amount?: string | undefined;
   referrer_conditions?: RewardPolicyArgs | null;
   referee_conditions?: RewardPolicyArgs | null;

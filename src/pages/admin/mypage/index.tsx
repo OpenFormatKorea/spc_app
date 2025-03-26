@@ -23,7 +23,7 @@ const DetailsMyPage = (data: UserInfoProps) => {
     <DashboardContainer>
       <div className="mb-[8px] flex h-[42px] w-full items-center justify-between">
         <div className="subject-container flex w-full">
-          <div className="text-2xl font-bold">마이 페이지</div>
+          <div className="text-[24px] font-bold">마이 페이지</div>
         </div>
 
         <div className="button-container flex w-full justify-end">
@@ -37,7 +37,7 @@ const DetailsMyPage = (data: UserInfoProps) => {
           </button>
         </div>
       </div>
-      <div className="flex w-full flex-col items-center justify-center sm:flex-row md:flex-row md:space-x-4 lg:space-x-4">
+      <div className="flex w-full flex-col items-center justify-center gap-[10px] sm:flex-row md:flex-row">
         <ContentsContainer variant="dashboard">
           <MyPageDetails
             username={userInfo.username}

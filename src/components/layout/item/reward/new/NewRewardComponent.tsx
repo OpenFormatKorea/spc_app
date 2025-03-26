@@ -1,13 +1,20 @@
-import React, { useState, KeyboardEvent, useEffect } from "react";
+import React, { useState, KeyboardEvent } from "react";
 import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import { ApiResponse } from "@/lib/types";
 import InputNumberTextBox from "@/components/base/InputNumberText";
 import NewRewardModal from "@/components/layout/item/reward/new/NewRewardModal";
-import NewCouponList from "@/components/layout/item/modal/new/NewCouponList";
+import CouponList from "@/components/layout/item/modal/CouponList";
+import {
+  inputFormClass,
+  labelClass,
+  radioButtonLabelClass,
+} from "@/interfaces/tailwindCss";
 
 interface NewRewardComponentProps {
   apiResponse: ApiResponse;
+  page: number;
+  page_size: number;
   selectedCouponItems: CouponsArgs[];
   setSelectedCouponItems: (value: CouponsArgs[]) => void;
   couponInputs: CouponsArgs[];
@@ -21,6 +28,8 @@ interface NewRewardComponentProps {
 
 const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   apiResponse,
+  page,
+  page_size,
   setSelectedCouponItems,
   selectedCouponItems,
   couponInputs,
@@ -31,13 +40,9 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   disableInput,
   handleKeyDown,
 }) => {
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
-  const radioButtonLabelClass = "text-xs pt-4 pb-2 text-gray-500";
-  const labelClass = "text-xs pt-4 text-gray-500";
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
-  const [addReward, setAddReward] = useState<Boolean>(false);
 
   const handleRewardTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -52,11 +57,11 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
 
   return (
     <>
-      <h1 className="border-b-[1px] pb-2 text-xl font-bold">리워드</h1>
+      <h1 className="border-b-[1px] pb-[5px] text-[18px] font-bold">리워드</h1>
       <div className={inputFormClass}>
         <label className={radioButtonLabelClass}>리워드 종류</label>
-        <div className="flex h-[42px] w-full items-center">
-          <div className="flex w-full space-x-20 text-left lg:max-w-[458px]">
+        <div className="flex h-[42px] w-full items-center justify-between">
+          <div className="flex w-full gap-[10px] text-left">
             <InputRadioBox
               label="쿠폰"
               name="reward_type"
@@ -92,16 +97,17 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
             <div className="flex h-fit w-full flex-col">
               <div className="mb-2 flex w-full flex-col text-left">
                 <label className={labelClass}>선택된 쿠폰</label>
-                <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-sm">
+                <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-lg bg-gray-100 p-2 pb-3 text-[14px]">
                   {selectedCouponItems.length !== 0 ? (
                     couponInputs.map((inputCoupon) => {
                       return (
                         inputCoupon && (
                           <div
                             key={inputCoupon.coupon_code}
-                            className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
+                            className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
                           >
-                            {inputCoupon.coupon_name}
+                            {inputCoupon.coupon_code} -{" "}
+                            {inputCoupon.coupon_title}
                           </div>
                         )
                       );
@@ -150,14 +156,15 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
           )}
         </div>
       </div>
-      <NewCouponList
+      <CouponList
         apiResponse={apiResponse}
         setSelectedCouponItems={setSelectedCouponItems}
         setCouponInputs={setCouponInputs}
         couponInputs={couponInputs}
         onClose={closeModal}
         isOpen={isModalOpen}
-        setAddReward={setAddReward}
+        page={page}
+        page_size={page_size}
       />
       {disableInput === false && (
         <>

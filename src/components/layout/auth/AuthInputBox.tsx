@@ -8,16 +8,24 @@ interface AuthInputBoxProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
-const AuthInputBox: React.FC<AuthInputBoxProps> = ({ label, type, id, placeholder, value, onChange, onKeyDown }) => {
+const AuthInputBox: React.FC<AuthInputBoxProps> = ({
+  label,
+  type,
+  id,
+  placeholder,
+  value,
+  onChange,
+  onKeyDown,
+}) => {
   return (
-    <div className="w-full justify-start items-center text-left pt-1">
-      <a className="w-[25%] mb-4 text-xs text-black">{label}</a>
+    <div className="w-full items-center justify-start pt-1 text-left">
+      <a className="mb-4 w-[25%] text-[12px] text-black">{label}</a>
       <input
         type={type}
         id={id}
         placeholder={placeholder}
         value={value}
-        className="usernameInput  flex-grow text-xs p-3 w-full lg:max-w-[450px] border-b-[1px]"
+        className="usernameInput w-full flex-grow border-b-[1px] p-3 text-[12px] lg:max-w-[450px]"
         onChange={onChange}
         onKeyDown={onKeyDown}
       />

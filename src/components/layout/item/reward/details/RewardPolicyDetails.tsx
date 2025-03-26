@@ -4,8 +4,6 @@ import ReferralConditionDetails from "@/components/layout/item/reward/details/Re
 
 interface RewardPolicyDetailsProps {
   trigger: string;
-  inputformClass: string;
-  labelClass: string;
   rewardType: RewardType;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   usePolicy: boolean;
@@ -24,8 +22,6 @@ interface RewardPolicyDetailsProps {
 const RewardPolicyDetails: React.FC<RewardPolicyDetailsProps> = ({
   defaultConditions,
   trigger,
-  inputformClass,
-  labelClass,
   rewardType,
   handleKeyDown,
   usePolicy,
@@ -107,9 +103,9 @@ const RewardPolicyDetails: React.FC<RewardPolicyDetailsProps> = ({
   }, [useReffererCondition, useRefereeCondition, usePolicy, setUsePolicy]);
 
   return (
-    <div className="mb-3 w-full min-w-[320px] rounded-lg bg-gray-100 p-4">
-      <div className="flex w-full items-center border-b pb-2 lg:flex-row">
-        <label className="w-full text-left text-lg font-bold">
+    <div className="w-full min-w-[320px] rounded-lg bg-gray-100 p-4">
+      <div className="flex w-full items-center border-b pb-[5px] lg:flex-row">
+        <label className="w-full text-left text-[16px] font-bold">
           {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
         </label>
         <div className="mr-2 flex w-full justify-end">
@@ -139,12 +135,10 @@ const RewardPolicyDetails: React.FC<RewardPolicyDetailsProps> = ({
             : "max-h-0 overflow-hidden opacity-0"
         }`}
       >
-        <div className="flex flex-col space-y-2 pt-3 lg:flex-row lg:space-x-3 lg:space-y-0">
+        <div className="flex flex-col gap-[10px] pt-3 lg:flex-row">
           <ReferralConditionDetails
             trigger={trigger}
             target="referrer"
-            inputFormClass={inputformClass}
-            labelClass={labelClass}
             rewardType={rewardType}
             handleKeyDown={handleKeyDown}
             itemConditions={referrerConditions}
@@ -155,8 +149,6 @@ const RewardPolicyDetails: React.FC<RewardPolicyDetailsProps> = ({
           <ReferralConditionDetails
             trigger={trigger}
             target="referee"
-            inputFormClass={inputformClass}
-            labelClass={labelClass}
             rewardType={rewardType}
             handleKeyDown={handleKeyDown}
             itemConditions={refereeConditions}

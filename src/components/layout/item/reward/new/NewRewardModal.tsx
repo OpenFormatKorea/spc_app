@@ -10,6 +10,7 @@ import {
 import Modal from "@/components/layout/base/Modal";
 import NewRewardPolicySetting from "@/components/layout/item/reward/new/NewRewardPolicySetting";
 import InputNumberTextBox from "@/components/base/InputNumberText";
+import { labelClass } from "@/interfaces/tailwindCss";
 
 interface NewRewardModalProps {
   reward_type: RewardType;
@@ -59,8 +60,6 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
   const [refereeState, setRefereeState] =
     useState<RewardPolicyArgs>(defaultPolicy);
 
-  const inputFormClass = "inputForm flex flex-col text-left w-full pb-2";
-  const labelClass = "text-xs pt-2 text-gray-500";
   const generatePolicy = (state: RewardPolicyArgs): RewardPolicyArgs => {
     return {
       SIGNUP: {
@@ -140,7 +139,11 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
       const rewardConditionsArgs: RewardsArgs = {
         reward_type,
         ...(reward_type === RewardType.CO
-          ? { coupon_code: String(inputCoupon.coupon_code) }
+          ? {
+              coupon_code: String(inputCoupon.coupon_code),
+              coupon_name: String(inputCoupon.coupon_name),
+              coupon_title: String(inputCoupon.coupon_title),
+            }
           : {}),
         referrer_conditions: generatePolicy(referrerState),
         referee_conditions: generatePolicy(refereeState),
@@ -159,15 +162,15 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <div className="flex flex-col items-center justify-center text-center">
-          <h1 className="w-full pb-2 text-left text-xl font-bold">
+          <h1 className="w-full pb-[5px] text-left text-[18px] font-bold">
             {reward_type === RewardType.CO ? "쿠폰" : "포인트"} 추가 설정
           </h1>
 
-          <div className="my-2 flex max-h-[550px] flex-col items-center overflow-y-scroll">
+          <div className="flex max-h-[550px] flex-col items-center overflow-y-scroll">
             <div className="flex w-full flex-col rounded-lg bg-white p-3">
-              <div className="mb-4 flex w-full flex-col items-center justify-center rounded-xl">
-                <div className="mb-2 flex w-full flex-col text-left">
-                  <label className="font-gray-300 mb-2 text-sm font-semibold">
+              <div className="flex w-full flex-col items-center justify-center rounded-xl">
+                <div className="flex w-full flex-col text-left">
+                  <label className="font-gray-300 mb-2 text-[14px] font-semibold">
                     {reward_type === RewardType.CO
                       ? "쿠폰 코드"
                       : " 지급 포인트 금액"}
@@ -194,7 +197,7 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
                           disabled={true}
                         />
 
-                        <label className="font-gray-300 ml-2 text-sm font-semibold">
+                        <label className="font-gray-300 ml-2 text-[14px] font-semibold">
                           포인트
                         </label>
                       </>
@@ -203,16 +206,17 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
                         <div className="flex h-fit w-full flex-col">
                           <div className="mb-2 flex w-full flex-col text-left">
                             <label className={labelClass}>선택된 쿠폰</label>
-                            <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-xl bg-gray-100 p-2 pb-3 text-sm">
+                            <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-lg bg-gray-100 p-2 pb-3 text-[14px]">
                               {couponInputs.length !== 0 ? (
                                 couponInputs.map((inputCoupon) => {
                                   return (
                                     inputCoupon && (
                                       <div
                                         key={inputCoupon.coupon_code}
-                                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-sm text-white"
+                                        className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
                                       >
-                                        {inputCoupon.coupon_name}
+                                        {inputCoupon.coupon_code} -{" "}
+                                        {inputCoupon.coupon_title}
                                       </div>
                                     )
                                   );
@@ -235,8 +239,6 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
                 </div>
               </div>
               <NewRewardPolicySetting
-                inputformClass={inputFormClass}
-                labelClass={labelClass}
                 reward_type={reward_type}
                 handleKeyDown={handleKeyDown}
                 setReferrerState={setReferrerState}

@@ -1,18 +1,18 @@
 export interface CampaignArgs {
-  id?: string;
   title: string;
   description: string;
   period_type: PeriodType;
   start_date: string;
   end_date?: string | null;
-  newStart_date?: Date;
-  newEnd_date?: Date;
   active: boolean;
+
+  //for details
+  id?: string;
   shop_id?: string;
-  created_by_username?: string;
-  updated_by_username?: string | null;
   created_at?: string;
   updated_at?: string;
+  created_by_username?: string;
+  updated_by_username?: string | null;
 }
 
 export interface CampaignInfoProps {

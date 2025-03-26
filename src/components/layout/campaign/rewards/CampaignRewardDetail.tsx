@@ -274,7 +274,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                                       }
                                     >
                                       <div className="flex h-fit w-fit flex-col p-[5px] font-bold">
-                                        <div>
+                                        <div className="w-[75px]">
                                           {reward.reward_trigger === "SIGNUP"
                                             ? "회원가입"
                                             : "구매 "}

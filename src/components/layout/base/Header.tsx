@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ shop_id }) => {
           <Navmenu menutitle="마이 페이지" link="/admin/mypage" />
 
           <div
-            className={`text-md mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-white transition-all duration-300`}
+            className={`mx-auto flex h-[55px] w-full cursor-pointer items-center justify-center text-[13px] text-white transition-all duration-300`}
           >
             <div
               className="flex w-[95%] items-center justify-center rounded-xl p-2 transition-all duration-300"
@@ -76,8 +76,8 @@ const Header: React.FC<HeaderProps> = ({ shop_id }) => {
           </div>
 
           <div className="flex w-full flex-col justify-center px-5">
-            <span className="text-xs text-white">SHOP ID</span>
-            <span id="shop_id" className="flex text-xs text-white">
+            <span className="text-[12px] text-white">SHOP ID</span>
+            <span id="shop_id" className="flex text-[12px] text-white">
               {shop_id}
             </span>
           </div>

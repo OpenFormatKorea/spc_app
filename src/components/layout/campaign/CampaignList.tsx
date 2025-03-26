@@ -90,18 +90,18 @@ const CampaignList: React.FC<CampaignListProps> = (
 
   return (
     <>
-      <div className="mb-2 w-full pb-2">
-        <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
+      <div className="flex w-full pb-[5px]">
+        <div className="flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="w-[80%]">
-            <div className="text-lg font-bold">캠페인</div>
-            <div className="text-sm font-normal text-gray-500">
+            <div className="text-[16px] font-bold">캠페인</div>
+            <div className="text-[14px] font-normal text-gray-500">
               현재 사용중인 캠페인 목록이에요.
             </div>
           </div>
           {!isCampaignPage && (
             <div
               id="more_campaign"
-              className="w-[20%] cursor-pointer justify-center pr-1 text-right text-sm text-blue-400"
+              className="w-[20%] cursor-pointer justify-center pr-1 text-right text-[14px] text-blue-400"
               onClick={handleButton}
             >
               더보기
@@ -140,7 +140,7 @@ const CampaignList: React.FC<CampaignListProps> = (
                         campaign.period_type === "LIMITED"
                           ? "bg-yellow-200 text-yellow-600"
                           : "bg-green-200 text-green-600"
-                      } w-fit rounded-md px-2 py-1 text-sm font-semibold`}
+                      } w-fit rounded-md px-2 py-1 text-[14px] font-semibold`}
                     >
                       {campaign.period_type === "LIMITED"
                         ? "기간 제한"
@@ -164,7 +164,7 @@ const CampaignList: React.FC<CampaignListProps> = (
                     : ""}
                 </td>
                 <td
-                  className="border-b border-gray-200 px-2 py-2 text-sm"
+                  className="border-b border-gray-200 px-2 py-2 text-[14px]"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <CampaignActiveButton
@@ -209,12 +209,12 @@ const CampaignList: React.FC<CampaignListProps> = (
           </tbody>
         </table>
         {/* Mobile-friendly layout */}
-        <div className="block lg:hidden">
+        <div className="flex flex-col gap-[10px] lg:hidden">
           {campaigns.length > 0 ? (
             campaigns.map((campaign) => (
               <div
                 key={campaign.id}
-                className="mb-4 w-full cursor-pointer space-y-1 rounded-xl bg-gray-100 p-4 text-gray-600"
+                className="w-full cursor-pointer gap-[5px] rounded-xl bg-gray-100 p-4 text-gray-600"
                 id={`${campaign.id}`}
                 onClick={handleCampaignClick}
               >
@@ -233,11 +233,11 @@ const CampaignList: React.FC<CampaignListProps> = (
                     />
                   </div>
                 </div>
-                <div className="flex pr-2 text-sm">
+                <div className="flex pr-2 text-[14px]">
                   <div className="w-[100px] font-semibold">타입:</div>
                   {campaign.period_type === "LIMITED" ? "기간 제한" : "무기한"}
                 </div>
-                <div className="flex pr-2 text-sm">
+                <div className="flex pr-2 text-[14px]">
                   <div className="w-[100px] font-semibold">활성 기간:</div>
                   <div>
                     {new Date(campaign.start_date).toLocaleDateString("ko-KR", {
@@ -248,6 +248,25 @@ const CampaignList: React.FC<CampaignListProps> = (
                     {" ~ "}
                     {campaign.end_date
                       ? new Date(campaign.end_date).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )
+                      : ""}
+                  </div>
+                </div>
+                <div className="flex pr-2 text-[14px]">
+                  <div className="w-[100px] font-semibold">등록 계정 ID:</div>
+                  {campaign.created_by_username}
+                </div>
+                <div className="flex pr-2 text-[14px]">
+                  <div className="w-[100px] font-semibold">캠페인 등록일:</div>
+                  <div>
+                    {campaign.created_at
+                      ? new Date(campaign.created_at).toLocaleDateString(
                           "ko-KR",
                           {
                             year: "numeric",
