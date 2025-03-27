@@ -49,6 +49,7 @@ const Header: React.FC<HeaderProps> = ({ shop_id }) => {
             submenus={[
               { title: "캠페인 리스트", link: "/campaign" },
               { title: "캠페인 생성", link: "/campaign/new" },
+              { title: "캠페인 상세 리포트", link: "/campaign/report" },
               { title: "캠페인 지표", link: "/campaign/stats" },
             ]}
           />
