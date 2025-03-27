@@ -109,7 +109,7 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
     return percentages;
   }
   const percentages = calculatePercentages(funnel_data);
-  console.log("percentages", percentages);
+  // console.log("percentages", percentages);
 
   return (
     <div className="h-full max-h-[400px] w-full rounded-2xl bg-white p-[16px]">

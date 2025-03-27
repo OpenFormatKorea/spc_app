@@ -67,8 +67,8 @@ const HourlySignupsBarChart = ({
   );
   const maxTick = Math.ceil(maxY);
   const tickValues = Array.from({ length: maxTick + 1 }, (_, i) => i); // [0, 1, 2, ...]
-  console.log("barChartNewData", barChartNewData);
-  console.log("chartData", chartData);
+  // console.log("barChartNewData", barChartNewData);
+  // console.log("chartData", chartData);
   return (
     <>
       <div className="h-full w-full rounded-2xl bg-white p-[16px]">
