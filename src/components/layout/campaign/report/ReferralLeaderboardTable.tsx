@@ -240,7 +240,7 @@ export default function ReferralLeaderboardTable(
               <tbody>
                 {newTableData.map((resultRow, index) => (
                   <tr className={tbodyStyle}>
-                    {/* <td>
+                    {/* <td> 
                       <input type="checkbox" id={index.toString()} />
                     </td> */}
                     <td className={tbodyStyle} id={resultRow.referrer_id}>
