@@ -61,8 +61,14 @@ const HourlySignupsBarChart = ({
       };
     },
   );
-  console.log("barChartNewData", barChartNewData);
-  console.log("chartData", chartData);
+  // Calculate max Y value from your chartData
+  const maxY = Math.max(
+    ...chartData.flatMap((d) => [d.signup_count, d.new_user_count]),
+  );
+  const maxTick = Math.ceil(maxY);
+  const tickValues = Array.from({ length: maxTick + 1 }, (_, i) => i); // [0, 1, 2, ...]
+  // console.log("barChartNewData", barChartNewData);
+  // console.log("chartData", chartData);
   return (
     <>
       <div className="h-full w-full rounded-2xl bg-white p-[16px]">
@@ -145,11 +151,13 @@ const HourlySignupsBarChart = ({
                       legend: "유입 이용자 수",
                       legendPosition: "middle",
                       legendOffset: -40,
+                      tickValues,
                     }}
                     labelSkipWidth={12}
                     labelSkipHeight={12}
                     labelTextColor="#ffffff"
                     animate={true}
+                    gridYValues={tickValues}
                   />
                 </div>
               </div>

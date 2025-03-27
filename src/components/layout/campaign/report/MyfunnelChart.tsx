@@ -109,7 +109,7 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
     return percentages;
   }
   const percentages = calculatePercentages(funnel_data);
-  console.log("percentages", percentages);
+  // console.log("percentages", percentages);
 
   return (
     <div className="h-full max-h-[400px] w-full rounded-2xl bg-white p-[16px]">
@@ -159,31 +159,11 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
           <p className="stext-[14px] ml-1 min-h-[17%] text-[#6c757d] lg:min-h-[19%]"></p>
           {percentages.map((stage, index) =>
             index != 1 ? (
-              <p
-                key={index}
-                className={`ml-1 min-h-[17%] lg:min-h-[19%] ${
-                  parseFloat(stage) > parseFloat(percentage_aggregates[index])
-                    ? "text-green-500"
-                    : parseFloat(stage) <
-                        parseFloat(percentage_aggregates[index])
-                      ? "text-red-500"
-                      : "text-gray-500"
-                }`}
-              >
+              <p key={index} className={`ml-1 min-h-[17%] lg:min-h-[19%]`}>
                 {stage}%
               </p>
             ) : (
-              <p
-                key={1}
-                className={`ml-1 min-h-[17%] lg:min-h-[19%] ${
-                  parseFloat(stage) > parseFloat(percentage_aggregates[1])
-                    ? "text-green-500"
-                    : parseFloat(stage) <
-                        parseFloat(percentage_aggregates[index])
-                      ? "text-red-500"
-                      : "text-gray-500"
-                }`}
-              >
+              <p key={1} className={`$ ml-1 min-h-[17%] lg:min-h-[19%]`}>
                 {stage}%
                 <br /> (신규유입%: {registration_to_new_user_rate}%)
               </p>
