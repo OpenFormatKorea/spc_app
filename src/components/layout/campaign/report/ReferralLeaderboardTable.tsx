@@ -195,11 +195,11 @@ export default function ReferralLeaderboardTable(
             <table className="w-full border border-gray-100 text-center lg:table">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className={theadStyle}>
+                  {/* <th className={theadStyle}>
                     <div className="flex h-full w-full items-center justify-center gap-[5px]">
                       <input type="checkbox" id="all" />
                     </div>
-                  </th>
+                  </th> */}
                   <th className={theadStyle}>
                     <div className="flex w-full items-center justify-center gap-[5px]">
                       <span>추천인 ID</span>
@@ -240,9 +240,9 @@ export default function ReferralLeaderboardTable(
               <tbody>
                 {newTableData.map((resultRow, index) => (
                   <tr className={tbodyStyle}>
-                    <td>
+                    {/* <td>
                       <input type="checkbox" id={index.toString()} />
-                    </td>
+                    </td> */}
                     <td className={tbodyStyle} id={resultRow.referrer_id}>
                       {resultRow.base_user_id}
                     </td>
