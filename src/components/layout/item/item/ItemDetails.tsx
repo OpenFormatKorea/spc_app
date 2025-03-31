@@ -1,5 +1,6 @@
 import InputTextBox from "@/components/base/InputText";
 import KakaoShareTemplate from "@/components/base/KakaoShareTemplate";
+import { fetchGetCampaignStatus } from "@/lib/campaign/apis";
 import { fetchActivateItem } from "@/lib/item/apis";
 import {
   ItemType,
@@ -9,7 +10,7 @@ import {
   KakaoShareArgs,
 } from "@/lib/item/types";
 import { GetServerSidePropsContext } from "next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ItemDetailsProps {
   page_type: "DETAILS" | "NEW";
@@ -25,7 +26,6 @@ interface ItemDetailsProps {
   setTitle: (value: string) => void;
   setProductInputs: React.Dispatch<React.SetStateAction<ProductsArgs[]>>;
   setPromotionInputs: React.Dispatch<React.SetStateAction<PromotionsArgs[]>>;
-  setActive?: (value: boolean) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onChangeImage: (
     imgType: string,
@@ -48,7 +48,6 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
     setTitle,
     setProductInputs,
     setPromotionInputs,
-    setActive,
     handleKeyDown,
     onChangeImage,
     campaign_id,
@@ -56,40 +55,66 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
   },
   context: GetServerSidePropsContext,
 ) => {
+  const [itemActiveStatus, setItemActiveStatus] = useState<boolean>(
+    itemArgs.active,
+  );
+  const [campaignActiveStatus, setCampaignActiveStatus] =
+    useState<boolean>(false);
   useEffect(() => {
     if (page_type === "DETAILS") {
       setProductInputs(itemArgs.products);
       setPromotionInputs(itemArgs.promotions);
     }
-  }, [
-    page_type,
-    itemArgs.products,
-    itemArgs.promotions,
-    setProductInputs,
-    setPromotionInputs,
-  ]);
+  }, [itemArgs.products, itemArgs.promotions]);
 
   const handleActiveStatus = async () => {
-    if (page_type === "DETAILS" && setActive && campaign_id && itemArgs.id) {
-      const newActiveStatus = !itemArgs.active;
-      if (confirm("아이템 활성화 상태를 변경하시겠어요?")) {
-        setActive(newActiveStatus);
-        const result = await fetchActivateItem(
-          itemArgs.id,
-          campaign_id,
-          context,
-        );
-        if (result.status !== 200) {
-          alert(
-            "아이템 활성화 상태를 변경 실패 하였습니다. 상태 코드: " +
-              result.status,
-          );
-          setActive(!newActiveStatus);
-        }
+    // 기본 조건 확인
+    if (!campaignActiveStatus) {
+      alert("캠페인이 비활성화 상태입니다. 아이템을 활성화할 수 없습니다.");
+      return;
+    }
+
+    if (page_type !== "DETAILS" || !campaign_id || !itemArgs.id) {
+      console.warn("활성화 조건이 충족되지 않았습니다.");
+      return;
+    }
+
+    const newActiveStatus = !itemActiveStatus;
+    const confirmMessage = "아이템 활성화 상태를 변경하시겠어요?";
+    const errorMessage = `아이템 활성화 상태 변경 실패.`;
+
+    const confirmed = confirm(confirmMessage);
+    if (!confirmed) return;
+
+    try {
+      const result = await fetchActivateItem(itemArgs.id, campaign_id, context);
+
+      if (result.status !== 200) {
+        alert(`${errorMessage} 상태 코드: ${result.status}`);
+        setItemActiveStatus(!newActiveStatus); // 상태 롤백
+      } else {
+        setItemActiveStatus(newActiveStatus);
       }
+    } catch (error) {
+      console.error("아이템 활성화 요청 중 오류:", error);
+      alert("아이템 활성화 상태 변경 중 오류가 발생했습니다.");
     }
   };
 
+  useEffect(() => {
+    const getCampiangStatus = async () => {
+      if (campaign_id) {
+        try {
+          const result = await fetchGetCampaignStatus(campaign_id, context);
+          console.log("result", result.active);
+          setCampaignActiveStatus(result.active);
+        } catch (e) {
+          console.error("Error: ", e);
+        }
+      }
+    };
+    getCampiangStatus();
+  }, [campaign_id, itemActiveStatus]);
   return (
     <>
       <div className="contents-container w-full items-center justify-center">
@@ -102,7 +127,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = (
                 className="peer sr-only opacity-0"
                 id="item-activation"
                 name="active"
-                checked={itemArgs.active}
+                checked={itemActiveStatus}
                 onChange={handleActiveStatus}
               />
               <label

@@ -41,8 +41,6 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   handleKeyDown,
   openModal,
 }) => {
-  console.log("page_type", page_type);
-  console.log("itemArgs.item_type ", itemArgs.item_type);
   const handleItemTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {

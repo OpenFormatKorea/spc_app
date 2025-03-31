@@ -68,7 +68,9 @@ const DetailsCampaign = (
   );
   const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
-  const [active, setActive] = useState(cDetailApiResponse.active);
+  const [campaignActiveStatus, setCampaignActiveStatus] = useState(
+    cDetailApiResponse.active,
+  );
   const shopId = cDetailApiResponse.shop_id || "";
   const createdAt = cDetailApiResponse.created_at || "";
   const [createdByUserName, setCreatedByUserName] = useState(
@@ -82,7 +84,7 @@ const DetailsCampaign = (
     period_type: period_type,
     start_date: start_date,
     end_date: end_date,
-    active: active,
+    active: campaignActiveStatus,
     shop_id: shopId,
     created_by_username: createdByUserName,
     created_at: createdAt,
@@ -214,7 +216,7 @@ const DetailsCampaign = (
               campaignArgs={campaignArgs}
               setPeriod_type={setPeriod_type}
               setDescription={setDescription}
-              setActive={setActive}
+              setActive={setCampaignActiveStatus}
               setTitle={setTitle}
               setStart_date={setStart_date}
               setEnd_date={setEnd_date}
@@ -226,6 +228,7 @@ const DetailsCampaign = (
                 apiResponse={itemListApiResponse}
                 handleButton={handleButton}
                 campaign_id={campaign_id}
+                campaignActiveStatus={campaignActiveStatus}
               />
             </div>
           </ContentsContainer>

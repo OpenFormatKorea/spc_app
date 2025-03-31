@@ -339,13 +339,13 @@ export async function fetchActivateItem(
       return {
         status: 200,
         success: true,
-        message: "아이템들을 삭제하였습니다.",
+        message: "아이템들을 활성화 하였습니다.",
       };
     } else {
       return {
         status: response.status || 400,
         success: false,
-        message: "삭제를 실패하였습니다.",
+        message: "활성화를 실패하였습니다.",
       };
     }
   } catch (error) {
@@ -354,7 +354,7 @@ export async function fetchActivateItem(
     return {
       status: 500,
       success: false,
-      message: "삭제를 실패하였습니다.",
+      message: "활성화를 실패하였습니다.",
       error: error,
     };
   }
