@@ -11,7 +11,7 @@ import {
   UserSearchList,
 } from "@/lib/admin/types";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const response = await fetchGetUserSearch("", "1", "25", context);
@@ -74,39 +74,6 @@ const UserSearch = (
     }
   };
 
-  const fetchUserSearch = async (
-    userId: string,
-    pageNum: string,
-    pageSize: string,
-  ): Promise<UserDataApiResponse> => {
-    setLoading(true);
-    try {
-      const data = await fetchGetUserSearch(userId, pageNum, pageSize, context);
-      return data;
-    } catch (error) {
-      console.error("Failed to fetch campaign stats:", error);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchData = async () => {
-    setPageNum("1");
-    const data = await fetchGetUserSearch(userId, "1", pageSize, context);
-    setNewApiResponse(data);
-  };
-
-  useEffect(() => {
-    try {
-      fetchData();
-    } catch (e) {
-      console.error("error:", e);
-    } finally {
-      setLoading(false);
-    }
-  }, [pageSize]);
-
   return (
     <>
       {loading && (
@@ -122,15 +89,13 @@ const UserSearch = (
         </div>
         <ContentsContainer variant="dashboard">
           <UserSearchComponent
-            handleSearch={handleSearch}
             handleUserDetail={handleUserDetail}
             apiResponse={newApiResponse}
             userId={userId}
             setUserId={setUserId}
+            pageSize={pageSize}
             pageNum={pageNum}
             setPageNum={setPageNum}
-            pageSize={pageSize}
-            fetchUserSearch={fetchUserSearch}
           />
         </ContentsContainer>
       </DashboardContainer>

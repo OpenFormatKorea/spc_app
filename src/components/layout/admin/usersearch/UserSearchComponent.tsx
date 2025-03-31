@@ -1,12 +1,13 @@
 import UserSearchTable from "@/components/layout/admin/usersearch/UserSearchTable";
 import { theadStyle } from "@/interfaces/tailwindCss";
+import { fetchGetUserSearch } from "@/lib/admin/apis";
 import { UserDataApiResponse, UserSearchList } from "@/lib/admin/types";
 import { removeWhiteSpace } from "@/lib/common";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
+import { GetServerSidePropsContext } from "next";
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
 
 interface UserSearchComponentProps {
-  handleSearch: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleUserDetail: (userId: string) => void;
   apiResponse: UserDataApiResponse;
   userId: string;
@@ -14,41 +15,28 @@ interface UserSearchComponentProps {
   pageSize: string;
   pageNum: string;
   setPageNum: React.Dispatch<React.SetStateAction<string>>;
-  fetchUserSearch: (
-    userId: string,
-    pageNum: string,
-    pageSize: string,
-  ) => Promise<UserDataApiResponse>;
 }
 
-const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
-  handleSearch,
-  handleUserDetail,
-  apiResponse,
-  userId,
-  setUserId,
-  pageSize,
-  pageNum,
-  setPageNum,
-  fetchUserSearch,
-}) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      buttonRef.current?.click();
-    }
-  };
+const UserSearchComponent: React.FC<UserSearchComponentProps> = (
+  {
+    handleUserDetail,
+    apiResponse,
+    userId,
+    setUserId,
+    pageSize,
+    pageNum,
+    setPageNum,
+  },
+  context: GetServerSidePropsContext,
+) => {
   const [userSearchResults, setUserSearchResults] = useState<UserSearchList[]>(
     apiResponse?.result ?? [],
   );
-
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const [totalCount, setTotalCount] = useState<number>(
     apiResponse.total_count || 0,
   );
-  const totalCountRef = useRef<number>(apiResponse.total_count || 0);
   const getNextPage = totalCount > stackedDataAmount;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -57,22 +45,25 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
     setUserSearchResults(apiResponse?.result ?? []);
   }, [apiResponse]);
 
-  const fetchNextPage = async () => {
-    if (!getNextPage || !scrollRef.current || isLoading) return;
-
+  const fetchUserList = async (reset = false) => {
+    if (isLoading || (!getNextPage && !reset)) return;
     setIsLoading(true);
-    const nextPageNum = (parseInt(pageNum) + 1).toString(); // 현재 페이지 +1 계산
-
+    const nextPageNum = reset ? "1" : (parseInt(pageNum) + 1).toString(); // 현재 페이지 +1 계산
     try {
-      const newData = await fetchUserSearch(userId, nextPageNum, pageSize); // 새로운 페이지 데이터를 fetch
-
+      const newData = await fetchGetUserSearch(
+        userId,
+        nextPageNum,
+        pageSize,
+        context,
+      ); // 새로운 페이지 데이터를 fetch
       if (newData.result && newData.result.length > 0) {
-        setUserSearchResults((prev) => [...prev, ...(newData.result || [])]); // 새로운 데이터를 기존 데이터에 추가
+        setUserSearchResults(
+          reset
+            ? newData.result || []
+            : (prev) => [...prev, ...(newData.result || [])],
+        ); // 새로운 데이터를 기존 데이터에 추가
         setPageNum(nextPageNum); // 페이지 넘버 업데이트
-      }
-
-      if (newData.total_count) {
-        totalCountRef.current = newData.total_count;
+        setTotalCount(newData.total_count || 0);
       }
     } catch (error) {
       console.error("Failed to fetch next page:", error);
@@ -80,10 +71,8 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    setUserId(removeWhiteSpace(userId));
-  }, [userId]);
+  const fetchforSearch = () => fetchUserList(true); // 검색
+  const fetchNextPage = () => fetchUserList(); // 다음 무한 스크롤 페이지
 
   useEffect(() => {
     if (isBottom) {
@@ -110,13 +99,16 @@ const UserSearchComponent: React.FC<UserSearchComponentProps> = ({
           placeholder="유저 아이디를 적어주세요"
           value={userId}
           className="input-class w-full flex-grow border-b-[1px] py-2 text-[14px] lg:max-w-[450px]"
-          onChange={(e) => setUserId(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={(e) => setUserId(removeWhiteSpace(e.target.value))}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              fetchforSearch();
+            }
+          }}
         />
         <button
-          ref={buttonRef}
           className="min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 text-center text-white"
-          onClick={handleSearch}
+          onClick={fetchforSearch}
         >
           검색
         </button>
