@@ -5,7 +5,7 @@ import { UserDataApiResponse, UserSearchList } from "@/lib/admin/types";
 import { removeWhiteSpace } from "@/lib/common";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { GetServerSidePropsContext } from "next";
-import { useState, useRef, KeyboardEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 interface UserSearchComponentProps {
   handleUserDetail: (userId: string) => void;
