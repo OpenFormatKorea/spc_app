@@ -134,7 +134,6 @@ const ProductList: React.FC<ProductListProps> = (
           { thumb: product.thumb || "" },
         ],
       };
-
       setBeforeAddingItemList((prev) =>
         isChecked
           ? prev.some((item) => item.product_model_code === productGid)

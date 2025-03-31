@@ -59,7 +59,6 @@ const CouponList: React.FC<CouponListProps> = (
 
     try {
       const currentPage = reset ? 1 : pageNum + (pageNum === 0 ? 2 : 1);
-      console.log("currentPage: ", currentPage);
       const response = await fetchSearchCoupon(
         currentPage,
         page_size,

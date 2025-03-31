@@ -26,7 +26,6 @@ const HourlySignupsBarChart = ({
           `${hour},${signup_count},${new_user_count}`,
       )
       .join("\n");
-    console.log("csvData", csvData);
     const csvHeader = "시간,유저_유입,신규가입자\n";
     const BOM = "\uFEFF";
     const csvContent = BOM + csvHeader + csvData;
@@ -67,8 +66,7 @@ const HourlySignupsBarChart = ({
   );
   const maxTick = Math.ceil(maxY);
   const tickValues = Array.from({ length: maxTick + 1 }, (_, i) => i); // [0, 1, 2, ...]
-  // console.log("barChartNewData", barChartNewData);
-  // console.log("chartData", chartData);
+
   return (
     <>
       <div className="h-full w-full rounded-2xl bg-white p-[16px]">

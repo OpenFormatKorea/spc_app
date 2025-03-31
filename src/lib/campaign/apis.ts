@@ -274,7 +274,6 @@ export async function fetchCampaignActiveButton(
 
   try {
     const response = await fetchAPI(context, apiUrl, "PUT", dataObj);
-    console.log("response", response);
     return response;
   } catch (e) {
     console.error("error:", e);
