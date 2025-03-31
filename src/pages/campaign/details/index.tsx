@@ -17,8 +17,6 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-// import CampaignRecord from "@/components/layout/campaign/modal/record/CampaignRecord";
-import { handleGoBack } from "@/lib/common";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { campaign_id }: any = context.query;
@@ -77,11 +75,6 @@ const DetailsCampaign = (
     cDetailApiResponse.created_by_username || "",
   );
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const closeModal = () => setIsModalOpen(false);
-
-  const [pageNum, setPageNum] = useState<string>("1");
-  const pageSize = "25";
 
   const campaignArgs: CampaignArgs = {
     title,
@@ -225,7 +218,6 @@ const DetailsCampaign = (
               setTitle={setTitle}
               setStart_date={setStart_date}
               setEnd_date={setEnd_date}
-              setIsOpen={setIsModalOpen}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">

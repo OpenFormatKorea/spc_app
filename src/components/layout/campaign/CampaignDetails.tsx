@@ -16,7 +16,6 @@ interface CampaignDetailsProps {
   setStart_date: (value: string) => void;
   setEnd_date: (value: string | null) => void;
   campaign_id?: string;
-  setIsOpen: (value: boolean) => void;
 }
 
 const CampaignDetails: React.FC<CampaignDetailsProps> = ({
@@ -30,7 +29,6 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   setTitle,
   setStart_date,
   setEnd_date,
-  setIsOpen,
 }) => {
   const [activeStatus, setActiveStatus] = useState<boolean>(
     campaignArgs.active,

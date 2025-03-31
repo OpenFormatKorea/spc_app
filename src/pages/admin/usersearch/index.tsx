@@ -45,21 +45,6 @@ const UserSearch = (
   const [loading, setLoading] = useState(false);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleSearch = async () => {
-    setLoading(true);
-    setPageNum("1"); // Reset to page 1 on a new search
-    setLoading(true);
-
-    try {
-      const data = await fetchGetUserSearch(userId, "1", "25", context);
-      setNewApiResponse(data as UserDataApiResponse);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleUserDetail = async (user_id: string) => {
     setLoading(true);
     try {

@@ -228,7 +228,7 @@ const ItemList: React.FC<ItemListProps> = (
               onClick={() => handleItemClick(item.id)}
             >
               <div
-                className="flex w-full justify-between border-b font-bold text-black"
+                className="flex h-[30px] w-full justify-between border-b font-bold text-black"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="w-full">{item.title}</div>
