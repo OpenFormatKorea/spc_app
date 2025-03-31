@@ -41,6 +41,8 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
   handleKeyDown,
   openModal,
 }) => {
+  console.log("page_type", page_type);
+  console.log("itemArgs.item_type ", itemArgs.item_type);
   const handleItemTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -78,16 +80,16 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
               disabled={disableInput}
             />
           </div>
-          {itemArgs.item_type === ItemType.PD && page_type === "NEW" && (
+          {itemArgs.item_type === ItemType.PD && page_type === "NEW" ? (
             <button
               id="create_item_container"
-              className={`"cursor-pointer bg-blue-500" min-w-[45px] rounded-lg border p-1 text-center text-white`}
+              className="min-w-[45px] cursor-pointer rounded-lg border bg-blue-500 p-1 text-center text-white"
               onClick={openModal}
               disabled={disableInput}
             >
               추가
             </button>
-          )}
+          ) : null}
         </div>
         <ItemTypeComponent
           item_type={item_type}
