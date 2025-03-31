@@ -14,7 +14,7 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useRef, useState, KeyboardEvent } from "react";
 
-//login page
+//login page index
 const Login = (context: GetServerSidePropsContext) => {
   const [loading, setLoading] = useState(false);
   const [showPW, setShowPw] = useState(false);

@@ -80,14 +80,10 @@ const ItemTypeDetails: React.FC<ItemTypeDetailsProps> = ({
               disabled={disableInput}
             />
           </div>
-          {itemArgs.item_type === ItemType.PD && (
+          {itemArgs.item_type === ItemType.PD && page_type === "NEW" && (
             <button
               id="create_item_container"
-              className={`border p-1 ${
-                page_type === "DETAILS"
-                  ? "cursor-not-allowed bg-gray-400"
-                  : "cursor-pointer bg-blue-500"
-              } min-w-[45px] rounded-lg text-center text-white`}
+              className={`"cursor-pointer bg-blue-500" min-w-[45px] rounded-lg border p-1 text-center text-white`}
               onClick={openModal}
               disabled={disableInput}
             >
