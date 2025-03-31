@@ -147,10 +147,7 @@ export default function ReferralLeaderboardTable(
   useEffect(() => {
     resetTableAndFetchSortedData();
   }, [direction, sortField]);
-  // useEffect(() => {
-  //   console.log("data", data);
-  //   console.log("newTableData", newTableData);
-  // }, [data]);
+
   return (
     <div className="h-full max-h-[400px] w-full rounded-2xl bg-white p-[16px]">
       <div className="flex flex-row justify-between">

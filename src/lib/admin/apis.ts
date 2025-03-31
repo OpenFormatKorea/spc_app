@@ -5,7 +5,7 @@ import { GetServerSidePropsContext } from "next";
 
 export async function fetchGetUserSearch(
   user_id: string,
-  page_num: string,
+  page: string,
   page_size: string,
   context: GetServerSidePropsContext,
 ) {
@@ -14,8 +14,8 @@ export async function fetchGetUserSearch(
 
   const params =
     user_id && user_id !== ""
-      ? { shop_id, user_id, page_num, page_size }
-      : { shop_id, page_num, page_size };
+      ? { shop_id, user_id, page, page_size }
+      : { shop_id, page, page_size };
 
   try {
     const response = await fetchAPI(context, apiUrl, "GET", {}, params);

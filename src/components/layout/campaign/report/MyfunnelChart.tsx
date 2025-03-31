@@ -21,7 +21,6 @@ interface CampaignReportProps {
 }
 const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
-  console.log("data", data);
 
   useEffect(() => {
     const updateWidth = () => setWindowWidth(window.innerWidth);
@@ -84,7 +83,6 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
   const registration_to_new_user_rate = (
     FunnelRate.registration_to_new_user * 100
   ).toFixed(2);
-  console.log("FunnelRate", FunnelRate);
   const percentage_aggregates = [
     (FunnelRate.share_click_to_kakao_share * 100).toFixed(2),
     (FunnelRate.kakao_share_to_registration * 100).toFixed(2),
@@ -109,7 +107,6 @@ const MyFunnelChart = ({ data, isLoading }: CampaignReportProps) => {
     return percentages;
   }
   const percentages = calculatePercentages(funnel_data);
-  // console.log("percentages", percentages);
 
   return (
     <div className="h-full max-h-[400px] w-full rounded-2xl bg-white p-[16px]">
