@@ -135,7 +135,6 @@ const ProductList: React.FC<ProductListProps> = (
         const updatedSelectedItems = shouldAdd
           ? [...prevSelected, productGid] // Add only the GID
           : prevSelected.filter((gid) => gid !== productGid);
-        console.log("updatedSelectedItems", updatedSelectedItems);
 
         const updatedProducts: ProductsArgs[] = products
           .filter((product) => updatedSelectedItems.includes(product.gid))
@@ -147,8 +146,6 @@ const ProductList: React.FC<ProductListProps> = (
               { thumb: product.thumb || "" },
             ],
           }));
-
-        console.log("updatedProducts", updatedProducts);
 
         setProductInputs(updatedProducts);
         setSelectAll(updatedSelectedItems.length === products.length);
