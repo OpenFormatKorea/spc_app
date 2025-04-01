@@ -60,12 +60,6 @@ const HourlySignupsBarChart = ({
       };
     },
   );
-  // Calculate max Y value from your chartData
-  const maxY = Math.max(
-    ...chartData.flatMap((d) => [d.signup_count, d.new_user_count]),
-  );
-  const maxTick = Math.ceil(maxY);
-  const tickValues = Array.from({ length: maxTick + 1 }, (_, i) => i); // [0, 1, 2, ...]
 
   return (
     <>
@@ -146,16 +140,16 @@ const HourlySignupsBarChart = ({
                       tickSize: 5,
                       tickPadding: 5,
                       tickRotation: 0,
-                      legend: "유입 이용자 수",
+                      legend: "유입자 수",
                       legendPosition: "middle",
-                      legendOffset: -40,
-                      tickValues,
+                      legendOffset: -50,
+                      format: (value) => (Number.isInteger(value) ? value : ""),
                     }}
                     labelSkipWidth={12}
                     labelSkipHeight={12}
                     labelTextColor="#ffffff"
                     animate={true}
-                    gridYValues={tickValues}
+                    // gridYValues={tickValues}
                   />
                 </div>
               </div>
