@@ -8,26 +8,32 @@ import { GetServerSidePropsContext } from "next";
 import { theadStyle, tbodyStyle, labelClass } from "@/interfaces/tailwindCss";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { CircularProgress } from "@mui/material";
+import { before } from "node:test";
 
 interface CouponListProps {
   apiResponse: ApiResponse;
   page: number;
   page_size: number;
-  couponInputs: CouponsArgs[];
-  setCouponInputs: (value: CouponsArgs[]) => void;
-  setSelectedCouponItems: (value: CouponsArgs[]) => void;
+  currentCouponList: CouponsArgs[];
+  newCouponList: CouponsArgs[];
+  setNewCouponList: (value: CouponsArgs[]) => void;
   isOpen: boolean;
   onClose: () => void;
 }
 
+enum searchType {
+  N = "name",
+  C = "cpnid",
+}
+
 const CouponList: React.FC<CouponListProps> = (
   {
-    apiResponse,
     page,
     page_size,
-    couponInputs,
-    setCouponInputs,
-    setSelectedCouponItems,
+    apiResponse,
+    currentCouponList,
+    newCouponList,
+    setNewCouponList,
     isOpen,
     onClose,
   },
@@ -39,11 +45,14 @@ const CouponList: React.FC<CouponListProps> = (
   const [newResponse, setNewResponse] = useState<ApiResponse>(apiResponse);
 
   const [pageNum, setPageNum] = useState<number>(page);
-  const [searchOption, setSearchOption] = useState("name");
+  const [searchOption, setSearchOption] = useState<searchType>(searchType.N);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchSort, setSearchSort] = useState("");
-  const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
 
+  const [searchSort, setSearchSort] = useState("");
+  // const [selectedItemList, setSelectedItemList] = useState<string[]>([]);
+
+  const [beforeAddingCouponList, setBeforeAddingCouponList] =
+    useState<CouponsArgs[]>(currentCouponList); // before update the coupons
   const [coupons, setCoupons] = useState<CouponListArgs[]>(
     newResponse.data?.content || [],
   );
@@ -89,6 +98,12 @@ const CouponList: React.FC<CouponListProps> = (
     if (isBottom) fetchNextPage();
   }, [isBottom]);
 
+  useEffect(() => {
+    if (isOpen) {
+      setBeforeAddingCouponList(currentCouponList);
+    }
+  }, [isOpen]);
+
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
@@ -98,59 +113,45 @@ const CouponList: React.FC<CouponListProps> = (
         coupon_name: coupon.name,
         coupon_title: coupon.name,
       }));
-      setCouponInputs(allProducts);
-      setSelectedItemList(
-        coupons.map((coupon: CouponListArgs) => coupon.cpnId),
-      );
+      setBeforeAddingCouponList(allProducts);
+      // setSelectedItemList(
+      //   coupons.map((coupon: CouponListArgs) => coupon.cpnId),
+      // );
     } else {
-      setCouponInputs([]);
-      setSelectedItemList([]);
+      setBeforeAddingCouponList([]);
+
+      // setSelectedItemList([]);
     }
     setSelectAll(isChecked);
   };
 
-  useEffect(() => {
-    if (selectedItemList.length === coupons.length && coupons.length > 0) {
-      setSelectAll(true);
-    } else {
-      setSelectAll(false);
-    }
-  }, [selectedItemList, coupons]);
-
   const handleCheckboxChange =
     (couponCpnId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const isChecked = e.target.checked;
-      setSelectedItemList((prevSelected: string[]) => {
-        let updatedSelectedItems: string[];
-        if (isChecked) {
-          updatedSelectedItems = [...prevSelected, couponCpnId];
-        } else {
-          updatedSelectedItems = prevSelected.filter(
-            (cpnId) => cpnId !== couponCpnId,
-          );
-        }
-        const updatedCoupons = coupons
-          .filter((coupon: CouponListArgs) =>
-            updatedSelectedItems.includes(coupon.cpnId),
-          )
-          .map((coupon: CouponListArgs) => ({
-            coupon_code: coupon.cpnId,
-            coupon_name: coupon.name,
-            coupon_title: coupon.name,
-          }));
-        setCouponInputs(updatedCoupons);
-        setSelectAll(updatedSelectedItems.length === coupons.length);
-        return updatedSelectedItems;
-      });
+      const coupon = coupons.find((c) => c.cpnId === couponCpnId);
+      if (!coupon) return;
+
+      const couponData: CouponsArgs = {
+        coupon_code: coupon.cpnId,
+        coupon_name: coupon.name,
+      };
+      setBeforeAddingCouponList((prev) =>
+        isChecked
+          ? prev.some((item) => item.coupon_code === couponCpnId)
+            ? prev
+            : [...prev, couponData]
+          : prev.filter((item) => item.coupon_code !== couponCpnId),
+      );
     };
 
   const handleAction = () => {
-    if (couponInputs.length === 0) {
+    if (beforeAddingCouponList.length === 0) {
       alert("선택된 쿠폰이 없습니다. 쿠폰을 선택해 주세요. ");
       return;
     }
     if (confirm("해당 쿠폰을 선택 하시겠어요?")) {
-      setSelectedCouponItems(couponInputs);
+      setNewCouponList(beforeAddingCouponList);
+      setBeforeAddingCouponList([]);
       onClose();
     }
   };
@@ -172,10 +173,10 @@ const CouponList: React.FC<CouponListProps> = (
                 name="coupon"
                 id="coupon"
                 value={searchOption}
-                onChange={(e) => setSearchOption(e.target.value)}
+                onChange={(e) => setSearchOption(e.target.value as searchType)}
               >
-                <option value="cpnId">아이디</option>
-                <option value="name">이름</option>
+                <option value={searchType.C}>아이디</option>
+                <option value={searchType.N}>이름</option>
               </select>
               <InputTextBox
                 disabled={false}
@@ -235,7 +236,9 @@ const CouponList: React.FC<CouponListProps> = (
                           type="checkbox"
                           id={`item_${coupon.cpnId}`}
                           name={`item_${coupon.cpnId}`}
-                          checked={selectedItemList.includes(coupon.cpnId)}
+                          checked={beforeAddingCouponList.some(
+                            (item) => item.coupon_code === coupon.cpnId,
+                          )}
                           onChange={handleCheckboxChange(coupon.cpnId)}
                         />
                       </td>
@@ -251,12 +254,12 @@ const CouponList: React.FC<CouponListProps> = (
                     <tr>
                       <td className={tbodyStyle} colSpan={6}>
                         현재 등록가능한 쿠폰이 없어요.
-                        <button
+                        {/* <button
                           className="w-[60px] rounded-lg bg-blue-500 p-2 text-white"
                           onClick={fetchforSearch}
                         >
                           페이지 추가
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   )}
@@ -276,11 +279,11 @@ const CouponList: React.FC<CouponListProps> = (
               선택된 쿠폰
             </label>
             <div className="flex h-[80px] w-full flex-wrap justify-start overflow-y-auto break-words rounded-lg bg-white p-[8px] text-[14px]">
-              {couponInputs.length !== 0 ? (
-                couponInputs.map((inputCoupon) => {
+              {beforeAddingCouponList.length !== 0 ? (
+                beforeAddingCouponList.map((item) => {
                   const coupon = coupons.find(
                     (coupon: CouponListArgs) =>
-                      coupon.cpnId === inputCoupon.coupon_code,
+                      coupon.cpnId === item.coupon_code,
                   );
                   return (
                     coupon && (
