@@ -20,10 +20,10 @@ const RewardComponentDetails: React.FC<RewardComponentDetailsProps> = ({
   return (
     <>
       <h1 className="pb-[5px] text-[18px] font-bold">리워드</h1>
-      <span className="mb-[10px] border-b-[1px] pb-[5px] text-[12px] text-gray-500">
+      {/* <span className="mb-[10px] border-b-[1px] pb-[5px] text-[12px] text-gray-500">
         * 이전에 세팅된 리워드의 경우, 수정시 체크박스로 선택한 리워드만
         저장됩니다.
-      </span>
+      </span> */}
 
       <div className={inputFormClass}>
         <RewardCurrentCardDetails

@@ -15,7 +15,7 @@ import InputNumberTextBox from "@/components/base/InputNumberText";
 interface RewardModalDetailsProps {
   reward_type: RewardType;
   point_amount: string;
-  couponInputs: CouponsArgs[];
+  newCouponList: CouponsArgs[];
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
   setPointAmount: (value: string) => void;
@@ -30,7 +30,7 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
   handleKeyDown,
   setRewards,
   point_amount,
-  couponInputs,
+  newCouponList,
   setPointAmount,
   isOpen,
   onClose,
@@ -128,7 +128,7 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
       reward_type,
       ...(reward_type === RewardType.PO && { point_amount }),
       ...(reward_type === RewardType.CO &&
-        couponInputs.reduce<Record<string, string>>((acc, coupon) => {
+        newCouponList.reduce<Record<string, string>>((acc, coupon) => {
           acc[`coupon_code_${coupon.coupon_code}`] = String(coupon.coupon_code);
           return acc;
         }, {})),
@@ -148,7 +148,7 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
     if (reward_type === RewardType.PO) {
       handleAddReward();
     } else if (reward_type === RewardType.CO) {
-      couponInputs.forEach((inputCoupon) => {
+      newCouponList.forEach((inputCoupon) => {
         const rewardArgs: RewardsArgs = {
           reward_type,
           coupon_code: String(inputCoupon.coupon_code),
@@ -201,8 +201,8 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
                   <div className="flex w-full flex-col">
                     <label className={labelClass}>선택된 쿠폰</label>
                     <div className="mt-2 flex flex-wrap justify-center rounded-xl bg-gray-100 p-2 pb-3 text-[14px]">
-                      {couponInputs.length > 0 ? (
-                        couponInputs.map((coupon) => (
+                      {newCouponList.length > 0 ? (
+                        newCouponList.map((coupon) => (
                           <div
                             key={coupon.coupon_code}
                             className="mr-1 mt-1 rounded-md bg-blue-300 p-1 text-[14px] text-white"
@@ -234,14 +234,14 @@ const RewardModalDetails: React.FC<RewardModalDetailsProps> = ({
 
         <button
           className={`mt-4 w-full rounded-lg p-2 text-white ${
-            (reward_type === RewardType.CO && couponInputs.length === 0) ||
+            (reward_type === RewardType.CO && newCouponList.length === 0) ||
             (reward_type === RewardType.PO && point_amount === "")
               ? "cursor-not-allowed bg-gray-400"
               : "cursor-pointer bg-blue-500"
           }`}
           onClick={handleAddButtonClick}
           disabled={
-            (reward_type === RewardType.CO && couponInputs.length === 0) ||
+            (reward_type === RewardType.CO && newCouponList.length === 0) ||
             (reward_type === RewardType.PO && point_amount === "")
           }
         >

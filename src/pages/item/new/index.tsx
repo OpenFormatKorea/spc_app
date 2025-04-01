@@ -108,7 +108,6 @@ const NewItem = (
   const [currentProductItemList, setCurrentProductItemList] = useState<
     ProductsArgs[]
   >([]); // 가장 마지막 업데이트 - > 이거 이후로 final로 데이터 넘어감
-
   const [newProductItemList, setNewProductItemList] = useState<ProductsArgs[]>(
     [],
   ); // new product Item array
@@ -117,10 +116,11 @@ const NewItem = (
     { description: description },
   ]);
 
-  const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
-  const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>(
-    [],
-  );
+  const [newCouponList, setNewCouponList] = useState<CouponsArgs[]>([]);
+  //  const [couponInputs, setCouponInputs] = useState<CouponsArgs[]>([]);
+  // const [selectedCouponItems, setSelectedCouponItems] = useState<CouponsArgs[]>(
+  //   [],
+  // );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -343,7 +343,7 @@ const NewItem = (
   useEffect(() => {
     if (item_type === ItemType.PD) {
       setPromotionInputs([]);
-      setSelectedCouponItems([]);
+      setNewCouponList([]);
       setDescription("");
     } else if (item_type === ItemType.PM) {
       setCurrentProductItemList([]);
@@ -352,10 +352,12 @@ const NewItem = (
   useEffect(() => {
     setPromotionInputs([{ description: description }]);
   }, [description]);
+
   useEffect(() => {
     if (!Array.isArray(newProductItemList)) return;
     setCurrentProductItemList(newProductItemList);
   }, [newProductItemList]);
+
   return (
     <>
       {loading && (
@@ -408,14 +410,12 @@ const NewItem = (
             <NewRewardComponent
               handleKeyDown={handleKeyDown}
               reward_type={reward_type}
-              selectedCouponItems={selectedCouponItems}
-              couponInputs={couponInputs}
+              newCouponList={newCouponList}
               setRewardType={setReward_Type}
               setRewards={setRewards}
               disableInput={false}
               apiResponse={couponResponse}
-              setSelectedCouponItems={setSelectedCouponItems}
-              setCouponInputs={setCouponInputs}
+              setNewCouponList={setNewCouponList}
               page={page}
               page_size={page_size}
             />

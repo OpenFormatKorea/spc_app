@@ -87,7 +87,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
       </div>
       {rewards.map((reward, index) => (
         <div
-          className="flex flex-col gap-[10px] rounded-lg bg-gray-200 p-[8px] text-[14px]"
+          className="mb-[10px] flex flex-col rounded-xl bg-gray-200 p-[10px] text-[12px]"
           key={reward.id}
           id={`rewards_${reward.id}`}
         >
@@ -140,7 +140,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                     key={trigger}
                     className="flex w-full flex-col gap-[10px]"
                   >
-                    <div className="w-full text-[12px] font-bold">
+                    <div className="flex w-full flex-col gap-[5px]">
                       {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
                     </div>
                     {conditionTypes.map((type) => {
@@ -154,15 +154,15 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                       return (
                         <div
                           key={type}
-                          className="min-h-[165px] w-full gap-[10px] bg-gray-100 p-2"
+                          className="min-h-[155px] w-full gap-[10px] rounded-md bg-gray-100 p-2"
                         >
-                          <div className="w-full border-b text-[16px]">
+                          <div className="w-full border-b border-b-gray-400 text-[16px] font-semibold">
                             {type === "referrer_conditions"
                               ? "추천인"
                               : "피추천인"}
                           </div>
-                          <div className="flex w-full gap-[10px] p-[5px]">
-                            <div className="w-fit text-gray-600">
+                          <div className="flex w-full justify-between gap-[10px] p-[5px]">
+                            <div className="w-[100px] font-semibold text-gray-600">
                               지급 시점:
                             </div>
                             <div className="w-fit">
@@ -170,8 +170,8 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                             </div>
                           </div>
                           {policy.payment_timing?.delay_days != null && (
-                            <div className="flex w-full gap-[10px] p-[5px]">
-                              <div className="w-fit text-gray-600">
+                            <div className="flex w-full justify-between gap-[10px] p-[5px]">
+                              <div className="w-[100px] font-semibold text-gray-600">
                                 제공 일:
                               </div>
                               <div className="w-fit">
@@ -179,8 +179,8 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                               </div>
                             </div>
                           )}
-                          <div className="flex w-full gap-[10px] p-[5px]">
-                            <div className="w-fit text-gray-600">
+                          <div className="flex w-full justify-between gap-[10px] p-[5px]">
+                            <div className="w-[100px] font-semibold text-gray-600">
                               지급 방식:
                             </div>
                             <div className="w-fit">
@@ -190,8 +190,8 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                             </div>
                           </div>
                           {policy.payment_frequency?.repeat_count != null && (
-                            <div className="flex w-full gap-[10px] p-[5px]">
-                              <div className="w-fit text-gray-600">
+                            <div className="flex w-full justify-between gap-[10px] p-[5px]">
+                              <div className="w-[100px] font-semibold text-gray-600">
                                 최대 지급 횟수:
                               </div>
                               <div className="w-fit">

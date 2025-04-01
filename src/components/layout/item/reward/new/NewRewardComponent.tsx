@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from "react";
+import React, { useState, KeyboardEvent, useEffect } from "react";
 import { CouponsArgs, RewardsArgs, RewardType } from "@/lib/item/types";
 import InputRadioBox from "@/components/base/InputRadio";
 import { ApiResponse } from "@/lib/types";
@@ -15,10 +15,8 @@ interface NewRewardComponentProps {
   apiResponse: ApiResponse;
   page: number;
   page_size: number;
-  selectedCouponItems: CouponsArgs[];
-  setSelectedCouponItems: (value: CouponsArgs[]) => void;
-  couponInputs: CouponsArgs[];
-  setCouponInputs: (value: CouponsArgs[]) => void;
+  newCouponList: CouponsArgs[];
+  setNewCouponList: (value: CouponsArgs[]) => void;
   reward_type: RewardType;
   setRewardType: (value: RewardType) => void;
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
@@ -30,10 +28,8 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   apiResponse,
   page,
   page_size,
-  setSelectedCouponItems,
-  selectedCouponItems,
-  couponInputs,
-  setCouponInputs,
+  newCouponList,
+  setNewCouponList,
   reward_type,
   setRewards,
   setRewardType,
@@ -43,7 +39,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   const [point_amount, setPointAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
-
+  const [currentCouponList, setCurrentCouponList] = useState<CouponsArgs[]>([]); // 가장 마지막 업데이트 - > 이거 이후로 final로 데이터 넘어감
   const handleRewardTypeRadioChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -55,6 +51,18 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
   const openRewardModal = () => setIsRewardModalOpen(true);
   const closeRewardModal = () => setIsRewardModalOpen(false);
 
+  useEffect(() => {
+    if (reward_type === RewardType.CO) {
+      setPointAmount("");
+    } else if (reward_type === RewardType.PO) {
+      setCurrentCouponList([]);
+    }
+  }, [reward_type]);
+
+  useEffect(() => {
+    if (!Array.isArray(newCouponList)) return;
+    setCurrentCouponList(newCouponList);
+  }, [newCouponList]);
   return (
     <>
       <h1 className="border-b-[1px] pb-[5px] text-[18px] font-bold">리워드</h1>
@@ -98,8 +106,8 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
               <div className="mb-2 flex w-full flex-col text-left">
                 <label className={labelClass}>선택된 쿠폰</label>
                 <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-lg bg-gray-100 p-2 pb-3 text-[14px]">
-                  {selectedCouponItems.length !== 0 ? (
-                    couponInputs.map((inputCoupon) => {
+                  {newCouponList.length !== 0 ? (
+                    newCouponList.map((inputCoupon) => {
                       return (
                         inputCoupon && (
                           <div
@@ -107,7 +115,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
                             className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
                           >
                             {inputCoupon.coupon_code} -{" "}
-                            {inputCoupon.coupon_title}
+                            {inputCoupon.coupon_name}
                           </div>
                         )
                       );
@@ -140,16 +148,16 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
               </div>
             </div>
           )}
-          {(couponInputs.length !== 0 || point_amount !== "") && (
+          {(newCouponList.length !== 0 || point_amount !== "") && (
             <button
               id="create_item_container"
               className={`w-full border p-2 ${
-                couponInputs.length === 0 && point_amount === ""
+                newCouponList.length === 0 && point_amount === ""
                   ? "cursor-not-allowed bg-gray-400"
                   : "cursor-pointer bg-blue-500"
               } min-w-[45px] items-center justify-center rounded-lg text-center text-white`}
               onClick={openRewardModal}
-              disabled={couponInputs.length === 0 && point_amount === ""}
+              disabled={newCouponList.length === 0 && point_amount === ""}
             >
               리워드 추가
             </button>
@@ -158,9 +166,9 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
       </div>
       <CouponList
         apiResponse={apiResponse}
-        setSelectedCouponItems={setSelectedCouponItems}
-        setCouponInputs={setCouponInputs}
-        couponInputs={couponInputs}
+        newCouponList={newCouponList}
+        setNewCouponList={setNewCouponList}
+        currentCouponList={currentCouponList}
         onClose={closeModal}
         isOpen={isModalOpen}
         page={page}
@@ -171,9 +179,10 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
           <NewRewardModal
             reward_type={reward_type}
             handleKeyDown={handleKeyDown}
+            newCouponList={newCouponList}
+            setNewCouponList={setNewCouponList}
             setRewards={setRewards}
             point_amount={point_amount}
-            couponInputs={couponInputs}
             setPointAmount={setPointAmount}
             isOpen={isRewardModalOpen}
             onClose={closeRewardModal}

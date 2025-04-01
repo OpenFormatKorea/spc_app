@@ -15,7 +15,8 @@ import { labelClass } from "@/interfaces/tailwindCss";
 interface NewRewardModalProps {
   reward_type: RewardType;
   point_amount: string;
-  couponInputs: CouponsArgs[];
+  newCouponList: CouponsArgs[];
+  setNewCouponList: (value: CouponsArgs[]) => void;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   setRewards: React.Dispatch<React.SetStateAction<RewardsArgs[]>>;
   setPointAmount: (value: string) => void;
@@ -27,8 +28,9 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
   reward_type,
   handleKeyDown,
   setRewards,
+  newCouponList,
+  setNewCouponList,
   point_amount,
-  couponInputs,
   setPointAmount,
   isOpen,
   onClose,
@@ -134,7 +136,7 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
     }
   };
   const onclickAddCouponItemConditions = () => {
-    couponInputs.forEach((inputCoupon: CouponsArgs) => {
+    newCouponList.forEach((inputCoupon: CouponsArgs) => {
       // Create rewardConditionsArgs based on the reward type
       const rewardConditionsArgs: RewardsArgs = {
         reward_type,
@@ -142,7 +144,7 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
           ? {
               coupon_code: String(inputCoupon.coupon_code),
               coupon_name: String(inputCoupon.coupon_name),
-              coupon_title: String(inputCoupon.coupon_title),
+              coupon_title: String(inputCoupon.coupon_name),
             }
           : {}),
         referrer_conditions: generatePolicy(referrerState),
@@ -187,7 +189,7 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
                           value={
                             reward_type === RewardType.PO
                               ? point_amount
-                              : couponInputs.toString
+                              : newCouponList.toString()
                           }
                           onChange={(e) =>
                             reward_type === RewardType.PO &&
@@ -207,8 +209,8 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
                           <div className="mb-2 flex w-full flex-col text-left">
                             <label className={labelClass}>선택된 쿠폰</label>
                             <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-lg bg-gray-100 p-2 pb-3 text-[14px]">
-                              {couponInputs.length !== 0 ? (
-                                couponInputs.map((inputCoupon) => {
+                              {newCouponList.length !== 0 ? (
+                                newCouponList.map((inputCoupon) => {
                                   return (
                                     inputCoupon && (
                                       <div
@@ -216,7 +218,7 @@ const NewRewardModal: React.FC<NewRewardModalProps> = ({
                                         className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
                                       >
                                         {inputCoupon.coupon_code} -{" "}
-                                        {inputCoupon.coupon_title}
+                                        {inputCoupon.coupon_name}
                                       </div>
                                     )
                                   );
