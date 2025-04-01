@@ -177,7 +177,7 @@ const ProductList: React.FC<ProductListProps> = (
         </h1>
         <div className="my-2 flex max-h-[550px] min-w-[350px] flex-col items-center lg:max-w-full">
           <div className="flex w-[380px] flex-col rounded-lg bg-white p-[10px]">
-            <h1 className="w-full pb-[5px] text-left text-[13px] font-semibold text-gray-500">
+            <h1 className="flex w-full pb-[5px] text-[13px] font-semibold text-gray-500">
               상품을 선택해 주세요
             </h1>
 
@@ -282,19 +282,18 @@ const ProductList: React.FC<ProductListProps> = (
           </div>
         </div>
         <div className="w-full gap-[5px] text-left">
-          <p className="text-[12px]">
-            최종 선택된 상품
-            <div className="mb-1 text-[11px] text-gray-600">
-              <span className="inline-block rounded-md bg-blue-200 px-1">
-                이전 선택
-              </span>
-              {"   "}
-              <span className="inline-block rounded-md bg-green-200 px-1">
-                신규 선택
-              </span>
-            </div>
-          </p>
-          <div className="flex h-[100px] w-[380px] flex-wrap gap-[5px] overflow-y-auto rounded-lg border border-gray-400 bg-gray-100 p-[5px]">
+          <div className="mb-1 flex items-center text-[11px] text-gray-600">
+            <h1 className="w-full text-left text-[13px] font-semibold text-gray-500">
+              최종 선택된 상품
+            </h1>
+            <span className="flex h-[25px] w-[70px] items-center justify-center rounded-md bg-blue-200 px-1 text-center">
+              <a>이전 선택</a>
+            </span>
+            <span className="flex h-[25px] w-[70px] items-center justify-center rounded-md bg-green-200 px-1 text-center">
+              <a>신규 선택</a>
+            </span>
+          </div>
+          <div className="flex h-[100px] w-[380px] flex-col flex-wrap gap-[5px] overflow-y-auto rounded-lg border-gray-400 bg-white p-[5px]">
             {beforeAddingItemList.map((item) => {
               const isFromCurrent = currentProductItemList.some(
                 (curr) => curr.product_model_code === item.product_model_code,
