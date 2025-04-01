@@ -114,13 +114,8 @@ const CouponList: React.FC<CouponListProps> = (
         coupon_title: coupon.name,
       }));
       setBeforeAddingCouponList(allProducts);
-      // setSelectedItemList(
-      //   coupons.map((coupon: CouponListArgs) => coupon.cpnId),
-      // );
     } else {
       setBeforeAddingCouponList([]);
-
-      // setSelectedItemList([]);
     }
     setSelectAll(isChecked);
   };

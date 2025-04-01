@@ -107,15 +107,14 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
                 <label className={labelClass}>선택된 쿠폰</label>
                 <div className="mt-2 flex h-fit w-full flex-wrap justify-center break-words rounded-lg bg-gray-100 p-2 pb-3 text-[14px]">
                   {newCouponList.length !== 0 ? (
-                    newCouponList.map((inputCoupon) => {
+                    newCouponList.map((newCoupon) => {
                       return (
-                        inputCoupon && (
+                        newCoupon && (
                           <div
-                            key={inputCoupon.coupon_code}
+                            key={newCoupon.coupon_code}
                             className="mr-1 mt-1 h-fit w-fit rounded-md bg-blue-300 p-1 text-[14px] text-white"
                           >
-                            {inputCoupon.coupon_code} -{" "}
-                            {inputCoupon.coupon_name}
+                            {newCoupon.coupon_code} - {newCoupon.coupon_name}
                           </div>
                         )
                       );

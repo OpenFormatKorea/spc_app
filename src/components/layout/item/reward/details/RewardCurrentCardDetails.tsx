@@ -79,7 +79,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
     };
 
   return (
-    <div className="flex flex-col gap-[10px] rounded-lg border border-gray-100 bg-gray-100 p-[10px]">
+    <div className="flex flex-col gap-[10px] rounded-lg py-[10px]">
       <div className="flex items-center justify-between">
         <span className="text-[16px] font-bold text-gray-600">
           현재 세팅 된 리워드
@@ -87,7 +87,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
       </div>
       {rewards.map((reward, index) => (
         <div
-          className="mb-[10px] flex flex-col rounded-xl bg-gray-200 p-[10px] text-[12px]"
+          className="flex flex-col rounded-lg border-2 border-gray-200 p-[10px] text-[12px]"
           key={reward.id}
           id={`rewards_${reward.id}`}
         >
@@ -95,8 +95,8 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
             className="flex items-center justify-between"
             onClick={() => toggleRewardDetails(index)}
           >
-            <div className="flex items-center gap-[10px]">
-              <input
+            <div className="max-w-full overflow-hidden truncate text-[18px] font-bold">
+              {/* <input
                 type="checkbox"
                 id={`reward_${reward.id}`}
                 name={`reward_${reward.id}`}
@@ -104,18 +104,18 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                 onChange={handleCheckboxChange(reward)}
                 className="h-4 w-4 rounded border-gray-300 text-blue-600"
                 disabled={true}
-              />
-              <span className="text-[14px] font-semibold">
+              /> */}
+              <div className="max-w-full overflow-hidden truncate text-[15px] font-bold">
                 {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} -{" "}
                 {reward.reward_type === "COUPON"
                   ? reward.coupon_title
                     ? `${reward.coupon_code} | ${reward.coupon_name ? reward.coupon_name : reward.coupon_title}`
                     : `${reward.coupon_code} | 쿠폰명 없음`
                   : `${(reward.point_amount ?? 0).toLocaleString()} 포인트`}
-              </span>
+              </div>
             </div>
             <div
-              className="text-blue-500"
+              className="text-gray-500"
               aria-expanded={visibleRewards[index]}
               aria-controls={`rewards_details_${reward.id}`}
             >
@@ -128,7 +128,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
           </div>
 
           {visibleRewards[index] && (
-            <div className="flex w-full flex-col gap-[10px] rounded-xl bg-white p-[10px] lg:flex-row">
+            <div className="flex w-full flex-col gap-[10px] p-[px] lg:flex-row">
               {triggerTypes.map((trigger) => {
                 const conditions =
                   trigger === "SIGNUP"
@@ -138,9 +138,9 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                 return (
                   <div
                     key={trigger}
-                    className="flex w-full flex-col gap-[10px]"
+                    className="mt-[10px] flex w-full flex-col gap-[10px] rounded-lg bg-gray-100 p-[10px]"
                   >
-                    <div className="flex w-full flex-col gap-[5px]">
+                    <div className="flex w-full flex-col gap-[5px] text-[16px] font-semibold">
                       {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
                     </div>
                     {conditionTypes.map((type) => {
@@ -154,7 +154,7 @@ const RewardCurrentCardDetails: React.FC<RewardCurrentCardDetailsProps> = ({
                       return (
                         <div
                           key={type}
-                          className="min-h-[155px] w-full gap-[10px] rounded-md bg-gray-100 p-2"
+                          className="min-h-[155px] w-full gap-[10px] rounded-md bg-white p-2"
                         >
                           <div className="w-full border-b border-b-gray-400 text-[16px] font-semibold">
                             {type === "referrer_conditions"
