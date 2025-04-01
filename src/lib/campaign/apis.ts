@@ -187,6 +187,22 @@ export async function fetchGetCampaignDetails(
     return null;
   }
 }
+export async function fetchGetCampaignStatus(
+  campaign_id: string,
+  context: GetServerSidePropsContext,
+) {
+  const shop_id = getShopIdFromCookies(context);
+  const final_url =
+    `${process.env.NEXT_PUBLIC_SERVER_API}/referral/campaign/` + campaign_id;
+  const params = { shop_id };
+  try {
+    const response = await fetchAPI(context, final_url, "GET", {}, params);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching campaign details:", error);
+    return null;
+  }
+}
 
 export async function fetchDeleteItem(
   item_id: string,

@@ -6,16 +6,27 @@ interface ItemActiveButtonProps {
   item_id: string;
   activeStatus: boolean;
   campaign_id: string;
+  campaignActiveStatus?: boolean;
   toggleItemActiveStatus: (itemId: string, newStatus: boolean) => void;
 }
 
 const ItemActiveButton: React.FC<ItemActiveButtonProps> = (
-  { view, item_id, activeStatus, campaign_id, toggleItemActiveStatus },
+  {
+    view,
+    item_id,
+    activeStatus,
+    campaign_id,
+    campaignActiveStatus,
+    toggleItemActiveStatus,
+  },
   context: GetServerSidePropsContext,
 ) => {
   const handleActiveStatus = async () => {
+    if (!campaignActiveStatus) {
+      alert("캠페인이 비활성화 상태입니다. 아이템을 활성화할 수 없습니다.");
+      return;
+    }
     const newActiveStatus = !activeStatus;
-
     if (confirm("아이템 활성화 상태를 변경하시겠어요?")) {
       toggleItemActiveStatus(item_id, newActiveStatus);
       const result = await fetchActivateItem(item_id, campaign_id, context);

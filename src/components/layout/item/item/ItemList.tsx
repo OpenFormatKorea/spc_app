@@ -10,11 +10,12 @@ import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 interface ItemListProps {
   apiResponse: ApiResponse;
   campaign_id: string;
+  campaignActiveStatus: boolean;
   handleButton: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const ItemList: React.FC<ItemListProps> = (
-  { apiResponse, handleButton, campaign_id },
+  { apiResponse, handleButton, campaignActiveStatus, campaign_id },
   context: GetServerSidePropsContext,
 ) => {
   const router = useRouter();
@@ -199,6 +200,7 @@ const ItemList: React.FC<ItemListProps> = (
                       item_id={item.id}
                       campaign_id={campaign_id}
                       activeStatus={activeStatusMap[item.id]}
+                      campaignActiveStatus={campaignActiveStatus}
                       toggleItemActiveStatus={toggleItemActiveStatus}
                     />
                   </td>
@@ -228,7 +230,7 @@ const ItemList: React.FC<ItemListProps> = (
               onClick={() => handleItemClick(item.id)}
             >
               <div
-                className="flex w-full justify-between border-b font-bold text-black"
+                className="flex h-[30px] w-full justify-between border-b font-bold text-black"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="w-full">{item.title}</div>
@@ -237,6 +239,7 @@ const ItemList: React.FC<ItemListProps> = (
                   item_id={item.id}
                   campaign_id={campaign_id}
                   activeStatus={activeStatusMap[item.id]}
+                  campaignActiveStatus={campaignActiveStatus}
                   toggleItemActiveStatus={toggleItemActiveStatus}
                 />
               </div>

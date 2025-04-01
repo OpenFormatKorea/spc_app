@@ -29,7 +29,6 @@ import { useRouter } from "next/router";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { item_id, campaign_id }: any = context.query;
   const shop_id = getShopIdFromCookies(context);
-
   const couponResponse = await fetchGetCouponCodeList(1, 25, "", context);
   const IDetailApiResponse = await fetchGetItemDetails(
     item_id,
@@ -332,6 +331,7 @@ const DetailsItem = (
               onChangeImage={onChangeImage}
               disableInput={false}
               handleTempImageDelete={handleTempImageDelete}
+              campaign_id={campaign_id}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign">
