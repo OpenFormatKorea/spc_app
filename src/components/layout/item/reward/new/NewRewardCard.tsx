@@ -81,7 +81,7 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex w-full flex-col gap-[10px] rounded-xl bg-white p-[5px] lg:flex-row">
+          <div className="flex w-full flex-col gap-[10px] rounded-lg bg-white p-[5px] lg:flex-row">
             {triggerTypes.map((trigger) => (
               <div key={trigger} className="flex w-full flex-col">
                 <div className="w-full text-[20px] font-bold">
