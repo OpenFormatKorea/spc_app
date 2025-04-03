@@ -81,10 +81,10 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex w-full flex-col gap-[10px] rounded-xl bg-white p-[10px] lg:flex-row">
+          <div className="flex w-full flex-col gap-[10px] rounded-xl bg-white p-[5px] lg:flex-row">
             {triggerTypes.map((trigger) => (
-              <div key={trigger} className="flex w-full flex-col gap-[10px]">
-                <div className="w-full text-[16px] font-bold">
+              <div key={trigger} className="flex w-full flex-col">
+                <div className="w-full text-[20px] font-bold">
                   {trigger === "SIGNUP" ? "회원가입" : "구매 후"}
                 </div>
                 <div className="flex flex-col gap-[10px]">
@@ -108,10 +108,10 @@ const NewRewardCard: React.FC<NewRewardCardProps> = ({
                       isEmpty === false && (
                         <div
                           key={type}
-                          className={`h-[205px] w-full gap-[10px] p-[10px] ${isEmpty ? "bg-white" : "bg-gray-100"}`}
+                          className={`flex h-[205px] w-full flex-col rounded-md p-[5px] ${isEmpty ? "bg-white" : "bg-gray-100"}`}
                         >
                           <>
-                            <div className="w-full border-b border-b-gray-400 text-[16px]">
+                            <div className="w-full border-b border-b-gray-400 text-[16px] font-semibold">
                               {type === "referrer_conditions"
                                 ? "추천인"
                                 : "피추천인"}
