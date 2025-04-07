@@ -86,7 +86,9 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
               router.push("/campaign");
             }
           } else {
-            alert(`캠페인 생성을 실패 하였습니다. 상태 코드: ${result.status}`);
+            alert(
+              `캠페인 생성을 실패 하였습니다. 상태 코드: ${result.status}, 에러 메시지: ${result.message}`,
+            );
           }
         }
       } catch (error) {
