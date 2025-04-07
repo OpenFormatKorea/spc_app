@@ -20,9 +20,10 @@ import { sortDirection } from "@/lib/campaign/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const today = new Date();
-    const end_date = today.toISOString().split("T")[0];
-    const start_date = new Date(today.setDate(today.getDate() - 30))
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const end_date = yesterday.toISOString().split("T")[0];
+    const start_date = new Date(yesterday.setDate(yesterday.getDate() - 30))
       .toISOString()
       .split("T")[0];
     const page_size = "10";
