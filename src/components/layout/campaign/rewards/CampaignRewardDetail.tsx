@@ -21,6 +21,78 @@ interface CampaignRewardDetailProps {
   setPageNum: (value: string) => void;
   setIsRewardLoading: (value: boolean) => void;
 }
+interface UserRewardBlockProps {
+  title: string;
+  user: ReferralItem["referrer"] | ReferralItem["referee"];
+}
+const UserRewardBlock: React.FC<UserRewardBlockProps> = ({ title, user }) => (
+  <td className={tbodyStyle}>
+    <div className="flex w-full flex-col items-center justify-center">
+      <div className="h-[25px] w-full text-left text-[14px] font-semibold">
+        <a>{title}: </a>
+        <a className="max-w-[50px] overflow-hidden truncate text-ellipsis whitespace-nowrap">
+          {user.base_user_id}
+        </a>
+      </div>
+      <div className="flex w-full min-w-[150px] max-w-[200px] items-center justify-start">
+        <div className="flex w-full gap-[10px]">
+          {user.rewards.map((reward: RewardProps, i: number) => (
+            <div
+              key={i}
+              className="flex h-fit w-full flex-col items-start justify-center text-[13px]"
+            >
+              <div className="text-[16px] font-semibold">
+                {reward.reward_trigger === "SIGNUP" ? "회원가입" : "구매 "}
+              </div>
+              <div
+                className={`flex h-fit w-full flex-col items-start justify-center rounded-md border-2 bg-white p-[5px] text-gray-500 ${
+                  reward.reward_trigger === "SIGNUP"
+                    ? "border-green-500"
+                    : "border-orange-300"
+                }`}
+              >
+                <div className="flex w-fit max-w-[100px] gap-[5px] overflow-hidden truncate text-ellipsis whitespace-nowrap">
+                  <a className="text-[16px] font-bold">
+                    {reward.reward_type === "POINT"
+                      ? new Intl.NumberFormat("en-US").format(
+                          Number(reward.reward_value),
+                        )
+                      : reward.coupon_title || reward.reward_value}{" "}
+                  </a>
+                  {reward.reward_type === "POINT" && (
+                    <a>{reward.reward_value} 포인트</a>
+                  )}
+                </div>
+                <div className="h-[20px] w-fit">
+                  {reward.reward_trigger === "PURCHASE" &&
+                  reward.payment_timing.type === "DELAYED"
+                    ? `${reward.payment_timing.delay_days}일 후`
+                    : ""}
+                </div>
+                {!reward.status ? (
+                  <div className="w-full rounded-md bg-red-500 p-1 text-[12px] text-white">
+                    {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} 미지급
+                  </div>
+                ) : (
+                  <div className="w-full rounded-md bg-blue-500 p-1 text-white">
+                    지급완료
+                  </div>
+                )}
+              </div>
+              {!reward.status ? (
+                <button className="mt-2 h-[28px] w-full cursor-pointer rounded-md border-2 border-blue-500 p-1 text-[12px] font-bold text-blue-500">
+                  {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"} 수동지급
+                </button>
+              ) : (
+                <div className="w-full rounded-md bg-blue-500 p-1 text-white"></div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </td>
+);
 
 const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   {
@@ -66,6 +138,8 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
   const totalCount = apiResponse?.data.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;
+  let tableIndex = 0;
+  //const [tableIndex, settTableIndex] = useState<number>(1);
 
   const fetchNextPage = async () => {
     if (!getNextPage || !scrollRef.current) return;
@@ -114,7 +188,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
       <div
         ref={scrollRef}
         id="CRTableDiv"
-        className="flex h-full max-h-[calc(58vh-30px)] w-full flex-col overflow-x-hidden overflow-y-scroll rounded-xl border bg-white"
+        className="flex h-full max-h-[calc(58vh-30px)] w-[90%] flex-col overflow-x-hidden overflow-y-scroll rounded-xl border bg-white"
       >
         {isRewardLoading && (
           <div className="absolute inset-0 z-50 flex items-center justify-center rounded-xl bg-black bg-opacity-10">
@@ -126,6 +200,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
             <tr className="w-full bg-gray-100">
               <th className={theadStyle + " w-[90px]"}>리워드 ID</th>
               <th className={theadStyle + " w-[90px]"}>가입 ID</th>
+              <th className={theadStyle + " w-[110px]"}>생성일</th>
               <th
                 className={
                   theadStyle + " w-[130px] min-w-[100px] max-w-[185px]"
@@ -140,7 +215,6 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
               >
                 피추천인 ID
               </th>
-              <th className={theadStyle + " w-[110px]"}>생성일</th>
             </tr>
           </thead>
 
@@ -151,6 +225,8 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                   const isSameAsPrevious =
                     index > 0 &&
                     record.referral_item_id === arr[index - 1].referral_item_id;
+                  tableIndex = !isSameAsPrevious ? tableIndex + 1 : tableIndex;
+                  console.log("record", record);
                   return (
                     <tr
                       key={record.referral_item_id + "-" + index}
@@ -160,169 +236,19 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                         className={`${isSameAsPrevious ? "border-x" : "border-x"} bg-gray-50`}
                       >
                         <div className="flex w-full items-center justify-center">
-                          <a className="w-[85px] text-[13px] font-semibold">
-                            {!isSameAsPrevious ? record.referral_item_id : ""}
+                          <a className="w-[85px] text-[18px] font-bold">
+                            {!isSameAsPrevious ? tableIndex : ""}
                           </a>
                         </div>
                       </td>
-                      <td className={tbodyStyle}>
+                      <td className={tbodyStyle + " w-[90px]"}>
                         <div className="flex w-full items-center justify-center">
                           <a className="w-[85px] text-[13px] font-semibold">
                             {record.signup_id}
                           </a>
                         </div>
                       </td>
-                      <td className={tbodyStyle}>
-                        <div className="flex w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-[4px]">
-                          <div className="w-full p-[5px] text-left text-[12px] font-semibold">
-                            <a>유저 ID: </a>
-                            <a className="font-normal">
-                              {record.referrer.base_user_id}
-                            </a>
-                          </div>
-                          <div className="flex min-w-[180px] items-center justify-center rounded-xl border p-[5px]">
-                            <div className="flex min-w-[200px] gap-[5px]">
-                              {record.referrer.rewards.map(
-                                (reward: RewardProps, i: number) => (
-                                  <div
-                                    className="flex h-fit w-full items-center justify-center text-[13px]"
-                                    key={i}
-                                  >
-                                    <div
-                                      className={
-                                        `flex h-fit w-[160px] max-w-[160px] items-center justify-center rounded-md border border-white text-white ` +
-                                        `${
-                                          reward.reward_trigger === "SIGNUP"
-                                            ? "bg-green-500"
-                                            : "bg-orange-300"
-                                        }`
-                                      }
-                                    >
-                                      <div className="flex h-fit w-fit flex-col p-[5px] font-bold">
-                                        <div className="w-[75px]">
-                                          {reward.reward_trigger === "SIGNUP"
-                                            ? "회원가입"
-                                            : "구매 "}
-                                          {reward.reward_trigger ===
-                                            "PURCHASE" &&
-                                          reward.payment_timing.type ===
-                                            "DELAYED"
-                                            ? `${reward.payment_timing.delay_days}일 후`
-                                            : " 즉시"}
-                                        </div>
-                                        {!reward.status ? (
-                                          <div className="rounded-sm bg-red-500 text-white">
-                                            {reward.reward_type === "COUPON"
-                                              ? "쿠폰"
-                                              : "포인트"}{" "}
-                                            미지급
-                                          </div>
-                                        ) : (
-                                          <div className="rounded-sm bg-blue-500 text-white">
-                                            지급완료
-                                          </div>
-                                        )}
-                                      </div>
-                                      <div className="flex w-fit gap-[5px] p-[5px]">
-                                        <a className="font-bold">
-                                          {Number.isInteger(
-                                            Number(reward.reward_value),
-                                          )
-                                            ? new Intl.NumberFormat(
-                                                "en-US",
-                                              ).format(
-                                                Number(reward.reward_value),
-                                              )
-                                            : reward.reward_value}{" "}
-                                        </a>
-                                        {Number.isInteger(
-                                          Number(reward.reward_value),
-                                        ) && <a> 포인트</a>}
-                                      </div>
-                                    </div>
-                                  </div>
-                                ),
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={tbodyStyle}>
-                        <div className="flex w-full flex-col items-center justify-center rounded-lg bg-gray-100 p-[4px]">
-                          <div className="w-full p-[5px] text-left text-[12px] font-semibold">
-                            <a>유저 ID: </a>{" "}
-                            <a className="font-normal">
-                              {record.referee.base_user_id}
-                            </a>
-                          </div>
-                          <div className="flex min-w-[180px] items-center justify-center rounded-xl border p-[5px]">
-                            <div className="flex min-w-[200px] gap-[5px]">
-                              {record.referee.rewards.map(
-                                (reward: RewardProps, i: number) => (
-                                  <div
-                                    className="flex h-fit w-full items-center justify-center text-[13px]"
-                                    key={i}
-                                  >
-                                    <div
-                                      className={
-                                        `flex h-fit w-[160px] max-w-[160px] items-center justify-center rounded-md border border-white text-white ` +
-                                        `${
-                                          reward.reward_trigger === "SIGNUP"
-                                            ? "bg-green-500"
-                                            : "bg-orange-300"
-                                        }`
-                                      }
-                                    >
-                                      <div className="flex h-fit w-fit flex-col p-[5px] font-bold">
-                                        <div className="w-[75px]">
-                                          {reward.reward_trigger === "SIGNUP"
-                                            ? "회원가입"
-                                            : "구매 "}
-                                          {reward.reward_trigger ===
-                                            "PURCHASE" &&
-                                          reward.payment_timing.type ===
-                                            "DELAYED"
-                                            ? `${reward.payment_timing.delay_days}일 후`
-                                            : ""}
-                                        </div>
-                                        {!reward.status ? (
-                                          <div className="rounded-sm bg-red-500 text-white">
-                                            {reward.reward_type === "COUPON"
-                                              ? "쿠폰"
-                                              : "포인트"}{" "}
-                                            미지급
-                                          </div>
-                                        ) : (
-                                          <div className="rounded-sm bg-blue-500 text-white">
-                                            지급완료
-                                          </div>
-                                        )}
-                                      </div>
-                                      <div className="flex w-fit gap-[5px] p-[5px]">
-                                        <a className="font-bold">
-                                          {Number.isInteger(
-                                            Number(reward.reward_value),
-                                          )
-                                            ? new Intl.NumberFormat(
-                                                "en-US",
-                                              ).format(
-                                                Number(reward.reward_value),
-                                              )
-                                            : reward.reward_value}{" "}
-                                        </a>
-                                        {Number.isInteger(
-                                          Number(reward.reward_value),
-                                        ) && <a> 포인트</a>}
-                                      </div>
-                                    </div>
-                                  </div>
-                                ),
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={tbodyStyle}>
+                      <td className={tbodyStyle + " w-[90px]"}>
                         {new Date(record.created_at).toLocaleDateString(
                           "ko-KR",
                           {
@@ -332,6 +258,8 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                           },
                         )}
                       </td>
+                      <UserRewardBlock title="유저 ID" user={record.referrer} />
+                      <UserRewardBlock title="유저 ID" user={record.referee} />
                     </tr>
                   );
                 },

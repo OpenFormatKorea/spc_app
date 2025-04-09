@@ -78,6 +78,7 @@ export interface CampaignRecordBody {
 // new reward type
 
 export interface RewardProps {
+  coupon_title: string | null;
   reward_trigger: string;
   id: number;
   reward_type: string;
