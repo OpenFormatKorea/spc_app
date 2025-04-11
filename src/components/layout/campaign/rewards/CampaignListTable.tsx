@@ -97,7 +97,7 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
             filtereCampaign.map((campaign) => (
               <div
                 key={campaign.id}
-                className={`flex w-full cursor-pointer flex-col gap-[5px] border p-4 text-gray-600 ${campaignId == campaign.id ? "border-gray-500 bg-gray-50" : "bg-white"}`}
+                className={`flex w-full cursor-pointer flex-col gap-[5px] border p-4 text-gray-600 hover:bg-gray-50 ${campaignId == campaign.id ? "border-gray-500 bg-gray-50" : "bg-white"}`}
                 id={`${campaign.id}`}
                 onClick={(event) => handleCampaignClick(event, campaign.title)}
               >
@@ -107,10 +107,12 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
                   </div>
                 </div>
                 <div className="flex w-full flex-col rounded-md bg-gray-100 p-[5px] pr-2 text-[14px]">
-                  <div className="flex flex-col">
+                  <div className="flex cursor-pointer flex-col">
                     <div>
-                      <label className="font-semibold">시작일: </label>
-                      <label>
+                      <label className="cursor-pointer font-semibold">
+                        시작일:{" "}
+                      </label>
+                      <label className="cursor-pointer text-[12px] text-gray-600">
                         {new Date(campaign.start_date).toLocaleDateString(
                           "ko-KR",
                           {
@@ -122,8 +124,10 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
                       </label>
                     </div>
                     <div>
-                      <label className="font-semibold">종료일: </label>
-                      <label>
+                      <label className="cursor-pointer font-semibold">
+                        종료일:{" "}
+                      </label>
+                      <label className="cursor-pointer text-[12px] text-gray-600">
                         {campaign.end_date
                           ? new Date(campaign.end_date).toLocaleDateString(
                               "ko-KR",
