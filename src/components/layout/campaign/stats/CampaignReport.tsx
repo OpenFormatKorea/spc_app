@@ -72,7 +72,7 @@ const CampaignReport: React.FC<CampaignReportProps> = ({
     }
   }, [hourlysignUpApiResponse]);
   return (
-    <div style={{ maxHeight: "70vh" }}>
+    <div className="h-[70vh]">
       <div className="mb-2 w-full pb-2">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-2">
           <div className="w-[80%]">

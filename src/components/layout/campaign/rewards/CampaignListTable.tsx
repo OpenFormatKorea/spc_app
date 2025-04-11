@@ -8,6 +8,8 @@ interface CampaignListTableProps {
   apiResponse: CampaignListApiResponse;
   pageSize: string;
   pageNum: string;
+  campaignSearch: string;
+  campaignId: string;
   setCampaignName: (value: string) => void;
   setCampaignId: (value: string) => void;
   setPageNum: (value: string) => void;
@@ -18,7 +20,9 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
     apiResponse,
     pageSize,
     pageNum,
+    campaignSearch,
     setCampaignName,
+    campaignId,
     setCampaignId,
     setPageNum,
   },
@@ -28,7 +32,10 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
   const [campaigns, setCampaigns] = useState<CampaignArgs[]>(
     apiResponse?.result ?? [],
   );
-
+  const filtereCampaign =
+    campaigns?.filter((campaign: CampaignArgs) =>
+      campaign.title.toLowerCase().includes(campaignSearch.toLowerCase()),
+    ) || [];
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
@@ -78,70 +85,56 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
     <>
       <div
         ref={scrollRef}
-        className="relative flex h-full w-full flex-col overflow-y-auto rounded-xl bg-white p-[10px]"
+        className="relative flex h-full w-[220px] flex-col overflow-y-auto rounded-xl bg-white p-[10px]"
       >
-        <div className="flex h-full w-full flex-col">
+        <div className="flex h-full w-full flex-col gap-[8px]">
           {isListLoading && (
             <div className="absolute inset-0 z-50 flex items-center justify-center rounded-xl bg-black bg-opacity-10">
               <LoadingSpinner />
             </div>
           )}
-          {/* <div
-            key={35}
-            className="text-gray-60e0 mb-[4px] w-full cursor-pointer gap-[5px] border bg-white p-4"
-            id={`${35}`}
-            onClick={(event) => handleCampaignClick(event, "테스트용 목업")}
-          >
-            <div className="mb-[5px] flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-[14px]">
-              <div className="w-[100px] font-semibold">캠페인명</div>
-              <div>{"테스트용 목업"}</div>
-            </div>
-            <div className="flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-[14px]">
-              <div className="w-[100px] font-semibold">활성 기간:</div>
-              <div className="flex flex-col">
-                <div>시작일: 2025년 2월 11일</div>
-                <div>종료일: 2025년 2월 12일</div>
-              </div>
-            </div>
-          </div> */}
-          {campaigns.length > 0 ? (
-            campaigns.map((campaign) => (
+          {filtereCampaign.length > 0 ? (
+            filtereCampaign.map((campaign) => (
               <div
                 key={campaign.id}
-                className="mb-[4px] w-full cursor-pointer gap-[5px] border bg-white p-4 text-gray-600"
+                className={`flex w-full cursor-pointer flex-col gap-[5px] border p-4 text-gray-600 ${campaignId == campaign.id ? "border-gray-500 bg-gray-50" : "bg-white"}`}
                 id={`${campaign.id}`}
                 onClick={(event) => handleCampaignClick(event, campaign.title)}
               >
-                <div className="mb-[5px] flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-[14px]">
-                  <div className="w-[100px] font-semibold">캠페인명</div>
-                  <div>{campaign.title}</div>
+                <div className="flex w-full flex-col rounded-md bg-gray-200 p-[5px] pr-2 text-[14px]">
+                  <div className="w-[150px] overflow-hidden truncate text-ellipsis whitespace-nowrap text-[12px]">
+                    {campaign.title}
+                  </div>
                 </div>
-                <div className="flex w-full flex-col rounded-lg bg-gray-100 p-[5px] pr-2 text-[14px]">
-                  <div className="w-[100px] font-semibold">활성 기간:</div>
+                <div className="flex w-full flex-col rounded-md bg-gray-100 p-[5px] pr-2 text-[14px]">
                   <div className="flex flex-col">
                     <div>
-                      시작일:{" "}
-                      {new Date(campaign.start_date).toLocaleDateString(
-                        "ko-KR",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        },
-                      )}
+                      <label className="font-semibold">시작일: </label>
+                      <label>
+                        {new Date(campaign.start_date).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          },
+                        )}
+                      </label>
                     </div>
                     <div>
-                      종료일:{" "}
-                      {campaign.end_date
-                        ? new Date(campaign.end_date).toLocaleDateString(
-                            "ko-KR",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            },
-                          )
-                        : ""}
+                      <label className="font-semibold">종료일: </label>
+                      <label>
+                        {campaign.end_date
+                          ? new Date(campaign.end_date).toLocaleDateString(
+                              "ko-KR",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              },
+                            )
+                          : ""}
+                      </label>
                     </div>
                   </div>
                 </div>

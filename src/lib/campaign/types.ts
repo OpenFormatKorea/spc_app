@@ -77,6 +77,10 @@ export interface CampaignRecordBody {
 
 // new reward type
 
+enum RewradStatus {
+  "S" = "SUCCESS",
+  "C" = "CANCELLED",
+}
 export interface RewardProps {
   coupon_title: string | null;
   reward_trigger: string;
@@ -87,7 +91,7 @@ export interface RewardProps {
     type: "IMMEDIATE" | "DELAYED";
     delay_days: number | null;
   };
-  status: string | null;
+  status: RewradStatus | null;
 }
 
 export interface RewardUserProps {

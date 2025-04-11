@@ -153,7 +153,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
               href="/campaign/rewards"
               className={`w-full text-[14px] ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
             >
-              - 캠페인 리워드
+              - 캠페인 리워드 내역
             </a>
           </div>
         </div>

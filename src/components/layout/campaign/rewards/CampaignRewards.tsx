@@ -32,6 +32,7 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
   const [isRewardLoading, setIsRewardLoading] = useState(false);
   const [campaignId, setCampaignId] = useState("");
   const [campaignName, setCampaignName] = useState("");
+  const [campaignSearch, setCampaignSearch] = useState("");
   const [detailPageNum, setDetailPageNum] = useState("1");
   const detailPageSize = "10";
   const defaultApiResponse: ApiResponse = {
@@ -73,10 +74,10 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
   }, [campaignId]);
   return (
     <>
-      <div style={{ maxHeight: "70vh" }}>
+      <div className="h-[72vh]">
         <div className="flex w-full pb-[5px]">
           <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
-            <div className="w-full">
+            <div className="h-fit w-full">
               <div className="text-[18px]">캠페인 리워드 내역</div>
               <div className="text-[14px] font-normal text-gray-500">
                 캠페인 리워드 내역입니다.
@@ -89,10 +90,22 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
             <div className="w-full text-left text-[14px] font-semibold">
               리워드를 확인할 캠페인을 선택해주세요
             </div>
+            <div className="flex h-[30px] w-full items-center justify-center gap-[5px]">
+              <label className="w-[100px] text-[12px]">캠페인 검색: </label>
+              <input
+                className="w-full p-2 text-[12px]"
+                value={campaignSearch}
+                type="text"
+                placeholder="캠페인 이름을 입력해 주세요"
+                onChange={(e) => setCampaignSearch(e.target.value)}
+              ></input>
+            </div>
             <CampaignListTable
               apiResponse={apiResponse}
               pageSize={pageSize}
               pageNum={pageNum}
+              campaignSearch={campaignSearch}
+              campaignId={campaignId}
               setCampaignId={setCampaignId}
               setCampaignName={setCampaignName}
               setPageNum={setPageNum}
