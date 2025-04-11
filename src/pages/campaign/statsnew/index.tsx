@@ -97,7 +97,7 @@ const StatsCampaignNew = (
           </div>
         </div>
 
-        <ContentsContainer variant="dashboard">
+        <ContentsContainer variant="dashboard" size="full">
           <CampaignStats
             apiResponse={newApiResponse}
             pageNum={pageNum}

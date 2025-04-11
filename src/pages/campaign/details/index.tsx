@@ -208,7 +208,7 @@ const DetailsCampaign = (
           </div>
         </div>
         <div className="flex w-full flex-col gap-[10px] md:flex-row">
-          <ContentsContainer variant="campaign">
+          <ContentsContainer variant="campaign" size="full">
             <CampaignDetails
               page_type="DETAILS"
               period_type={period_type}
@@ -222,7 +222,7 @@ const DetailsCampaign = (
               setEnd_date={setEnd_date}
             />
           </ContentsContainer>
-          <ContentsContainer variant="campaign">
+          <ContentsContainer variant="campaign" size="full">
             <div className="mb-3 flex h-full w-full flex-col items-center justify-between overflow-y-auto">
               <ItemList
                 apiResponse={itemListApiResponse}

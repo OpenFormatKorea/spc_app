@@ -98,7 +98,7 @@ const RewardsCampaign = (
           </div>
         </div>
 
-        <ContentsContainer variant="dashboard">
+        <ContentsContainer variant="dashboard" size="full">
           <CampaignRewards
             apiResponse={campaignListResponse}
             pageNum={pageNum}

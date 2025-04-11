@@ -313,7 +313,7 @@ const DetailsItem = (
           </div>
         </div>
         <div className="flex w-full flex-col justify-center gap-[10px] lg:flex-row">
-          <ContentsContainer variant="campaign">
+          <ContentsContainer variant="campaign" size="full">
             <ItemDetails
               page_type="DETAILS"
               itemArgs={itemArgs}
@@ -334,7 +334,7 @@ const DetailsItem = (
               campaign_id={campaign_id}
             />
           </ContentsContainer>
-          <ContentsContainer variant="campaign">
+          <ContentsContainer variant="campaign" size="full">
             <ItemTypeDetails
               page_type="DETAILS"
               item_type={item_type}

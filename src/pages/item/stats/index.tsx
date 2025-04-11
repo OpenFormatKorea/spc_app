@@ -119,7 +119,7 @@ const StatsItem = (
             <span className="text-[24px] font-bold">아이템 지표</span>
           </div>
         </div>
-        <ContentsContainer variant="dashboard">
+        <ContentsContainer variant="dashboard" size="full">
           <ItemStats
             apiResponse={newApiResponse}
             campaign_id={campaign_id}

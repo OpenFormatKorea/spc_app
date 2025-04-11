@@ -122,7 +122,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
             </button>
           </div>
         </div>
-        <ContentsContainer variant="campaign">
+        <ContentsContainer variant="campaign" size="full">
           <div className="mb-3 flex h-full w-full flex-col items-center justify-between overflow-y-auto">
             <CampaignNew
               page_type="NEW"

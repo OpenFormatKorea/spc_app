@@ -72,7 +72,7 @@ const UserSearch = (
             <span className="text-[24px] font-bold">유저 검색</span>
           </div>
         </div>
-        <ContentsContainer variant="dashboard">
+        <ContentsContainer variant="dashboard" size="full">
           <UserSearchComponent
             handleUserDetail={handleUserDetail}
             apiResponse={newApiResponse}

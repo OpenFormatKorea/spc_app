@@ -1,6 +1,5 @@
 import DashboardContainer from "@/components/layout/dashboard/DashboardContainer";
 import ContentsContainer from "@/components/layout/base/ContentsContainer";
-import CampaignList from "@/components/layout/campaign/CampaignList";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { CampaignListApiResponse } from "@/lib/campaign/types";
 import { fetchGetCampaignList } from "@/lib/campaign/apis";
@@ -8,30 +7,59 @@ import { useEffect, useState } from "react";
 import { withAuth } from "@/hoc/withAuth";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import DashboardReport from "@/components/layout/dashboard/DashboardReport";
+import { HourlySignups, myFunnelResponse } from "@/lib/campaign/reporttypes";
+import {
+  fetchHourlySignUpGraph,
+  fetchMyFunnelGraph,
+} from "@/lib/campaign/reportapis";
+import DashboardCampaignList from "@/components/layout/dashboard/DashboardCampaignList";
 interface DashboardProps {
+  hourlysignUpApiResponse: HourlySignups;
+  myFunnelApiResponse: myFunnelResponse;
+  start_date: string;
+  end_date: string;
   apiResponse: CampaignListApiResponse;
   page: string;
   page_size: string;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const campaignResponse = await fetchGetCampaignList("1", "25", context);
+  const campaignResponse = await fetchGetCampaignList("1", "10", context);
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const end_date = yesterday.toISOString().split("T")[0];
+  const start_date = new Date(yesterday.setDate(yesterday.getDate() - 30))
+    .toISOString()
+    .split("T")[0];
+  const hourlysignUpApiResponse = await fetchHourlySignUpGraph(
+    start_date,
+    end_date,
+    context,
+  );
+  const myFunnelApiResponse = await fetchMyFunnelGraph(
+    start_date,
+    end_date,
+    context,
+  );
   return {
     props: {
+      hourlysignUpApiResponse,
+      myFunnelApiResponse,
       apiResponse: campaignResponse,
-      page: "1",
-      page_size: "25",
+      start_date,
+      end_date,
     },
   };
 };
 
 const Dashboard: React.FC<DashboardProps> = ({
+  hourlysignUpApiResponse,
+  myFunnelApiResponse,
+  start_date,
+  end_date,
   apiResponse,
-  page,
-  page_size,
 }) => {
-  const [pageNum, setPageNum] = useState(page);
-  const pageSize = page_size;
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -62,15 +90,20 @@ const Dashboard: React.FC<DashboardProps> = ({
             <span className="text-[24px] font-bold">대시보드</span>
           </div>
         </div>
-        <div className="contents-container w-full justify-center">
-          <ContentsContainer variant="dashboard">
-            <CampaignList
+        <div className="contents-container flex h-fit w-full flex-col justify-center gap-[20px]">
+          <div className="flex h-fit w-full flex-col overflow-y-auto rounded-xl bg-white lg:p-[12px]">
+            <DashboardReport
+              hourlysignUpApiResponse={hourlysignUpApiResponse}
+              myFunnelApiResponse={myFunnelApiResponse}
+              startDate={start_date}
+              endDate={end_date}
+            />
+          </div>
+          <ContentsContainer variant="dashboard" size="half">
+            <DashboardCampaignList
               apiResponse={apiResponse}
-              pageNum={pageNum}
-              pageSize={pageSize}
               handleButton={handleButton}
               setLoading={setLoading}
-              setPageNum={setPageNum}
             />
           </ContentsContainer>
         </div>

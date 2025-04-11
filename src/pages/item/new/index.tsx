@@ -372,7 +372,7 @@ const NewItem = (
           </div>
         </div>
         <div className="flex w-full flex-col justify-center gap-[10px] overflow-y-auto lg:flex-row">
-          <ContentsContainer variant="campaign">
+          <ContentsContainer variant="campaign" size="full">
             <ItemDetails
               page_type="NEW"
               itemArgs={itemArgs}
@@ -392,7 +392,7 @@ const NewItem = (
               handleTempImageDelete={handleTempImageDelete}
             />
           </ContentsContainer>
-          <ContentsContainer variant="campaign">
+          <ContentsContainer variant="campaign" size="full">
             <ItemTypeDetails
               page_type="NEW"
               item_type={item_type}

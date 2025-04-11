@@ -217,7 +217,7 @@ const ReportCampaign = (
           </div>
         </div>
 
-        <ContentsContainer variant="dashboard">
+        <ContentsContainer variant="dashboard" size="full">
           <CampaignReport
             signUpApiResponse={newSignUpApiResponse}
             hourlysignUpApiResponse={newHourlysignUpApiResponse}
