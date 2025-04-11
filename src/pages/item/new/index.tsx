@@ -419,7 +419,9 @@ const NewItem = (
               page={page}
               page_size={page_size}
             />
-            <NewRewardCard rewards={rewards} setRewards={setRewards} />
+            <div className="flex w-full flex-col items-center justify-center gap-[10px]">
+              <NewRewardCard rewards={rewards} setRewards={setRewards} />
+            </div>
           </ContentsContainer>
         </div>
         <div className="button-container flex w-full justify-between pt-[5px] lg:justify-end">

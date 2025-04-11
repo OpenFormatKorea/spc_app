@@ -295,3 +295,25 @@ export async function fetchCampaignActiveButton(
     console.error("error:", e);
   }
 }
+
+export async function fetchRevokeReward(
+  base_user_id: string,
+  signup_id: string,
+  reward_trigger: string,
+  context: GetServerSidePropsContext,
+) {
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/share/rewards/revoke-issued-by-signup`;
+  const shop_id = getShopIdFromCookies(context);
+  let dataObj = {
+    shop_id,
+    base_user_id,
+    signup_id,
+    reward_trigger,
+  };
+  try {
+    const response = await fetchAPI(context, apiUrl, "POST", dataObj);
+    return response;
+  } catch (e) {
+    console.error("error:", e);
+  }
+}

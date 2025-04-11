@@ -122,7 +122,7 @@ const ItemStats: React.FC<ItemStatsProps> = (
   }, [startDate]);
 
   return (
-    <div style={{ maxHeight: "70vh" }}>
+    <div className="h-[70vh]">
       <div className="flex w-full pb-[5px]">
         <div className="mb-2 flex w-full items-center border-b-[1px] pb-[5px]">
           <div className="w-[80%]">
