@@ -165,7 +165,7 @@ const NewRewardComponent: React.FC<NewRewardComponentProps> = ({
       </div>
       <CouponList
         apiResponse={apiResponse}
-        newCouponList={newCouponList}
+        //      newCouponList={newCouponList}
         setNewCouponList={setNewCouponList}
         currentCouponList={currentCouponList}
         onClose={closeModal}

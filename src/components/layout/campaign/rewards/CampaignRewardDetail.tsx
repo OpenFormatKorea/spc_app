@@ -10,6 +10,7 @@ import {
   RewardProps,
   RewradStatus,
 } from "@/lib/campaign/types";
+import { removeWhiteSpace } from "@/lib/common";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { ApiResponse } from "@/lib/types";
 import { GetServerSidePropsContext } from "next";
@@ -18,11 +19,13 @@ interface CampaignRewardDetailProps {
   apiResponse: ApiResponse;
   pageSize: string;
   pageNum: string;
+  setPageNum: (value: string) => void;
   startDate: string;
   endDate: string;
   campaignId: string;
+  userId: string;
+  setUserId: (value: string) => void;
   isRewardLoading: boolean;
-  setPageNum: (value: string) => void;
   setIsRewardLoading: (value: boolean) => void;
 }
 interface ClickFetchRevokeReward {
@@ -45,10 +48,10 @@ const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
   <td className={tbodyStyle}>
     <div className="flex w-full flex-col items-center justify-center">
       <div className="h-fit w-full text-left font-semibold">
-        <label className="w-[120px] text-left text-[16px] font-semibold text-black">
+        <label className="w-[120px] text-left text-[14px] font-semibold text-black">
           유저 ID:{" "}
         </label>
-        <label className="max-w-[50px] overflow-hidden truncate text-ellipsis whitespace-nowrap text-[14px] text-gray-600">
+        <label className="max-w-[50px] overflow-hidden truncate text-ellipsis whitespace-nowrap text-[14px] font-bold text-gray-500">
           {user.base_user_id}
         </label>
       </div>
@@ -205,11 +208,13 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
     apiResponse,
     pageSize,
     pageNum,
+    setPageNum,
     startDate,
     endDate,
     campaignId,
+    userId,
+    setUserId,
     isRewardLoading,
-    setPageNum,
     setIsRewardLoading,
   },
   context: GetServerSidePropsContext,
@@ -262,29 +267,36 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   const getNextPage = totalCount > stackedDataAmount;
   let tableIndex = 0;
 
-  const fetchNextPage = async () => {
-    if (!getNextPage || !scrollRef.current) return;
+  const fetchRewarDetails = async (reset = false) => {
+    if (!getNextPage && !reset) return;
     setIsRewardLoading(true);
-    const currentPage = (parseInt(pageNum) + 1).toString();
+
     try {
+      const currentPage = reset ? "1" : (parseInt(pageNum) + 1).toString();
       const newAPIResponse: ApiResponse = await fetchPostCampaignRecords(
         campaignId,
         currentPage,
         pageSize,
         startDate,
         endDate,
+        userId,
         context,
       );
+
       if (newAPIResponse.data.result && newAPIResponse.data.result.length > 0) {
         setNewApiResponse(newAPIResponse);
-        setCampaigns((prev) => ({
-          ...prev,
-          total_count: newAPIResponse.data.total_count,
-          page: newAPIResponse.data.page,
-          page_size: newAPIResponse.data.page_size,
-          total_pages: newAPIResponse.data.total_pages,
-          result: [...prev.result, ...newAPIResponse.data.result],
-        }));
+        setCampaigns(
+          reset
+            ? newAPIResponse.data
+            : (prev) => ({
+                ...prev,
+                total_count: newAPIResponse.data.total_count,
+                page: newAPIResponse.data.page,
+                page_size: newAPIResponse.data.page_size,
+                total_pages: newAPIResponse.data.total_pages,
+                result: [...prev.result, ...newAPIResponse.data.result],
+              }),
+        );
       }
       setPageNum(currentPage);
     } catch (error) {
@@ -293,6 +305,10 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
       setIsRewardLoading(false);
     }
   };
+
+  const fetchforSearch = () => fetchRewarDetails(true); // 검색
+  const fetchNextPage = () => fetchRewarDetails(); // 다음 무한 스크롤 페이지
+
   useEffect(() => {
     if (isBottom) {
       fetchNextPage();
@@ -306,6 +322,28 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
 
   return (
     <>
+      <div className="flex h-[40px] w-full items-center justify-end gap-[5px] pb-2">
+        <div className="h-fit w-fit text-center text-[14px] font-semibold">
+          리워드 검색{" "}
+        </div>
+        <input
+          type="text"
+          className="h-fit w-[250px] bg-gray-100 p-1 text-left"
+          value={userId}
+          onChange={(e) => setUserId(removeWhiteSpace(e.target.value))}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              fetchforSearch();
+            }
+          }}
+        />
+        <button
+          onClick={fetchforSearch}
+          className="flex w-[55px] items-center justify-center rounded-md bg-blue-500 p-1 text-center text-white hover:bg-blue-600"
+        >
+          검색
+        </button>
+      </div>
       <div
         ref={scrollRef}
         id="CRTableDiv"
@@ -316,6 +354,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
             <LoadingSpinner />
           </div>
         )}
+
         <table className="table w-full border border-gray-100 text-center">
           <thead>
             <tr className="w-full bg-gray-100">
@@ -411,12 +450,6 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
         </table>
       </div>
       <div className="wf w-full">
-        <div className="flex w-full text-left text-[12px]">
-          <div className="w-fit pt-[4px] text-left text-[12px]">
-            리워드 검색
-          </div>
-          <input type="text"></input>
-        </div>
         <div className="w-full pt-[4px] text-left text-[12px]">
           총 리워드:{" "}
           {new Intl.NumberFormat("en-US").format(

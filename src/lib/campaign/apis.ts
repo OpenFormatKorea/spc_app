@@ -244,28 +244,42 @@ export async function fetchPostCampaignRecords(
   page_size: string,
   start_date: string,
   end_date: string,
+  search_user_id: string,
   context: GetServerSidePropsContext,
 ) {
+  console.log("search_user_id", search_user_id);
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/share/records-by-campaign`;
   const shop_id = getShopIdFromCookies(context);
-  let dataObj =
-    campaign_id !== "35"
-      ? {
-          shop_id: shop_id,
-          campaign_id: campaign_id,
-          page: page,
-          page_size: page_size,
-          start_date: start_date,
-          end_date: end_date,
-        }
-      : {
-          shop_id: shop_id,
-          campaign_id: campaign_id,
-          page: page,
-          page_size: page_size,
-          start_date: "2025-01-01",
-          end_date: "2025-02-14",
-        };
+  let dataObj = {
+    shop_id: shop_id,
+    campaign_id: campaign_id,
+    page: page,
+    page_size: page_size,
+    start_date: start_date,
+    end_date: end_date,
+    search_user_id: search_user_id,
+  };
+  console.log("dataObj", dataObj);
+  // let dataObj =
+  //   campaign_id !== "35"
+  //     ? {
+  //         shop_id: shop_id,
+  //         campaign_id: campaign_id,
+  //         page: page,
+  //         page_size: page_size,
+  //         start_date: start_date,
+  //         end_date: end_date,
+  //         search_user_id: search_user_id,
+  //       }
+  //     : {
+  //         shop_id: shop_id,
+  //         campaign_id: campaign_id,
+  //         page: page,
+  //         page_size: page_size,
+  //         start_date: "2025-01-01",
+  //         end_date: "2025-02-14",
+  //         search_user_id: search_user_id,
+  //       };
   try {
     const response = await fetchAPI(context, apiUrl, "POST", dataObj);
     return response;

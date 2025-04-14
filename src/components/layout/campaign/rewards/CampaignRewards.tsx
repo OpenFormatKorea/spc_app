@@ -34,6 +34,8 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
   const [campaignName, setCampaignName] = useState("");
   const [campaignSearch, setCampaignSearch] = useState("");
   const [detailPageNum, setDetailPageNum] = useState("1");
+  const [userId, setUserId] = useState("");
+
   const detailPageSize = "10";
   const defaultApiResponse: ApiResponse = {
     status: "",
@@ -56,6 +58,7 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
       detailPageSize,
       startDate,
       endDate,
+      userId,
       context,
     );
     setCampaignRewardDetailResponse(response);
@@ -86,7 +89,7 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
           </div>
         </div>
         <div className="flex h-[calc(100%-80px)] min-h-[430px] w-full gap-[20px]">
-          <div className="flex h-full w-[300px] flex-col gap-[10px] rounded-xl bg-gray-100 p-[10px]">
+          <div className="flex h-full w-[280px] flex-col items-center gap-[10px] rounded-xl bg-gray-100 p-[10px]">
             <div className="w-full text-left text-[14px] font-semibold">
               리워드를 확인할 캠페인을 선택해주세요
             </div>
@@ -106,6 +109,7 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
               pageNum={pageNum}
               campaignSearch={campaignSearch}
               campaignId={campaignId}
+              setUserId={setUserId}
               setCampaignId={setCampaignId}
               setCampaignName={setCampaignName}
               setPageNum={setPageNum}
@@ -127,6 +131,8 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
                   startDate={startDate}
                   endDate={endDate}
                   campaignId={campaignId}
+                  userId={userId}
+                  setUserId={setUserId}
                   isRewardLoading={isRewardLoading}
                   setPageNum={setDetailPageNum}
                   setIsRewardLoading={setIsRewardLoading}

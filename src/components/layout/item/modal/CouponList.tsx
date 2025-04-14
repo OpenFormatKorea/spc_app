@@ -15,7 +15,7 @@ interface CouponListProps {
   page: number;
   page_size: number;
   currentCouponList: CouponsArgs[];
-  newCouponList: CouponsArgs[];
+  // newCouponList: CouponsArgs[];
   setNewCouponList: (value: CouponsArgs[]) => void;
   isOpen: boolean;
   onClose: () => void;
@@ -32,7 +32,7 @@ const CouponList: React.FC<CouponListProps> = (
     page_size,
     apiResponse,
     currentCouponList,
-    newCouponList,
+    // newCouponList,
     setNewCouponList,
     isOpen,
     onClose,

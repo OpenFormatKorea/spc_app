@@ -10,6 +10,7 @@ interface CampaignListTableProps {
   pageNum: string;
   campaignSearch: string;
   campaignId: string;
+  setUserId: (value: string) => void;
   setCampaignName: (value: string) => void;
   setCampaignId: (value: string) => void;
   setPageNum: (value: string) => void;
@@ -21,6 +22,7 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
     pageSize,
     pageNum,
     campaignSearch,
+    setUserId,
     setCampaignName,
     campaignId,
     setCampaignId,
@@ -70,13 +72,14 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
   }, [isBottom]);
 
   const handleCampaignClick = async (
-    event: React.MouseEvent<HTMLElement>,
+    e: React.MouseEvent<HTMLElement>,
     title: string,
   ) => {
-    const id = event.currentTarget.id;
+    const id = e.currentTarget.id;
     try {
       setCampaignId(id);
       setCampaignName(title);
+      setUserId("");
     } catch (e) {
       console.error("error: ", e);
     }
@@ -85,9 +88,9 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
     <>
       <div
         ref={scrollRef}
-        className="relative flex h-full w-[220px] flex-col overflow-y-auto rounded-xl bg-white p-[10px]"
+        className="relative flex h-full w-[230px] flex-col items-center justify-center overflow-y-auto rounded-xl bg-white p-[10px]"
       >
-        <div className="flex h-full w-full flex-col gap-[8px]">
+        <div className="flex h-full w-[200px] flex-col gap-[8px]">
           {isListLoading && (
             <div className="absolute inset-0 z-50 flex items-center justify-center rounded-xl bg-black bg-opacity-10">
               <LoadingSpinner />
@@ -99,7 +102,7 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
                 key={campaign.id}
                 className={`flex w-full cursor-pointer flex-col gap-[5px] border p-4 text-gray-600 hover:bg-gray-50 ${campaignId == campaign.id ? "border-gray-500 bg-gray-50" : "bg-white"}`}
                 id={`${campaign.id}`}
-                onClick={(event) => handleCampaignClick(event, campaign.title)}
+                onClick={(e) => handleCampaignClick(e, campaign.title)}
               >
                 <div className="flex w-full flex-col rounded-md bg-gray-200 p-[5px] pr-2 text-[14px]">
                   <div className="w-[150px] overflow-hidden truncate text-ellipsis whitespace-nowrap text-[12px]">
