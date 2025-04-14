@@ -77,9 +77,11 @@ export interface CampaignRecordBody {
 
 // new reward type
 
-enum RewradStatus {
+export enum RewradStatus {
   "S" = "SUCCESS",
   "C" = "CANCELLED",
+  "P" = "PENDING",
+  "F" = "FAILURE",
 }
 export interface RewardProps {
   coupon_title: string | null;

@@ -42,10 +42,9 @@ const DashboardReport: React.FC<DashboardReportProps> = ({
       <div className="mb-[10px] flex w-full justify-between border-b-[1px]">
         <div className="w-[80%]">
           <div className="text-[25px] font-bold">
-            최근 30일 간의 리포트 내역입니다.
+            최근 30일 간의 리포트 내역
           </div>{" "}
           <div className="itmes-end flex h-fit w-fit justify-end gap-[10px] text-gray-500">
-            {/* <label className="h-fit text-[18px] font-semibold"></label> */}
             <label className="h-fit text-[14px]">
               ( 시작일: {startDate} 종료일: {endDate} )
             </label>

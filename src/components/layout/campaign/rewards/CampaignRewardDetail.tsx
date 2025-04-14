@@ -8,6 +8,7 @@ import {
   CampaignRecordsProps,
   ReferralItem,
   RewardProps,
+  RewradStatus,
 } from "@/lib/campaign/types";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { ApiResponse } from "@/lib/types";
@@ -58,14 +59,22 @@ const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
               key={i}
               className={`flex h-fit w-full flex-col items-start justify-center rounded-lg border bg-gray-50 p-2 text-[14px]`}
             >
-              <div className="flex h-[25px] w-full items-center text-left text-[18px] font-semibold">
+              <div className="flex h-[25px] w-full items-center border-b-2 border-gray-400 pb-2 text-left text-[18px] font-semibold">
                 <label className="w-full text-gray-600">
                   {reward.reward_trigger === "SIGNUP" ? "회원가입" : "구매"} 후
                 </label>
               </div>
               <div
-                className={`flex h-fit w-full flex-col items-start gap-[5px] rounded-md text-gray-500`}
+                className={`flex h-fit w-full flex-col items-start gap-[5px] rounded-md pt-2 text-gray-500`}
               >
+                <div className="flex h-[25px] w-full items-center gap-[10px]">
+                  <label className="w-[120px] text-left font-semibold text-black">
+                    리워드 종류:{" "}
+                  </label>
+                  <label className="w-full text-left text-gray-600">
+                    {reward.reward_type === "POINT" ? "포인트" : "쿠폰"}
+                  </label>
+                </div>
                 <div className="flex h-[25px] w-full items-center gap-[10px]">
                   <label className="w-[120px] text-left font-semibold text-black">
                     리워드 트리거:{" "}
@@ -77,12 +86,16 @@ const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
                 </div>
                 <div className="flex h-[25px] w-full items-center gap-[10px]">
                   <label className="w-[120px] text-left font-semibold text-black">
-                    리워드 종류:{" "}
+                    지급 시점:{" "}
                   </label>
                   <label className="w-full text-left text-gray-600">
-                    {reward.reward_type === "POINT" ? "포인트" : "쿠폰"}
+                    {reward.reward_trigger === "PURCHASE" &&
+                    reward.payment_timing.type === "DELAYED"
+                      ? `${reward.payment_timing.delay_days}일 후`
+                      : "즉시 지급"}
                   </label>
                 </div>
+
                 <div className="flex h-[25px] w-full items-center gap-[10px] overflow-hidden truncate text-ellipsis whitespace-nowrap">
                   <label className="w-[120px] text-left font-semibold text-black">
                     {reward.reward_type === "POINT"
@@ -98,35 +111,19 @@ const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
                     <label>{reward.reward_value.toLocaleString()} 포인트</label>
                   )}
                 </div>
-                <div className="flex h-[25px] w-full items-center gap-[10px]">
-                  <label className="w-[120px] text-left font-semibold text-black">
-                    지급 시점:{" "}
-                  </label>
-                  <label className="w-full text-left text-gray-600">
-                    {reward.reward_trigger === "PURCHASE" &&
-                    reward.payment_timing.type === "DELAYED"
-                      ? `${reward.payment_timing.delay_days}일 후`
-                      : "즉시 지급"}
-                  </label>
-                </div>
-                {!reward.status ? (
-                  <>
-                    <div className="flex h-[25px] w-full items-center justify-between">
-                      <div className="flex w-full gap-[10px]">
-                        <label className="w-[120px] text-left font-semibold text-black">
-                          지급 현황:
-                        </label>
-                        <label className="w-full text-left font-bold text-red-500">
-                          {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
-                          미지급
-                        </label>
-                      </div>
-                      {/* <div className="flex w-[120px] cursor-pointer items-center justify-center rounded-md bg-blue-500 p-1 text-[14px] text-white hover:bg-blue-600">
-                        수동 지급
-                      </div> */}
+                {reward.status === RewradStatus.P ? (
+                  <div className="flex h-[25px] w-full items-center justify-between">
+                    <div className="flex w-full gap-[10px]">
+                      <label className="w-[120px] text-left font-semibold text-black">
+                        지급 현황:
+                      </label>
+                      <label className="w-full text-left font-bold text-green-500">
+                        {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
+                        지급 전
+                      </label>
                     </div>
-                  </>
-                ) : (
+                  </div>
+                ) : reward.status === RewradStatus.S ? (
                   <div className="flex h-[25px] w-full items-center">
                     <div className="flex w-full gap-[10px]">
                       <label className="w-[120px] text-left font-semibold text-black">
@@ -148,6 +145,49 @@ const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
                       }
                     >
                       {reward.reward_type === "POINT" ? "포인트" : "쿠폰"} 회수
+                    </div>
+                  </div>
+                ) : reward.status === RewradStatus.F ? (
+                  <>
+                    <div className="flex h-[25px] w-full items-center justify-between">
+                      <div className="flex w-full gap-[10px]">
+                        <label className="w-[120px] text-left font-semibold text-black">
+                          지급 현황:
+                        </label>
+                        <label className="w-full text-left font-bold text-red-500">
+                          {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
+                          지급 실패
+                        </label>
+                      </div>
+                      {/* <div className="flex w-[120px] cursor-pointer items-center justify-center rounded-md bg-blue-500 p-1 text-[14px] text-white hover:bg-blue-600">
+                        수동 지급
+                      </div> */}
+                    </div>
+                  </>
+                ) : reward.status === RewradStatus.C ? (
+                  <>
+                    <div className="flex h-[25px] w-full items-center justify-between">
+                      <div className="flex w-full gap-[10px]">
+                        <label className="w-[120px] text-left font-semibold text-black">
+                          지급 현황:
+                        </label>
+                        <label className="w-full text-left font-bold text-orange-500">
+                          {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
+                          지급 취소
+                        </label>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex h-[25px] w-full items-center justify-between">
+                    <div className="flex w-full gap-[10px]">
+                      <label className="w-[120px] text-left font-semibold text-black">
+                        지급 현황:
+                      </label>
+                      <label className="w-full text-left font-bold text-green-500">
+                        {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
+                        지급 전
+                      </label>
                     </div>
                   </div>
                 )}
@@ -188,7 +228,6 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   };
   const [newApiResponse, setNewApiResponse] =
     useState<ApiResponse>(defaultApiResponse);
-
   const [campaigns, setCampaigns] = useState<CampaignRecordsProps>(
     newApiResponse.data.result,
   );
@@ -270,7 +309,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
       <div
         ref={scrollRef}
         id="CRTableDiv"
-        className="flex h-full max-h-[calc(58vh-30px)] w-[90%] flex-col overflow-x-hidden overflow-y-scroll rounded-xl border bg-white"
+        className="flex h-full max-h-[calc(58vh-30px)] w-full flex-col overflow-x-hidden overflow-y-scroll rounded-xl border bg-white"
       >
         {isRewardLoading && (
           <div className="absolute inset-0 z-50 flex items-center justify-center rounded-xl bg-black bg-opacity-10">
@@ -371,12 +410,20 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
           </tbody>
         </table>
       </div>
-      <div className="w-full pt-[4px] text-left text-[12px]">
-        총 리워드:{" "}
-        {new Intl.NumberFormat("en-US").format(
-          Math.min(Number(totalCount), Number(pageNum) * Number(pageSize)),
-        )}{" "}
-        / {new Intl.NumberFormat("en-US").format(Number(totalCount))}개
+      <div className="wf w-full">
+        <div className="flex w-full text-left text-[12px]">
+          <div className="w-fit pt-[4px] text-left text-[12px]">
+            리워드 검색
+          </div>
+          <input type="text"></input>
+        </div>
+        <div className="w-full pt-[4px] text-left text-[12px]">
+          총 리워드:{" "}
+          {new Intl.NumberFormat("en-US").format(
+            Math.min(Number(totalCount), Number(pageNum) * Number(pageSize)),
+          )}{" "}
+          / {new Intl.NumberFormat("en-US").format(Number(totalCount))}개
+        </div>
       </div>
     </>
   );
