@@ -41,13 +41,13 @@ const DashboardReport: React.FC<DashboardReportProps> = ({
     <>
       <div className="mb-[10px] flex w-full justify-between border-b-[1px]">
         <div className="w-[80%]">
-          <div className="text-[16px] font-bold">대시보드 리포트</div>{" "}
-          <div className="flex w-fit gap-[10px] py-1 text-gray-500">
-            <label className="text-[12px] font-semibold">
-              시작일: {startDate}
-            </label>
-            <label className="text-[12px] font-semibold">
-              종료일: {endDate}
+          <div className="text-[25px] font-bold">
+            최근 30일 간의 리포트 내역입니다.
+          </div>{" "}
+          <div className="itmes-end flex h-fit w-fit justify-end gap-[10px] text-gray-500">
+            {/* <label className="h-fit text-[18px] font-semibold"></label> */}
+            <label className="h-fit text-[14px]">
+              ( 시작일: {startDate} 종료일: {endDate} )
             </label>
           </div>
         </div>

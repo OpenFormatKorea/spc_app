@@ -90,22 +90,24 @@ const Dashboard: React.FC<DashboardProps> = ({
             <span className="text-[24px] font-bold">대시보드</span>
           </div>
         </div>
-        <div className="contents-container flex h-fit w-full flex-col justify-center gap-[20px]">
-          <div className="flex h-fit w-full flex-col overflow-y-auto rounded-xl bg-white lg:p-[12px]">
-            <DashboardReport
-              hourlysignUpApiResponse={hourlysignUpApiResponse}
-              myFunnelApiResponse={myFunnelApiResponse}
-              startDate={start_date}
-              endDate={end_date}
-            />
+        <div className="contents-container flex h-fit w-full flex-col justify-center">
+          <div className="flex h-[80vh] w-full flex-col justify-center gap-[20px]">
+            <div className="flex h-fit w-full flex-col overflow-y-auto rounded-xl bg-white lg:p-[12px]">
+              <DashboardReport
+                hourlysignUpApiResponse={hourlysignUpApiResponse}
+                myFunnelApiResponse={myFunnelApiResponse}
+                startDate={start_date}
+                endDate={end_date}
+              />
+            </div>
+            <ContentsContainer variant="dashboard" size="half">
+              <DashboardCampaignList
+                apiResponse={apiResponse}
+                handleButton={handleButton}
+                setLoading={setLoading}
+              />
+            </ContentsContainer>
           </div>
-          <ContentsContainer variant="dashboard" size="half">
-            <DashboardCampaignList
-              apiResponse={apiResponse}
-              handleButton={handleButton}
-              setLoading={setLoading}
-            />
-          </ContentsContainer>
         </div>
       </DashboardContainer>
     </>

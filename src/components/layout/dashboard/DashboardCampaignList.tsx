@@ -107,7 +107,7 @@ const DashboardCampaignList: React.FC<DashboardCampaignListProps> = ({
                         campaign.period_type === "LIMITED"
                           ? "bg-yellow-200 text-yellow-600"
                           : "bg-green-200 text-green-600"
-                      } w-fit rounded-md text-[14px] font-semibold`}
+                      } w-fit rounded-md p-1 text-[14px] font-semibold`}
                     >
                       {campaign.period_type === "LIMITED"
                         ? "기간 제한"
