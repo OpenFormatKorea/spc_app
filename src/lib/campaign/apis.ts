@@ -259,7 +259,6 @@ export async function fetchPostCampaignRecords(
     end_date: end_date,
     search_user_id: search_user_id,
   };
-  console.log("dataObj", dataObj);
   // let dataObj =
   //   campaign_id !== "35"
   //     ? {

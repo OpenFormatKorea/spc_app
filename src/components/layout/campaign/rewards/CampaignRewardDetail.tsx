@@ -1,4 +1,5 @@
 import LoadingSpinner from "@/components/base/LoadingSpinner";
+import UserRewardBlock from "@/components/layout/campaign/rewards/UserRewardBlock";
 import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 import {
   fetchPostCampaignRecords,
@@ -28,181 +29,6 @@ interface CampaignRewardDetailProps {
   isRewardLoading: boolean;
   setIsRewardLoading: (value: boolean) => void;
 }
-interface ClickFetchRevokeReward {
-  (
-    base_user_id: string,
-    signup_id: string,
-    reward_trigger: string,
-  ): Promise<void>;
-}
-interface UserRewardBlockProps {
-  user: ReferralItem["referrer"] | ReferralItem["referee"];
-  signup_id: string;
-  clickFetchRevokeReward: ClickFetchRevokeReward;
-}
-const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
-  user,
-  signup_id,
-  clickFetchRevokeReward,
-}) => (
-  <td className={tbodyStyle}>
-    <div className="flex w-full flex-col items-center justify-center">
-      <div className="h-fit w-full text-left font-semibold">
-        <label className="w-[120px] text-left text-[14px] font-semibold text-black">
-          유저 ID:{" "}
-        </label>
-        <label className="max-w-[50px] overflow-hidden truncate text-ellipsis whitespace-nowrap text-[14px] font-bold text-gray-500">
-          {user.base_user_id}
-        </label>
-      </div>
-      <div className="my-[5px] flex h-fit w-full min-w-[150px] items-center justify-start gap-[5px]">
-        <div className="flex h-fit w-full flex-col gap-[10px]">
-          {user.rewards.map((reward: RewardProps, i: number) => (
-            <div
-              key={i}
-              className={`flex h-fit w-full flex-col items-start justify-center rounded-lg border bg-gray-50 p-2 text-[14px]`}
-            >
-              <div className="flex h-[25px] w-full items-center border-b-2 border-gray-400 pb-2 text-left text-[18px] font-semibold">
-                <label className="w-full text-gray-600">
-                  {reward.reward_trigger === "SIGNUP" ? "회원가입" : "구매"} 후
-                </label>
-              </div>
-              <div
-                className={`flex h-fit w-full flex-col items-start gap-[5px] rounded-md pt-2 text-gray-500`}
-              >
-                <div className="flex h-[25px] w-full items-center gap-[10px]">
-                  <label className="w-[120px] text-left font-semibold text-black">
-                    리워드 종류:{" "}
-                  </label>
-                  <label className="w-full text-left text-gray-600">
-                    {reward.reward_type === "POINT" ? "포인트" : "쿠폰"}
-                  </label>
-                </div>
-                <div className="flex h-[25px] w-full items-center gap-[10px]">
-                  <label className="w-[120px] text-left font-semibold text-black">
-                    리워드 트리거:{" "}
-                  </label>
-                  <label className="w-full text-left text-gray-600">
-                    {reward.reward_trigger === "SIGNUP" ? "회원가입" : "구매"}{" "}
-                    후
-                  </label>
-                </div>
-                <div className="flex h-[25px] w-full items-center gap-[10px]">
-                  <label className="w-[120px] text-left font-semibold text-black">
-                    지급 시점:{" "}
-                  </label>
-                  <label className="w-full text-left text-gray-600">
-                    {reward.reward_trigger === "PURCHASE" &&
-                    reward.payment_timing.type === "DELAYED"
-                      ? `${reward.payment_timing.delay_days}일 후`
-                      : "즉시 지급"}
-                  </label>
-                </div>
-
-                <div className="flex h-[25px] w-full items-center gap-[10px] overflow-hidden truncate text-ellipsis whitespace-nowrap">
-                  <label className="w-[120px] text-left font-semibold text-black">
-                    {reward.reward_type === "POINT"
-                      ? "포인트 액수: "
-                      : "쿠폰 명: "}
-                  </label>
-                  <label className="w-full text-left text-gray-600">
-                    {reward.reward_type === "POINT"
-                      ? Number(reward.reward_value).toLocaleString()
-                      : reward.coupon_title || reward.reward_value}{" "}
-                  </label>
-                  {reward.reward_type === "POINT" && (
-                    <label>{reward.reward_value.toLocaleString()} 포인트</label>
-                  )}
-                </div>
-                {reward.status === RewradStatus.P ? (
-                  <div className="flex h-[25px] w-full items-center justify-between">
-                    <div className="flex w-full gap-[10px]">
-                      <label className="w-[120px] text-left font-semibold text-black">
-                        지급 현황:
-                      </label>
-                      <label className="w-full text-left font-bold text-green-500">
-                        {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
-                        지급 전
-                      </label>
-                    </div>
-                  </div>
-                ) : reward.status === RewradStatus.S ? (
-                  <div className="flex h-[25px] w-full items-center">
-                    <div className="flex w-full gap-[10px]">
-                      <label className="w-[120px] text-left font-semibold text-black">
-                        지급 현황:
-                      </label>
-                      <label className="w-full text-left font-bold text-blue-500">
-                        {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
-                        지급 완료
-                      </label>
-                    </div>
-                    <div
-                      className="flex w-[120px] cursor-pointer items-center justify-center rounded-md bg-red-500 p-1 text-[14px] text-white hover:bg-red-600"
-                      onClick={() =>
-                        clickFetchRevokeReward(
-                          user.base_user_id,
-                          signup_id,
-                          reward.reward_trigger,
-                        )
-                      }
-                    >
-                      {reward.reward_type === "POINT" ? "포인트" : "쿠폰"} 회수
-                    </div>
-                  </div>
-                ) : reward.status === RewradStatus.F ? (
-                  <>
-                    <div className="flex h-[25px] w-full items-center justify-between">
-                      <div className="flex w-full gap-[10px]">
-                        <label className="w-[120px] text-left font-semibold text-black">
-                          지급 현황:
-                        </label>
-                        <label className="w-full text-left font-bold text-red-500">
-                          {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
-                          지급 실패
-                        </label>
-                      </div>
-                      {/* <div className="flex w-[120px] cursor-pointer items-center justify-center rounded-md bg-blue-500 p-1 text-[14px] text-white hover:bg-blue-600">
-                        수동 지급
-                      </div> */}
-                    </div>
-                  </>
-                ) : reward.status === RewradStatus.C ? (
-                  <>
-                    <div className="flex h-[25px] w-full items-center justify-between">
-                      <div className="flex w-full gap-[10px]">
-                        <label className="w-[120px] text-left font-semibold text-black">
-                          지급 현황:
-                        </label>
-                        <label className="w-full text-left font-bold text-orange-500">
-                          {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
-                          지급 취소
-                        </label>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex h-[25px] w-full items-center justify-between">
-                    <div className="flex w-full gap-[10px]">
-                      <label className="w-[120px] text-left font-semibold text-black">
-                        지급 현황:
-                      </label>
-                      <label className="w-full text-left font-bold text-green-500">
-                        {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
-                        지급 전
-                      </label>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </td>
-);
-
 const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   {
     apiResponse,
@@ -358,20 +184,16 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
         <table className="table w-full border border-gray-100 text-center">
           <thead>
             <tr className="w-full bg-gray-100">
-              <th className={theadStyle + " w-[90px]"}></th>
+              <th className={theadStyle + " w-[10%]"}></th>
               {/* <th className={theadStyle + " w-[90px]"}>가입 ID</th> */}
-              <th className={theadStyle + " w-[110px]"}>생성일</th>
+              <th className={theadStyle + " w-[20%]"}>생성일</th>
               <th
-                className={
-                  theadStyle + " w-[130px] min-w-[100px] max-w-[185px]"
-                }
+                className={theadStyle + " w-[35%] min-w-[100px] max-w-[185px]"}
               >
                 추천인 ID
               </th>
               <th
-                className={
-                  theadStyle + " w-[130px] min-w-[100px] max-w-[185px]"
-                }
+                className={theadStyle + " w-[35%] min-w-[100px] max-w-[185px]"}
               >
                 피추천인 ID
               </th>
