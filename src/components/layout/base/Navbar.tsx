@@ -151,7 +151,7 @@ const Navbar: React.FC<NavbarProps> = ({ shop_id }) => {
           <div className="flex w-full px-10 pb-[5px] text-[14px] text-white">
             <a
               href="/campaign/rewards"
-              className={`w-full text-[14px] ${router.pathname === "/campaign/stats" ? "font-bold" : ""}`}
+              className={`w-full text-[14px] ${router.pathname === "/campaign/rewards" ? "font-bold" : ""}`}
             >
               - 캠페인 리워드 내역
             </a>

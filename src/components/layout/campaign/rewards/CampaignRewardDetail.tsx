@@ -5,12 +5,7 @@ import {
   fetchPostCampaignRecords,
   fetchRevokeReward,
 } from "@/lib/campaign/apis";
-import {
-  CampaignRecordsProps,
-  ReferralItem,
-  RewardProps,
-  RewradStatus,
-} from "@/lib/campaign/types";
+import { CampaignRecordsProps, ReferralItem } from "@/lib/campaign/types";
 import { removeWhiteSpace } from "@/lib/common";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { ApiResponse } from "@/lib/types";
@@ -45,7 +40,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   },
   context: GetServerSidePropsContext,
 ) => {
-  const defaultApiResponse: ApiResponse = {
+  const defaultApiResponse: ApiResponse = apiResponse || {
     status: "",
     message: "",
     error: undefined,
@@ -89,7 +84,9 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  const totalCount = newApiResponse?.data?.total_count || 0;
+  const [totalCount, setTotalCount] = useState(0);
+  const safeTotalCount = Number(totalCount) || 0;
+  const safeStackedAmount = Number(stackedDataAmount) || 0;
   const getNextPage = totalCount > stackedDataAmount;
   let tableIndex = 0;
 
@@ -128,6 +125,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
         newAPIResponse.data.result.length == 0
       ) {
         setNewApiResponse(newAPIResponse);
+        setTotalCount(0);
         setCampaigns(newAPIResponse.data);
       }
       setPageNum(currentPage);
@@ -149,6 +147,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   useEffect(() => {
     if (pageNum === "1" && apiResponse?.data) {
       setCampaigns(apiResponse.data);
+      setTotalCount(apiResponse.data.total_count);
     }
   }, [apiResponse]);
 
@@ -283,9 +282,9 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
         <div className="w-full pt-[4px] text-left text-[12px]">
           총 리워드:{" "}
           {new Intl.NumberFormat("en-US").format(
-            Math.min(Number(totalCount), Number(pageNum) * Number(pageSize)),
+            Math.min(safeTotalCount, safeStackedAmount),
           )}{" "}
-          / {new Intl.NumberFormat("en-US").format(Number(totalCount))}개
+          / {new Intl.NumberFormat("en-US").format(safeTotalCount)}개
         </div>
       </div>
     </>

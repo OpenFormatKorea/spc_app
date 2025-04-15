@@ -5,10 +5,7 @@ import { useState } from "react";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 
-import {
-  fetchGetCampaignList,
-  fetchGetCampaignStats,
-} from "@/lib/campaign/apis";
+import { fetchGetCampaignList } from "@/lib/campaign/apis";
 import CampaignRewards from "@/components/layout/campaign/rewards/CampaignRewards";
 import { CampaignListApiResponse } from "@/lib/campaign/types";
 
@@ -31,59 +28,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const RewardsCampaign = (
-  {
-    campaignListResponse,
-    start_date,
-    end_date,
-    page,
-    page_size,
-  }: {
-    campaignListResponse: CampaignListApiResponse;
-    start_date: string;
-    end_date: string;
-    page: string;
-    page_size: string;
-  },
-  context: GetServerSidePropsContext,
-) => {
-  const [newApiResponse, setNewApiResponse] =
-    useState<CampaignListApiResponse>(campaignListResponse);
-
-  const [startDate, setStartDate] = useState(start_date);
+const RewardsCampaign = ({
+  campaignListResponse,
+  start_date,
+  end_date,
+  page,
+  page_size,
+}: {
+  campaignListResponse: CampaignListApiResponse;
+  start_date: string;
+  end_date: string;
+  page: string;
+  page_size: string;
+}) => {
   const endDate = end_date;
   const [pageNum, setPageNum] = useState(page);
   const [loading, setLoading] = useState(false);
   const pageSize = page_size;
-
-  const fetchData = async (newPeriod: string) => {
-    const newStartDate = new Date();
-    newStartDate.setDate(newStartDate.getDate() - Number(newPeriod));
-
-    const year = newStartDate.getFullYear();
-    const month = String(newStartDate.getMonth() + 1).padStart(2, "0");
-    const day = String(newStartDate.getDate()).padStart(2, "0");
-
-    const formattedStartDate = `${year}-${month}-${day}`;
-    setStartDate(formattedStartDate);
-    setPageNum("1");
-    setLoading(true);
-    try {
-      const data = await fetchGetCampaignStats(
-        formattedStartDate,
-        end_date,
-        "1",
-        pageSize,
-        context,
-      );
-      setNewApiResponse(data);
-    } catch (e) {
-      console.error("Error fetching data:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <>
       {loading && (
@@ -103,7 +64,7 @@ const RewardsCampaign = (
             apiResponse={campaignListResponse}
             pageNum={pageNum}
             setPageNum={setPageNum}
-            startDate={startDate}
+            startDate={start_date}
             endDate={endDate}
             pageSize={pageSize}
             setLoading={setLoading}
