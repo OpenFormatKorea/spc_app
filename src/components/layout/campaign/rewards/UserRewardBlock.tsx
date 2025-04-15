@@ -88,11 +88,11 @@ const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
                     {reward.status === RewradStatus.P
                       ? "지급 전"
                       : reward.status === RewradStatus.S
-                        ? "성공"
+                        ? "지급 성공"
                         : reward.status === RewradStatus.C
-                          ? "취소"
+                          ? "지급 취소"
                           : reward.status === RewradStatus.F
-                            ? "실패"
+                            ? "지급 실패"
                             : " 지급 전"}
                   </label>
                 </div>
