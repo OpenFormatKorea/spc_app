@@ -23,12 +23,10 @@ const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
     className={`whitespace-normal break-words break-all border-b border-gray-200 p-2 text-center align-top text-[13px]`}
   >
     <div className="flex h-full w-full min-w-[150px] flex-col items-start justify-start gap-[5px]">
-      <div className="flex h-fit w-full flex-col items-start justify-start px-2 text-[14px]">
-        <div className="flex h-[60px] w-full flex-col items-start rounded-md bg-gray-200 p-3 lg:w-1/2">
-          <div className="w-full text-left text-[12px] text-gray-500">유저</div>
-          <div className="w-full text-left text-[14px] font-semibold text-black">
-            {user.base_user_id}
-          </div>
+      <div className="flex h-[60px] w-full flex-col rounded-md bg-gray-200 p-3 lg:w-1/2">
+        <div className="w-full text-left text-[12px] text-gray-500">유저</div>
+        <div className="w-full overflow-hidden truncate text-ellipsis whitespace-nowrap text-left text-[14px] font-semibold text-black">
+          {user.base_user_id}
         </div>
       </div>
       <div className="flex h-fit w-full flex-col gap-[10px]">

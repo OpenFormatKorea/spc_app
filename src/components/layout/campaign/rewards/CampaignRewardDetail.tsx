@@ -148,27 +148,29 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
 
   return (
     <>
-      <div className="flex h-[40px] w-full items-center justify-end gap-[5px] pb-2">
-        <div className="h-fit w-fit text-center text-[14px] font-semibold">
-          리워드 검색{" "}
+      <div className="flex h-[40px] w-full items-center justify-end rounded-md">
+        <div className="flex h-fit w-fit items-end gap-[5px] pb-2">
+          <div className="h-fit w-fit text-center text-[14px] font-semibold text-gray-600">
+            리워드 검색:{" "}
+          </div>
+          <input
+            type="text"
+            className="h-fit w-[250px] border-b border-b-gray-400 p-1 text-left"
+            value={userId}
+            onChange={(e) => setUserId(removeWhiteSpace(e.target.value))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                fetchforSearch();
+              }
+            }}
+          />
+          <button
+            onClick={fetchforSearch}
+            className="flex w-[55px] items-center justify-center rounded-md bg-blue-500 p-1 text-center text-white hover:bg-blue-600"
+          >
+            검색
+          </button>
         </div>
-        <input
-          type="text"
-          className="h-fit w-[250px] bg-gray-100 p-1 text-left"
-          value={userId}
-          onChange={(e) => setUserId(removeWhiteSpace(e.target.value))}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              fetchforSearch();
-            }
-          }}
-        />
-        <button
-          onClick={fetchforSearch}
-          className="flex w-[55px] items-center justify-center rounded-md bg-blue-500 p-1 text-center text-white hover:bg-blue-600"
-        >
-          검색
-        </button>
       </div>
       <div
         ref={scrollRef}
@@ -186,14 +188,14 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
             <tr className="w-full bg-gray-100">
               <th className={theadStyle + " w-[10%]"}></th>
               {/* <th className={theadStyle + " w-[90px]"}>가입 ID</th> */}
-              <th className={theadStyle + " w-[20%]"}>생성일</th>
+              <th className={theadStyle + " w-[10%]"}>생성일</th>
               <th
-                className={theadStyle + " w-[35%] min-w-[100px] max-w-[185px]"}
+                className={theadStyle + " w-[40%] min-w-[100px] max-w-[185px]"}
               >
                 추천인 ID
               </th>
               <th
-                className={theadStyle + " w-[35%] min-w-[100px] max-w-[185px]"}
+                className={theadStyle + " w-[40%] min-w-[100px] max-w-[185px]"}
               >
                 피추천인 ID
               </th>

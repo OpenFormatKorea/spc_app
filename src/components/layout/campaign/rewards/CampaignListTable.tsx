@@ -104,12 +104,12 @@ const CampaignListTable: React.FC<CampaignListTableProps> = (
                 id={`${campaign.id}`}
                 onClick={(e) => handleCampaignClick(e, campaign.title)}
               >
-                <div className="flex w-full flex-col rounded-md bg-gray-200 p-[5px] pr-2 text-[14px]">
+                <div className="flex w-full flex-col rounded-sm bg-gray-200 p-[5px] pr-2 text-[14px]">
                   <div className="w-[150px] overflow-hidden truncate text-ellipsis whitespace-nowrap text-[12px]">
                     {campaign.title}
                   </div>
                 </div>
-                <div className="flex w-full flex-col rounded-md bg-gray-100 p-[5px] pr-2 text-[14px]">
+                <div className="flex w-full flex-col rounded-sm bg-gray-100 p-[5px] pr-2 text-[14px]">
                   <div className="flex cursor-pointer flex-col">
                     <div>
                       <label className="cursor-pointer font-semibold">
