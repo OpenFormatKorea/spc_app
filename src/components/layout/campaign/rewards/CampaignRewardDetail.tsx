@@ -89,7 +89,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
-  const totalCount = apiResponse?.data.total_count || 0;
+  const totalCount = newApiResponse?.data?.total_count || 0;
   const getNextPage = totalCount > stackedDataAmount;
   let tableIndex = 0;
 
