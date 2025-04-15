@@ -123,6 +123,12 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                 result: [...prev.result, ...newAPIResponse.data.result],
               }),
         );
+      } else if (
+        newAPIResponse.data.result &&
+        newAPIResponse.data.result.length == 0
+      ) {
+        setNewApiResponse(newAPIResponse);
+        setCampaigns(newAPIResponse.data);
       }
       setPageNum(currentPage);
     } catch (error) {
