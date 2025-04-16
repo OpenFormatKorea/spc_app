@@ -76,14 +76,14 @@ const UserRewardBlock: React.FC<UserRewardBlockProps> = ({
                   </label>
                 </div>
               </div>
-              <div className="flex h-[60px] w-full flex-col items-start rounded-md bg-gray-200 p-3 lg:w-1/2">
-                <div className="w-full text-left text-[12px] text-gray-500">
+              <div
+                className={`flex h-[60px] w-full flex-col items-start rounded-md p-3 lg:w-1/2 ${reward.status === RewradStatus.P ? "bg-green-500" : reward.status === RewradStatus.S ? "bg-blue-500" : reward.status === RewradStatus.C ? "bg-orange-500" : reward.status === RewradStatus.F ? "bg-red-500" : "bg-green-500"}`}
+              >
+                <div className="w-full text-left text-[12px] text-white">
                   지급 현황
                 </div>
-                <div className="w-full text-left text-[14px] font-semibold text-black">
-                  <label
-                    className={`w-full text-left font-bold ${reward.status === RewradStatus.P ? "text-green-500" : reward.status === RewradStatus.S ? "text-blue-500" : reward.status === RewradStatus.C ? "text-orange-500" : reward.status === RewradStatus.F ? "text-red-500" : "text-green-500"}`}
-                  >
+                <div className="w-full text-left text-[14px] font-semibold text-white">
+                  <label className={`w-full text-left font-bold`}>
                     {reward.reward_type === "COUPON" ? "쿠폰" : "포인트"}{" "}
                     {reward.status === RewradStatus.P
                       ? "지급 전"
