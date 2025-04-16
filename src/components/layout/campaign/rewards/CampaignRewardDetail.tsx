@@ -96,7 +96,7 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
 
     try {
       const currentPage = reset ? "1" : (parseInt(pageNum) + 1).toString();
-      const newAPIResponse: ApiResponse = await fetchPostCampaignRecords(
+      const response: ApiResponse = await fetchPostCampaignRecords(
         campaignId,
         currentPage,
         pageSize,
@@ -106,27 +106,30 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
         context,
       );
 
-      if (newAPIResponse.data.result && newAPIResponse.data.result.length > 0) {
-        setNewApiResponse(newAPIResponse);
+      if (
+        response.data.result &&
+        response.data.result.length > 0 &&
+        newApiResponse != response
+      ) {
+        setNewApiResponse(response);
+        setTotalCount(response.data.total_count);
+
         setCampaigns(
           reset
-            ? newAPIResponse.data
+            ? response.data
             : (prev) => ({
                 ...prev,
-                total_count: newAPIResponse.data.total_count,
-                page: newAPIResponse.data.page,
-                page_size: newAPIResponse.data.page_size,
-                total_pages: newAPIResponse.data.total_pages,
-                result: [...prev.result, ...newAPIResponse.data.result],
+                total_count: response.data.total_count,
+                page: response.data.page,
+                page_size: response.data.page_size,
+                total_pages: response.data.total_pages,
+                result: [...prev.result, ...response.data.result],
               }),
         );
-      } else if (
-        newAPIResponse.data.result &&
-        newAPIResponse.data.result.length == 0
-      ) {
-        setNewApiResponse(newAPIResponse);
+      } else if (response.data.result && response.data.result.length == 0) {
+        setNewApiResponse(response);
         setTotalCount(0);
-        setCampaigns(newAPIResponse.data);
+        setCampaigns(response.data);
       }
       setPageNum(currentPage);
     } catch (error) {
