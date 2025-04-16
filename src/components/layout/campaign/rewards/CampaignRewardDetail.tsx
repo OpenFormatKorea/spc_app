@@ -9,6 +9,7 @@ import { CampaignRecordsProps, ReferralItem } from "@/lib/campaign/types";
 import { removeWhiteSpace } from "@/lib/common";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { ApiResponse } from "@/lib/types";
+import { error } from "console";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 interface CampaignRewardDetailProps {
@@ -91,14 +92,15 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
   let tableIndex = 0;
 
   const fetchRewarDetails = async (reset = false) => {
-    if (!getNextPage && !reset) return;
+    if (!reset && !getNextPage) return;
+
     setIsRewardLoading(true);
+    const nextPage = reset ? 1 : parseInt(pageNum, 10) + 1;
 
     try {
-      const currentPage = reset ? "1" : (parseInt(pageNum) + 1).toString();
-      const response: ApiResponse = await fetchPostCampaignRecords(
+      const res: ApiResponse = await fetchPostCampaignRecords(
         campaignId,
-        currentPage,
+        nextPage.toString(),
         pageSize,
         startDate,
         endDate,
@@ -106,42 +108,34 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
         context,
       );
 
-      if (
-        response.data.result &&
-        response.data.result.length > 0 &&
-        newApiResponse != response
-      ) {
-        setNewApiResponse(response);
-        setTotalCount(response.data.total_count);
+      const { result, total_count, page, page_size, total_pages } = res.data;
 
-        setCampaigns(
-          reset
-            ? response.data
-            : (prev) => ({
-                ...prev,
-                total_count: response.data.total_count,
-                page: response.data.page,
-                page_size: response.data.page_size,
-                total_pages: response.data.total_pages,
-                result: [...prev.result, ...response.data.result],
-              }),
-        );
-      } else if (response.data.result && response.data.result.length == 0) {
-        setNewApiResponse(response);
-        setTotalCount(0);
-        setCampaigns(response.data);
-      }
-      setPageNum(currentPage);
+      setTotalCount(total_count);
+      setNewApiResponse(res);
+      setCampaigns((prev) =>
+        reset
+          ? res.data
+          : {
+              ...prev,
+              total_count,
+              page,
+              page_size,
+              total_pages,
+              result: [...prev.result, ...result],
+            },
+      );
+
+      setPageNum(nextPage.toString());
     } catch (error) {
       console.error("Failed to fetch next page:", error);
     } finally {
       setIsRewardLoading(false);
     }
   };
-
   const fetchforSearch = () => fetchRewarDetails(true); // 검색
   const fetchNextPage = () => fetchRewarDetails(); // 다음 무한 스크롤 페이지
-
+  const formatNumber = (n: number) =>
+    new Intl.NumberFormat("en-US").format(n || 0);
   useEffect(() => {
     if (isBottom) {
       fetchNextPage();
@@ -283,11 +277,8 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
       </div>
       <div className="wf w-full">
         <div className="w-full pt-[4px] text-left text-[12px]">
-          총 리워드:{" "}
-          {new Intl.NumberFormat("en-US").format(
-            Math.min(safeTotalCount, safeStackedAmount),
-          )}{" "}
-          / {new Intl.NumberFormat("en-US").format(safeTotalCount)}개
+          총 리워드: {formatNumber(Math.min(safeTotalCount, safeStackedAmount))}{" "}
+          / {formatNumber(safeTotalCount)}개
         </div>
       </div>
     </>
