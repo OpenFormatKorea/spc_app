@@ -14,7 +14,6 @@ export interface CampaignArgs {
   created_by_username?: string;
   updated_by_username?: string | null;
 }
-
 export interface CampaignInfoProps {
   campaignInfo: CampaignArgs[];
 }

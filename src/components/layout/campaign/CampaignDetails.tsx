@@ -3,6 +3,7 @@ import InputRadioBox from "@/components/base/InputRadio";
 import InputTextBox from "@/components/base/InputText";
 import CampaignActiveButton from "@/components/layout/campaign/CampaignActiveButton";
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
+import { parseDateString } from "@/lib/common";
 import React, { useRef, KeyboardEvent, useState, useEffect } from "react";
 
 interface CampaignDetailsProps {
@@ -13,8 +14,8 @@ interface CampaignDetailsProps {
   setDescription: (value: string) => void;
   setActive: (value: boolean) => void;
   setTitle: (value: string) => void;
-  setStart_date: (value: string) => void;
-  setEnd_date: (value: string | null) => void;
+  setStartDate: (value: Date) => void;
+  setEndDate: (value: Date | null) => void;
   campaign_id?: string;
 }
 
@@ -27,8 +28,8 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
   setDescription,
   setActive,
   setTitle,
-  setStart_date,
-  setEnd_date,
+  setStartDate,
+  setEndDate,
 }) => {
   const [activeStatus, setActiveStatus] = useState<boolean>(
     campaignArgs.active,
@@ -40,13 +41,17 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
 
   useEffect(() => {
     if (period_type === PeriodType.UL) {
-      setEnd_date(null);
+      setEndDate(null);
       setEndDateActiveStatus(true);
     } else {
-      setEnd_date(campaignArgs.end_date || null);
+      if (campaignArgs.end_date) {
+        const end_date = parseDateString(campaignArgs.end_date);
+        setEndDate(end_date);
+        console.log("end_date", end_date);
+      }
       setEndDateActiveStatus(false);
     }
-  }, [period_type, campaignArgs.end_date, setEnd_date]);
+  }, [period_type, campaignArgs.end_date, setEndDate]);
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setPeriod_type(e.target.value as PeriodType);
@@ -58,7 +63,7 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
       buttonRef.current?.click();
     }
   };
-  // const openModal = () => setIsOpen(true);
+
   const toggleCampaignActiveStatus = (campaignId: string, newStatus: boolean) =>
     setActiveStatus(newStatus);
 
@@ -142,20 +147,22 @@ const CampaignDetails: React.FC<CampaignDetailsProps> = ({
           <label className="pt-[10px] text-[12px] text-gray-500">
             캠페인 기간
           </label>
-          <div className="flex w-full flex-wrap items-center justify-center gap-2 pt-[10px]">
+          <div className="flex w-full flex-wrap items-center justify-center gap-[20px] pt-[10px]">
             <DatePicker
               label="캠페인 시작일"
-              value={campaignArgs.start_date}
-              onChange={setStart_date}
+              value={parseDateString(campaignArgs.start_date)}
+              onChange={setStartDate}
               disabled={false}
             />
             {period_type === PeriodType.L && (
               <DatePicker
                 label="캠페인 종료일"
                 value={
-                  period_type === PeriodType.L ? campaignArgs.end_date : null
+                  period_type === PeriodType.L && campaignArgs.end_date
+                    ? parseDateString(campaignArgs.end_date)
+                    : null
                 }
-                onChange={setEnd_date}
+                onChange={setEndDate}
                 disabled={endDateActiveStatus}
               />
             )}

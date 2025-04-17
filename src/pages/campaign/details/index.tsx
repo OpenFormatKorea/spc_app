@@ -10,12 +10,14 @@ import {
   fetchModifyCampaign,
 } from "@/lib/campaign/apis";
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
+import { getFormattedDate, parseDateString } from "@/lib/common";
 import { getShopIdFromCookies } from "@/lib/helper";
 import { fetchGetItemList } from "@/lib/item/apis";
 import { ApiResponse } from "@/lib/types";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
+import { title } from "process";
 import { useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -68,6 +70,10 @@ const DetailsCampaign = (
   );
   const [start_date, setStart_date] = useState(cDetailApiResponse.start_date);
   const [end_date, setEnd_date] = useState(cDetailApiResponse.end_date);
+  const isEndDate = end_date ? parseDateString(end_date) : null;
+  const [startDate, setStartDate] = useState<Date>(parseDateString(start_date));
+  const [endDate, setEndDate] = useState<Date | null>(isEndDate);
+
   const [campaignActiveStatus, setCampaignActiveStatus] = useState(
     cDetailApiResponse.active,
   );
@@ -89,7 +95,12 @@ const DetailsCampaign = (
     created_by_username: createdByUserName,
     created_at: createdAt,
   };
-
+  useEffect(() => {
+    setStart_date(getFormattedDate(startDate));
+  }, [startDate]);
+  useEffect(() => {
+    setEnd_date(getFormattedDate(endDate));
+  }, [endDate]);
   useEffect(() => {
     if (period_type === PeriodType.UL) {
       setEnd_date(null);
@@ -218,8 +229,8 @@ const DetailsCampaign = (
               setDescription={setDescription}
               setActive={setCampaignActiveStatus}
               setTitle={setTitle}
-              setStart_date={setStart_date}
-              setEnd_date={setEnd_date}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
             />
           </ContentsContainer>
           <ContentsContainer variant="campaign" size="full">

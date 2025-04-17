@@ -3,39 +3,35 @@ import ContentsContainer from "@/components/layout/base/ContentsContainer";
 import { CampaignArgs, PeriodType } from "@/lib/campaign/types";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchCreateCampaign } from "@/lib/campaign/apis";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LoadingSpinner from "@/components/base/LoadingSpinner";
 import { withAuth } from "@/hoc/withAuth";
 import CampaignNew from "@/components/layout/campaign/CampaignNew";
-import { handleGoBack } from "@/lib/common";
+import { getFormattedDate, handleGoBack } from "@/lib/common";
 
 const NewCampaign = (context: GetServerSidePropsContext) => {
   const router = useRouter();
-
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const getFormattedDate = (date: string): string => {
-    const targetDate = date === "today" ? today : tomorrow;
-    const year = targetDate.getFullYear();
-    const month = String(targetDate.getMonth() + 1).padStart(2, "0");
-    const day = String(targetDate.getDate()).padStart(2, "0");
-    const hours = String(targetDate.getHours()).padStart(2, "0");
-    const minutes = String(targetDate.getMinutes()).padStart(2, "0");
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:00`;
-  };
-
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [period_type, setPeriod_type] = useState(PeriodType.L);
-  const [start_date, setStart_date] = useState(getFormattedDate("today"));
+
+  const today = new Date();
+  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const [startDate, setStartDate] = useState<Date>(today);
+  const [endDate, setEndDate] = useState<Date | null>(tomorrow);
+  const [start_date, setStart_date] = useState(getFormattedDate(startDate));
   const [end_date, setEnd_date] = useState<string | null>(
-    getFormattedDate("tomorrow"),
+    getFormattedDate(endDate),
   );
+  useEffect(() => {
+    setStart_date(getFormattedDate(startDate));
+  }, [startDate]);
+  useEffect(() => {
+    setEnd_date(getFormattedDate(endDate));
+  }, [endDate]);
   const [active, setActive] = useState(false);
 
   // Validate campaign information
@@ -73,7 +69,7 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
     end_date: end_date,
     active,
   };
-
+  console.log("campaignArgs", campaignArgs);
   const handleSubmit = async () => {
     if (!loading && confirm("새로운 캠페인을 생성하시곘습니까?")) {
       setLoading(true);
@@ -132,8 +128,8 @@ const NewCampaign = (context: GetServerSidePropsContext) => {
               setDescription={setDescription}
               setActive={setActive}
               setTitle={setTitle}
-              setStart_date={setStart_date}
-              setEnd_date={setEnd_date}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
             />
           </div>
           <div className="button-container flex w-full items-center justify-center pt-4">

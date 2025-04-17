@@ -13,7 +13,6 @@ interface CampaignRewardsProps {
   startDate: string;
   endDate: string;
   pageSize: string;
-
   setLoading: (value: boolean) => void;
 }
 
@@ -52,16 +51,21 @@ const CampaignRewards: React.FC<CampaignRewardsProps> = (
   }, [apiResponse]);
 
   const getNewCampaignRewardRecord = async () => {
-    const response = await fetchPostCampaignRecords(
-      campaignId,
-      detailPageNum,
-      detailPageSize,
-      startDate,
-      endDate,
-      userId,
-      context,
-    );
-    setCampaignRewardDetailResponse(response);
+    try {
+      const response = await fetchPostCampaignRecords(
+        campaignId,
+        detailPageNum,
+        detailPageSize,
+        startDate,
+        endDate,
+        userId,
+        context,
+      );
+      setCampaignRewardDetailResponse(response);
+    } catch (e) {
+      console.error("Error: ", e);
+      setCampaignRewardDetailResponse(defaultApiResponse);
+    }
   };
   useEffect(() => {
     if (campaignId || campaignId !== "") {

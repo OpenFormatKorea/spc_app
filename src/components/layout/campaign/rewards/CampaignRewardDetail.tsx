@@ -9,7 +9,6 @@ import { CampaignRecordsProps, ReferralItem } from "@/lib/campaign/types";
 import { removeWhiteSpace } from "@/lib/common";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { ApiResponse } from "@/lib/types";
-import { error } from "console";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 interface CampaignRewardDetailProps {

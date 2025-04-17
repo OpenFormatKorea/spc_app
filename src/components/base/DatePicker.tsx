@@ -1,135 +1,45 @@
-import React, { useState, useEffect } from "react";
-
-interface DatePickerProps {
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/locale";
+interface DatePickerComponentProps {
   label: string;
-  value: string | null | undefined;
-  onChange: (value: string) => void;
+  value: Date | null;
+  onChange: (value: Date) => void;
   disabled: boolean;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({
+const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
   label,
   value,
   onChange,
   disabled,
 }) => {
-  const today = new Date();
-
-  // Use today's date when value is null or undefined
-  const initialYear = value?.substring(0, 4) || String(today.getFullYear());
-  const initialMonth =
-    value?.substring(5, 7) || String(today.getMonth() + 1).padStart(2, "0");
-  const initialDay =
-    value?.substring(8, 10) || String(today.getDate()).padStart(2, "0");
-  const initialHour =
-    value?.substring(11, 13) || String(today.getHours()).padStart(2, "0");
-  const initialMinute =
-    value?.substring(14, 16) || String(today.getMinutes()).padStart(2, "0");
-
-  const [year, setYear] = useState<string>(initialYear);
-  const [month, setMonth] = useState<string>(initialMonth);
-  const [day, setDay] = useState<string>(initialDay);
-  const [hour, setHour] = useState<string>(initialHour);
-  const [minute, setMinute] = useState<string>(initialMinute);
-
-  useEffect(() => {
-    const newDate = `${year}-${month}-${day} ${hour}:${minute}:00`;
-    onChange(newDate);
-  }, [year, month, day, hour, minute, onChange]);
-
-  const years = Array.from(
-    { length: 10 },
-    (_, i) => `${new Date().getFullYear() + i}`,
-  );
-  const months = Array.from({ length: 12 }, (_, i) =>
-    String(i + 1).padStart(2, "0"),
-  );
-  const days = Array.from({ length: 31 }, (_, i) =>
-    String(i + 1).padStart(2, "0"),
-  );
-  const hours = Array.from({ length: 24 }, (_, i) =>
-    String(i).padStart(2, "0"),
-  );
-  const minutes = Array.from({ length: 60 }, (_, i) =>
-    String(i).padStart(2, "0"),
-  );
+  const actualDate = value ? value : new Date();
+  const [dateAndTime, setDateAndTime] = useState(actualDate);
 
   return (
-    <div className="flex w-fit flex-col rounded-lg bg-gray-200 p-[8px]">
-      <label className="pb-[5px] text-[12px] text-gray-500">{label}</label>
-      <div className="flex flex-col items-center gap-[5px] rounded-md bg-white p-[8px]">
-        <div className="flex h-full items-center gap-[5px] bg-white">
-          <select
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-[4px]"
-          >
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
-          년
-          <select
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-[4px]"
-          >
-            {months.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-          월
-          <select
-            value={day}
-            onChange={(e) => setDay(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-[4px]"
-          >
-            {days.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-          일
-        </div>
-        <div className="flex h-full items-center gap-[5px] bg-white">
-          <select
-            value={hour}
-            onChange={(e) => setHour(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-[4px]"
-          >
-            {hours.map((h) => (
-              <option key={h} value={h}>
-                {h}
-              </option>
-            ))}
-          </select>
-          시
-          <select
-            value={minute}
-            onChange={(e) => setMinute(e.target.value)}
-            disabled={disabled}
-            className="rounded-md border border-gray-300 p-[4px]"
-          >
-            {minutes.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-          분
-        </div>
+    <div className="flex flex-col gap-[5px] rounded-md bg-gray-100 p-[8px]">
+      <label className="text-[12px] text-gray-500">{label}</label>
+      <div className="flex h-[30px] w-full items-center justify-center rounded-md bg-white p-1">
+        <DatePicker
+          locale={ko}
+          selected={dateAndTime}
+          onChange={(date) => {
+            if (date) {
+              setDateAndTime(date);
+              onChange(date);
+            }
+          }}
+          showTimeSelect
+          timeIntervals={15}
+          timeFormat="HH:mm"
+          dateFormat="yyyy-MM-dd HH:mm"
+          disabled={disabled}
+        />
       </div>
     </div>
   );
 };
 
-export default DatePicker;
+export default DatePickerComponent;
