@@ -329,3 +329,32 @@ export async function fetchRevokeReward(
     console.error("error:", e);
   }
 }
+
+export async function fetchIssueManualReward(
+  base_user_id: string,
+  signup_id: string,
+  reward_trigger: string,
+  reward_id: number,
+  reward_target: string,
+  record_id: string,
+  context: GetServerSidePropsContext,
+) {
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_API}/share/rewards/issue-manually-to-user`;
+  const shop_id = getShopIdFromCookies(context);
+  let dataObj = {
+    shop_id,
+    base_user_id,
+    signup_id,
+    reward_trigger,
+    reward_id,
+    reward_target,
+    record_id,
+  };
+  try {
+    const response = await fetchAPI(context, apiUrl, "POST", dataObj);
+    console.log("dataObj", dataObj);
+    return response;
+  } catch (e) {
+    console.error("error:", e);
+  }
+}

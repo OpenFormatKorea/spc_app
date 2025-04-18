@@ -2,10 +2,15 @@ import LoadingSpinner from "@/components/base/LoadingSpinner";
 import UserRewardBlock from "@/components/layout/campaign/rewards/UserRewardBlock";
 import { theadStyle, tbodyStyle } from "@/interfaces/tailwindCss";
 import {
+  fetchIssueManualReward,
   fetchPostCampaignRecords,
   fetchRevokeReward,
 } from "@/lib/campaign/apis";
-import { CampaignRecordsProps, ReferralItem } from "@/lib/campaign/types";
+import {
+  CampaignRecordsProps,
+  ReferralItem,
+  RefTarget,
+} from "@/lib/campaign/types";
 import { removeWhiteSpace } from "@/lib/common";
 import { useScrollPosition } from "@/lib/infinitescrollFunctions";
 import { ApiResponse } from "@/lib/types";
@@ -81,6 +86,37 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
       console.error("error: ", e);
     }
   };
+
+  const clickFetchIssueReward = async (
+    base_user_id: string,
+    signup_id: string,
+    reward_trigger: string,
+    reward_id: number,
+    reward_target: string,
+    record_id: string,
+  ) => {
+    const confirmed = confirm("해당 리워드를 수동 지급하시겠습니까?");
+    if (!confirmed) return; // 👈 User cancelled — exit early
+    try {
+      const response: ApiResponse = await fetchIssueManualReward(
+        base_user_id,
+        signup_id,
+        reward_trigger,
+        reward_id,
+        reward_target,
+        record_id,
+        context,
+      );
+      if (response.status != 200) {
+        alert("리워드 수동 지급을 실패하였습니다.");
+        console.error("error: ", response.status, response.message);
+      } else {
+        alert("리워드를 수동하였습니다.");
+      }
+    } catch (e) {
+      console.error("error: ", e);
+    }
+  };
   // 무한 스크롤
   const { isBottom, scrollRef } = useScrollPosition(true);
   const stackedDataAmount = parseInt(pageNum) * parseInt(pageSize);
@@ -146,7 +182,6 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
       setTotalCount(apiResponse.data.total_count);
     }
   }, [apiResponse]);
-
   return (
     <>
       <div className="flex h-[40px] w-full items-center justify-end rounded-md">
@@ -238,13 +273,17 @@ const CampaignRewardDetail: React.FC<CampaignRewardDetailProps> = (
                       </td>
                       <UserRewardBlock
                         user={record.referrer}
+                        reward_target={RefTarget.REFERRER}
                         signup_id={record.signup_id}
                         clickFetchRevokeReward={clickFetchRevokeReward}
+                        clickFetchIssueReward={clickFetchIssueReward}
                       />
                       <UserRewardBlock
                         user={record.referee}
+                        reward_target={RefTarget.REFEREE}
                         signup_id={record.signup_id}
                         clickFetchRevokeReward={clickFetchRevokeReward}
+                        clickFetchIssueReward={clickFetchIssueReward}
                       />
                     </tr>
                   );

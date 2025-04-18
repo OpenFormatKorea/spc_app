@@ -88,6 +88,7 @@ export interface RewardProps {
   id: number;
   reward_type: string;
   reward_value: number | string;
+  record_id: string;
   payment_timing: {
     type: "IMMEDIATE" | "DELAYED";
     delay_days: number | null;
@@ -121,4 +122,8 @@ export enum sortDirection {
   D = "desc",
   A = "asc",
   N = "none",
+}
+export enum RefTarget {
+  REFERRER = "REFERRER",
+  REFEREE = "REFEREE",
 }
